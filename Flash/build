@@ -1,3 +1,3 @@
 #! /bin/sh
 # Note: this is a build file so that Nick can compile without FlashDevelop, don't delete this.
-mxmlc -compiler.source-path=./src -default-frame-rate 60 -default-background-color 0xFFFFFF -default-size 800 600 ./src/pyrokid/Main.as
+mxmlc -compiler.source-path=./src -default-frame-rate 60 -default-background-color 0xFFFFFF -default-size 800 600 -o bin/PyroKid.swf ./src/pyrokid/Main.as
