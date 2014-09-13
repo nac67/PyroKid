@@ -48,21 +48,34 @@ package pyrokid {
          * @param object the object to move
          * @param level The array holding the wall values
          * @param isPlayer Whether its the player (allow jumping with jump button)
+         *                 Also to make player hit his head on ceilings
          */
         public static function gravitize(object:PhysicsObject, level:Array, isPlayer:Boolean):void {
-            object.y += object.speedY;
-            
             var w:int = object.w,
                 h:int = object.h,
                 baseY:int = object.y + object.h,
                 midLeftX:int = object.x + Constants.CELL*margin,
                 midRightX:int = object.x + w - Constants.CELL * margin;
                 
+            // Prevent player from launching through a ceiling
+            if (isPlayer) {
+                var hittingHead:Boolean = isColliding(midLeftX, object.y + object.speedY, level, object) ||
+                        isColliding(midRightX, object.y + object.speedY, level, object)
+                if (hittingHead) {
+                    object.speedY = 3;
+                }
+            }
+            
+            // Apply speed in direction, then update new baseY
+            object.y += object.speedY;
+            baseY = object.y + object.h
+                
+            // Check if object is touching ground, if so, stop it from moving, orient y position with platform,
+            // then allow him to jump if its a player
             var touchingGround:Boolean = isColliding(midLeftX, baseY, level, object) || isColliding(midRightX, baseY, level, object);
             if (!touchingGround) {
                 object.speedY += 1;
             } else {
-                
                 object.speedY = 0;
                 object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY));
                 if (isPlayer && Key.isDown(87)) {
