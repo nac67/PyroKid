@@ -2,7 +2,38 @@ package pyrokid {
     
     public class PhysicsHandler {
         
-        public static const margin:Number = .1;
+        /**
+         * The physics system checks for box to box collisions by considering the two corners nearest
+         * the collisions. For example, when checking if the box is touching the ground, it needs to see
+         * if the bottom-left corner or the bottom-right corner are touching the ground. If either are,
+         * it will stop the box from moving downard. This causes a slight issue however. Say the character 
+         * were pressed up against a wall to his right while falling. In this case the bottom right corner would be
+         * registering a collision, and it would stop him from falling. To fix this error, I have included the
+         * MARGIN variable which brings the corners slightly inside to avoid false collision. For example, when
+         * checking for ground collisions, the bottom right corner, will be at the same y-coordinate, but
+         * its x-coordinate will be moved slightly left. You can visualize these collision detectors as so:
+         *         
+         *              U.............U
+         *             L...............R
+         *             .................
+         *             .................
+         *             .................
+         *             .................
+         *             .................
+         *             L...............R
+         *              B.............B
+         *   
+         * So what this means is that the ground detection will be checked by the two B locations, while the right
+         * wall detection will be checked by the two R locations. This effectively stops the box from getting
+         * stuck in unfortunate situations, but it also creates a tradeoff. If margin is too small, there is a
+         * high probability that it will register a false collision and stop the block. If the margin is too large
+         * The physics will look unrealistic and clip too far around corners. The MARGIN variable controls how far
+         * to bring in the corners. The total distance to bring in the corners:
+         *
+         *      distance-in-pixels = MARGIN*width-of-one-cell
+         */
+        
+        public static var MARGIN:Number = .1;
         
         /**
          * Handles player's x and y movement
@@ -13,15 +44,16 @@ package pyrokid {
             //x movement
             var w:int = player.w,
                 h:int = player.h,
-                midUpperY:int = player.y + Constants.CELL*margin,
-                midLowerY:int = player.y + h - Constants.CELL*margin,
+                midUpperY:int = player.y + Constants.CELL*MARGIN,
+                midLowerY:int = player.y + h - Constants.CELL*MARGIN,
                 bodyLeftX:int = player.x,
                 bodyRightX:int = player.x + w,
                 proposedMovement:Number,
                 touchingWall:Boolean,
                 halfW:int = w / 2;
             
-            if (Key.isDown(65)) {
+            // Check to see if moving sideways would cause collision, if it does NOT, then move player
+            if (Key.isDown(Constants.LEFT_BTN)) {
                 proposedMovement = -3;
                 touchingWall = isColliding(bodyLeftX + proposedMovement, midUpperY, level, player) ||
                     isColliding(bodyLeftX, midLowerY, level, player);
@@ -30,7 +62,7 @@ package pyrokid {
                 }
             }
             
-            if (Key.isDown(68)) {
+            if (Key.isDown(Constants.RIGHT_BTN)) {
                 proposedMovement = 3;
                 touchingWall = isColliding(bodyRightX + proposedMovement, midUpperY, level, player) ||
                     isColliding(bodyRightX, midLowerY, level, player);
@@ -54,10 +86,12 @@ package pyrokid {
             var w:int = object.w,
                 h:int = object.h,
                 baseY:int = object.y + object.h,
-                midLeftX:int = object.x + Constants.CELL*margin,
-                midRightX:int = object.x + w - Constants.CELL * margin;
+                midLeftX:int = object.x + Constants.CELL*MARGIN,
+                midRightX:int = object.x + w - Constants.CELL * MARGIN;
                 
             // Prevent player from launching through a ceiling
+            // If moving player up would cause overlap, prevent it from happening in advance and send player
+            // moving downward.
             if (isPlayer) {
                 var hittingHead:Boolean = isColliding(midLeftX, object.y + object.speedY, level, object) ||
                         isColliding(midRightX, object.y + object.speedY, level, object)
@@ -78,7 +112,7 @@ package pyrokid {
             } else {
                 object.speedY = 0;
                 object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY));
-                if (isPlayer && Key.isDown(87)) {
+                if (isPlayer && Key.isDown(Constants.JUMP_BTN)) {
                     object.speedY = -12;
                 }
             }

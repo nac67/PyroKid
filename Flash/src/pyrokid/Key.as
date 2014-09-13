@@ -6,6 +6,17 @@ package pyrokid {
         public static var debug:Boolean = false;
         private static var keysDown:Array = [];
         
+        // Feel free to add more
+        public static var UP:int = 38;
+        public static var DOWN:int = 40;
+        public static var LEFT:int = 37;
+        public static var RIGHT:int = 39;
+        public static var SPACE:int = 32;
+        public static var A:int = 65;
+        public static var S:int = 83;
+        public static var W:int = 87;
+        public static var D:int = 68;
+        
         public static function init(stage:Stage):void {
             for (var i:int = 0; i < 128; i++) {
                 keysDown.push(false);
