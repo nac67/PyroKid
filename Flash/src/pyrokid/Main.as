@@ -28,16 +28,16 @@ package pyrokid {
                     var cell:int = row[j];
                     if (cell == 1) {
                         var a:GroundTile = new GroundTile();
-                        a.x = j * 50;
-                        a.y = i * 50;
+                        a.x = j * Constants.CELL;
+                        a.y = i * Constants.CELL;
                         addChild(a);
                     }
                 }
             }
             
             player = new Player();
-            player.x = 2 * 50;
-            player.y = 2 * 50;
+            player.x = 2 * Constants.CELL;
+            player.y = 2 * Constants.CELL;
             addChild(player);
             
             addEventListener(Event.ENTER_FRAME, update);

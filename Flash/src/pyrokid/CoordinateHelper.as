@@ -7,7 +7,7 @@ package pyrokid{
          * @return
          */
         public static function realToCell (real:Number):Number {
-            return Math.floor(real/50);
+            return Math.floor(real/Constants.CELL);
         }
         
         /**
@@ -18,7 +18,7 @@ package pyrokid{
          * @return Pixel-space coordinate
          */
         public static function topOfCell (cell:int):Number {
-            return cell * 50 - 50;
+            return cell * Constants.CELL - Constants.CELL;
         }
         
         /**
@@ -29,7 +29,7 @@ package pyrokid{
          * @return Pixel-space coordinate
          */
         public static function bottomOfCell (cell:int):Number {
-            return cell * 50;
+            return cell * Constants.CELL;
         }
     }
 }

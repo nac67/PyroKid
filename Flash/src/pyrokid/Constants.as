@@ -7,7 +7,7 @@ package pyrokid
     public class Constants 
     {
         
-        public static const CELL:int = 50;
+        public static var CELL:int = 40;
         
     }
 

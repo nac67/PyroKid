@@ -10,11 +10,10 @@ package pyrokid {
         
         public var speedY:Number = 0;
         
-        public var w:int = 50;
-        public var h:int = 50;
+        public var w:int = Constants.CELL;
+        public var h:int = Constants.CELL;
         
         public function PhysicsObject() {
-        
         }
     
     }

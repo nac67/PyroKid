@@ -10,7 +10,7 @@ package pyrokid {
         public function GroundTile() {
             graphics.lineStyle(0x000000);
             graphics.beginFill(0xEEEEEE);
-            graphics.drawRect(0, 0, 50, 50);
+            graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
             graphics.endFill();
         
         }

@@ -2,7 +2,7 @@ package pyrokid {
     
     public class PhysicsHandler {
         
-        public static const margin:Number = .3;
+        public static const margin:Number = .1;
         
         /**
          * Handles player's x and y movement
