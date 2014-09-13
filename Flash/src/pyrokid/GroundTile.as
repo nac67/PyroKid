@@ -1,8 +1,7 @@
-package pyrokid 
-{
+package pyrokid {
     import flash.display.Sprite;
     
-	/**
+    /**
      * ...
      * @author Nick Cheng
      */
@@ -13,9 +12,9 @@ package pyrokid
             graphics.beginFill(0xEEEEEE);
             graphics.drawRect(0, 0, 50, 50);
             graphics.endFill();
-            
-        }
         
+        }
+    
     }
 
 }
