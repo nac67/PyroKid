@@ -22,12 +22,12 @@ package pyrokid {
             // entry point
             Key.init(stage);
             
-            for (var i = 0; i < Level.level1.length; i++) {
-                var row = Level.level1[i];
-                for (var j = 0; j < row.length; j++) {
-                    var cell = row[j];
+            for (var i:int = 0; i < Level.level1.length; i++) {
+                var row:Array = Level.level1[i];
+                for (var j:int = 0; j < row.length; j++) {
+                    var cell:int = row[j];
                     if (cell == 1) {
-                        var a = new GroundTile();
+                        var a:GroundTile = new GroundTile();
                         a.x = j * 50;
                         a.y = i * 50;
                         addChild(a);
@@ -44,7 +44,6 @@ package pyrokid {
         }
         
         private function update(event:Event):void {
-            
             PhysicsHandler.handlePlayer(player, Level.level1)
         }
     }
