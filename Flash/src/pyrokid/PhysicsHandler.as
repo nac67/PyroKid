@@ -2,6 +2,8 @@ package pyrokid {
     
     public class PhysicsHandler {
         
+        public static const margin:Number = .3;
+        
         /**
          * Handles player's x and y movement
          * @param player
@@ -9,19 +11,20 @@ package pyrokid {
          */
         public static function handlePlayer(player:Player, level:Array):void {
             //x movement
-            var proposedMovement:Number,
-                midY:int,
-                bodyLeftX:int,
-                bodyRightX:int,
+            var w:int = player.w,
+                h:int = player.h,
+                midUpperY:int = player.y + Constants.CELL*margin,
+                midLowerY:int = player.y + h - Constants.CELL*margin,
+                bodyLeftX:int = player.x,
+                bodyRightX:int = player.x + w,
+                proposedMovement:Number,
                 touchingWall:Boolean,
-                w:int = player.w,
                 halfW:int = w / 2;
             
             if (Key.isDown(65)) {
                 proposedMovement = -3;
-                midY = player.y + halfW;
-                bodyLeftX = player.x + proposedMovement;
-                touchingWall = isColliding(bodyLeftX, midY, level, player);
+                touchingWall = isColliding(bodyLeftX + proposedMovement, midUpperY, level, player) ||
+                    isColliding(bodyLeftX, midLowerY, level, player);
                 if (!touchingWall) {
                     player.x += proposedMovement
                 }
@@ -29,9 +32,8 @@ package pyrokid {
             
             if (Key.isDown(68)) {
                 proposedMovement = 3;
-                midY = player.y + halfW;
-                bodyRightX = player.x + w + proposedMovement;
-                touchingWall = isColliding(bodyRightX, midY, level, player);
+                touchingWall = isColliding(bodyRightX + proposedMovement, midUpperY, level, player) ||
+                    isColliding(bodyRightX, midLowerY, level, player);
                 if (!touchingWall) {
                     player.x += proposedMovement;
                 }
@@ -50,15 +52,19 @@ package pyrokid {
         public static function gravitize(object:PhysicsObject, level:Array, isPlayer:Boolean):void {
             object.y += object.speedY;
             
-            var footLeftX:int = object.x + 15;
-            var footRightX:int = object.x + 35;
-            var footY:int = object.y + object.h;
-            var touchingGround:Boolean = isColliding(footLeftX, footY, level, object) || isColliding(footRightX, footY, level, object);
+            var w:int = object.w,
+                h:int = object.h,
+                baseY:int = object.y + object.h,
+                midLeftX:int = object.x + Constants.CELL*margin,
+                midRightX:int = object.x + w - Constants.CELL * margin;
+                
+            var touchingGround:Boolean = isColliding(midLeftX, baseY, level, object) || isColliding(midRightX, baseY, level, object);
             if (!touchingGround) {
                 object.speedY += 1;
             } else {
+                
                 object.speedY = 0;
-                object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(footY));
+                object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY));
                 if (isPlayer && Key.isDown(87)) {
                     object.speedY = -12;
                 }
