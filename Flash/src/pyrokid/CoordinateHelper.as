@@ -18,7 +18,7 @@ package pyrokid{
          * @return Pixel-space coordinate
          */
         public static function topOfCell (cell:int):Number {
-            return cell * Constants.CELL - Constants.CELL;
+            return cell * Constants.CELL;
         }
         
         /**
@@ -29,7 +29,7 @@ package pyrokid{
          * @return Pixel-space coordinate
          */
         public static function bottomOfCell (cell:int):Number {
-            return cell * Constants.CELL;
+            return (cell+1) * Constants.CELL;
         }
     }
 }

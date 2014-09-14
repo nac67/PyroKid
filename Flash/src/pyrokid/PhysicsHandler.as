@@ -137,13 +137,7 @@ package pyrokid {
                 object.speedY += GRAVITY;
             } else {
                 object.speedY = 0;
-                
-                if(isPlayer){
-                    object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY));
-                }else {
-                    var extraY:int = (object.h - Constants.CELL); //account for blocks with height>1
-                    object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY))-extraY;
-                }
+                object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY-object.h));
                 
                 if (isPlayer && Key.isDown(Constants.JUMP_BTN)) {
                     object.speedY = -JUMP_POWER;
