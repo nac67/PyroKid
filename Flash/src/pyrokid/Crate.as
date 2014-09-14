@@ -21,6 +21,13 @@ package pyrokid {
         public function setCellSize(cw:int, ch:int):void {
             this.w = cw * Constants.CELL;
             this.h = ch * Constants.CELL;
+            
+            graphics.clear();
+            
+            graphics.lineStyle(0x000000);
+            graphics.beginFill(0xFFEECC);
+            graphics.drawRect(0, 0, Constants.CELL*cw, Constants.CELL*ch);
+            graphics.endFill();
         }
     
     }

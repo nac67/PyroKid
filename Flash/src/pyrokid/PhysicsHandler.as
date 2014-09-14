@@ -115,7 +115,16 @@ package pyrokid {
             if (isPlayer) {
                 touchingGround = isColliding(midLeftX, baseY, level, dynamics, object) || isColliding(midRightX, baseY, level, dynamics, object);
             } else {
-                touchingGround = isColliding(midX, baseY, level, dynamics, object);
+                
+                touchingGround = false;
+                var cellsWide:int = CoordinateHelper.realToCell(object.w);
+                var halfCell:int = Constants.CELL / 2;
+                
+                // Check collision for center bottom of each cell that the crate takes up
+                for (var i:int = 0; i < cellsWide; i++) {
+                    var xpos:int = object.x + halfCell + (Constants.CELL * i);
+                    touchingGround = touchingGround || isColliding(xpos, baseY, level, dynamics, object);
+                }
             }
             
             // Check if object is touching ground, if so, stop it from moving, orient y position with platform,
@@ -124,7 +133,15 @@ package pyrokid {
                 object.speedY += 1;
             } else {
                 object.speedY = 0;
-                object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY));
+                
+                
+                if(isPlayer){
+                    object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY));
+                }else {
+                    var extraY:int = (object.h - Constants.CELL); //account for blocks with height>1
+                    object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY))-extraY;
+                }
+                
                 if (isPlayer && Key.isDown(Constants.JUMP_BTN)) {
                     object.speedY = -12;
                 }
@@ -143,6 +160,7 @@ package pyrokid {
             var cellX:int = CoordinateHelper.realToCell(x),
                 cellY:int = CoordinateHelper.realToCell(y);
             
+            // Check if collide with walls O(1)
             if (cellY >= 0 && cellY < level.length) {
                 var row:Array = level[cellY];
                 if (cellX >= 0 && cellX <= row.length) {
@@ -152,13 +170,19 @@ package pyrokid {
                 }
             }
             
-            // TODO: make islands to manage this
+            // Check if collide with dynamic objects O(n)
+            // TODO: make islands to manage this ~O(1)
             for (var i:int = 0; i < dynamics.length; i++) {
                 if (dynamics[i] != self) {
                     var dx:int = dynamics[i].getCellPosition().x;
                     var dy:int = dynamics[i].getCellPosition().y;
-                    if (cellX == dx && cellY == dy) {
-                        return true;
+                    var dw:int = dynamics[i].w / Constants.CELL;
+                    var dh:int = dynamics[i].h / Constants.CELL;
+                    
+                    if (cellX >= dx && cellX < dx + dw) {
+                        if (cellY >= dy && cellY < dy + dh) {
+                            return true;
+                        }
                     }
                 }
             }

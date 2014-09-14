@@ -52,6 +52,7 @@ package pyrokid {
             c = new Crate();
             c.x = 7 * Constants.CELL;
             c.y = 1 * Constants.CELL;
+            c.setCellSize(3, 2);
             addChild(c);
             dynamics.push(c);
             
