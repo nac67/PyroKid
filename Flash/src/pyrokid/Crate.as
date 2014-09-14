@@ -1,20 +1,16 @@
 package pyrokid {
-    import flash.display.Sprite;
     
     /**
      * ...
      * @author Nick Cheng
      */
-    public class Player extends PhysicsObject {
+    public class Crate extends PhysicsObject {
         
-        public function Player() {
-            this.isPlayer = true;
-            
+        public function Crate() {
             graphics.lineStyle(0x000000);
-            graphics.beginFill(0xCCCCFF);
+            graphics.beginFill(0xFFEECC);
             graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
             graphics.endFill();
-        
         }
     
     }

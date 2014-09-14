@@ -9,6 +9,7 @@ package pyrokid {
     public class Main extends Sprite {
         
         private var player:Player;
+        private var dynamics:Array = [];
         
         public function Main():void {
             if (stage)
@@ -40,11 +41,21 @@ package pyrokid {
             player.y = 2 * Constants.CELL;
             addChild(player);
             
+            var c:Crate = new Crate();
+            c.x = 5 * Constants.CELL;
+            c.y = 2 * Constants.CELL;
+            addChild(c);
+            dynamics.push(c);
+            
             addEventListener(Event.ENTER_FRAME, update);
         }
         
         private function update(event:Event):void {
             PhysicsHandler.handlePlayer(player, Level.level1)
+            
+            for (var i:int = 0; i < dynamics.length; i++) {
+                PhysicsHandler.gravitize(dynamics[i], Level.level1);
+            }
         }
     }
 

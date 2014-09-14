@@ -72,7 +72,7 @@ package pyrokid {
             }
             
             //gravity
-            gravitize(player, level, true);
+            gravitize(player, level);
         }
         
         /**
@@ -82,12 +82,15 @@ package pyrokid {
          * @param isPlayer Whether its the player (allow jumping with jump button)
          *                 Also to make player hit his head on ceilings
          */
-        public static function gravitize(object:PhysicsObject, level:Array, isPlayer:Boolean):void {
+        public static function gravitize(object:PhysicsObject, level:Array):void {
             var w:int = object.w,
                 h:int = object.h,
                 baseY:int = object.y + object.h,
+                midX:int = object.x + (w/2),
                 midLeftX:int = object.x + Constants.CELL*MARGIN,
-                midRightX:int = object.x + w - Constants.CELL * MARGIN;
+                midRightX:int = object.x + w - Constants.CELL * MARGIN,
+                touchingGround:Boolean,
+                isPlayer:Boolean = object.isPlayer;
                 
             // Prevent player from launching through a ceiling
             // If moving player up would cause overlap, prevent it from happening in advance and send player
@@ -104,9 +107,16 @@ package pyrokid {
             object.y += object.speedY;
             baseY = object.y + object.h
                 
+            // If the object is the player, use two points of contact for precision
+            // If it is a crate, the object will always be centered in a cell, so only use one point of contact
+            if (isPlayer) {
+                touchingGround = isColliding(midLeftX, baseY, level, object) || isColliding(midRightX, baseY, level, object);
+            } else {
+                touchingGround = isColliding(midX, baseY, level, object);
+            }
+            
             // Check if object is touching ground, if so, stop it from moving, orient y position with platform,
             // then allow him to jump if its a player
-            var touchingGround:Boolean = isColliding(midLeftX, baseY, level, object) || isColliding(midRightX, baseY, level, object);
             if (!touchingGround) {
                 object.speedY += 1;
             } else {

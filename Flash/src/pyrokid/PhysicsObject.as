@@ -13,7 +13,18 @@ package pyrokid {
         public var w:int = Constants.CELL;
         public var h:int = Constants.CELL;
         
+        // Player would have more complex physics behavior, 
+        // and allow keyboard movement
+        public var isPlayer:Boolean = false;
+        
         public function PhysicsObject() {
+        }
+        
+        public function getCellPosition():Object {
+            return { 
+                x: CoordinateHelper.realToCell(x),
+                y: CoordinateHelper.realToCell(y)
+            };
         }
     
     }
