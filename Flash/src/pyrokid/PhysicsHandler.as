@@ -31,6 +31,9 @@ package pyrokid {
          * to bring in the corners. The total distance to bring in the corners:
          *
          *      distance-in-pixels = MARGIN*width-of-one-cell
+         * 
+         * Also note: two dynamic objects on top of each other is unpredictable (just make a taller dynamic
+         * object to overcome this), but a player on top of dynamic objects is fine.
          */
         
         public static var MARGIN:Number = .1;
@@ -40,7 +43,7 @@ package pyrokid {
          * @param player
          * @param level
          */
-        public static function handlePlayer(player:Player, level:Array):void {
+        public static function handlePlayer(player:Player, level:Array, dynamics:Array):void {
             //x movement
             var w:int = player.w,
                 h:int = player.h,
@@ -55,8 +58,8 @@ package pyrokid {
             // Check to see if moving sideways would cause collision, if it does NOT, then move player
             if (Key.isDown(Constants.LEFT_BTN)) {
                 proposedMovement = -3;
-                touchingWall = isColliding(bodyLeftX + proposedMovement, midUpperY, level, player) ||
-                    isColliding(bodyLeftX, midLowerY, level, player);
+                touchingWall = isColliding(bodyLeftX + proposedMovement, midUpperY, level, dynamics, player) ||
+                    isColliding(bodyLeftX, midLowerY, level, dynamics, player);
                 if (!touchingWall) {
                     player.x += proposedMovement
                 }
@@ -64,15 +67,15 @@ package pyrokid {
             
             if (Key.isDown(Constants.RIGHT_BTN)) {
                 proposedMovement = 3;
-                touchingWall = isColliding(bodyRightX + proposedMovement, midUpperY, level, player) ||
-                    isColliding(bodyRightX, midLowerY, level, player);
+                touchingWall = isColliding(bodyRightX + proposedMovement, midUpperY, level, dynamics, player) ||
+                    isColliding(bodyRightX, midLowerY, level, dynamics, player);
                 if (!touchingWall) {
                     player.x += proposedMovement;
                 }
             }
             
             //gravity
-            gravitize(player, level);
+            gravitize(player, level, dynamics);
         }
         
         /**
@@ -82,7 +85,7 @@ package pyrokid {
          * @param isPlayer Whether its the player (allow jumping with jump button)
          *                 Also to make player hit his head on ceilings
          */
-        public static function gravitize(object:PhysicsObject, level:Array):void {
+        public static function gravitize(object:PhysicsObject, level:Array, dynamics:Array):void {
             var w:int = object.w,
                 h:int = object.h,
                 baseY:int = object.y + object.h,
@@ -96,8 +99,8 @@ package pyrokid {
             // If moving player up would cause overlap, prevent it from happening in advance and send player
             // moving downward.
             if (isPlayer) {
-                var hittingHead:Boolean = isColliding(midLeftX, object.y + object.speedY, level, object) ||
-                        isColliding(midRightX, object.y + object.speedY, level, object)
+                var hittingHead:Boolean = isColliding(midLeftX, object.y + object.speedY, level, dynamics, object) ||
+                        isColliding(midRightX, object.y + object.speedY, level, dynamics, object)
                 if (hittingHead) {
                     object.speedY = 3;
                 }
@@ -110,9 +113,9 @@ package pyrokid {
             // If the object is the player, use two points of contact for precision
             // If it is a crate, the object will always be centered in a cell, so only use one point of contact
             if (isPlayer) {
-                touchingGround = isColliding(midLeftX, baseY, level, object) || isColliding(midRightX, baseY, level, object);
+                touchingGround = isColliding(midLeftX, baseY, level, dynamics, object) || isColliding(midRightX, baseY, level, dynamics, object);
             } else {
-                touchingGround = isColliding(midX, baseY, level, object);
+                touchingGround = isColliding(midX, baseY, level, dynamics, object);
             }
             
             // Check if object is touching ground, if so, stop it from moving, orient y position with platform,
@@ -136,20 +139,31 @@ package pyrokid {
          * @param self The object checking for collision, this is to avoid a self collision
          * @return Whether or not the object is colliding
          */
-        public static function isColliding(x:int, y:int, level:Array, self:PhysicsObject):Boolean {
+        public static function isColliding(x:int, y:int, level:Array, dynamics:Array, self:PhysicsObject):Boolean {
             var cellX:int = CoordinateHelper.realToCell(x),
                 cellY:int = CoordinateHelper.realToCell(y);
-            
-            var cellCollision:Boolean = false;
             
             if (cellY >= 0 && cellY < level.length) {
                 var row:Array = level[cellY];
                 if (cellX >= 0 && cellX <= row.length) {
-                    cellCollision = level[cellY][cellX] == 1;
+                    if (level[cellY][cellX] == 1) {
+                        return true;
+                    }
                 }
             }
             
-            return cellCollision;
+            // TODO: make islands to manage this
+            for (var i:int = 0; i < dynamics.length; i++) {
+                if (dynamics[i] != self) {
+                    var dx:int = dynamics[i].getCellPosition().x;
+                    var dy:int = dynamics[i].getCellPosition().y;
+                    if (cellX == dx && cellY == dy) {
+                        return true;
+                    }
+                }
+            }
+            
+            return false;
         }
     }
 }

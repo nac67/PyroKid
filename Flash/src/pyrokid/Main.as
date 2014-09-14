@@ -41,9 +41,17 @@ package pyrokid {
             player.y = 2 * Constants.CELL;
             addChild(player);
             
-            var c:Crate = new Crate();
+            var c:Crate;
+            
+            c = new Crate();
             c.x = 5 * Constants.CELL;
             c.y = 2 * Constants.CELL;
+            addChild(c);
+            dynamics.push(c);
+            
+            c = new Crate();
+            c.x = 7 * Constants.CELL;
+            c.y = 1 * Constants.CELL;
             addChild(c);
             dynamics.push(c);
             
@@ -51,11 +59,13 @@ package pyrokid {
         }
         
         private function update(event:Event):void {
-            PhysicsHandler.handlePlayer(player, Level.level1)
+            
             
             for (var i:int = 0; i < dynamics.length; i++) {
-                PhysicsHandler.gravitize(dynamics[i], Level.level1);
+                PhysicsHandler.gravitize(dynamics[i], Level.level1, dynamics);
             }
+            
+            PhysicsHandler.handlePlayer(player, Level.level1, dynamics)
         }
     }
 
