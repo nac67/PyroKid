@@ -2,6 +2,9 @@ package pyrokid {
     
     public class PhysicsHandler {
         
+        public static var GRAVITY:Number = .8;
+        public static var JUMP_POWER:int = 12;
+        
         /**
          * The physics system checks for box to box collisions by considering the two corners nearest
          * the collisions. For example, when checking if the box is touching the ground, it needs to see
@@ -34,8 +37,8 @@ package pyrokid {
          * 
          * Also note: two dynamic objects on top of each other is unpredictable (just make a taller dynamic
          * object to overcome this), but a player on top of dynamic objects is fine.
-         */
-        
+         */        
+         
         public static var MARGIN:Number = .1;
         
         /**
@@ -82,6 +85,7 @@ package pyrokid {
          * Handles a PhysicsObject's gravity
          * @param object the object to move
          * @param level The array holding the wall values
+         * @param dynamics The crates of the level
          * @param isPlayer Whether its the player (allow jumping with jump button)
          *                 Also to make player hit his head on ceilings
          */
@@ -109,18 +113,18 @@ package pyrokid {
             // Apply speed in direction, then update new baseY
             object.y += object.speedY;
             baseY = object.y + object.h
-                
+            
+            // Determine if object is touching the ground
             // If the object is the player, use two points of contact for precision
             // If it is a crate, the object will always be centered in a cell, so only use one point of contact
             if (isPlayer) {
                 touchingGround = isColliding(midLeftX, baseY, level, dynamics, object) || isColliding(midRightX, baseY, level, dynamics, object);
             } else {
-                
-                touchingGround = false;
                 var cellsWide:int = CoordinateHelper.realToCell(object.w);
                 var halfCell:int = Constants.CELL / 2;
                 
                 // Check collision for center bottom of each cell that the crate takes up
+                touchingGround = false;
                 for (var i:int = 0; i < cellsWide; i++) {
                     var xpos:int = object.x + halfCell + (Constants.CELL * i);
                     touchingGround = touchingGround || isColliding(xpos, baseY, level, dynamics, object);
@@ -130,10 +134,9 @@ package pyrokid {
             // Check if object is touching ground, if so, stop it from moving, orient y position with platform,
             // then allow him to jump if its a player
             if (!touchingGround) {
-                object.speedY += 1;
+                object.speedY += GRAVITY;
             } else {
                 object.speedY = 0;
-                
                 
                 if(isPlayer){
                     object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY));
@@ -143,7 +146,7 @@ package pyrokid {
                 }
                 
                 if (isPlayer && Key.isDown(Constants.JUMP_BTN)) {
-                    object.speedY = -12;
+                    object.speedY = -JUMP_POWER;
                 }
             }
         }
@@ -153,6 +156,7 @@ package pyrokid {
          * @param x 
          * @param y
          * @param level The level array
+         * @param dyamics The crates of the level
          * @param self The object checking for collision, this is to avoid a self collision
          * @return Whether or not the object is colliding
          */

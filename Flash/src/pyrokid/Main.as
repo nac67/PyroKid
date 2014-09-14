@@ -23,6 +23,7 @@ package pyrokid {
             // entry point
             Key.init(stage);
             
+            // ---------- BEGIN MESSY TEMPORARY CODE
             for (var i:int = 0; i < Level.level1.length; i++) {
                 var row:Array = Level.level1[i];
                 for (var j:int = 0; j < row.length; j++) {
@@ -55,13 +56,12 @@ package pyrokid {
             c.setCellSize(3, 2);
             addChild(c);
             dynamics.push(c);
+            // ---------- END MESSY TEMPORARY CODE
             
             addEventListener(Event.ENTER_FRAME, update);
         }
         
         private function update(event:Event):void {
-            
-            
             for (var i:int = 0; i < dynamics.length; i++) {
                 PhysicsHandler.gravitize(dynamics[i], Level.level1, dynamics);
             }
