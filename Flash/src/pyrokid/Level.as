@@ -6,20 +6,28 @@ package pyrokid {
      * @author Nick Cheng
      */
     public class Level extends Sprite {
+		
+		// TODO figure out how to make the recipe an actual LevelRecipe instead
+		// of an object. Right now file I/O makes this impossible
+		
+		
         // Level object instances
         public var walls:Array;
         public var player:Player;
         public var dynamics:Array;
+		public var recipe:Object;
         
-        public function Level(recipe:LevelRecipe) {
-           reset(recipe);
+        public function Level(recipe:Object) {
+			trace("recipe is: " + recipe);
+			reset(recipe);
         }
         
-        public function reset (recipe:LevelRecipe):void {
+        public function reset (recipe:Object):void {
             var i:int, w:int, h:int;
             
             Utils.removeAllChildren(this);
             
+			this.recipe = recipe;
             walls = recipe.walls;
             dynamics = [];
 
