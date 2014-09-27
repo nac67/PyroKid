@@ -23,8 +23,7 @@ package pyrokid {
             // entry point
             Key.init(stage);
             
-            level = new Level();
-            level.reset();
+            level = new Level(new LevelRecipe());
             addChild(level);
             
             addEventListener(Event.ENTER_FRAME, update);

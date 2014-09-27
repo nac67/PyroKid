@@ -6,38 +6,23 @@ package pyrokid {
      * @author Nick Cheng
      */
     public class Level extends Sprite {
-        
-        // Unchanging level information
-        public var walls:Array; //2d array where walls[x][y] is how you lookup. 1 is wall 0 is empty
-        public var playerStart:Array; //[xtile, ytile]
-        public var plainCrates:Array; //[ [x-left,y-top,w,h] ...]
-        
-        
         // Level object instances
+        public var walls:Array;
         public var player:Player;
-        public var dynamics:Array = [];
+        public var dynamics:Array;
         
-        public function Level() {
-            walls = [
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                [1, 0, 1, 0, 0, 0, 1, 0, 0, 1],
-                [1, 1, 0, 0, 0, 0, 1, 0, 0, 1],
-                [1, 0, 0, 0, 1, 1, 1, 0, 0, 1],
-                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]];
-                
-            
-            playerStart = [2, 2];
-            
-            plainCrates = [[5,2,1,1],[7,1,3,2]]
+        public function Level(recipe:LevelRecipe) {
+           reset(recipe);
         }
         
-        public function reset ():void {
+        public function reset (recipe:LevelRecipe):void {
             var i:int, w:int, h:int;
             
             Utils.removeAllChildren(this);
+            
+            walls = recipe.walls;
+            dynamics = [];
+
             
             for (i = 0; i < walls.length; i++) {
                 var row:Array = walls[i];
@@ -53,19 +38,19 @@ package pyrokid {
             }
             
             player = new Player();
-            player.x = playerStart.x * Constants.CELL;
-            player.y = playerStart.y * Constants.CELL;
+            player.x = recipe.playerStart.x * Constants.CELL;
+            player.y = recipe.playerStart.y * Constants.CELL;
             addChild(player);
             
             var c:Crate;
-            for (i = 0; i < plainCrates.length; i++) {
+            for (i = 0; i < recipe.plainCrates.length; i++) {
                 c = new Crate();
                 
-                c.x = plainCrates[i][0] * Constants.CELL;
-                c.y = plainCrates[i][1] * Constants.CELL;
+                c.x = recipe.plainCrates[i][0] * Constants.CELL;
+                c.y = recipe.plainCrates[i][1] * Constants.CELL;
                 
-                w = plainCrates[i][2];
-                h = plainCrates[i][3];
+                w = recipe.plainCrates[i][2];
+                h = recipe.plainCrates[i][3];
                 if (w != 1 || h != 1) {
                     c.setCellSize(w, h);
                 }
