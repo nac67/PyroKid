@@ -24,7 +24,7 @@ package pyrokid {
             w = 30;
         
             var s:String = b.readUTFBytes(b.length);
-            trace(s);
+            //trace(s);
             
         }
     
