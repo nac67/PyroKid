@@ -5,57 +5,87 @@ package pyrokid {
      * ...
      * @author Nick Cheng
      */
-    public class Level extends Sprite {
-		
-		// TODO figure out how to make the recipe an actual LevelRecipe instead
-		// of an object. Right now file I/O makes this impossible
-		
+    public class Level extends Sprite {		
 		
         // Level object instances
         public var walls:Array;
         public var player:Player;
-        public var dynamics:Array;
+        public var crates:Array;
 		public var recipe:Object;
         
-        public function Level(recipe:Object) {
-			trace("recipe is: " + recipe);
+        //2d grid, tile locked objects, non moving
+        public var staticObjects:Array;
+        
+        //1d list of moving objects, not locked to tile position
+        public var dynamicObjects:Array;
+        
+        public function Level(recipe:Object):void {
 			reset(recipe);
         }
         
+        public function setStaticObject(x:int, y:int, obj:Object):void {
+            try {
+                staticObjects[x][y] = obj;
+            } catch (e) {
+                throw new Error("Attempted to add an object to the staticObjects matrix but the indices were out of bounds. \n" +
+                    "Attempted indices: x: " + x + ", y: " + y + ", actual bounds: x: " + staticObjects.length + ", y: " + staticObjects[0].length);
+            }
+        }
+        
+        public function getStaticObject(x:int, y:int):Object {
+            try {
+                return staticObjects[x][y];
+            } catch (e) {
+                throw new Error("Attempted to add an object to the staticObjects matrix but the indices were out of bounds. \n" +
+                    "Attempted indices: x: " + x + ", y: " + y + ", actual bounds: x: " + staticObjects.length + ", y: " + staticObjects[0].length);
+            }
+            return null;
+        }
+        
         public function reset (recipe:Object):void {
-            var i:int, w:int, h:int;
+            var x:int, w:int, h:int;
             
             Utils.removeAllChildren(this);
             
 			this.recipe = recipe;
             walls = recipe.walls;
-            dynamics = [];
-
+            crates = [];
             
-            for (i = 0; i < walls.length; i++) {
-                var row:Array = walls[i];
-                for (var j:int = 0; j < row.length; j++) {
-                    var cell:int = row[j];
+            staticObjects = [];
+            dynamicObjects = [];
+            
+            staticObjects = new Array(walls.length);
+            for (x = 0; x < walls.length; x++) {
+                staticObjects[x] = new Array(walls[x].length);
+            }
+            
+            for (x = 0; x < walls.length; x++) {
+                var row:Array = walls[x];
+                for (var y:int = 0; y < row.length; y++) {
+                    var cell:int = row[y];
                     if (cell == 1) {
                         var a:GroundTile = new GroundTile();
-                        a.x = i * Constants.CELL;
-                        a.y = j * Constants.CELL;
+                        a.x = x * Constants.CELL;
+                        a.y = y * Constants.CELL;
                         addChild(a);
+                        setStaticObject(x, y, a);
                     }
                 }
             }
             
             player = new Player();
-            player.x = recipe.playerStart.x * Constants.CELL;
-            player.y = recipe.playerStart.y * Constants.CELL;
+            player.x = recipe.playerStart[0] * Constants.CELL;
+            player.y = recipe.playerStart[1] * Constants.CELL;
             addChild(player);
             
             var c:Crate;
-            for (i = 0; i < recipe.plainCrates.length; i++) {
+            for (var i = 0; i < recipe.plainCrates.length; i++) {
                 c = new Crate();
                 
-                c.x = recipe.plainCrates[i][0] * Constants.CELL;
-                c.y = recipe.plainCrates[i][1] * Constants.CELL;
+                var xCoor = recipe.plainCrates[i][0];
+                var yCoor = recipe.plainCrates[i][1];
+                c.x = xCoor * Constants.CELL;
+                c.y = yCoor * Constants.CELL;
                 
                 w = recipe.plainCrates[i][2];
                 h = recipe.plainCrates[i][3];
@@ -64,7 +94,13 @@ package pyrokid {
                 }
                 
                 addChild(c);
-                dynamics.push(c);
+                crates.push(c);
+                
+                for (var cw = 0; cw < w; cw++) {
+                    for (var ch = 0; ch < h; ch++) {
+                        setStaticObject(xCoor + cw, yCoor + ch, c);
+                    }
+                }
             }
         }
         
