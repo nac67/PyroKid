@@ -9,8 +9,7 @@ package pyrokid {
     public class Main extends Sprite {
         
         private var level:Level;
-        private var player:Player;
-        private var dynamics:Array = [];
+        
         
         public function Main():void {
             if (stage)
@@ -24,51 +23,19 @@ package pyrokid {
             // entry point
             Key.init(stage);
             
-            // ---------- BEGIN MESSY TEMPORARY CODE
-            for (var i:int = 0; i < Level.walls.length; i++) {
-                var row:Array = Level.walls[i];
-                for (var j:int = 0; j < row.length; j++) {
-                    var cell:int = row[j];
-                    if (cell == 1) {
-                        var a:GroundTile = new GroundTile();
-                        a.x = i * Constants.CELL;
-                        a.y = j * Constants.CELL;
-                        addChild(a);
-                    }
-                }
-            }
-            
-            player = new Player();
-            player.x = 2 * Constants.CELL;
-            player.y = 2 * Constants.CELL;
-            addChild(player);
-            
-            var c:Crate;
-            
-            c = new Crate();
-            c.x = 5 * Constants.CELL;
-            c.y = 2 * Constants.CELL;
-            addChild(c);
-            dynamics.push(c);
-            
-            c = new Crate();
-            c.x = 7 * Constants.CELL;
-            c.y = 1 * Constants.CELL;
-            c.setCellSize(3, 2);
-            addChild(c);
-            dynamics.push(c);
-            trace(Embedded.level1);
-            // ---------- END MESSY TEMPORARY CODE
+            level = new Level();
+            level.reset();
+            addChild(level);
             
             addEventListener(Event.ENTER_FRAME, update);
         }
         
         private function update(event:Event):void {
-            for (var i:int = 0; i < dynamics.length; i++) {
-                PhysicsHandler.gravitize(dynamics[i], Level.walls, dynamics);
+            for (var i:int = 0; i < level.dynamics.length; i++) {
+                PhysicsHandler.gravitize(level.dynamics[i], level.walls, level.dynamics);
             }
             
-            PhysicsHandler.handlePlayer(player, Level.walls, dynamics)
+            PhysicsHandler.handlePlayer(level.player, level.walls, level.dynamics)
         }
     }
 
