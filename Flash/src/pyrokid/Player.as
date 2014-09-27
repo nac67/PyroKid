@@ -8,11 +8,6 @@ package pyrokid {
      */
     public class Player extends PhysicsObject {
         
-        [Embed(source="../../assets/diggity.txt",mimeType="application/octet-stream")]
-        private var TestText : Class; 
-        var b:ByteArray = new TestText();
-
-        
         public function Player() {
             this.isPlayer = true;
             
@@ -22,10 +17,6 @@ package pyrokid {
             graphics.endFill();
             
             w = 30;
-        
-            var s:String = b.readUTFBytes(b.length);
-            //trace(s);
-            
         }
     
     }
