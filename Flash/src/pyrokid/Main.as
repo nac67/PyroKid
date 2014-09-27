@@ -8,6 +8,7 @@ package pyrokid {
      */
     public class Main extends Sprite {
         
+        private var level:Level;
         private var player:Player;
         private var dynamics:Array = [];
         
@@ -24,14 +25,14 @@ package pyrokid {
             Key.init(stage);
             
             // ---------- BEGIN MESSY TEMPORARY CODE
-            for (var i:int = 0; i < Level.level1.length; i++) {
-                var row:Array = Level.level1[i];
+            for (var i:int = 0; i < Level.walls.length; i++) {
+                var row:Array = Level.walls[i];
                 for (var j:int = 0; j < row.length; j++) {
                     var cell:int = row[j];
                     if (cell == 1) {
                         var a:GroundTile = new GroundTile();
-                        a.x = j * Constants.CELL;
-                        a.y = i * Constants.CELL;
+                        a.x = i * Constants.CELL;
+                        a.y = j * Constants.CELL;
                         addChild(a);
                     }
                 }
@@ -64,10 +65,10 @@ package pyrokid {
         
         private function update(event:Event):void {
             for (var i:int = 0; i < dynamics.length; i++) {
-                PhysicsHandler.gravitize(dynamics[i], Level.level1, dynamics);
+                PhysicsHandler.gravitize(dynamics[i], Level.walls, dynamics);
             }
             
-            PhysicsHandler.handlePlayer(player, Level.level1, dynamics)
+            PhysicsHandler.handlePlayer(player, Level.walls, dynamics)
         }
     }
 
