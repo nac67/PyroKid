@@ -56,6 +56,7 @@ package pyrokid {
             c.setCellSize(3, 2);
             addChild(c);
             dynamics.push(c);
+            trace(Embedded.level1);
             // ---------- END MESSY TEMPORARY CODE
             
             addEventListener(Event.ENTER_FRAME, update);
