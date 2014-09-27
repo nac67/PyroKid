@@ -6,7 +6,7 @@ package pyrokid {
      * @author Nick Cheng
      */
     public class Player extends PhysicsObject {
-        // poop 
+
         public function Player() {
             this.isPlayer = true;
             
