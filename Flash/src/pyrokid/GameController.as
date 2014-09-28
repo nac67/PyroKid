@@ -8,6 +8,7 @@ package pyrokid {
 	public class GameController extends Sprite {
 		
         public var editorMode:Boolean = false;
+		private var levelEditor:LevelEditor;
         
 		public var level:Level;
 		
@@ -28,6 +29,13 @@ package pyrokid {
             if (e.keyCode == 13) { //enter
                 editorMode = !editorMode;
                 reloadLevel(level.recipe);
+				if (editorMode) {
+					levelEditor = new LevelEditor(level);
+					addChild(levelEditor);
+				} else {
+					levelEditor.turnEditorOff();
+					removeChild(levelEditor);
+				}
             }
             
             if (editorMode){

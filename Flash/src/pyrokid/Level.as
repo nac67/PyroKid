@@ -96,6 +96,8 @@ package pyrokid {
                 addChild(c);
                 crates.push(c);
                 
+				trace("xCoor: " + xCoor);
+				trace("yCoor: " + yCoor);
                 for (var cw = 0; cw < w; cw++) {
                     for (var ch = 0; ch < h; ch++) {
                         setStaticObject(xCoor + cw, yCoor + ch, c);
