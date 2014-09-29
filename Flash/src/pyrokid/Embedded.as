@@ -9,10 +9,9 @@ package pyrokid {
      */
     public class Embedded {
         
-        [Embed(source="../../assets/level1.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/nicklevel.txt", mimeType="application/octet-stream")]
         private static var Level1:Class;
-        private static var level1b:ByteArray = new Level1();
-        public static var level1:String = level1b.readUTFBytes(level1b.length);
+        public static var level1b:ByteArray = new Level1();
         
     }
 

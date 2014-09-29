@@ -11,12 +11,17 @@ package pyrokid {
 		/* callback is a function that will be called on the loaded LevelRecipe object.
 		 * Note that callback MUST expect an Object or untyped parameter, NOT a LevelRecipe
 		 * parameter. This is due to the Flash compiler not knowing the unserialized object's type. */
-		public static function loadLevel(callback:Function):void {
+		public static function loadLevel(callback:Function, level:ByteArray=null):void {
 			loadLevelCallback = callback;
-            fileRef = new FileReference();
-            fileRef.addEventListener(Event.SELECT, onFileSelected);
-            var textTypeFilter:FileFilter = new FileFilter("Text Files", "*.txt");
-            fileRef.browse([textTypeFilter]);
+            
+            if (level == null) {
+                fileRef = new FileReference();
+                fileRef.addEventListener(Event.SELECT, onFileSelected);
+                var textTypeFilter:FileFilter = new FileFilter("Text Files", "*.txt");
+                fileRef.browse([textTypeFilter]);
+            } else {
+                loadLevelCallback(level.readObject());
+            }
 		}
 		
 		/* Saves levelRecipe to file. levelRecipe is an Object due to the Flash compiler not being knowing
