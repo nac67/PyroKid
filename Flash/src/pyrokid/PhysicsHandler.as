@@ -159,10 +159,10 @@ package pyrokid {
                 cellY:int = CoordinateHelper.realToCell(y);
             
             // Check if collide with walls O(1)
-            if (cellY >= 0 && cellY < level.length) {
-                var row:Array = level[cellY];
-                if (cellX >= 0 && cellX <= row.length) {
-                    if (level[cellY][cellX] == 1) {
+            if (cellX >= 0 && cellX < level.length) {
+                var yline:Array = level[cellX];
+                if (cellY >= 0 && cellY <= yline.length) {
+                    if (level[cellX][cellY] == 1) {
                         return true;
                     }
                 }
