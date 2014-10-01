@@ -1,8 +1,11 @@
 package pyrokid {
+	import flash.display.FrameLabel;
     import flash.display.Sprite;
 	import flash.events.MouseEvent;
 	import flash.display.SimpleButton;
 	import flash.text.TextField;
+	import flash.text.TextFieldType;
+	import flash.text.TextFormat;
     
     public class LevelEditor extends Sprite {
 		
@@ -16,6 +19,9 @@ package pyrokid {
 			addChild(button);
 			var button2:LevelEditorButton = new LevelEditorButton("figgity", buttonify, 600, 150);
 			addChild(button2);
+			
+			addChild(new LevelEditorInput("Map Width", level.walls.length, 600, 300));
+			addChild(new LevelEditorInput("Map Height", level.walls[0].length, 600, 350));
 		}
 		
 		private function buttonify(event:MouseEvent):void {
@@ -37,6 +43,7 @@ package pyrokid {
 			var wallObj = level.getStaticObject(cellX, cellY);
 			if (wallObj != null) {
 				level.removeChild(wallObj);
+				level.setStaticObject(cellX, cellY, null);
 			} else {
 				var a:GroundTile = new GroundTile();
 				a.x = cellX * Constants.CELL;
@@ -44,11 +51,13 @@ package pyrokid {
 				level.addChild(a);
 				level.setStaticObject(cellX, cellY, a);
 			}
-			toggleWall(cellX, cellY);
+			//toggleWall(cellX, cellY);
+			level.recipe.walls[cellX][cellY] = (level.recipe.walls[cellX][cellY] + 1) % 2;
 		}
 		
 		public function toggleWall(x:int, y:int):void {
 			level.recipe.walls[x][y] = (level.recipe.walls[x][y] + 1) % 2;
+			// TODO not reset every time?
 			level.reset(level.recipe);
 		}
     
