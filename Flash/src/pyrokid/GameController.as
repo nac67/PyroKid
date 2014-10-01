@@ -14,6 +14,7 @@ package pyrokid {
 		
 		public function GameController() {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
+            
             level = new Level(new LevelRecipe());
             addChild(level);
             addEventListener(Event.ENTER_FRAME, update);
