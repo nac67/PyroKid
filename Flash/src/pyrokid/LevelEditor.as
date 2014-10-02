@@ -21,30 +21,8 @@ package pyrokid {
 			var button2:LevelEditorButton = new LevelEditorButton("figgity", buttonify, 100, 50, 600, 150);
 			addChild(button2);
 			
-			addChild(new LevelEditorInput("Map Width", level.walls.length, 600, 300, function(w:int):void {
-				// TODO not reset, and also use the recipe only instead of the level object
-				// TODO if shrinking in size, delete all crates/items that go beyond the edge
-				if (w < 1) {
-					trace("cannot set size to less than 1");
-					return;
-				}
-				if (w >= level.recipe.walls.length) {
-					for (var x = level.recipe.walls.length; x < w; x++) {
-						var newCol:Array = [];
-						for (var y = 0; y < level.recipe.walls[0].length; y++) {
-							newCol.push(1);
-						}
-						level.recipe.walls.push(newCol);
-					}
-				} else {
-					level.recipe.walls.splice(w);
-				}
-				level.reset(level.recipe);
-			}));
-			addChild(new LevelEditorInput("Map Height", level.walls[0].length, 600, 350, function(h:int):void {
-				// TODO make height changes work
-				trace("width is: " + h);
-			}));
+			addChild(new LevelEditorInput("Map Width", level.walls.length, 600, 300, updateWidth));
+			addChild(new LevelEditorInput("Map Height", level.walls[0].length, 600, 350, updateHeight));
 		}
 		
 		private function buttonify(event:MouseEvent):void {
@@ -55,35 +33,61 @@ package pyrokid {
 			Main.MainStage.removeEventListener(MouseEvent.CLICK, clickHandler);
 		}
 		
+		private function updateWidth(w:int):void {
+			// TODO if shrinking in size, delete all crates/items that go beyond the edge
+			if (w < 1) {
+				trace("cannot set size to less than 1");
+				return;
+			}
+			var walls:Array = level.recipe.walls;
+			var height:int = walls[0].length;
+			if (w >= walls.length) {
+				for (var x = walls.length; x < w; x++) {
+					var newCol:Array = [];
+					for (var y = 0; y < height; y++) {
+						newCol.push(1);
+					}
+					walls.push(newCol);
+				}
+			} else {
+				walls.splice(w);
+			}
+			level.recipe.walls = walls;
+			level.reset(level.recipe);
+		}
+		
+		private function updateHeight(h:int):void {
+			if (h < 1) {
+				trace("cannot set size to less than 1");
+				return;
+			}
+			var walls:Array = level.recipe.walls;
+			var height:int = walls[0].length;
+			if (h >= walls[0].length) {
+				for (var x = 0; x < walls.length; x++) {
+					for (var y = height; y < h; y++) {
+						walls[x].push(1);
+					}
+				}
+			} else {
+				for (var x = 0; x < walls.length; x++) {
+					walls[x].splice(h);
+				}
+			}
+			level.recipe.walls = walls;
+			level.reset(level.recipe);
+		}
+		
 		private function clickHandler(event:MouseEvent):void {
 			var cellX:int = event.stageX / Constants.CELL;
 			var cellY:int = event.stageY / Constants.CELL;
 			if (cellX >= level.walls.length || cellY >= level.walls[0].length) {
 				return;
 			}
-			
-			trace("stage x, y: " + cellX + ", " + cellY);
-			var wallObj = level.getStaticObject(cellX, cellY);
-			if (wallObj != null) {
-				level.removeChild(wallObj);
-				level.setStaticObject(cellX, cellY, null);
-			} else {
-				var a:GroundTile = new GroundTile();
-				a.x = cellX * Constants.CELL;
-				a.y = cellY * Constants.CELL;
-				level.addChild(a);
-				level.setStaticObject(cellX, cellY, a);
-			}
-			//toggleWall(cellX, cellY);
 			level.recipe.walls[cellX][cellY] = (level.recipe.walls[cellX][cellY] + 1) % 2;
-		}
-		
-		public function toggleWall(x:int, y:int):void {
-			level.recipe.walls[x][y] = (level.recipe.walls[x][y] + 1) % 2;
-			// TODO not reset every time?
 			level.reset(level.recipe);
 		}
-    
+		
     }
 
 }
