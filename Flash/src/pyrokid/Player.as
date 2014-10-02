@@ -1,5 +1,6 @@
 package pyrokid {
     import flash.display.Sprite;
+    import flash.utils.ByteArray;
     
     /**
      * Player can be any width <= 50
@@ -16,7 +17,6 @@ package pyrokid {
             graphics.endFill();
             
             w = 30;
-        
         }
     
     }
