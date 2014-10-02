@@ -4,7 +4,7 @@ package physics {
      * ...
      * @author Cristian Zaloj
      */
-    public interface IPhysEdgeProvider {
+    public interface IPhysTile {
         /**
          * Append Any Important Edges That Can Always Have Collisions
          * @param e Reference To Edge List
@@ -21,6 +21,13 @@ package physics {
          * True If This Provides A Grounding
          */
         function get IsGrounded():Boolean;
+        
+        /**
+         * Used For Initial Binding Phase When A Level Loads
+         * @param side Cardinal Direction
+         * @return True If Binding In That Direction Is Possible
+         */
+        function CanBind(side:int):Boolean;
     }
     
 }

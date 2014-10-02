@@ -28,7 +28,7 @@ package pyrokid {
         
         private function init(e:Event = null):void {
             for (var i:int  = 0; i < 10; i++) {
-                pi.AddFullBlock(i, 9);
+                pi.AddFullBlock(i, 0);
             }
             pi.RebuildEdges();
             pr.center.Set(0, 30.0);

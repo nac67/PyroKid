@@ -14,17 +14,17 @@ package physics {
                     
                     providers[y][x].ProvideEdgesSpecial(edges);
                     
-                    if (y == 0 || (providers[y - 1][x] == null)) {
-                        providers[y][x].ProvideEdgesDirection(Cardinal.PY, edges);
-                    }
-                    if (y == providers.length - 1 || (providers[y + 1][x] == null)) {
-                        providers[y][x].ProvideEdgesDirection(Cardinal.NY, edges);
-                    }
                     if (x == 0 || (providers[y][x - 1] == null)) {
                         providers[y][x].ProvideEdgesDirection(Cardinal.NX, edges);
                     }
                     if (x == providers[y].length - 1 || (providers[y][x + 1] == null)) {
                         providers[y][x].ProvideEdgesDirection(Cardinal.PX, edges);
+                    }
+                    if (y == 0 || (providers[y - 1][x] == null)) {
+                        providers[y][x].ProvideEdgesDirection(Cardinal.NY, edges);
+                    }
+                    if (y == providers.length - 1 || (providers[y + 1][x] == null)) {
+                        providers[y][x].ProvideEdgesDirection(Cardinal.PY, edges);
                     }
                 }
             }

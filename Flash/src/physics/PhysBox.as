@@ -3,7 +3,7 @@ package physics {
      * A Simple Collidable Box Implementation
      * @author Cristian Zaloj
      */
-    public class PhysBox implements IPhysEdgeProvider {
+    public class PhysBox implements IPhysTile {
         private var edges:Array;
         
         /**
@@ -30,6 +30,9 @@ package physics {
             e.push(edges[side]);
         }
         public function get IsGrounded():Boolean {
+            return true;
+        }
+        public function CanBind(side:int):Boolean {
             return true;
         }
     }
