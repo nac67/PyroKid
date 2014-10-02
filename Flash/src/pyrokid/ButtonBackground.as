@@ -8,6 +8,8 @@ package pyrokid {
 			var textField:TextField = new TextField();
 			textField.selectable = false;
 			textField.appendText(text);
+			textField.width = w;
+			textField.height = h;
 			addChild(textField);
 			
 			graphics.lineStyle(0x000000);

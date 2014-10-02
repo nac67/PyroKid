@@ -12,16 +12,39 @@ package pyrokid {
 		private var level:Level;
         
         public function LevelEditor(level:Level):void {
+			
 			this.level = level;
 			Main.MainStage.addEventListener(MouseEvent.CLICK, clickHandler);
 
-			var button:LevelEditorButton = new LevelEditorButton("shwiggity", buttonify, 600, 50);
+			var button:LevelEditorButton = new LevelEditorButton("shwiggity", buttonify, 100, 50, 600, 50);
 			addChild(button);
-			var button2:LevelEditorButton = new LevelEditorButton("figgity", buttonify, 600, 150);
+			var button2:LevelEditorButton = new LevelEditorButton("figgity", buttonify, 100, 50, 600, 150);
 			addChild(button2);
 			
-			addChild(new LevelEditorInput("Map Width", level.walls.length, 600, 300));
-			addChild(new LevelEditorInput("Map Height", level.walls[0].length, 600, 350));
+			addChild(new LevelEditorInput("Map Width", level.walls.length, 600, 300, function(w:int):void {
+				// TODO not reset, and also use the recipe only instead of the level object
+				// TODO if shrinking in size, delete all crates/items that go beyond the edge
+				if (w < 1) {
+					trace("cannot set size to less than 1");
+					return;
+				}
+				if (w >= level.recipe.walls.length) {
+					for (var x = level.recipe.walls.length; x < w; x++) {
+						var newCol:Array = [];
+						for (var y = 0; y < level.recipe.walls[0].length; y++) {
+							newCol.push(1);
+						}
+						level.recipe.walls.push(newCol);
+					}
+				} else {
+					level.recipe.walls.splice(w);
+				}
+				level.reset(level.recipe);
+			}));
+			addChild(new LevelEditorInput("Map Height", level.walls[0].length, 600, 350, function(h:int):void {
+				// TODO make height changes work
+				trace("width is: " + h);
+			}));
 		}
 		
 		private function buttonify(event:MouseEvent):void {
