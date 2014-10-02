@@ -5,32 +5,45 @@ package physics {
      * @author Cristian Zaloj
      */
     public class CollisionResolver {
+        /**
+         * Construct A Set Of Edges In The Frame Of Reference Of The Island
+         * @param providers IPhysTile[y][x] Array
+         * @return A Set Of Collision Edges
+         */
         public static function ConstructEdges(providers:Array):Array {
             var edges:Array = [];
+            var offset:Vector2 = new Vector2(0, 0);
             for (var y:int = 0; y < providers.length; y++) {
                 for (var x:int = 0; x < providers[y].length; x++) {
                     if (providers[y][x] == null)
                         continue;
+                    offset.Set(x, y);
                     
-                    providers[y][x].ProvideEdgesSpecial(edges);
+                    providers[y][x].ProvideEdgesSpecial(edges, offset);
                     
                     if (x == 0 || (providers[y][x - 1] == null)) {
-                        providers[y][x].ProvideEdgesDirection(Cardinal.NX, edges);
+                        providers[y][x].ProvideEdgesDirection(Cardinal.NX, edges, offset);
                     }
                     if (x == providers[y].length - 1 || (providers[y][x + 1] == null)) {
-                        providers[y][x].ProvideEdgesDirection(Cardinal.PX, edges);
+                        providers[y][x].ProvideEdgesDirection(Cardinal.PX, edges, offset);
                     }
                     if (y == 0 || (providers[y - 1][x] == null)) {
-                        providers[y][x].ProvideEdgesDirection(Cardinal.NY, edges);
+                        providers[y][x].ProvideEdgesDirection(Cardinal.NY, edges, offset);
                     }
                     if (y == providers.length - 1 || (providers[y + 1][x] == null)) {
-                        providers[y][x].ProvideEdgesDirection(Cardinal.PY, edges);
+                        providers[y][x].ProvideEdgesDirection(Cardinal.PY, edges, offset);
                     }
                 }
             }
             return edges;
         }
-        
+       
+        /**
+         * Resolves Collision Between A Dynamic Body And A Set Of Islands
+         * @param r Dynamic Body
+         * @param iList List Of Islands
+         * @param fCallback Callback Function For When A Collision Occurs Inside Of An Island
+         */
         public static function Resolve(r:PhysRectangle, iList:Array, fCallback:Function):void {
             for each (var i:PhysIsland in iList) {
                 // Move From Global To Island Reference Point

@@ -4,30 +4,28 @@ package physics {
      * @author Cristian Zaloj
      */
     public class PhysBox implements IPhysTile {
-        private var edges:Array;
+        private static var edges:Array = [
+            new PhysEdge(Cardinal.NX, 0, 0.5, 1),
+            new PhysEdge(Cardinal.PX, 1, 0.5, 1),
+            new PhysEdge(Cardinal.NY, 0.5, 0, 1),
+            new PhysEdge(Cardinal.PY, 0.5, 1, 1)
+        ];
         
-        /**
-         * Construct A Box Found At: [x,x+s]  [y,y+s]
-         * @param s Size Of The Square
-         * @param x Minimum X Coordinate
-         * @param y Minimum Y Coordinate
-         */
-        public function PhysBox(s:Number, x:Number, y:Number) {
-            var hs:Number = s / 2;
-            var center:Vector2 = new Vector2(x, y).AddD(hs);
-            
-            edges = new Array(4);
-            edges[Cardinal.NX] = new PhysEdge(Cardinal.NX, center.x - hs, center.y, s);
-            edges[Cardinal.PX] = new PhysEdge(Cardinal.PX, center.x + hs, center.y, s);
-            edges[Cardinal.NY] = new PhysEdge(Cardinal.NY, center.x, center.y - hs, s);
-            edges[Cardinal.PY] = new PhysEdge(Cardinal.PY, center.x, center.y + hs, s);
-        }
-        
-        public function ProvideEdgesSpecial(edges:Array):void {
+        public function ProvideEdgesSpecial(edges:Array, offset:Vector2):void {
             return;
         }
-        public function ProvideEdgesDirection(side:int, e:Array):void {
-            e.push(edges[side]);
+        public function ProvideEdgesDirection(side:int, e:Array, offset:Vector2):void {
+            var i:int = 0;
+            switch(side) {
+                case Cardinal.NX: i = 0;
+                case Cardinal.PX: i = 1;
+                case Cardinal.NY: i = 2;
+                case Cardinal.PY: i = 3;
+            }
+            
+            var edge:PhysEdge = new PhysEdge(edges[i].direction, edges[i].center.x, edges[i].center.y, edges[i].halfSize * 2);
+            edge.center.AddV(offset);
+            e.push(edge);
         }
         public function get IsGrounded():Boolean {
             return true;
@@ -36,5 +34,4 @@ package physics {
             return true;
         }
     }
-
 }

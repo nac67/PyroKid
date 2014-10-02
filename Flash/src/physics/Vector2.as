@@ -1,5 +1,4 @@
 package physics {
-    import flash.automation.ActionGenerator;
 	/**
      * ...
      * @author Cristian Zaloj

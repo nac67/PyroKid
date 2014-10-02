@@ -7,6 +7,7 @@ package pyrokid {
     import physics.PhysIsland;
     import physics.PhysRectangle;
     import physics.CollisionResolver;
+    import physics.IslandSimulator;
     
     /**
      * ...
@@ -17,7 +18,7 @@ package pyrokid {
 		public static var MainStage:Stage;
         
         private var pr:PhysRectangle = new PhysRectangle();
-        private var pi:PhysIsland = new PhysIsland(10, 10);
+        private var islands:Array;
         
         public function Main():void {
             if (stage)
@@ -27,10 +28,13 @@ package pyrokid {
         }
         
         private function init(e:Event = null):void {
-            for (var i:int  = 0; i < 10; i++) {
-                pi.AddFullBlock(i, 0);
-            }
-            pi.RebuildEdges();
+            islands = IslandSimulator.ConstructIslands([
+                [new PhysBox(), new PhysBox(), new PhysBox(), new PhysBox(), new PhysBox()], // Bottom
+                [null, null, null, null, null],
+                [null, null, null, null, null],
+                [null, null, null, new PhysBox(), null],
+                [null, null, null, null, null] // Top
+            ])
             pr.center.Set(0, 30.0);
             pr.motion.Set(0, -9.0);
             
@@ -44,7 +48,7 @@ package pyrokid {
 		private function Update(e:Event = null):void {
                 pr.center.y += pr.motion.y / 30.0;
                 
-                CollisionResolver.Resolve(pr, [pi], null);
+                CollisionResolver.Resolve(pr, islands, null);
                 trace(pr.center.y);
         }
     }

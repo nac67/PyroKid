@@ -45,7 +45,7 @@ package physics {
             isGrounded = isGrounded || tile.IsGrounded;
         }
         public function AddFullBlock(x:int, y:int) {
-            AddTile(x, y, new PhysBox(1, x, y));
+            AddTile(x, y, new PhysBox());
         }
         
         public function RebuildEdges():void {
