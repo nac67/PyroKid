@@ -109,7 +109,7 @@ package physics {
                     }
                     break;
                 case Cardinal.PY:
-                    if (r.motion.y > 0 || (r.NY - e.center.y) < r.motion.y)
+                    if (r.motion.y > 0 || (e.center.y - r.NY) > -r.motion.y)
                         break;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.NY < e.center.y)

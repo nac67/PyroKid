@@ -93,7 +93,7 @@ package physics {
             
             // Make Droplets
             var dropSize:Number = 0.03;
-            for (var c:int = 0; c < 120; c++) {
+            for (var c:int = 0; c < 500; c++) {
                 var d:PhysRectangle = new PhysRectangle();
                 d.halfSize.Set(dropSize, dropSize);
                 d.center.Set(Math.random() * 8, 0);

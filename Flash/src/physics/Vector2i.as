@@ -68,5 +68,9 @@ package physics {
         public function DivV(v:Vector2i):Vector2i {
             return Div(v.x, v.y);
         }
+
+        public function toString():String {
+            return x.toString() + " " + y.toString();
+        }
     }
 }

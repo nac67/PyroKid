@@ -26,7 +26,7 @@ package physics {
             }
             return islands;
         }
-
+        
         private static function BuildIDs(tiles:Array, queue:Array):Array {
             var ids:Array = new Array(tiles.length);
             var uuid:int = 1;
@@ -51,12 +51,16 @@ package physics {
             while (queue.length > 0) {
                 var pos:Vector2i = queue.shift();
                 var w:int = tiles[pos.y].length;
-
+                
                 // Merge In Four Directions
-                if (pos.x > 0) MergeTiles(tiles, ids, pos, (otherPos.SetV(pos)).Sub(1, 0), Cardinal.NX);
-                if (pos.x < w - 1) MergeTiles(tiles, ids, pos, (otherPos.SetV(pos)).Add(1, 0), Cardinal.PX);
-                if (pos.y > 0) MergeTiles(tiles, ids, pos, (otherPos.SetV(pos)).Sub(0, 1), Cardinal.NY);
-                if (pos.y < h - 1) MergeTiles(tiles, ids, pos, (otherPos.SetV(pos)).Add(0, 1), Cardinal.PY);
+                if (pos.x > 0)
+                    MergeTiles(tiles, ids, pos, (otherPos.SetV(pos)).Sub(1, 0), Cardinal.NX);
+                if (pos.x < w - 1)
+                    MergeTiles(tiles, ids, pos, (otherPos.SetV(pos)).Add(1, 0), Cardinal.PX);
+                if (pos.y > 0)
+                    MergeTiles(tiles, ids, pos, (otherPos.SetV(pos)).Sub(0, 1), Cardinal.NY);
+                if (pos.y < h - 1)
+                    MergeTiles(tiles, ids, pos, (otherPos.SetV(pos)).Add(0, 1), Cardinal.PY);
             }
         }
         private static function MergeTiles(tiles:Array, ids:Array, p1:Vector2i, p2:Vector2i, dir12:int) {
@@ -66,14 +70,36 @@ package physics {
             var id2:int = ids[p2.y][p2.x];
             
             // Check For Abscence And Merge History
-            if (t1 == null || t2 == null) return;
-            if (id1 == id2) return;
+            if (t1 == null || t2 == null)
+                return;
+            if (id1 == id2)
+                return;
             
             // Check If They Can Bind In Both Directions
             if (t1.CanBind(dir12) && t2.CanBind(dir12 ^ 1)) {
                 // Set To The Minimum ID
-                if (id1 < id2) ids[p2.y][p2.x] = id1;
-                else ids[p1.y][p1.x] = id2;
+                if (id1 < id2)
+                    SwapIDs(ids, p2.x, p2.y, id2, id1);
+                else
+                    SwapIDs(ids, p1.x, p1.y, id1, id2);
+            }
+            return;
+        }
+        private static function SwapIDs(ids:Array, x:int, y:int, idRef:int, idSwap:int) {
+            if (ids[y][x] == idRef) {
+                ids[y][x] = idSwap;
+                
+                var h:int = ids.length;
+                var w:int = ids[y].length;
+                
+                if (x > 0)
+                    SwapIDs(ids, x - 1, y, idRef, idSwap);
+                if (x < w - 1)
+                    SwapIDs(ids, x + 1, y, idRef, idSwap);
+                if (y > 0)
+                    SwapIDs(ids, x, y - 1, idRef, idSwap);
+                if (y < h - 1)
+                    SwapIDs(ids, x, y + 1, idRef, idSwap);
             }
         }
         private static function GetIslandPositions(ids:Array):Array {
@@ -83,9 +109,10 @@ package physics {
             for (var y:int = 0; y < ids.length; y++) {
                 for (var x:int = 0; x < ids[y].length; x++) {
                     var id:int = ids[y][x];
-
+                    
                     // Skip If Nothing
-                    if (id == 0) continue;
+                    if (id == 0)
+                        continue;
                     
                     var idS:String = id.toString();
                     if (!map.hasOwnProperty(idS)) {
@@ -106,22 +133,23 @@ package physics {
             var xBounds:Vector2i = new Vector2i(int.MAX_VALUE, int.MIN_VALUE);
             var yBounds:Vector2i = new Vector2i(int.MAX_VALUE, int.MIN_VALUE);
             
-            for each(var p:Vector2i in pos) {
-                if (p.x < xBounds.x) xBounds.x = p.x;
-                if (p.x > xBounds.y) xBounds.y = p.x;
-                if (p.y < yBounds.x) yBounds.x = p.y;
-                if (p.y > yBounds.y) yBounds.y = p.y;
+            for each (var p:Vector2i in pos) {
+                if (p.x < xBounds.x)
+                    xBounds.x = p.x;
+                if (p.x > xBounds.y)
+                    xBounds.y = p.x;
+                if (p.y < yBounds.x)
+                    yBounds.x = p.y;
+                if (p.y > yBounds.y)
+                    yBounds.y = p.y;
             }
             
             // Create Island At Its Starting Min Location
-            var island:PhysIsland = new PhysIsland(
-                xBounds.y - xBounds.x + 1,
-                yBounds.y - yBounds.x + 1
-            );
+            var island:PhysIsland = new PhysIsland(xBounds.y - xBounds.x + 1, yBounds.y - yBounds.x + 1);
             island.globalAnchor.Set(xBounds.x, yBounds.x);
-
+            
             // Add All The Tiles
-            for each(var p:Vector2i in pos) {
+            for each (var p:Vector2i in pos) {
                 var tile:IPhysTile = tiles[p.y][p.x];
                 p.Sub(xBounds.x, yBounds.x);
                 island.AddTile(p.x, p.y, tile);
@@ -132,6 +160,5 @@ package physics {
             return island;
         }
     
-        
     }
 }
