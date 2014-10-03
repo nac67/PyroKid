@@ -53,6 +53,9 @@ package pyrokid {
         }
 		    
         private function update(event:Event):void {
+			if (!editorMode) {
+				level.x = - level.player.x + 400;
+			}
             if(!editorMode){
                 for (var i:int = 0; i < level.crates.length; i++) {
                     PhysicsHandler.gravitize(level.crates[i], level.walls, level.crates);

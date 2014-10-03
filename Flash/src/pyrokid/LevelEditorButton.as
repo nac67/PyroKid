@@ -5,19 +5,66 @@ package pyrokid {
 	import flash.events.MouseEvent;
 
 	public class LevelEditorButton extends SimpleButton {
-		private static var upColor:uint = 0x00CCFF;
-		private static var overColor:uint = 0xCCFF00;
-		private static var downColor:uint = 0xFFCC00;
+		protected static var upColor:uint = 0x00CCFF;
+		protected static var overColor:uint = 0xCCFF00;
+		protected static var downColor:uint = 0xFFCC00;
+		
+		protected var mainText:String;
+		protected var alternateText:String;
+		protected var upC:uint;
+		protected var downC:uint;
+		protected var w:int;
+		protected var h:int;
+		
+		private var isToggle:Boolean;
 
-		public function LevelEditorButton(text:String, onClick:Function, w:int, h:int, x:int, y:int) {
+		public function LevelEditorButton(onClick:Function, w:int, h:int, x:int, y:int, text:String, altText:String = null) {
 			this.x = x;
 			this.y = y;
-			downState = new ButtonBackground(downColor, w, h, text);
-			overState = new ButtonBackground(overColor, w, h, text);
-			upState = new ButtonBackground(upColor, w, h, text);
+			this.w = w;
+			this.h = h;
+			mainText = text;
+			isToggle = altText != null;
+			alternateText = isToggle ? altText : mainText;
+			upC = upColor;
+			downC = downColor;
+			
+			setBackgroundStates();
 			hitTestState = upState;
 			useHandCursor = true;
-			addEventListener(MouseEvent.CLICK, onClick);
+			setOnClick(onClick);
+		}
+		
+		public function toggle():void {
+			var temp = mainText;
+			mainText = alternateText;
+			alternateText = temp;
+			
+			var temp = upC;
+			upC = downC;
+			downC = temp;
+			
+			setBackgroundStates();
+		}
+		
+		public function setOnClick(onClick:Function):void {
+			if (onClick == null) {
+				return;
+			}
+			if (isToggle) {
+				addEventListener(MouseEvent.CLICK, function():void {
+					toggle();
+					onClick();
+				});
+			} else {
+				addEventListener(MouseEvent.CLICK, onClick);
+			}
+		}
+		
+		protected function setBackgroundStates():void {
+			upState = new ButtonBackground(upC, w, h, mainText);
+			downState = new ButtonBackground(downC, w, h, mainText);
+			overState = new ButtonBackground(overColor, w, h, mainText);
 		}
 	}
 }
