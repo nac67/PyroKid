@@ -32,13 +32,13 @@ package physics {
             
             // Make Tiles Test
             var walls:Array = [
-                [1, 1, 1, 1, 1, 1, 1, 1],
-                [0, 0, 0, 1, 1, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
+                [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 1, 0, 1, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0]
+                [0, 0, 0, 1, 1, 0, 0, 0],
+                [1, 1, 1, 1, 1, 1, 1, 1]
             ];
             var tiles = new Array(7);
             for (var y:int = 0; y < 7; y++) {
@@ -78,25 +78,24 @@ package physics {
             // Make Player
             rect = new PhysRectangle();
             rect.halfSize.Set(0.4, 0.5);
-            rect.center.Set(5, 5);
+            rect.center.Set(5, 2);
             rect.motion.Set(0, 0);
             
             player.graphics.beginFill(0xFF0000, 1);
             player.graphics.drawRect(-0.4, -0.5, 0.8, 1.0);
             player.graphics.endFill();
             world.addChild(player);
-            player.x = 5;
-            player.y = 5;
+            player.x = rect.center.x;
+            player.y = rect.center.y;
             
             addChild(world);
             world.width = 800 / 2;
             world.height = 700 / 2;
-            world.scaleY *= -1;
-            world.y = 400;
+            world.y = 0;
         }
         public function Update(e:Event = null) {
             var dt:Number = 1 / 30.0;
-            rect.velocity.Add(0, -9 * dt);
+            rect.velocity.Add(0, 9 * dt);
             rect.velocity.x = 0;
             if (Key.isDown(Constants.LEFT_BTN)) {
                 rect.velocity.x -= 2;
@@ -104,7 +103,7 @@ package physics {
                 rect.velocity.x += 2;
             }
             if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
-                rect.velocity.y = 5;
+                rect.velocity.y = -5;
             }
             
             rect.Update(dt);
@@ -117,7 +116,7 @@ package physics {
         }
         
         public function CR(r:PhysRectangle, a:CollisionAccumulator):Boolean {
-            if (a.accumPY > 0)
+            if (a.accumNY > 0)
                 isPlayerGrounded = true;
             return true;
         }
