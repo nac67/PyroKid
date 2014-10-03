@@ -17,10 +17,10 @@ package physics {
         public function ProvideEdgesDirection(side:int, e:Array, offset:Vector2):void {
             var i:int = 0;
             switch(side) {
-                case Cardinal.NX: i = 0;
-                case Cardinal.PX: i = 1;
-                case Cardinal.NY: i = 2;
-                case Cardinal.PY: i = 3;
+                case Cardinal.NX: i = 0; break;
+                case Cardinal.PX: i = 1; break;
+                case Cardinal.NY: i = 2; break;
+                case Cardinal.PY: i = 3; break;
             }
             
             var edge:PhysEdge = new PhysEdge(edges[i].direction, edges[i].center.x, edges[i].center.y, edges[i].halfSize * 2);

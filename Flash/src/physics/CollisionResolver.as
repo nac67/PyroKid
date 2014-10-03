@@ -37,14 +37,17 @@ package physics {
             }
             return edges;
         }
-       
+        
         /**
          * Resolves Collision Between A Dynamic Body And A Set Of Islands
          * @param r Dynamic Body
          * @param iList List Of Islands
          * @param fCallback Callback Function For When A Collision Occurs Inside Of An Island
+         * func(PhysRectangle, CollisionAccumulator):Boolean
          */
         public static function Resolve(r:PhysRectangle, iList:Array, fCallback:Function):void {
+            r.motion.MulD(1.1);
+            
             for each (var i:PhysIsland in iList) {
                 // Move From Global To Island Reference Point
                 r.center.SubV(i.globalAnchor);
@@ -64,40 +67,49 @@ package physics {
             }
             
             // Use The Callback And Check If Resolution Should Continue
-            var doResolve:Boolean = fCallback == null ? true : fCallback.call(r, a);
+            var doResolve:Boolean = fCallback == null ? true : fCallback.call(null, r, a);
             
             // Resolve The Collision
-            if (doResolve)
-                r.center.Add(a.accumPX - a.accumNX, a.accumPY - a.accumNY);
+            if (doResolve) {
+                var dx = a.accumPX - a.accumNX;
+                var dy = a.accumPY - a.accumNY;
+                
+                if (dx != 0)
+                    r.velocity.x = 0;
+                if (dy != 0)
+                    r.velocity.y = 0;
+                
+                r.center.Add(dx, dy);
+            }
         }
         private static function ResolveCollision(r:PhysRectangle, e:PhysEdge, a:CollisionAccumulator):void {
             switch (e.direction) {
                 case Cardinal.NX: 
-                    if (r.motion.x < 0)
+                    if (r.motion.x < 0 || (r.PX - e.center.x) > r.motion.x)
                         break;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
                         if (r.PX > e.center.x)
                             a.accumNX = Math.max(a.accumNX, r.PX - e.center.x);
                     }
                     break;
-                case Cardinal.PX: 
-                    if (r.motion.x > 0)
+                case Cardinal.PX:
+                    if (r.motion.x > 0 || (e.center.x - r.NX) > -r.motion.x)
                         break;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
                         if (r.NX < e.center.x)
                             a.accumPX = Math.max(a.accumPX, e.center.x - r.NX);
                     }
                     break;
-                case Cardinal.NY: 
-                    if (r.motion.y < 0)
+                case Cardinal.NY:
+                    if (r.motion.y < 0 || (r.PY - e.center.y) > r.motion.y)
                         break;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.PY > e.center.y)
                             a.accumNY = Math.max(a.accumNY, r.PY - e.center.y);
                     }
                     break;
-                case Cardinal.PY: 
-                    if (r.motion.y > 0)
+                case Cardinal.PY:
+                    if (r.motion.y > 0 || (r.NY - e.center.y) < r.motion.y)
                         break;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.NY < e.center.y)

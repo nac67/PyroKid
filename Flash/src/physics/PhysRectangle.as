@@ -5,16 +5,11 @@ package physics {
      * @author Cristian Zaloj
      */
     public class PhysRectangle {
-        public var center:Vector2;
-        public var halfSize:Vector2;
+        public var center:Vector2 = new Vector2();
+        public var halfSize:Vector2 = new Vector2(1, 1);
         
-        public var motion:Vector2;
-        
-        public function PhysRectangle() {
-            center = new Vector2().Set(0, 0);
-            halfSize = new Vector2().Set(1, 1);
-            motion = new Vector2().Set(0, 0);
-        }
+        public var velocity:Vector2 = new Vector2();
+        public var motion:Vector2 = new Vector2();
         
         public function get NX():Number {
             return center.x - halfSize.x;
@@ -27,6 +22,11 @@ package physics {
         }
         public function get PY():Number {
             return center.y + halfSize.y;
+        }
+    
+        public function Update(dt:Number) {
+            motion.Set(velocity.x, velocity.y).MulD(dt);
+            center.AddV(motion);
         }
     }
 
