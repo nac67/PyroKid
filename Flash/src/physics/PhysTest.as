@@ -16,6 +16,9 @@ package physics {
         private var player:Sprite = new Sprite();
         private var isPlayerGrounded:Boolean = false;
         
+        private var drops:Array = [];
+        private var dropSprites:Array = [];
+        
         private var islands:Array;
         private var rect:PhysRectangle;
         
@@ -88,10 +91,30 @@ package physics {
             player.x = rect.center.x;
             player.y = rect.center.y;
             
+            // Make Droplets
+            var dropSize:Number = 0.03;
+            for (var c:int = 0; c < 120; c++) {
+                var d:PhysRectangle = new PhysRectangle();
+                d.halfSize.Set(dropSize, dropSize);
+                d.center.Set(Math.random() * 8, 0);
+                d.motion.Set(0, 0);
+                drops.push(d);
+                
+                var ds:Sprite = new Sprite();
+                ds.graphics.beginFill(0x0000FF, 1);
+                ds.graphics.drawRect(-dropSize, -dropSize, dropSize * 2, dropSize * 2);
+                ds.graphics.endFill();
+                world.addChild(ds);
+                ds.x = d.center.x;
+                ds.y = d.center.y;
+                dropSprites.push(ds);
+            }
+            
             addChild(world);
             world.width = 800 / 2;
             world.height = 700 / 2;
             world.y = 0;
+            world.x = 0;
         }
         public function Update(e:Event = null) {
             var dt:Number = 1 / 30.0;
@@ -105,19 +128,38 @@ package physics {
             if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
                 rect.velocity.y = -5;
             }
-            
             rect.Update(dt);
-            isPlayerGrounded = false;
+
+            for each(var d:PhysRectangle in drops) {
+                d.velocity.Add(0, 9 * dt);
+                d.Update(dt);
+            }
             
+            isPlayerGrounded = false;
             CollisionResolver.Resolve(rect, islands, CR);
+            for each(var d:PhysRectangle in drops) {
+                CollisionResolver.Resolve(d, islands, CRDroplet);        
+            }
             
             player.x = rect.center.x;
             player.y = rect.center.y;
+            for (var di in drops) {
+                dropSprites[di].x = drops[di].center.x;
+                dropSprites[di].y = drops[di].center.y;
+            }
         }
         
         public function CR(r:PhysRectangle, a:CollisionAccumulator):Boolean {
             if (a.accumNY > 0)
                 isPlayerGrounded = true;
+            return true;
+        }
+        public function CRDroplet(r:PhysRectangle, a:CollisionAccumulator):Boolean {
+            if (a.accumNY > 0) {
+                r.center.y = (Math.random() * 4) - 8;
+                r.velocity.y = 0;
+                return false;
+            }
             return true;
         }
     }
