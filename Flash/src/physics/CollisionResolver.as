@@ -5,6 +5,13 @@ package physics {
      * @author Cristian Zaloj
      */
     public class CollisionResolver {
+        public static var MAX_MOTION:Number = 0.2;
+        public static function ClampedMotion(v:Number):Number {
+            if (v < -MAX_MOTION) return -MAX_MOTION;
+            if (v > MAX_MOTION) return MAX_MOTION;
+            return v;
+        }
+        
         /**
          * Construct A Set Of Edges In The Frame Of Reference Of The Island
          * @param providers IPhysTile[y][x] Array
@@ -49,14 +56,19 @@ package physics {
             r.motion.MulD(1.1);
             
             for each (var i:PhysIsland in iList) {
+                
                 // Move From Global To Island Reference Point
                 r.center.SubV(i.globalAnchor);
+                r.velocity.SubV(i.velocity);
+                r.motion.SubV(i.motion);
                 
                 // Perform Collision Detection
                 ResolveIsland(r, i.edges, fCallback);
                 
                 // Move Back In Global Frame Of Reference
                 r.center.AddV(i.globalAnchor);
+                r.velocity.AddV(i.velocity);
+                r.motion.AddV(i.motion);
             }
         }
         private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function):void {

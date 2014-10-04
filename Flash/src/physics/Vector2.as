@@ -17,6 +17,9 @@ package physics {
             y = _y;
             return this;
         }
+        public function SetV(v:Vector2):Vector2 {
+            return Set(v.x, v.y);
+        }
         
         public function Add(_x:Number, _y:Number):Vector2 {
             x += _x;
@@ -65,7 +68,7 @@ package physics {
         public function DivV(v:Vector2):Vector2 {
             return Div(v.x, v.y);
         }
-
+        
         public function toString():String {
             return x.toString() + " " + y.toString();
         }

@@ -159,6 +159,19 @@ package physics {
             island.RebuildEdges();
             return island;
         }
-    
+        
+        public static function Simulate(islands:Array, gravAcceleration:Vector2, dt:Number) {
+            for each(var island:PhysIsland in islands) {
+                if (!island.isGrounded) {
+                    island.velocity.Add(gravAcceleration.x * dt, gravAcceleration.y * dt);
+                    island.motion.SetV(island.velocity).MulD(dt);
+                    island.motion.x = CollisionResolver.ClampedMotion(island.motion.x);
+                    island.motion.y = CollisionResolver.ClampedMotion(island.motion.y);
+                    island.globalAnchor.AddV(island.motion);
+                    
+                    island.motion.MulD(1.1);
+                }
+            }
+        }
     }
 }

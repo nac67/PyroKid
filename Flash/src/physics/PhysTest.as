@@ -38,10 +38,10 @@ package physics {
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 0, 0, 0, 0],
-                [0, 0, 0, 0, 1, 0, 1, 0],
+                [0, 0, 0, 0, 0, 0, 0, 2],
+                [0, 0, 0, 0, 2, 0, 2, 2],
                 [0, 0, 0, 1, 1, 0, 0, 0],
-                [1, 1, 1, 1, 1, 1, 1, 1]
+                [1, 1, 2, 1, 1, 1, 1, 1]
             ];
             var tiles = new Array(7);
             for (var y:int = 0; y < 7; y++) {
@@ -50,6 +50,9 @@ package physics {
                     switch (walls[y][x]) {
                         case 1: 
                             tiles[y][x] = new PhysBox();
+                            break;
+                        case 2: 
+                            tiles[y][x] = new PhysBox(true);
                             break;
                         default: 
                             tiles[y][x] = null;
@@ -60,7 +63,7 @@ package physics {
             
             // Make Islands
             islands = IslandSimulator.ConstructIslands(tiles);
-            islandSprites = new Array(islands.length);
+            islandSprites = [];
             for each (var i:PhysIsland in islands) {
                 var s:Sprite = new Sprite();
                 s.graphics.beginFill(0xFF00FF, 1);
@@ -126,7 +129,7 @@ package physics {
                 rect.velocity.x += 2;
             }
             if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
-                rect.velocity.y = -5;
+                rect.velocity.y = -6;
             }
             rect.Update(dt);
 
@@ -135,10 +138,12 @@ package physics {
                 d.Update(dt);
             }
             
+            IslandSimulator.Simulate(islands, new Vector2(0, -0.1), dt);
+            
             isPlayerGrounded = false;
             CollisionResolver.Resolve(rect, islands, CR);
             for each(var d:PhysRectangle in drops) {
-                CollisionResolver.Resolve(d, islands, CRDroplet);        
+                CollisionResolver.Resolve(d, islands, CRDroplet);  
             }
             
             player.x = rect.center.x;
@@ -146,6 +151,10 @@ package physics {
             for (var di in drops) {
                 dropSprites[di].x = drops[di].center.x;
                 dropSprites[di].y = drops[di].center.y;
+            }
+            for (var ii in islands) {
+                islandSprites[ii].x = islands[ii].globalAnchor.x;
+                islandSprites[ii].y = islands[ii].globalAnchor.y;
             }
         }
         

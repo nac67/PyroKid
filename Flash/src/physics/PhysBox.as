@@ -33,10 +33,10 @@ package physics {
             e.push(edge);
         }
         public function get IsGrounded():Boolean {
-            return true;
+            return !fallingType;
         }
         public function CanBind(side:int, neighbor:IPhysTile):Boolean {
-            return !fallingType || !(neighbor is PhysBox && (neighbor as PhysBox).fallingType);
+            return !fallingType || (neighbor is PhysBox && (neighbor as PhysBox).fallingType);
         }
     }
 }

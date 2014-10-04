@@ -25,7 +25,9 @@ package physics {
         }
     
         public function Update(dt:Number) {
-            motion.Set(velocity.x, velocity.y).MulD(dt);
+            motion.SetV(velocity).MulD(dt);
+            motion.x = CollisionResolver.ClampedMotion(motion.x);
+            motion.y = CollisionResolver.ClampedMotion(motion.y);
             center.AddV(motion);
         }
     }

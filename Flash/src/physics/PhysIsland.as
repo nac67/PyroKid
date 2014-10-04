@@ -7,6 +7,8 @@ package physics {
     public class PhysIsland {
         // The Location Of The Island In World For Relative Calculations
         public var globalAnchor:Vector2 = new Vector2();
+        public var velocity:Vector2 = new Vector2();
+        public var motion:Vector2 = new Vector2();
         
         // Width And Height Of Island In Tiles
         public var tilesWidth:int;
@@ -53,4 +55,3 @@ package physics {
         }
     }
 }
-
