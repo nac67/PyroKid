@@ -76,7 +76,7 @@ package physics {
                 return;
             
             // Check If They Can Bind In Both Directions
-            if (t1.CanBind(dir12) && t2.CanBind(dir12 ^ 1)) {
+            if (t1.CanBind(dir12,t2) && t2.CanBind(dir12 ^ 1,t1)) {
                 // Set To The Minimum ID
                 if (id1 < id2)
                     SwapIDs(ids, p2.x, p2.y, id2, id1);

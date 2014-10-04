@@ -11,6 +11,11 @@ package physics {
             new PhysEdge(Cardinal.PY, 0.5, 1, 1)
         ];
         
+        public var fallingType:Boolean;
+        public function PhysBox(isFalling:Boolean = false) {
+            fallingType = isFalling;
+        }
+        
         public function ProvideEdgesSpecial(edges:Array, offset:Vector2):void {
             return;
         }
@@ -30,8 +35,8 @@ package physics {
         public function get IsGrounded():Boolean {
             return true;
         }
-        public function CanBind(side:int):Boolean {
-            return true;
+        public function CanBind(side:int, neighbor:IPhysTile):Boolean {
+            return !fallingType || !(neighbor is PhysBox && (neighbor as PhysBox).fallingType);
         }
     }
 }
