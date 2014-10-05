@@ -1,4 +1,4 @@
-package pyrokid {
+package ui {
 	import flash.display.DisplayObject;
 	import flash.display.SimpleButton;
 	import flash.display.Sprite;

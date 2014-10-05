@@ -8,6 +8,7 @@ package pyrokid {
 	import flash.text.TextFormat;
 	import flash.utils.Dictionary;
 	import Math;
+	import ui.*;
     
     public class LevelEditor extends Sprite {
 		
