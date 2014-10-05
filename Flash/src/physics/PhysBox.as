@@ -1,7 +1,7 @@
 package physics {
 	import flash.display.Sprite;
 	import pyrokid.Constants;
-	import pyrokid.GameEntity;
+	import physics.GameEntity;
 	/**
      * A Simple Collidable Box Implementation
      * @author Cristian Zaloj

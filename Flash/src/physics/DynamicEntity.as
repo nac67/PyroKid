@@ -2,7 +2,6 @@ package physics {
 	import flash.display.Sprite;
     import flash.geom.Rectangle;
 	import pyrokid.Constants;
-	import pyrokid.GameEntity;
 
     public class DynamicEntity extends GameEntity {
         
