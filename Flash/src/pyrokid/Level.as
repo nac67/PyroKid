@@ -2,13 +2,13 @@ package pyrokid {
     import flash.display.Sprite;
 	import physics.IslandSimulator;
 	import physics.PhysBox;
-	import physics.PhysRectangle;
+	import physics.DynamicEntity;
     
     public class Level extends Sprite {
 		
         // Level object instances
         public var walls:Array;
-        public var player:PhysRectangle;
+        public var player:DynamicEntity;
 		public var recipe:Object;
 		public var islands:Array;
         
@@ -43,7 +43,7 @@ package pyrokid {
 			} else if (objectCode == 2) { // crate
 				return;// obj = new Crate();
 			} else if (objectCode == 3) { // player
-				player =  new PhysRectangle(0.8, 0.95);
+				player =  new DynamicEntity(0.8, 0.95);
 				obj = player;
 			}
 			

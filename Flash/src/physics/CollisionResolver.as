@@ -43,9 +43,9 @@ package physics {
          * @param r Dynamic Body
          * @param iList List Of Islands
          * @param fCallback Callback Function For When A Collision Occurs Inside Of An Island
-         * func(PhysRectangle, CollisionAccumulator):Boolean
+         * func(DynamicEntity, CollisionAccumulator):Boolean
          */
-        public static function Resolve(r:PhysRectangle, iList:Array, fCallback:Function):void {
+        public static function Resolve(r:DynamicEntity, iList:Array, fCallback:Function):void {
             r.motion.MulD(1.1);
             
             for each (var i:PhysIsland in iList) {
@@ -59,7 +59,7 @@ package physics {
                 r.center.AddV(i.globalAnchor);
             }
         }
-        private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function):void {
+        private static function ResolveIsland(r:DynamicEntity, eList:Array, fCallback:Function):void {
             // Accumulate All Collisions
             var a:CollisionAccumulator = new CollisionAccumulator();
             for each (var e:PhysEdge in eList) {
@@ -82,7 +82,7 @@ package physics {
                 r.center.Add(dx, dy);
             }
         }
-        private static function ResolveCollision(r:PhysRectangle, e:PhysEdge, a:CollisionAccumulator):void {
+        private static function ResolveCollision(r:DynamicEntity, e:PhysEdge, a:CollisionAccumulator):void {
             switch (e.direction) {
                 case Cardinal.NX: 
                     if (r.motion.x < 0 || (r.PX - e.center.x) > r.motion.x)

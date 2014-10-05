@@ -1,11 +1,12 @@
 package physics {
 	import flash.display.Sprite;
 	import pyrokid.Constants;
+	import pyrokid.GameEntity;
 	/**
      * A Simple Collidable Box Implementation
      * @author Cristian Zaloj
      */
-    public class PhysBox extends Sprite implements IPhysTile {
+    public class PhysBox extends GameEntity implements IPhysTile {
         private static var edges:Array = [
             new PhysEdge(Cardinal.NX, 0, 0.5, 1),
             new PhysEdge(Cardinal.PX, 1, 0.5, 1),
@@ -13,11 +14,11 @@ package physics {
             new PhysEdge(Cardinal.PY, 0.5, 1, 1)
         ];
 		
-		public function PhysBox() {
-            graphics.lineStyle(0x000000);
-            graphics.beginFill(0xFFEECC);
-            graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
-            graphics.endFill();
+		private var grounded:Boolean;
+		
+		public function PhysBox(grounded:Boolean = true) {
+            super(1, 1, 0xFFEECC);
+			this.grounded = grounded;
         }
         
         public function ProvideEdgesSpecial(edges:Array, offset:Vector2):void {
@@ -37,7 +38,7 @@ package physics {
             e.push(edge);
         }
         public function get IsGrounded():Boolean {
-            return true;
+            return grounded;
         }
         public function CanBind(side:int):Boolean {
             return true;

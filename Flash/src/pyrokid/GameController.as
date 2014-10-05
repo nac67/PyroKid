@@ -18,16 +18,18 @@ package pyrokid {
 		
 		public function GameController() {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
-            
-            level = new Level(new LevelRecipe());
-            addChild(level);
-			levelEditor = new LevelEditor(level);
-			addChild(levelEditor);
-            addEventListener(Event.ENTER_FRAME, update);
+            LevelIO.loadLevel(function(levelRecipe):void {
+				reloadLevel(levelRecipe);
+				levelEditor = new LevelEditor(level);
+				addChild(levelEditor);
+				addEventListener(Event.ENTER_FRAME, update);
+			});
 		}
 
 		public function reloadLevel(levelRecipe):void {
-			removeChild(level);
+			if (level != null) {
+				removeChild(level);
+			}
 			level = new Level(levelRecipe);
 			addChild(level);
 			if (editorMode) {
@@ -59,7 +61,7 @@ package pyrokid {
             }
         }
 		
-        public function CR(r:PhysRectangle, a:CollisionAccumulator):Boolean {
+        public function CR(r:GameEntity, a:CollisionAccumulator):Boolean {
             if (a.accumNY > 0)
                 isPlayerGrounded = true;
             return true;

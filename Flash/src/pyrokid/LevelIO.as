@@ -28,6 +28,8 @@ package pyrokid {
 		 * an unserialized Object's type, but ONLY pass a LevelRecipe object into this method. */
 		public static function saveLevel(levelRecipe:Object):void {
 			for (var i = 0; i < levelRecipe.plainCrates.length; i++) {
+				// TODO there shouldn't be any plainCrates . . .
+				// need to figure out how to type check this or get rid of it
 				trace(levelRecipe.plainCrates[i]);
 			}
 			var bytes:ByteArray = new ByteArray();
