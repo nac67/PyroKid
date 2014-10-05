@@ -1,13 +1,16 @@
 package pyrokid {
     import flash.display.Sprite;
+	import physics.IslandSimulator;
+	import physics.PhysBox;
+	import physics.PhysRectangle;
     
     public class Level extends Sprite {
 		
         // Level object instances
         public var walls:Array;
-        public var player:Player;
-        public var crates:Array;
+        public var player:PhysRectangle;
 		public var recipe:Object;
+		public var islands:Array;
         
         //2d grid, tile locked objects, non moving
         public var staticObjects:Array;
@@ -19,6 +22,14 @@ package pyrokid {
 			reset(recipe);
         }
 		
+		public function numCellsWide():int {
+			return walls[0].length;
+		}
+		
+		public function numCellsTall():int {
+			return walls.length;
+		}
+		
 		// NOTE: this assumes only 1 tile objects for now. Will need to be expaned
 		// later on otherwise multiple children will be added for the same object TODO
 		private function addStaticObject(objectCode:int, cellX:int, cellY:int):void {
@@ -28,44 +39,43 @@ package pyrokid {
 			
 			var obj:Sprite;
 			if (objectCode == 1) { // background dirt
-				obj = new GroundTile();
+				obj = new PhysBox();
 			} else if (objectCode == 2) { // crate
-				obj = new Crate();
-				crates.push(obj);
+				return;// obj = new Crate();
 			} else if (objectCode == 3) { // player
-				player = new Player();
+				player =  new PhysRectangle(0.8, 0.95);
 				obj = player;
 			}
 			
 			obj.x = cellX * Constants.CELL;
 			obj.y = cellY * Constants.CELL;
-			staticObjects[cellX][cellY] = obj;
+			if (obj != player) {
+				staticObjects[cellY][cellX] = obj;
+			}
 			addChild(obj);
 		}
         
         public function reset(recipe:Object):void {
-            var x:int, w:int, h:int;
+            var x:int, y:int, w:int, h:int;
             
             Utils.removeAllChildren(this);
             
 			this.recipe = recipe;
             walls = recipe.walls;
-            crates = [];
-            
-            staticObjects = [];
-            dynamicObjects = [];
-            
+			
             staticObjects = [];
             for (x = 0; x < walls.length; x++) {
                 staticObjects.push(new Array(walls[x].length));
             }
             
-            for (x = 0; x < walls.length; x++) {
-                var column:Array = walls[x];
-                for (var y:int = 0; y < column.length; y++) {
-					addStaticObject(column[y], x, y);
+            for (y = 0; y < walls.length; y++) {
+                var row:Array = walls[y];
+                for (x = 0; x < row.length; x++) {
+					addStaticObject(row[x], x, y);
                 }
             }
+			
+            islands = IslandSimulator.ConstructIslands(staticObjects);
         }
         
     }

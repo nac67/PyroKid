@@ -13,24 +13,24 @@ package pyrokid {
 		
 		private var level:Level;
 		private var backgroundMode:Boolean;
+		private var buttons:Array;
         
         public function LevelEditor(level:Level):void {
 			this.level = level;
 			backgroundMode = true;
-			Main.MainStage.addEventListener(MouseEvent.CLICK, clickHandler);
 
-			var button:LevelEditorButton = new LevelEditorButton(toggleBackgroundMode, 120, 25, 650, 50, "Editing Background", "Editing Objects");
-			addChild(button);
+			buttons = [];
+			buttons.push(new LevelEditorButton(toggleBackgroundMode, 120, 25, 650, 50, "Editing Background", "Editing Objects"));
 			
-			addChild(new LevelEditorInput("Map Width", level.walls.length, 650, 100, updateWidth));
-			addChild(new LevelEditorInput("Map Height", level.walls[0].length, 650, 150, updateHeight));
+			buttons.push(new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth));
+			buttons.push(new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight));
 			
 			var options:Dictionary = new Dictionary();
 			options[1] = "yisssss";
 			options[2] = "lester";
 			options[20] = "malvo";
 			options[4] = "nooooo";
-			addChild(new SelectorButton(options, changeSelectedObject));
+			buttons.push(new SelectorButton(options, changeSelectedObject));
 		}
 		
 		private function changeSelectedObject(selected):void {
@@ -41,53 +41,69 @@ package pyrokid {
 			backgroundMode = !backgroundMode;
 		}
 		
+		public function turnEditorOn():void {
+			Main.MainStage.addEventListener(MouseEvent.CLICK, clickHandler);
+			for (var i:int = 0; i < buttons.length; i++) {
+				addChild(buttons[i]);
+			}
+			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+		}
+		
 		public function turnEditorOff():void {
 			Main.MainStage.removeEventListener(MouseEvent.CLICK, clickHandler);
+			Utils.removeAllChildren(this);
 		}
 		
-		private function updateWidth(w:int):void {
+		public function loadLevel(level:Level):void {
+			this.level = level;
+			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+		}
+		
+		private function updateHeight(newHeight:int):void {
 			// TODO if shrinking in size, delete all crates/items that go beyond the edge
-			if (w < 1) {
+			if (newHeight < 1) {
 				trace("cannot set size to less than 1");
 				return;
 			}
 			var walls:Array = level.recipe.walls;
-			var height:int = walls[0].length;
-			if (w >= walls.length) {
-				for (var x = walls.length; x < w; x++) {
-					var newCol:Array = [];
-					for (var y = 0; y < height; y++) {
-						newCol.push(1);
+			var width:int = walls[0].length;
+			var height:int = walls.length;
+			if (newHeight >= height) {
+				for (var y = height; y < newHeight; y++) {
+					var newRow:Array = [];
+					for (var x = 0; x < width; x++) {
+						newRow.push(1);
 					}
-					walls.push(newCol);
+					walls.push(newRow);
 				}
 			} else {
-				walls.splice(w);
+				walls.splice(newHeight);
 			}
 			level.recipe.walls = walls;
-			scaleAndResetLevel(w, walls[0].length);
+			scaleAndResetLevel(width, newHeight);
 		}
 		
-		private function updateHeight(h:int):void {
-			if (h < 1) {
+		private function updateWidth(newWidth:int):void {
+			if (newWidth < 1) {
 				trace("cannot set size to less than 1");
 				return;
 			}
 			var walls:Array = level.recipe.walls;
-			var height:int = walls[0].length;
-			if (h >= walls[0].length) {
-				for (var x = 0; x < walls.length; x++) {
-					for (var y = height; y < h; y++) {
-						walls[x].push(1);
+			var width:int = walls[0].length;
+			var height:int = walls.length;
+			if (newWidth >= width) {
+				for (var y = 0; y < height; y++) {
+					for (var x = width; x < newWidth; x++) {
+						walls[y].push(1);
 					}
 				}
 			} else {
-				for (var x = 0; x < walls.length; x++) {
-					walls[x].splice(h);
+				for (var y = 0; y < height; y++) {
+					walls[y].splice(newWidth);
 				}
 			}
 			level.recipe.walls = walls;
-			scaleAndResetLevel(walls.length, h);
+			scaleAndResetLevel(newWidth, height);
 		}
 		
 		private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
@@ -99,11 +115,11 @@ package pyrokid {
 		private function clickHandler(event:MouseEvent):void {
 			var cellX:int = event.stageX / (Constants.CELL * level.scaleX);
 			var cellY:int = event.stageY / (Constants.CELL * level.scaleY);
-			if (cellX >= level.walls.length || cellY >= level.walls[0].length) {
+			if (cellX >= level.numCellsWide() || cellY >= level.numCellsTall()) {
 				return;
 			}
 			if (backgroundMode) {
-				var currentCode:int = level.recipe.walls[cellX][cellY];
+				var currentCode:int = level.recipe.walls[cellY][cellX];
 				if (currentCode == 0) {
 					currentCode = 1;
 				} else if (currentCode == 1) {
@@ -111,7 +127,7 @@ package pyrokid {
 				} else {
 					return;
 				}
-				level.recipe.walls[cellX][cellY] = currentCode;
+				level.recipe.walls[cellY][cellX] = currentCode;
 			} else {
 				trace("not in background mode");
 			}

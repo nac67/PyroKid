@@ -4,6 +4,7 @@ package pyrokid {
 	import flash.utils.ByteArray;
 	import flash.net.FileReference;
     import flash.events.KeyboardEvent;
+	import physics.*;
 	
 	public class GameController extends Sprite {
 		
@@ -12,11 +13,16 @@ package pyrokid {
         
 		public var level:Level;
 		
+		// TODO remove
+        private var isPlayerGrounded:Boolean = false;
+		
 		public function GameController() {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             
             level = new Level(new LevelRecipe());
             addChild(level);
+			levelEditor = new LevelEditor(level);
+			addChild(levelEditor);
             addEventListener(Event.ENTER_FRAME, update);
 		}
 
@@ -24,19 +30,20 @@ package pyrokid {
 			removeChild(level);
 			level = new Level(levelRecipe);
 			addChild(level);
+			if (editorMode) {
+				levelEditor.loadLevel(level);
+			}
 		}
 		
 		private function levelEditorListener(e:KeyboardEvent):void {
             if (e.keyCode == 13) { //enter
                 editorMode = !editorMode;
-                reloadLevel(level.recipe);
 				if (editorMode) {
-					levelEditor = new LevelEditor(level);
-					addChild(levelEditor);
+					levelEditor.turnEditorOn();
 				} else {
 					levelEditor.turnEditorOff();
-					removeChild(levelEditor);
 				}
+                reloadLevel(level.recipe);
             }
             
             if (editorMode){
@@ -51,17 +58,31 @@ package pyrokid {
                 
             }
         }
+		
+        public function CR(r:PhysRectangle, a:CollisionAccumulator):Boolean {
+            if (a.accumNY > 0)
+                isPlayerGrounded = true;
+            return true;
+        }
 		    
         private function update(event:Event):void {
 			if (!editorMode) {
 				level.x = - level.player.x + 400;
-			}
-            if(!editorMode){
-                for (var i:int = 0; i < level.crates.length; i++) {
-                    PhysicsHandler.gravitize(level.crates[i], level.walls, level.crates);
-                }
-                
-                PhysicsHandler.handlePlayer(level.player, level.walls, level.crates)
+				
+				var dt:Number = 1 / 30.0;
+				level.player.velocity.Add(0, 9 * dt);
+				level.player.velocity.x = 0;
+				if (Key.isDown(Constants.LEFT_BTN)) {
+					level.player.velocity.x -= 2;
+				} else if (Key.isDown(Constants.RIGHT_BTN)) {
+					level.player.velocity.x += 2;
+				}
+				if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
+					level.player.velocity.y = -6;
+				}
+				level.player.Update(dt);
+				isPlayerGrounded = false;
+				CollisionResolver.Resolve(level.player, level.islands, CR);
             }
         }
 		

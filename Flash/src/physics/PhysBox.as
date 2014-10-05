@@ -1,15 +1,24 @@
 package physics {
+	import flash.display.Sprite;
+	import pyrokid.Constants;
 	/**
      * A Simple Collidable Box Implementation
      * @author Cristian Zaloj
      */
-    public class PhysBox implements IPhysTile {
+    public class PhysBox extends Sprite implements IPhysTile {
         private static var edges:Array = [
             new PhysEdge(Cardinal.NX, 0, 0.5, 1),
             new PhysEdge(Cardinal.PX, 1, 0.5, 1),
             new PhysEdge(Cardinal.NY, 0.5, 0, 1),
             new PhysEdge(Cardinal.PY, 0.5, 1, 1)
         ];
+		
+		public function PhysBox() {
+            graphics.lineStyle(0x000000);
+            graphics.beginFill(0xFFEECC);
+            graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
+            graphics.endFill();
+        }
         
         public function ProvideEdgesSpecial(edges:Array, offset:Vector2):void {
             return;

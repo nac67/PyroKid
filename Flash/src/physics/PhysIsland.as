@@ -1,4 +1,6 @@
 package physics {
+	import pyrokid.Constants;
+	import flash.display.Sprite;
     
     /**
      * ...
@@ -43,6 +45,9 @@ package physics {
             
             // Add Grounding To The Island
             isGrounded = isGrounded || tile.IsGrounded;
+			var child:Sprite = tile as Sprite;
+			child.x = (x + globalAnchor.x) * Constants.CELL;
+			child.y = (y + globalAnchor.y) * Constants.CELL;
         }
         public function AddFullBlock(x:int, y:int) {
             AddTile(x, y, new PhysBox());
