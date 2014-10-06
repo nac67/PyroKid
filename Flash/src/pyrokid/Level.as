@@ -1,5 +1,6 @@
 package pyrokid {
     import flash.display.DisplayObject;
+    import flash.display.MovieClip;
     import flash.display.Sprite;
 	import physics.IslandSimulator;
 	import physics.PhysBox;
@@ -12,7 +13,9 @@ package pyrokid {
         public var player:Player;
 		public var recipe:Object;
 		public var islands:Array;
-        public var fireballs:RingBuffer; //1d list of active fireballs, TODO, make it a ring buffer with max size
+        public var fireballs:RingBuffer;
+        public var firesplooshes:RingBuffer;
+        
         
         //2d grid, tile locked objects, non moving
         public var staticObjects:Array;
@@ -58,7 +61,7 @@ package pyrokid {
 		}
         
         public function reset(recipe:Object):void {
-            var x:int, y:int, w:int, h:int;
+            var x:int, y:int, w:int, h:int, self:Level = this;
             
             Utils.removeAllChildren(this);
             
@@ -85,7 +88,21 @@ package pyrokid {
             fireballs = new RingBuffer(5, function(o:Object) {
                 if (o is DisplayObject) {
                     var dispObj = o as DisplayObject;
-                    dispObj.parent.removeChild(dispObj);
+                    
+                    var sploosh:MovieClip = new Embedded.FiresplooshSWF() as MovieClip;
+                    sploosh.x = dispObj.x-30;
+                    sploosh.y = dispObj.y-13;
+                    self.addChild(sploosh);
+                    self.firesplooshes.push(sploosh);
+                    
+                    self.removeChild(dispObj);
+                }
+            });
+            
+            firesplooshes = new RingBuffer(5, function(o:Object) {
+                if (o is DisplayObject) {
+                    var dispObj = o as DisplayObject;
+                    self.removeChild(dispObj);
                 }
             });
         }

@@ -34,30 +34,6 @@ package pyrokid {
             
         }
         
-        public function updateAnimation() {
-            if (animIsShooting) {
-                playerSwf.gotoAndStop(5);
-                if (playerSwf.playershoot.currentFrame == playerSwf.playershoot.totalFrames) {
-                    animIsShooting = false;
-                }
-            } else {
-                if (velocity.y > 1) {
-                    playerSwf.gotoAndStop(4);
-                    return;
-                }
-                if (velocity.y < -1 ) {
-                    playerSwf.gotoAndStop(3);
-                    return;
-                }
-                
-                if (animIsRunning) {
-                    playerSwf.gotoAndStop(2);
-                } else {
-                    playerSwf.gotoAndStop(1);
-                }
-            }
-        }
-        
         public function set direction(dir:int) {
             _direction = dir;
             if (dir == Constants.DIR_RIGHT) {
@@ -72,6 +48,31 @@ package pyrokid {
         
         public function get direction() {
             return _direction;
+        }
+        
+        public function updateAnimation(isPlayerGrounded:Boolean) {
+            if (animIsShooting) {
+                playerSwf.gotoAndStop(5);
+                if (playerSwf.playershoot.currentFrame == playerSwf.playershoot.totalFrames) {
+                    animIsShooting = false;
+                }
+            } else {
+                if(!isPlayerGrounded){
+                    if (velocity.y > 0) {
+                        playerSwf.gotoAndStop(4);
+                        return;
+                    } else {
+                        playerSwf.gotoAndStop(3);
+                        return;
+                    }
+                }
+                
+                if (animIsRunning) {
+                    playerSwf.gotoAndStop(2);
+                } else {
+                    playerSwf.gotoAndStop(1);
+                }
+            }
         }
     
     }

@@ -1,4 +1,5 @@
 package pyrokid {
+    import flash.display.MovieClip;
     import flash.display.Sprite;
     import flash.events.Event;
 	import flash.utils.ByteArray;
@@ -111,7 +112,7 @@ package pyrokid {
 				}
                 prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
 				level.player.Update(dt);
-                level.player.updateAnimation();
+                level.player.updateAnimation(isPlayerGrounded);
 				isPlayerGrounded = false;
 				CollisionResolver.Resolve(level.player, level.islands, resolveCollision);
                 
@@ -164,7 +165,16 @@ package pyrokid {
                     }
                 }
                 level.fireballs.deleteAllMarked();
-
+                
+                
+                //firesplooshes
+                for (var i = 0; i < level.firesplooshes.size(); i++) {
+                    var fsploosh:MovieClip = level.firesplooshes.get(i) as MovieClip;
+                    if (fsploosh.currentFrame == fsploosh.totalFrames) {
+                        level.firesplooshes.markForDeletion(fsploosh);
+                    }
+                }
+                level.firesplooshes.deleteAllMarked();
                 
                 level.x = Math.floor(- level.player.x + 400);
 				
