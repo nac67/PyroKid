@@ -69,7 +69,7 @@ package pyrokid {
 		    
         private function update(event:Event):void {
 			if (!editorMode) {
-				level.x = - level.player.x + 400;
+				
 				
 				var dt:Number = 1 / 30.0;
 				level.player.velocity.Add(0, 9 * dt);
@@ -104,6 +104,8 @@ package pyrokid {
 					}
 					Fire.spreadFire(onFire, fireGrid);
 				}*/
+                
+                level.x = - level.player.x + 400;
 				
             }
         }
