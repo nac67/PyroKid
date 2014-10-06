@@ -79,7 +79,7 @@ package pyrokid {
 			
             islands = IslandSimulator.ConstructIslands(staticObjects);
             
-            fireballs = new RingBuffer(5);
+            fireballs = new RingBuffer(5,true);
         }
         
     }

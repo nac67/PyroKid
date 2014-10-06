@@ -1,19 +1,41 @@
 package pyrokid {
     import flash.display.DisplayObject;
     
+    /*
+     Example of how to iterate through this
+      
+     for (var i = 0; i < level.fireballs.size(); i++) {
+        var fball:Fireball = level.fireballs.get(i) as Fireball;
+        // do stuff with fball...
+     }
+    */
+    
     public class RingBuffer {
         
         private var maxItems:int;
-        private var buffer:Array;
+        public var buffer:Array;
         private var head = 0;
         private var _size = 0;
+        private var autoDeleteSprites:Boolean;
         
-        public function RingBuffer(maxItems:int) {
+        //can't delete things while in iterator,
+        //so we prepare them for purge, then purge
+        //them after the iteration is complete
+        private var markedForDel:Array;
+        
+        /**
+         * 
+         * @param maxItems
+         * @param autoDeleteSprites
+         */
+        public function RingBuffer(maxItems:int, autoDeleteSprites:Boolean = false) {
             this.maxItems = maxItems;
             buffer = new Array(maxItems);
             for (var i = 0; i < maxItems; i++) {
                 buffer[i] = null;
             }
+            markedForDel = [];
+            this.autoDeleteSprites = autoDeleteSprites;
         }
         
         public function size():int {
@@ -23,7 +45,7 @@ package pyrokid {
         public function push(o:Object):void {
             var oldHead = buffer[head];
             if (oldHead != null) {
-                destroy(oldHead);                
+                removeVisual(oldHead);                
             }
             
             buffer[head] = o;
@@ -34,7 +56,7 @@ package pyrokid {
         public function pop():Object {
             if(_size>0){
                 var output:Object = buffer[tail()];
-                destroy(buffer[tail()]);
+                removeVisual(buffer[tail()]);
                 buffer[tail()] = null;
                 _size--;
                 return output;
@@ -60,14 +82,64 @@ package pyrokid {
             return buffer[index];
         }
         
+        /**
+         * While iterating through the list, you can prepare objects
+         * to be removed. Since you can't remove things while iterating,
+         * you do this. Objects must be prepared for deletion in order that they
+         * appear in the list. I.e. if you iterate through the list, and mark things
+         * for deletion in the order you encounter them it will be fine.
+         * @param o
+         */
+        public function markForDeletion(o:Object) {
+            markedForDel.push(o);
+        }
+        
+        /**
+         * After iteration, you call this to actually delete all the objects marked 
+         * for deletion.
+         */
+        public function deleteAllMarked():void {
+            var oldBuffer:Array = buffer.slice();
+            var oldHead = head;
+            var oldSize = _size;
+            
+            //reset buffer
+            buffer = new Array(maxItems);
+            for (var i = 0; i < maxItems; i++) {
+                buffer[i] = null;
+            }
+            head = 0;
+            _size = 0;
+            
+            //look through old objects, if they are not purged,
+            //add them to the new buffer, if they are marked,
+            //increment the markIndex, to look for the next item
+            //to be purged.
+            var markIndex = 0;
+            for (var i = 0; i < oldSize; i++) {
+                var realIndex = clamp(oldHead - oldSize+i);
+                var oldObj = oldBuffer[realIndex];
+                if(markedForDel[markIndex] == oldObj){
+                    markIndex++;
+                    removeVisual(oldObj);
+                }else {
+                    push(oldBuffer[realIndex]);
+                }
+            }
+            
+            markedForDel = [];
+        }
+        
         private function clamp(v:int):int {
             return (v+maxItems) % maxItems;
         }
         
-        private function destroy(o:Object) {
-            if (o is DisplayObject) {
-                var dispObj:DisplayObject = o as DisplayObject;
-                dispObj.parent.removeChild(dispObj);
+        private function removeVisual(o:Object) {
+            if(autoDeleteSprites){
+                if (o is DisplayObject) {
+                    var dispObj:DisplayObject = o as DisplayObject;
+                    dispObj.parent.removeChild(dispObj);
+                }
             }
         }
     

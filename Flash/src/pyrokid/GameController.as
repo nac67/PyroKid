@@ -29,6 +29,20 @@ package pyrokid {
 				addChild(levelEditor);
 				addEventListener(Event.ENTER_FRAME, update);
 			});
+            
+            /*var buf:RingBuffer = new RingBuffer(5);
+            buf
+            buf.push("a");
+            buf.push("b");
+            buf.push("c");
+            buf.push("d");
+            buf.push("e");
+            buf.push("FFFF");
+            trace(buf.buffer);
+            buf.preparePurge("c");
+            buf.preparePurge("e");
+            buf.purgeThoseWhichArePrepared();
+            trace(buf.buffer);*/
 		}
 
 		public function reloadLevel(levelRecipe):void {
@@ -95,7 +109,6 @@ package pyrokid {
 				CollisionResolver.Resolve(level.player, level.islands, resolveCollision);
                 
                 if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
-                    trace(level.player.direction);
                     var fball:Fireball = new Fireball();
                     fball.x = level.player.x;
                     fball.y = level.player.y;
@@ -129,7 +142,15 @@ package pyrokid {
                 for (var i = 0; i < level.fireballs.size(); i++) {
                     var fball:Fireball = level.fireballs.get(i) as Fireball;
                     fball.x += fball.speedX;
+                    var cellX = CoordinateHelper.realToCell(fball.x);
+                    var cellY = CoordinateHelper.realToCell(fball.y);
+                    var entity:GameEntity = level.staticObjects[cellY][cellX];
+                    if (entity != null) {
+                        // remove fireball from list, also delete from stage
+                        level.fireballs.markForDeletion(fball);
+                    }
                 }
+                level.fireballs.deleteAllMarked();
 
                 
                 level.x = - level.player.x + 400;
