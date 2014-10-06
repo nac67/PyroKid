@@ -1,4 +1,5 @@
 package pyrokid {
+    import flash.display.DisplayObject;
     import flash.display.Sprite;
 	import physics.IslandSimulator;
 	import physics.PhysBox;
@@ -79,7 +80,12 @@ package pyrokid {
 			
             islands = IslandSimulator.ConstructIslands(staticObjects);
             
-            fireballs = new RingBuffer(5,true);
+            fireballs = new RingBuffer(5, function(o:Object) {
+                if (o is DisplayObject) {
+                    var dispObj = o as DisplayObject;
+                    dispObj.parent.removeChild(dispObj);
+                }
+            });
         }
         
     }

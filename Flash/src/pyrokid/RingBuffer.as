@@ -16,7 +16,7 @@ package pyrokid {
         public var buffer:Array;
         private var head = 0;
         private var _size = 0;
-        private var autoDeleteSprites:Boolean;
+        private var evictFcn:Function;
         
         //can't delete things while in iterator,
         //so we prepare them for purge, then purge
@@ -24,18 +24,20 @@ package pyrokid {
         private var markedForDel:Array;
         
         /**
-         * 
+         * Ring buffer!
          * @param maxItems
-         * @param autoDeleteSprites
+         * @param evictFcn callback function with one parameter. 
+         *        This function gets called anytime something gets
+         *        evicted. It has one parameter which is the evicted object.
          */
-        public function RingBuffer(maxItems:int, autoDeleteSprites:Boolean = false) {
+        public function RingBuffer(maxItems:int, evictFcn:Function=null) {
             this.maxItems = maxItems;
             buffer = new Array(maxItems);
             for (var i = 0; i < maxItems; i++) {
                 buffer[i] = null;
             }
             markedForDel = [];
-            this.autoDeleteSprites = autoDeleteSprites;
+            this.evictFcn = evictFcn;
         }
         
         public function size():int {
@@ -135,11 +137,8 @@ package pyrokid {
         }
         
         private function removeVisual(o:Object) {
-            if(autoDeleteSprites){
-                if (o is DisplayObject) {
-                    var dispObj:DisplayObject = o as DisplayObject;
-                    dispObj.parent.removeChild(dispObj);
-                }
+            if (evictFcn != null) {
+                evictFcn(o);
             }
         }
     
