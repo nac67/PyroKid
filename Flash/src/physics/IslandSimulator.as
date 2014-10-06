@@ -172,6 +172,9 @@ package physics {
                     island.motion.MulD(1.1);
                 }
             }
+            
+            trace("\r\n\r\n\r\n\r\n\r\n\r\n");
+            CollisionResolver.BuildTrimmedEdgeSet(islands, 0.1);
         }
     }
 }

@@ -21,6 +21,7 @@ package physics {
          * List Of PhysEdge Objects
          */
         public var edges:Array;
+        public var clippedEdges:Array;
         
         /**
          * Should This Island Be Hovering
