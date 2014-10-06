@@ -1,5 +1,6 @@
 package pyrokid {
     import flash.display.Bitmap;
+    import flash.display.MovieClip;
     import flash.utils.ByteArray;
     /**
      * Since we need to embed every asset into the compiled SWF file, all
@@ -16,6 +17,12 @@ package pyrokid {
         
         [Embed(source="../../assets/tile_art/dirt.png")]
         public static var DirtBMP:Class;
+        
+        [Embed(source='../../assets/swf/player.swf', symbol='PlayerAnim')]
+        public static var PlayerSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/fireball.swf')]
+        public static var FireballSWF:Class; //cast as MovieClip on instantiation
         
     }
 

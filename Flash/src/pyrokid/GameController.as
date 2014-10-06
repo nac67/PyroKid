@@ -97,21 +97,26 @@ package pyrokid {
 				if (Key.isDown(Constants.LEFT_BTN)) {
 					level.player.velocity.x -= 2;
                     level.player.direction = Constants.DIR_LEFT;
+                    level.player.animIsRunning = true;
 				} else if (Key.isDown(Constants.RIGHT_BTN)) {
 					level.player.velocity.x += 2;
                     level.player.direction = Constants.DIR_RIGHT;
-				}
+                    level.player.animIsRunning = true;
+				} else {
+                    level.player.animIsRunning = false;                    
+                }
 				if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
 					level.player.velocity.y = -6;
 				}
 				level.player.Update(dt);
+                level.player.updateAnimation();
 				isPlayerGrounded = false;
 				CollisionResolver.Resolve(level.player, level.islands, resolveCollision);
                 
                 if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
                     var fball:Fireball = new Fireball();
-                    fball.x = level.player.x;
-                    fball.y = level.player.y;
+                    fball.x = level.player.x+25;
+                    fball.y = level.player.y+25;
                     fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
                     level.fireballs.push(fball);
                     level.addChild(fball);
@@ -144,7 +149,12 @@ package pyrokid {
                     fball.x += fball.speedX;
                     var cellX = CoordinateHelper.realToCell(fball.x);
                     var cellY = CoordinateHelper.realToCell(fball.y);
-                    var entity:GameEntity = level.staticObjects[cellY][cellX];
+                    var entity:GameEntity;
+                    try{
+                        entity = level.staticObjects[cellY][cellX];
+                    } catch (exc) {
+                        entity = null;
+                    }
                     if (entity != null) {
                         // remove fireball from list, also delete from stage
                         level.fireballs.markForDeletion(fball);

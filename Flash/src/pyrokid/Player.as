@@ -1,4 +1,5 @@
 package pyrokid {
+    import flash.display.MovieClip;
     import flash.display.Sprite;
     import flash.utils.ByteArray;
     import physics.DynamicEntity;
@@ -12,9 +13,18 @@ package pyrokid {
         private var _direction:int;
         private var _width:Number;
         private var _height:Number;
+        
+        private var playerSwf:MovieClip;
+        
+        public var animIsRunning:Boolean = false;
+        public var animIsShooting:Boolean = false;
 
         public function Player(width:Number, height:Number) {
             super(width, height, 0xCCCCFF);
+            
+            playerSwf = new Embedded.PlayerSWF() as MovieClip;
+            playerSwf.stop();
+            addChild(playerSwf);
             
             this._width = width;
             this._height = height;
@@ -24,29 +34,24 @@ package pyrokid {
             
         }
         
+        public function updateAnimation() {
+            if (animIsRunning) {
+                playerSwf.gotoAndStop(2);
+            } else {
+                playerSwf.gotoAndStop(1);
+            }
+        }
+        
         public function set direction(dir:int) {
+            trace("we're setting direction to:" + dir);
             _direction = dir;
             if (dir == Constants.DIR_RIGHT) {
-                graphics.clear();
-                graphics.lineStyle(0x000000);
-                graphics.beginFill(0xCCCCFF);
-                graphics.drawRect(0, 0, Constants.CELL * _width, Constants.CELL * _height);
-                graphics.endFill();
-                graphics.lineStyle(0x000000);
-                graphics.beginFill(0x000000);
-                graphics.drawRect(10, 0, 30, 20);
-                graphics.endFill();
+                playerSwf.scaleX = 1;                
+                playerSwf.x = 0;
             }
             if (dir == Constants.DIR_LEFT) {
-                graphics.clear();
-                graphics.lineStyle(0x000000);
-                graphics.beginFill(0xCCCCFF);
-                graphics.drawRect(0, 0, Constants.CELL * _width, Constants.CELL * _height);
-                graphics.endFill();
-                graphics.lineStyle(0x000000);
-                graphics.beginFill(0x000000);
-                graphics.drawRect(0, 0, 30, 20);
-                graphics.endFill();
+                playerSwf.scaleX = -1;
+                playerSwf.x = 30;
             }
         }
         
