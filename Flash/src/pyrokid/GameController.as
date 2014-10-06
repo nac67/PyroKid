@@ -117,13 +117,18 @@ package pyrokid {
 				CollisionResolver.Resolve(level.player, level.islands, resolveCollision);
                 
                 if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
-                    var fball:Fireball = new Fireball();
-                    fball.x = level.player.x+25;
-                    fball.y = level.player.y+25;
-                    fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
-                    level.fireballs.push(fball);
-                    level.addChild(fball);
-                    level.player.animIsShooting = true;
+                    // Fire button just pressed
+                    level.player.fireballCharge = 0;
+                }else if (Key.isDown(Constants.FIRE_BTN)) {
+                    // Fire button is being held
+                    level.player.fireballCharge++;
+                }else if(prevFrameFireBtn) {
+                    // Fire button is released
+                    if (level.player.fireballCharge > Constants.FIREBALL_CHARGE) {
+                        launchFireball();
+                    }else {
+                        launchSpark();
+                    }
                 }
                 prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
 				
@@ -179,6 +184,25 @@ package pyrokid {
                 level.x = Math.floor(- level.player.x + 400);
 				
             }
+        }
+        
+        function launchFireball() {
+            var fball:Fireball = new Fireball();
+            fball.x = level.player.x+25;
+            fball.y = level.player.y+25;
+            fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
+            level.fireballs.push(fball);
+            level.addChild(fball);
+            level.player.animIsShooting = true;
+        }
+        
+        function launchSpark() {
+            var spark:MovieClip = new Embedded.FiresplooshSWF();
+            spark.x = level.player.x + 25;
+            spark.y = level.player.y + 25;
+            level.firesplooshes.push(spark);
+            level.addChild(spark);
+            level.player.animIsShooting = true;
         }
 		
 	}

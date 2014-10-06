@@ -16,6 +16,8 @@ package pyrokid {
         
         private var playerSwf:MovieClip;
         
+        public var fireballCharge:int = 0;
+        
         public var animIsRunning:Boolean = false;
         public var animIsShooting:Boolean = false;
 

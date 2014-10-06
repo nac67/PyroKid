@@ -16,6 +16,7 @@ package pyrokid {
         public static var DIR_RIGHT:int = 104;
         
         public static var FBALL_SPEED:int = 10;
+        public static var FIREBALL_CHARGE:int = 30;
     
     }
 
