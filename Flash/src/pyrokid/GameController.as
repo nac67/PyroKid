@@ -16,6 +16,9 @@ package pyrokid {
 		// TODO remove
         private var isPlayerGrounded:Boolean = false;
 		
+		// TODO reset to 0 when level editor turned off
+		private var frameCount:int = 0;
+		
 		public function GameController() {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             LevelIO.loadLevel(function(levelRecipe):void {
@@ -68,44 +71,31 @@ package pyrokid {
         }
 		    
         private function update(event:Event):void {
-			if (!editorMode) {
-				level.x = - level.player.x + 400;
-				
-				var dt:Number = 1 / 30.0;
-				level.player.velocity.Add(0, 9 * dt);
-				level.player.velocity.x = 0;
-				if (Key.isDown(Constants.LEFT_BTN)) {
-					level.player.velocity.x -= 2;
-				} else if (Key.isDown(Constants.RIGHT_BTN)) {
-					level.player.velocity.x += 2;
-				}
-				if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
-					level.player.velocity.y = -6;
-				}
-				level.player.Update(dt);
-				isPlayerGrounded = false;
-				CollisionResolver.Resolve(level.player, level.islands, CR);
-				
-				/*
-				if (Math.random() < 0.05) {
-					var fireGrid:Array = [];
-					var onFire:Array = [];
-					for (var y:int = 0; y < level.staticObjects.length; y++) {
-						fireGrid.push(new Array(level.staticObjects[0].length));
-						for (var x:int = 0; x < level.staticObjects[0].length; x++) {
-							var box = level.staticObjects[y][x];
-							if (box != null) {
-								fireGrid[y][x] = box.fire;
-								if (box.fire.isOnFire()) {
-									onFire.push(box.fire);
-								}
-							}
-						}
-					}
-					Fire.spreadFire(onFire, fireGrid);
-				}*/
-				
-            }
+			if (editorMode) {
+				return;
+			}
+			frameCount += 1;
+			
+			var dt:Number = 1 / 30.0;
+			level.player.velocity.Add(0, 9 * dt);
+			level.player.velocity.x = 0;
+			if (Key.isDown(Constants.LEFT_BTN)) {
+				level.player.velocity.x -= 2;
+			} else if (Key.isDown(Constants.RIGHT_BTN)) {
+				level.player.velocity.x += 2;
+			}
+			if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
+				level.player.velocity.y = -6;
+			}
+			level.player.Update(dt);
+			isPlayerGrounded = false;
+			CollisionResolver.Resolve(level.player, level.islands, CR);
+			
+			
+			if (frameCount % 30 == 0) {
+				FireHandler.spreadFire(level.onFire, level.staticObjects, frameCount);
+			}
+			level.x = -level.player.x + 400;
         }
 		
 	}

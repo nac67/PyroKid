@@ -1,7 +1,6 @@
 package physics {
 	import flash.display.Sprite;
 	import pyrokid.Constants;
-	import pyrokid.Fire;
 	
 	/* This class ensures that the physics engine is always in sync with
 	 * the Sprites. Anything in the game that will be processed by the
@@ -12,7 +11,7 @@ package physics {
 		private var _center:Vector2 = new Vector2();
         private var _halfSize:Vector2 = new Vector2();
 		
-		private var _fire:Fire;
+		private var ignitionTime:int = -1;
 		
 		public function GameEntity(width:Number = 1, height:Number = 1, color:uint = 0xFF0000) {
 			_center = new Vector2(0, 0, updateSpriteX, updateSpriteY);
@@ -21,14 +20,27 @@ package physics {
             graphics.beginFill(color);
             graphics.drawRect(0, 0, Constants.CELL * width, Constants.CELL * height);
             graphics.endFill();
-			_fire = new Fire();
-			addChild(fire);
         }
 		
-		public function get fire():Fire {
-			_fire.cellX = Math.floor(center.x);
-			_fire.cellY = Math.floor(center.y);
-			return _fire;
+		public function ignite(onFire:Array, ignitionFrame:int):void {
+			ignitionTime = ignitionFrame;
+            graphics.lineStyle(0x000000);
+            graphics.beginFill(0xFF0088);
+            graphics.drawRect(20, 20, 10, 10);
+            graphics.endFill();
+			onFire.push(this);
+		}
+		
+		public function isOnFire():Boolean {
+			return ignitionTime >= 0;
+		}
+		
+		public function get cellX():int {
+			return Math.floor(center.x);
+		}
+		
+		public function get cellY():int {
+			return Math.floor(center.y);
 		}
 		
 		/* These functions handle the conversion between physics engine coordinates

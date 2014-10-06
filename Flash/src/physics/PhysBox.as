@@ -16,8 +16,8 @@ package physics {
 		
 		private var grounded:Boolean;
 		
-		public function PhysBox(grounded:Boolean = true) {
-            super(1, 1, 0xFFEECC);
+		public function PhysBox(grounded:Boolean = true, color:uint = 0xFFEECC) {
+            super(1, 1, color);
 			this.grounded = grounded;
         }
         

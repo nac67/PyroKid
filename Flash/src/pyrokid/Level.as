@@ -1,8 +1,11 @@
 package pyrokid {
     import flash.display.Sprite;
+	import physics.IPhysTile;
 	import physics.IslandSimulator;
 	import physics.PhysBox;
 	import physics.DynamicEntity;
+	import physics.Vector2i;
+	import physics.GameEntity;
     
     public class Level extends Sprite {
 		
@@ -17,6 +20,8 @@ package pyrokid {
         
         //1d list of moving objects, not locked to tile position
         public var dynamicObjects:Array;
+		
+		public var onFire:Array;
         
         public function Level(recipe:Object):void {
 			reset(recipe);
@@ -62,6 +67,7 @@ package pyrokid {
             
 			this.recipe = recipe;
             walls = recipe.walls;
+			onFire = [];
 			
             staticObjects = [];
             for (x = 0; x < walls.length; x++) {
@@ -74,7 +80,16 @@ package pyrokid {
 					addStaticObject(row[x], x, y);
                 }
             }
-			staticObjects[6][5].fire.ignite();
+			staticObjects[6][5].ignite(onFire, 0);
+			var cells:Array = [];
+			cells.push(new Vector2i(4, 0));
+			cells.push(new Vector2i(4, 1));
+			var multiTile:MultiTileGameEntity = new MultiTileGameEntity(cells);
+			for (var i:int = 0; i < cells.length; i++) {
+				var obj:PhysBox = multiTile.entities[i];
+				staticObjects[cells[i].y][cells[i].x] = obj;
+				addChild(obj);
+			}
 			
             islands = IslandSimulator.ConstructIslands(staticObjects);
         }
