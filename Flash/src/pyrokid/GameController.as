@@ -4,6 +4,7 @@ package pyrokid {
 	import flash.utils.ByteArray;
 	import flash.net.FileReference;
     import flash.events.KeyboardEvent;
+	import flash.ui.Keyboard;
 	
 	public class GameController extends Sprite {
 		
@@ -11,6 +12,8 @@ package pyrokid {
 		private var levelEditor:LevelEditor;
         
 		public var level:Level;
+		
+		public var isGameOver:Boolean = false;
 		
 		public function GameController() {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
@@ -50,6 +53,10 @@ package pyrokid {
             } else { 
                 
             }
+			
+			if (e.keyCode == Keyboard.ESCAPE) { //this should not be in this method
+				isGameOver = true;
+			}
         }
 		    
         private function update(event:Event):void {
