@@ -51,7 +51,7 @@ package pyrokid {
         }
         
         public function get direction() {
-            return _direction
+            return _direction;
         }
     
     }

@@ -153,7 +153,7 @@ package pyrokid {
                 level.fireballs.deleteAllMarked();
 
                 
-                level.x = - level.player.x + 400;
+                level.x = Math.floor(- level.player.x + 400);
 				
             }
         }

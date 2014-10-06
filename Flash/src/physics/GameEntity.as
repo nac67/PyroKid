@@ -14,13 +14,18 @@ package physics {
 		
 		private var _fire:Fire;
 		
-		public function GameEntity(width:Number = 1, height:Number = 1, color:uint = 0xFF0000) {
+        //default color is don't draw anything, if given a color then draw rectangle
+		public function GameEntity(width:Number = 1, height:Number = 1, color:uint = uint.MAX_VALUE) {
 			_center = new Vector2(0, 0, updateSpriteX, updateSpriteY);
 			_halfSize = new Vector2(width / 2, height / 2);
-            graphics.lineStyle(0x000000);
-            graphics.beginFill(color);
-            graphics.drawRect(0, 0, Constants.CELL * width, Constants.CELL * height);
-            graphics.endFill();
+            
+            if(!color == uint.MAX_VALUE){
+                graphics.lineStyle(0x000000);
+                graphics.beginFill(color);
+                graphics.drawRect(0, 0, Constants.CELL * width, Constants.CELL * height);
+                graphics.endFill();
+            }
+            
 			_fire = new Fire();
 			addChild(fire);
         }

@@ -41,7 +41,7 @@ package pyrokid {
 			
 			var obj:Sprite;
 			if (objectCode == 1) { // background dirt
-				obj = new PhysBox();
+				obj = new GroundTile();
 			} else if (objectCode == 2) { // crate
 				return;// obj = new Crate();
 			} else if (objectCode == 3) { // player

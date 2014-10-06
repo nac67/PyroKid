@@ -1,4 +1,5 @@
 package pyrokid {
+    import flash.display.Bitmap;
     import flash.utils.ByteArray;
     /**
      * Since we need to embed every asset into the compiled SWF file, all
@@ -9,9 +10,12 @@ package pyrokid {
      */
     public class Embedded {
         
-        [Embed(source="../../assets/nicklevel.txt", mimeType="application/octet-stream")]
-        private static var Level1:Class;
-        public static var level1b:ByteArray = new Level1();
+        //[Embed(source="../../assets/nicklevel.txt", mimeType="application/octet-stream")]
+        //private static var Level1:Class;
+        //public static var level1b:ByteArray = new Level1();
+        
+        [Embed(source="../../assets/tile_art/dirt.png")]
+        public static var DirtBMP:Class;
         
     }
 
