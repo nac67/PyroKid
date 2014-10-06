@@ -83,12 +83,12 @@ package physics {
             
             // Make Player
             rect = new PhysRectangle();
-            rect.halfSize.Set(0.4, 0.5);
+            rect.halfSize.Set(0.35, 0.45);
             rect.center.Set(5, 2);
             rect.motion.Set(0, 0);
             
             player.graphics.beginFill(0xFF0000, 1);
-            player.graphics.drawRect(-0.4, -0.5, 0.8, 1.0);
+            player.graphics.drawRect(-0.35, -0.45, 0.7, 0.9);
             player.graphics.endFill();
             world.addChild(player);
             player.x = rect.center.x;
@@ -96,7 +96,7 @@ package physics {
             
             // Make Droplets
             var dropSize:Number = 0.03;
-            for (var c:int = 0; c < 500; c++) {
+            for (var c:int = 0; c < 0; c++) {
                 var d:PhysRectangle = new PhysRectangle();
                 d.halfSize.Set(dropSize, dropSize);
                 d.center.Set(Math.random() * 8, 0);
@@ -138,7 +138,7 @@ package physics {
                 d.Update(dt);
             }
             
-            IslandSimulator.Simulate(islands, new Vector2(0, -0.1), dt);
+            IslandSimulator.Simulate(islands, new Vector2(0, 0), dt);
             
             isPlayerGrounded = false;
             CollisionResolver.Resolve(rect, islands, CR);

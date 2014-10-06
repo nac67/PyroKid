@@ -45,6 +45,94 @@ package physics {
             return edges;
         }
         
+        public static function BuildTrimmedEdgeSet(islands:Array, clipDist:Number) {            
+            
+            // Separate Island Types
+            var clipIslands:Array = [];
+            var staticIslands:Array = [];
+            for each(var i:PhysIsland in islands) {
+                if (i.isGrounded) staticIslands.push(i);
+                else clipIslands.push(i);
+            }
+            
+            
+            var cedges:Array = [[], [], [], []];
+            for each(var i:PhysIsland in islands) {
+                i.clippedEdges = new Array(i.edges.length);
+                var ei:int = 0;
+                for each(var e:PhysEdge in i.edges) {
+                    var ce:PhysEdge = e.Clone(i.globalAnchor);
+                    cedges[ce.direction].push(ce);
+                    i.clippedEdges[ei++] = ce;
+                }
+            }
+            for each(var ce:PhysEdge in cedges[Cardinal.NX]) {
+                for each(var se:PhysEdge in cedges[Cardinal.PX]) {
+                    if (ce.direction == -1 || se.direction == -1) continue;
+                    ClipX(ce, se, clipDist);
+                }
+            }
+            for each(var ce:PhysEdge in cedges[Cardinal.NY]) {
+                for each(var se:PhysEdge in cedges[Cardinal.PY]) {
+                    if (ce.direction == -1 || se.direction == -1) continue;
+                    ClipY(ce, se, clipDist);
+                }
+            }
+            
+            // Position Back To Island Frame
+            for each(var i:PhysIsland in islands) {
+                for each(var e:PhysEdge in i.clippedEdges) {
+                    e.center.SubV(i.globalAnchor);
+                }
+            }
+        }
+        private static function ClipX(ce:PhysEdge, se:PhysEdge, clipDist:Number) {
+            if (ce.halfSize > se.halfSize) ClipX(se, ce, clipDist);
+            
+            // Check For Neighboring
+            var d:Number = ce.center.x - se.center.x;
+            if (Math.abs(d) > clipDist) return;
+
+            // Check If They Clip
+            var off = ce.center.y - se.center.y;
+            if (Math.abs(off) >= (ce.halfSize + se.halfSize)) return;
+            
+            ce.halfSize = Math.abs(off) - se.halfSize;
+            if (ce.halfSize <= 0) {
+                ce.direction = -1;
+                se.direction = -1;
+                // TODO: Split In Two
+                return;
+            }
+            if (off > 0)
+                ce.center.y = se.center.y + se.halfSize + ce.halfSize;
+            else
+                ce.center.y = se.center.y - se.halfSize - ce.halfSize;
+        }
+        private static function ClipY(ce:PhysEdge, se:PhysEdge, clipDist:Number) {
+            if (ce.halfSize > se.halfSize) ClipY(se, ce, clipDist);
+            
+            // Check For Neighboring
+            var d:Number = ce.center.y - se.center.y;
+            if (Math.abs(d) > clipDist) return;
+
+            // Check If They Clip
+            var off = ce.center.x - se.center.x;
+            if (Math.abs(off) >= (ce.halfSize + se.halfSize)) return;
+            
+            ce.halfSize = Math.abs(off) - se.halfSize;
+            if (ce.halfSize <= 0) {
+                ce.direction = -1;
+                se.direction = -1;
+                // TODO: Split In Two
+                return;
+            }
+            if (off > 0)
+                ce.center.x = se.center.x + se.halfSize + ce.halfSize;
+            else
+                ce.center.x = se.center.x - se.halfSize - ce.halfSize;
+        }
+        
         /**
          * Resolves Collision Between A Dynamic Body And A Set Of Islands
          * @param r Dynamic Body
@@ -63,8 +151,11 @@ package physics {
                 r.motion.SubV(i.motion);
                 
                 // Perform Collision Detection
-                ResolveIsland(r, i.edges, fCallback);
-                
+                if(i.isGrounded)
+                    ResolveIsland(r, i.clippedEdges, fCallback);
+                else
+                    ResolveIsland(r, i.clippedEdges, fCallback);
+                    
                 // Move Back In Global Frame Of Reference
                 r.center.AddV(i.globalAnchor);
                 r.velocity.AddV(i.velocity);

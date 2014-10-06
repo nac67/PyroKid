@@ -27,8 +27,12 @@ package physics {
          */
         public function PhysEdge(d:int, x:Number, y:Number, s:Number) {
             direction = d;
-            center = new Vector2().Set(x, y);
+            center = new Vector2(x, y);
             halfSize = s / 2.0;
+        }
+    
+        public function Clone(off:Vector2):PhysEdge {
+            return new PhysEdge(direction, center.x + off.x, center.y + off.y, halfSize * 2);
         }
     }
 
