@@ -64,7 +64,7 @@ package pyrokid {
             }
         }
 		
-        public function CR(r:GameEntity, a:CollisionAccumulator):Boolean {
+        public function CR(r:PhysRectangle, a:CollisionAccumulator):Boolean {
             if (a.accumNY > 0)
                 isPlayerGrounded = true;
             return true;
@@ -76,24 +76,37 @@ package pyrokid {
 			}
 			frameCount += 1;
 			
+			//trace("one: " + int(level.player.x));
+			
 			var dt:Number = 1 / 30.0;
-			level.player.velocity.Add(0, 9 * dt);
-			level.player.velocity.x = 0;
+			level.playerRect.velocity.Add(0, 0.4/*9*/ * dt);
+			level.playerRect.velocity.x = 0;
 			if (Key.isDown(Constants.LEFT_BTN)) {
-				level.player.velocity.x -= 2;
+				level.playerRect.velocity.x -= 0.1;
 			} else if (Key.isDown(Constants.RIGHT_BTN)) {
-				level.player.velocity.x += 2;
+				level.playerRect.velocity.x += 0.1;
 			}
 			if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
-				level.player.velocity.y = -6;
+				level.playerRect.velocity.y = -0.3;
 			}
-			level.player.Update(dt);
+			level.playerRect.Update(dt);
 			isPlayerGrounded = false;
-			CollisionResolver.Resolve(level.player, level.islands, CR);
+			
+			//trace("two: " + int(level.player.x));
+			ViewPIsland.updatePhysics(level.islands, new Vector2(0, 0.1), dt);
+			for (var i:int = 0; i < level.islandViews.length; i++) {
+				level.islandViews[i].onUpdate();
+			}
+			//trace("three: " + int(level.player.x));
+			for (var i:int = 0; i < level.rectViews.length; i++) {
+				level.rectViews[i].onUpdate(level.islands, dt, CR);
+			}
+			//trace("four: " + int(level.player.x));
+			//CollisionResolver.Resolve(level.playerRect, level.islands, CR);
 			
 			
 			if (frameCount % 30 == 0) {
-				FireHandler.spreadFire(level.onFire, level.flammables, frameCount);
+				//FireHandler.spreadFire(level.onFire, level.tileEntityGrid, frameCount);
 			}
 			level.x = Math.floor(level.x * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.x + 400));
 			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.y + 300));

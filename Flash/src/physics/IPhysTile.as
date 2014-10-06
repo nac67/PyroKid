@@ -29,7 +29,7 @@ package physics {
          * @param side Cardinal Direction
          * @return True If Binding In That Direction Is Possible
          */
-        function CanBind(side:int):Boolean;
+        function CanBind(side:int, neighbor:IPhysTile):Boolean;
     }
     
 }

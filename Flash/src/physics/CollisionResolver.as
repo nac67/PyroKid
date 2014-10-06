@@ -5,6 +5,13 @@ package physics {
      * @author Cristian Zaloj
      */
     public class CollisionResolver {
+        public static var MAX_MOTION:Number = 0.2;
+        public static function ClampedMotion(v:Number):Number {
+            if (v < -MAX_MOTION) return -MAX_MOTION;
+            if (v > MAX_MOTION) return MAX_MOTION;
+            return v;
+        }
+        
         /**
          * Construct A Set Of Edges In The Frame Of Reference Of The Island
          * @param providers IPhysTile[y][x] Array
@@ -43,23 +50,28 @@ package physics {
          * @param r Dynamic Body
          * @param iList List Of Islands
          * @param fCallback Callback Function For When A Collision Occurs Inside Of An Island
-         * func(DynamicEntity, CollisionAccumulator):Boolean
+         * func(PhysRectangle, CollisionAccumulator):Boolean
          */
-        public static function Resolve(r:DynamicEntity, iList:Array, fCallback:Function):void {
+        public static function Resolve(r:PhysRectangle, iList:Array, fCallback:Function):void {
             r.motion.MulD(1.1);
             
             for each (var i:PhysIsland in iList) {
+                
                 // Move From Global To Island Reference Point
                 r.center.SubV(i.globalAnchor);
+                r.velocity.SubV(i.velocity);
+                r.motion.SubV(i.motion);
                 
                 // Perform Collision Detection
                 ResolveIsland(r, i.edges, fCallback);
                 
                 // Move Back In Global Frame Of Reference
                 r.center.AddV(i.globalAnchor);
+                r.velocity.AddV(i.velocity);
+                r.motion.AddV(i.motion);
             }
         }
-        private static function ResolveIsland(r:DynamicEntity, eList:Array, fCallback:Function):void {
+        private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function):void {
             // Accumulate All Collisions
             var a:CollisionAccumulator = new CollisionAccumulator();
             for each (var e:PhysEdge in eList) {
@@ -82,7 +94,7 @@ package physics {
                 r.center.Add(dx, dy);
             }
         }
-        private static function ResolveCollision(r:DynamicEntity, e:PhysEdge, a:CollisionAccumulator):void {
+        private static function ResolveCollision(r:PhysRectangle, e:PhysEdge, a:CollisionAccumulator):void {
             switch (e.direction) {
                 case Cardinal.NX: 
                     if (r.motion.x < 0 || (r.PX - e.center.x) > r.motion.x)

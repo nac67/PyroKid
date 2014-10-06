@@ -1,12 +1,9 @@
 package physics {
-	import flash.display.Sprite;
-	import pyrokid.Constants;
-	import physics.GameEntity;
 	/**
      * A Simple Collidable Box Implementation
-     * @author Cris tian Zaloj
+     * @author Cristian Zaloj
      */
-    public class PhysBox extends GameEntity implements IPhysTile {
+    public class PhysBox implements IPhysTile {
         private static var edges:Array = [
             new PhysEdge(Cardinal.NX, 0, 0.5, 1),
             new PhysEdge(Cardinal.PX, 1, 0.5, 1),
@@ -14,13 +11,14 @@ package physics {
             new PhysEdge(Cardinal.PY, 0.5, 1, 1)
         ];
 		
-		private var grounded:Boolean;
-		
-		public function PhysBox(grounded:Boolean = true, color:uint = 0xFFEECC) {
-            super(1, 1, color);
-			this.grounded = grounded;
-        }
+		public var id:int;
         
+        public var fallingType:Boolean;
+        public function PhysBox(id:int = -1, isFalling:Boolean = false) {
+            fallingType = isFalling;
+			this.id = id;
+        }
+
         public function ProvideEdgesSpecial(edges:Array, offset:Vector2):void {
             return;
         }
@@ -38,10 +36,15 @@ package physics {
             e.push(edge);
         }
         public function get IsGrounded():Boolean {
-            return grounded;
+            return !fallingType;
         }
-        public function CanBind(side:int):Boolean {
-            return true;
+        public function CanBind(side:int, neighbor:IPhysTile):Boolean {
+			if (neighbor is PhysBox) {
+				var neighborBox:PhysBox = neighbor as PhysBox;
+				return id > 0 && id == neighborBox.id;
+			} else {
+				return false;
+			}
         }
     }
 }

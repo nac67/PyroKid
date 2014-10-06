@@ -76,7 +76,7 @@ package physics {
                 return;
             
             // Check If They Can Bind In Both Directions
-            if (t1.CanBind(dir12) && t2.CanBind(dir12 ^ 1)) {
+            if (t1.CanBind(dir12,t2) && t2.CanBind(dir12 ^ 1,t1)) {
                 // Set To The Minimum ID
                 if (id1 < id2)
                     SwapIDs(ids, p2.x, p2.y, id2, id1);
@@ -159,6 +159,19 @@ package physics {
             island.RebuildEdges();
             return island;
         }
-    
+        
+        public static function Simulate(islands:Array, gravAcceleration:Vector2, dt:Number) {
+            for each(var island:PhysIsland in islands) {
+                if (!island.isGrounded) {
+                    island.velocity.Add(gravAcceleration.x * dt, gravAcceleration.y * dt);
+                    island.motion.SetV(island.velocity).MulD(dt);
+                    island.motion.x = CollisionResolver.ClampedMotion(island.motion.x);
+                    island.motion.y = CollisionResolver.ClampedMotion(island.motion.y);
+                    island.globalAnchor.AddV(island.motion);
+                    
+                    island.motion.MulD(1.1);
+                }
+            }
+        }
     }
 }

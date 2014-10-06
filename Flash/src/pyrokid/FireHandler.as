@@ -1,10 +1,10 @@
 package pyrokid {
 	import flash.display.Sprite;
-	import physics.GameEntity;
+	import pyrokid.entities.TileEntity;
 	
 	public class FireHandler extends Sprite {
 		
-		private static function getNeighbors(entity:MultiTileGameEntity, fireGrid:Array):Array {
+		private static function getNeighbors(entity:TileEntity, fireGrid:Array):Array {
 			var neighbors:Array = [];
 			var neiCoors:Array = entity.getNeighborCoordinates(fireGrid);
 			for (var i:int = 0; i < neiCoors.length; i++) {

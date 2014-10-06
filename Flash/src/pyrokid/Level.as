@@ -1,23 +1,22 @@
 package pyrokid {
     import flash.display.Sprite;
-	import physics.IPhysTile;
-	import physics.IslandSimulator;
-	import physics.PhysBox;
-	import physics.DynamicEntity;
-	import physics.Vector2i;
-	import physics.GameEntity;
+	import physics.*;
+	import pyrokid.entities.*;
     
     public class Level extends Sprite {
 		
         // Level object instances
         public var walls:Array;
-        public var player:DynamicEntity;
+        public var player:FreeEntity;
+		public var playerRect:PhysRectangle;
 		public var recipe:Object;
 		public var islands:Array;
+		
+		public var islandViews:Array;
+		public var rectViews:Array;
         
         //2d grid, tile locked objects, non moving
-        public var staticObjects:Array;
-		public var flammables:Array;
+		public var tileEntityGrid:Array;
         
         //1d list of moving objects, not locked to tile position
         public var dynamicObjects:Array;
@@ -35,34 +34,7 @@ package pyrokid {
 		public function numCellsTall():int {
 			return walls.length;
 		}
-		
-		// NOTE: this assumes only 1 tile objects for now. Will need to be expaned
-		// later on otherwise multiple children will be added for the same object TODO
-		private function addStaticObject(objectCode:int, cellX:int, cellY:int):void {
-			if (objectCode == 0) {
-				return;
-			}
-			
-			var obj:Sprite;
-			if (objectCode == 1) { // background dirt
-				obj = new PhysBox();
-			} else if (objectCode == 2) { // crate
-				return;// obj = new Crate();
-			} else if (objectCode == 3) { // player
-				player =  new DynamicEntity(0.8, 0.95);
-				obj = player;
-				addChild(player);
-			}
-			
-			obj.x = cellX * Constants.CELL;
-			obj.y = cellY * Constants.CELL;
-			if (obj is PhysBox) {
-				staticObjects[cellY][cellX] = obj;
-				flammables[cellY][cellX] = new MultiTileGameEntity([obj]);
-				addChild(obj);
-			}
-		}
-        
+
         public function reset(recipe:Object):void {
             var x:int, y:int, w:int, h:int;
             
@@ -71,21 +43,30 @@ package pyrokid {
 			this.recipe = recipe;
             walls = recipe.walls;
 			onFire = [];
-
-			flammables = [];
-            staticObjects = [];
-            for (x = 0; x < walls.length; x++) {
-                staticObjects.push(new Array(walls[x].length));
-				flammables.push(new Array(walls[x].length));
+			islandViews = [];
+			rectViews = [];
+			
+			tileEntityGrid = [];
+            var physBoxGrid:Array = [];
+			var width:int = walls[x].length;
+            for (y = 0; y < walls.length; y++) {
+                physBoxGrid.push(new Array(width));
+				tileEntityGrid.push(new Array(width));
             }
             
+			var objId:int = 1;
             for (y = 0; y < walls.length; y++) {
                 var row:Array = walls[y];
                 for (x = 0; x < row.length; x++) {
-					addStaticObject(row[x], x, y);
+					var objCode:int = row[x];
+					
+					if (objCode == 1) {
+						physBoxGrid[y][x] = new PhysBox(objId);
+						objId += 1;
+					}
                 }
             }
-			flammables[6][5].ignite(onFire, 0);
+			/*tileEntityGrid[6][5].ignite(onFire, 0);
 			var cells:Array = [];
 			cells.push(new Vector2i(1, 0));
 			cells.push(new Vector2i(1, 1));
@@ -97,12 +78,51 @@ package pyrokid {
 				obj.x = cells[i].x * Constants.CELL;
 				obj.y = cells[i].y * Constants.CELL;
 				staticObjects[cells[i].y][cells[i].x] = obj;
-				flammables[cells[i].y][cells[i].x] = multiTile;
+				tileEntityGrid[cells[i].y][cells[i].x] = multiTile;
 				multiTile.entities.push(obj);
 				addChild(obj);
+			}*/
+			
+			recipe.multiTileObjects = [];
+
+			for (var i:int = 0; i < recipe.multiTileObjects.length; i++) {
+				var multiTileObj:Array = recipe.multiTileObjects[i];
+				for (var j:int = 0; j < multiTileObj.length; j++) {
+					var cell:Vector2i = multiTileObj[j];
+					physBoxGrid[cell.y][cell.x].id = objId;
+				}
+				objId += 1;
 			}
 			
-            islands = IslandSimulator.ConstructIslands(staticObjects);
+            islands = IslandSimulator.ConstructIslands(physBoxGrid);
+			trace(islands.length);
+			for (var i:int = 0; i < islands.length; i++) {
+				var isle:PhysIsland = islands[i];
+				var tileEntity:TileEntity = new TileEntity(
+					Utils.cellToPixel(Math.floor(isle.globalAnchor.x)),
+					Utils.cellToPixel(Math.floor(isle.globalAnchor.y))
+				);
+				addChild(tileEntity);
+				for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
+					for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
+						var tile:IPhysTile = isle.tileGrid[iy][ix];
+						if (tile != null && tile is PhysBox) {
+							var cellX:int = ix + Math.floor(isle.globalAnchor.x);
+							var cellY:int = iy + Math.floor(isle.globalAnchor.y);
+							tileEntity.cells.push(new Vector2i(cellX, cellY));
+							tileEntityGrid[cellY][cellX] = tileEntity;
+						}
+					}
+				}
+				islandViews.push(new ViewPIsland(tileEntity, isle));
+			}
+			
+			player = new FreeEntity();
+			player.x = 250;
+			player.y = 0;
+			addChild(player);
+			playerRect = new PhysRectangle();
+			rectViews.push(new ViewPRect(player, playerRect));
         }
         
     }
