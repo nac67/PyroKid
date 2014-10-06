@@ -7,7 +7,13 @@ package pyrokid {
      for (var i = 0; i < level.fireballs.size(); i++) {
         var fball:Fireball = level.fireballs.get(i) as Fireball;
         // do stuff with fball...
+        
+        // here's how to mark something for eviction
+        level.fireball.markForDeletion(fball);
      }
+     
+     // this actually deletes all things marked, after the iteration
+     level.fireball.deleteAllMarked();
     */
     
     public class RingBuffer {
