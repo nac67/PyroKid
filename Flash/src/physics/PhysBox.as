@@ -4,7 +4,7 @@ package physics {
 	import physics.GameEntity;
 	/**
      * A Simple Collidable Box Implementation
-     * @author Cristian Zaloj
+     * @author Cris tian Zaloj
      */
     public class PhysBox extends GameEntity implements IPhysTile {
         private static var edges:Array = [

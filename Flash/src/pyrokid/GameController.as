@@ -85,6 +85,26 @@ package pyrokid {
 				level.player.Update(dt);
 				isPlayerGrounded = false;
 				CollisionResolver.Resolve(level.player, level.islands, CR);
+				
+				/*
+				if (Math.random() < 0.05) {
+					var fireGrid:Array = [];
+					var onFire:Array = [];
+					for (var y:int = 0; y < level.staticObjects.length; y++) {
+						fireGrid.push(new Array(level.staticObjects[0].length));
+						for (var x:int = 0; x < level.staticObjects[0].length; x++) {
+							var box = level.staticObjects[y][x];
+							if (box != null) {
+								fireGrid[y][x] = box.fire;
+								if (box.fire.isOnFire()) {
+									onFire.push(box.fire);
+								}
+							}
+						}
+					}
+					Fire.spreadFire(onFire, fireGrid);
+				}*/
+				
             }
         }
 		

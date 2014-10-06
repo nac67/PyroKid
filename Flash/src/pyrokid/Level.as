@@ -74,6 +74,7 @@ package pyrokid {
 					addStaticObject(row[x], x, y);
                 }
             }
+			staticObjects[6][5].fire.ignite();
 			
             islands = IslandSimulator.ConstructIslands(staticObjects);
         }
