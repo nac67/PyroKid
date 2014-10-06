@@ -11,8 +11,6 @@ package physics {
 		private var _center:Vector2 = new Vector2();
         private var _halfSize:Vector2 = new Vector2();
 		
-		private var ignitionTime:int = -1;
-		
 		public function GameEntity(width:Number = 1, height:Number = 1, color:uint = 0xFF0000) {
 			_center = new Vector2(0, 0, updateSpriteX, updateSpriteY);
 			_halfSize = new Vector2(width / 2, height / 2);
@@ -21,19 +19,6 @@ package physics {
             graphics.drawRect(0, 0, Constants.CELL * width, Constants.CELL * height);
             graphics.endFill();
         }
-		
-		public function ignite(onFire:Array, ignitionFrame:int):void {
-			ignitionTime = ignitionFrame;
-            graphics.lineStyle(0x000000);
-            graphics.beginFill(0xFF0088);
-            graphics.drawRect(20, 20, 10, 10);
-            graphics.endFill();
-			onFire.push(this);
-		}
-		
-		public function isOnFire():Boolean {
-			return ignitionTime >= 0;
-		}
 		
 		public function get cellX():int {
 			return Math.floor(center.x);

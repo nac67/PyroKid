@@ -4,23 +4,23 @@ package pyrokid {
 	
 	public class FireHandler extends Sprite {
 		
-		private static function getNeighbors(entity:GameEntity, fireGrid:Array):Array {
+		private static function getNeighbors(entity:MultiTileGameEntity, fireGrid:Array):Array {
 			var neighbors:Array = [];
-			if (entity.cellY > 0) {
-				neighbors.push(fireGrid[entity.cellY - 1][entity.cellX]);
-			}
-			if (entity.cellY < fireGrid.length - 1) {
-				neighbors.push(fireGrid[entity.cellY + 1][entity.cellX]);
-			}
-			if (entity.cellX > 0) {
-				neighbors.push(fireGrid[entity.cellY][entity.cellX - 1]);
-			}
-			if (entity.cellX < fireGrid[0].length - 1) {
-				neighbors.push(fireGrid[entity.cellY][entity.cellX + 1]);
+			var neiCoors:Array = entity.getNeighborCoordinates(fireGrid);
+			for (var i:int = 0; i < neiCoors.length; i++) {
+				var x:int = neiCoors[i].x;
+				var y:int = neiCoors[i].y;
+				if (inBounds(fireGrid, x, y)) {
+					neighbors.push(fireGrid[y][x]);
+				}
 			}
 			return neighbors.filter(function(obj) {
 				return obj != null;
 			});
+		}
+		
+		private static function inBounds(array:Array, x:int, y:int):Boolean {
+			return y >= 0 && x >= 0 && y < array.length && x < array[0].length;
 		}
 		
 		// not spread every frame BUT should spread when touches something

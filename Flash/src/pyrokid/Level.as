@@ -17,6 +17,7 @@ package pyrokid {
         
         //2d grid, tile locked objects, non moving
         public var staticObjects:Array;
+		public var flammables:Array;
         
         //1d list of moving objects, not locked to tile position
         public var dynamicObjects:Array;
@@ -50,14 +51,16 @@ package pyrokid {
 			} else if (objectCode == 3) { // player
 				player =  new DynamicEntity(0.8, 0.95);
 				obj = player;
+				addChild(player);
 			}
 			
 			obj.x = cellX * Constants.CELL;
 			obj.y = cellY * Constants.CELL;
-			if (obj != player) {
+			if (obj is PhysBox) {
 				staticObjects[cellY][cellX] = obj;
+				flammables[cellY][cellX] = new MultiTileGameEntity([obj]);
+				addChild(obj);
 			}
-			addChild(obj);
 		}
         
         public function reset(recipe:Object):void {
@@ -68,10 +71,12 @@ package pyrokid {
 			this.recipe = recipe;
             walls = recipe.walls;
 			onFire = [];
-			
+
+			flammables = [];
             staticObjects = [];
             for (x = 0; x < walls.length; x++) {
                 staticObjects.push(new Array(walls[x].length));
+				flammables.push(new Array(walls[x].length));
             }
             
             for (y = 0; y < walls.length; y++) {
@@ -80,14 +85,20 @@ package pyrokid {
 					addStaticObject(row[x], x, y);
                 }
             }
-			staticObjects[6][5].ignite(onFire, 0);
+			flammables[6][5].ignite(onFire, 0);
 			var cells:Array = [];
-			cells.push(new Vector2i(4, 0));
-			cells.push(new Vector2i(4, 1));
-			var multiTile:MultiTileGameEntity = new MultiTileGameEntity(cells);
+			cells.push(new Vector2i(1, 0));
+			cells.push(new Vector2i(1, 1));
+			cells.push(new Vector2i(2, 1));
+			cells.push(new Vector2i(3, 1));
+			var multiTile:MultiTileGameEntity = new MultiTileGameEntity([]);
 			for (var i:int = 0; i < cells.length; i++) {
-				var obj:PhysBox = multiTile.entities[i];
+				var obj:PhysBox = new PhysBox(true, 0xCCCCFF);
+				obj.x = cells[i].x * Constants.CELL;
+				obj.y = cells[i].y * Constants.CELL;
 				staticObjects[cells[i].y][cells[i].x] = obj;
+				flammables[cells[i].y][cells[i].x] = multiTile;
+				multiTile.entities.push(obj);
 				addChild(obj);
 			}
 			
