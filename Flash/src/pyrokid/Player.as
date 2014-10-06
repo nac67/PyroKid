@@ -35,15 +35,32 @@ package pyrokid {
         }
         
         public function updateAnimation() {
-            if (animIsRunning) {
-                playerSwf.gotoAndStop(2);
+            if (animIsShooting) {
+                playerSwf.gotoAndStop(5);
+                if (playerSwf.playershoot.currentFrame == playerSwf.playershoot.totalFrames) {
+                    animIsShooting = false;
+                }
             } else {
-                playerSwf.gotoAndStop(1);
+                trace(velocity.y);
+                
+                if (velocity.y > 1) {
+                    playerSwf.gotoAndStop(4);
+                    return;
+                }
+                if (velocity.y < -1 ) {
+                    playerSwf.gotoAndStop(3);
+                    return;
+                }
+                
+                if (animIsRunning) {
+                    playerSwf.gotoAndStop(2);
+                } else {
+                    playerSwf.gotoAndStop(1);
+                }
             }
         }
         
         public function set direction(dir:int) {
-            trace("we're setting direction to:" + dir);
             _direction = dir;
             if (dir == Constants.DIR_RIGHT) {
                 playerSwf.scaleX = 1;                

@@ -17,6 +17,7 @@ package pyrokid {
         
         // TODO move these somewhere logical
         private var prevFrameFireBtn:Boolean = false;
+        private var prevFrameJumpBtn:Boolean = false;
 		
 		// TODO remove
         private var isPlayerGrounded:Boolean = false;
@@ -105,9 +106,10 @@ package pyrokid {
 				} else {
                     level.player.animIsRunning = false;                    
                 }
-				if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
+				if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN) && !prevFrameJumpBtn) {
 					level.player.velocity.y = -6;
 				}
+                prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
 				level.player.Update(dt);
                 level.player.updateAnimation();
 				isPlayerGrounded = false;
@@ -120,6 +122,7 @@ package pyrokid {
                     fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
                     level.fireballs.push(fball);
                     level.addChild(fball);
+                    level.player.animIsShooting = true;
                 }
                 prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
 				
