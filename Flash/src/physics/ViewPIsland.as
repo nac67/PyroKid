@@ -1,5 +1,6 @@
 package physics {
 	import flash.display.Sprite;
+    import pyrokid.Constants;
 	import pyrokid.Utils;
 	/**
      * ...
@@ -28,9 +29,8 @@ package physics {
          * Update Sprite Position To Match Physics
          */
         public function onUpdate():void {
-			var spritePos:Vector2i = Utils.getSpritePosition(phys.globalAnchor);
-            sprite.x = spritePos.x;
-			sprite.y = spritePos.y;
+            sprite.x = phys.globalAnchor.x * Constants.CELL;
+			sprite.y = phys.globalAnchor.y * Constants.CELL;
         }
     }
 }

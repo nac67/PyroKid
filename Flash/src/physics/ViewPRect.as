@@ -1,5 +1,6 @@
 package physics {
     import flash.display.Sprite;
+    import pyrokid.Constants;
 	import pyrokid.Utils;
 	/**
      * ...
@@ -21,14 +22,13 @@ package physics {
          * @param dt Frame Delta-Time
          */
         public function onUpdate(islands:Array, dt:Number, callback:Function):void {
-			phys.center = Utils.getCellXYCenter(new Vector2i(sprite.x, sprite.y));
+            phys.center.Set(sprite.x, sprite.y).DivD(Constants.CELL);
            
             phys.Update(dt);
             CollisionResolver.Resolve(phys, islands, callback);
             
-			var spritePos:Vector2i = Utils.getSpritePosition(phys.center);
-            sprite.x = spritePos.x;
-			sprite.y = spritePos.y;
+            sprite.x = phys.center.x * Constants.CELL;
+			sprite.y = phys.center.y * Constants.CELL;
         }
     }
 
