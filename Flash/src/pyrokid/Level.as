@@ -95,7 +95,6 @@ package pyrokid {
 			}
 			
             islands = IslandSimulator.ConstructIslands(physBoxGrid);
-			trace(islands.length);
 			for (var i:int = 0; i < islands.length; i++) {
 				var isle:PhysIsland = islands[i];
 				var tileEntity:TileEntity = new TileEntity(
@@ -117,11 +116,12 @@ package pyrokid {
 				islandViews.push(new ViewPIsland(tileEntity, isle));
 			}
 			
-			player = new FreeEntity();
+			player = new FreeEntity(0.8, 0.9);
 			player.x = 250;
 			player.y = 0;
 			addChild(player);
 			playerRect = new PhysRectangle();
+			playerRect.halfSize = new Vector2(0.4, 0.45);
 			rectViews.push(new ViewPRect(player, playerRect));
         }
         

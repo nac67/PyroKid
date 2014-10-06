@@ -25,12 +25,10 @@ package physics {
         }
     
         public function Update(dt:Number) {
-			trace("center before: " + String(center.x) + ", " + String(center.y));
             motion.SetV(velocity).MulD(dt);
             motion.x = CollisionResolver.ClampedMotion(motion.x);
             motion.y = CollisionResolver.ClampedMotion(motion.y);
             center.AddV(motion);
-			trace("center after: " + String(center.x) + ", " + String(center.y));
         }
     }
 

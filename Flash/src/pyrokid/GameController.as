@@ -76,8 +76,6 @@ package pyrokid {
 			}
 			frameCount += 1;
 			
-			//trace("one: " + int(level.player.x));
-			
 			var dt:Number = 1 / 30.0;
 			level.playerRect.velocity.Add(0, 9 * dt);
 			level.playerRect.velocity.x = 0;

@@ -22,13 +22,13 @@ package physics {
          * @param dt Frame Delta-Time
          */
         public function onUpdate(islands:Array, dt:Number, callback:Function):void {
-            phys.center.Set(sprite.x, sprite.y).DivD(Constants.CELL);
+            phys.center.Set(sprite.x, sprite.y).DivD(Constants.CELL).AddV(phys.halfSize);
            
             phys.Update(dt);
             CollisionResolver.Resolve(phys, islands, callback);
             
-            sprite.x = phys.center.x * Constants.CELL;
-			sprite.y = phys.center.y * Constants.CELL;
+            sprite.x = (phys.center.x - phys.halfSize.x) * Constants.CELL;
+			sprite.y = (phys.center.y - phys.halfSize.y) * Constants.CELL;
         }
     }
 

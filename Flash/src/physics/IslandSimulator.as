@@ -173,7 +173,6 @@ package physics {
                 }
             }
             
-            trace("\r\n\r\n\r\n\r\n\r\n\r\n");
             CollisionResolver.BuildTrimmedEdgeSet(islands, 0.1);
         }
     }
