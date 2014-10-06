@@ -12,6 +12,11 @@ package pyrokid {
 		private var levelEditor:LevelEditor;
         
 		public var level:Level;
+        
+        private var buf:RingBuffer;
+        
+        // TODO move these somewhere logical
+        private var prevFrameFireBtn:Boolean = false;
 		
 		// TODO remove
         private var isPlayerGrounded:Boolean = false;
@@ -61,9 +66,10 @@ package pyrokid {
             }
         }
 		
-        public function CR(r:GameEntity, a:CollisionAccumulator):Boolean {
-            if (a.accumNY > 0)
+        public function resolveCollision(r:GameEntity, a:CollisionAccumulator):Boolean {
+            if (a.accumNY > 0) {
                 isPlayerGrounded = true;
+            }
             return true;
         }
 		    
@@ -76,15 +82,28 @@ package pyrokid {
 				level.player.velocity.x = 0;
 				if (Key.isDown(Constants.LEFT_BTN)) {
 					level.player.velocity.x -= 2;
+                    level.player.direction = Constants.DIR_LEFT;
 				} else if (Key.isDown(Constants.RIGHT_BTN)) {
 					level.player.velocity.x += 2;
+                    level.player.direction = Constants.DIR_RIGHT;
 				}
 				if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
 					level.player.velocity.y = -6;
 				}
 				level.player.Update(dt);
 				isPlayerGrounded = false;
-				CollisionResolver.Resolve(level.player, level.islands, CR);
+				CollisionResolver.Resolve(level.player, level.islands, resolveCollision);
+                
+                if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
+                    trace(level.player.direction);
+                    var fball:Fireball = new Fireball();
+                    fball.x = level.player.x;
+                    fball.y = level.player.y;
+                    fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
+                    level.fireballs.push(fball);
+                    level.addChild(fball);
+                }
+                prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
 				
 				/*
 				if (Math.random() < 0.05) {
@@ -104,6 +123,14 @@ package pyrokid {
 					}
 					Fire.spreadFire(onFire, fireGrid);
 				}*/
+                
+                
+                //fireballs
+                for (var i = 0; i < level.fireballs.size(); i++) {
+                    var fball:Fireball = level.fireballs.get(i) as Fireball;
+                    fball.x += fball.speedX;
+                }
+
                 
                 level.x = - level.player.x + 400;
 				

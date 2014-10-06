@@ -8,9 +8,10 @@ package pyrokid {
 		
         // Level object instances
         public var walls:Array;
-        public var player:DynamicEntity;
+        public var player:Player;
 		public var recipe:Object;
 		public var islands:Array;
+        public var fireballs:RingBuffer; //1d list of active fireballs, TODO, make it a ring buffer with max size
         
         //2d grid, tile locked objects, non moving
         public var staticObjects:Array;
@@ -43,7 +44,7 @@ package pyrokid {
 			} else if (objectCode == 2) { // crate
 				return;// obj = new Crate();
 			} else if (objectCode == 3) { // player
-				player =  new DynamicEntity(0.8, 0.95);
+				player =  new Player(0.8, 0.95);
 				obj = player;
 			}
 			
@@ -77,6 +78,8 @@ package pyrokid {
 			staticObjects[6][5].fire.ignite();
 			
             islands = IslandSimulator.ConstructIslands(staticObjects);
+            
+            fireballs = new RingBuffer(5);
         }
         
     }

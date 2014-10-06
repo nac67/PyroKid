@@ -8,8 +8,9 @@ package physics {
         public var velocity:Vector2 = new Vector2();
         public var motion:Vector2 = new Vector2();
 		
-		public function DynamicEntity(width:Number, height:Number) {
-			super(width, height);
+        //width and height are a percentage of a tile
+		public function DynamicEntity(width:Number, height:Number, color:uint = 0xFF0000) {
+			super(width, height, color);
         }
 
         public function Update(dt:Number) {
