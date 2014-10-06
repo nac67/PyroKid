@@ -62,6 +62,8 @@ package pyrokid {
             
             Utils.removeAllChildren(this);
             
+            this.addChild(new CaveBackground(recipe.walls[0].length, recipe.walls.length));
+            
 			this.recipe = recipe;
             walls = recipe.walls;
 			

@@ -41,8 +41,6 @@ package pyrokid {
                     animIsShooting = false;
                 }
             } else {
-                trace(velocity.y);
-                
                 if (velocity.y > 1) {
                     playerSwf.gotoAndStop(4);
                     return;

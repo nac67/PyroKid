@@ -18,6 +18,9 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/dirt.png")]
         public static var DirtBMP:Class;
         
+        [Embed(source="../../assets/tile_art/big_background.png")]
+        public static var BGBMP:Class;
+        
         [Embed(source='../../assets/swf/player.swf', symbol='PlayerAnim')]
         public static var PlayerSWF:Class; //cast as MovieClip on instantiation
         
