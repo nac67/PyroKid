@@ -1,4 +1,5 @@
 package physics {
+    import adobe.utils.CustomActions;
     import flash.accessibility.AccessibilityProperties;
     import flash.display.GraphicsPathWinding;
     import flash.geom.Point;
@@ -24,7 +25,76 @@ package physics {
             for (var i:int = 0; i < islandPositions.length; i++) {
                 islands[i] = ConstructIsland(islandPositions[i], tiles);
             }
+            
             return islands;
+        }
+        
+        private static function sortNY(e1:PhysEdge, e2:PhysEdge):int {
+            if (e1.center.y > e2.center.y) return 1;
+            else if (e1.center.y < e2.center.y) return -1;
+            else return 0;
+        }
+        private static function sortPY(e1:PhysEdge, e2:PhysEdge):int {
+            if (e1.center.y < e2.center.y) return 1;
+            else if (e1.center.y > e2.center.y) return -1;
+            else return 0;
+        }
+        
+        public static function ConstructCollisionColumns(islands:Array):Array {
+            // Create A List Of All The Columns
+            var minX:int = int.MAX_VALUE;
+            var maxX:int = int.MIN_VALUE;
+            for each(var island:PhysIsland in islands) {
+                var iMinX:int = int(island.globalAnchor.x + 0.5);
+                var iMaxX:int = iMinX + island.tilesWidth - 1;
+                if (iMinX < minX) minX = iMinX;
+                if (iMaxX > maxX) maxX = iMaxX;
+            }
+            var totalWidth:int = maxX - minX + 1
+            var hashSet = new Array(totalWidth);
+            for (var i:int = 0; i < totalWidth; i++) {
+                hashSet[i] = [];
+            }
+            
+            // Hash All Columns
+            for each(var island:PhysIsland in islands) {
+                var igX:int = int(island.globalAnchor.x + 0.5);
+                igX -= minX;
+                var columns = BuildIslandCollisionColumns(island);
+                for (var x:int = 0; x < columns.length; x++) {
+                    hashSet[igX + x].push(columns[x]);
+                }
+            }
+            
+            return hashSet;
+        }
+        private static function BuildIslandCollisionColumns(island:PhysIsland):Array { 
+            var cols = new Array(island.tilesWidth);
+            for (var i:int = 0; i < island.tilesWidth; i++) {
+                cols[i] = new CollisionColumn(island);
+            }
+            
+            for each(var e:PhysEdge in island.edges) {
+                var ex:int = int(e.center.x);
+                if (ex < 0 || ex >= island.tilesWidth) continue;
+                var col:CollisionColumn = cols[ex];
+                switch(e.direction) {
+                    case Cardinal.NY:
+                        if (col.nyEdge == null)
+                            col.nyEdge = e;
+                        else if (e.center.y < col.nyEdge.center.y)
+                            col.nyEdge = e;
+                        break;
+                    case Cardinal.PY:
+                        if (col.pyEdge == null)
+                            col.pyEdge = e;
+                        else if (e.center.y > col.pyEdge.center.y)
+                            col.pyEdge = e;
+                        break;
+                }
+            }
+            
+            return cols;
         }
         
         private static function BuildIDs(tiles:Array, queue:Array):Array {
@@ -160,7 +230,7 @@ package physics {
             return island;
         }
         
-        public static function Simulate(islands:Array, gravAcceleration:Vector2, dt:Number) {
+        public static function Simulate(islands:Array, columns:Array, gravAcceleration:Vector2, dt:Number) {
             for each(var island:PhysIsland in islands) {
                 if (!island.isGrounded) {
                     island.velocity.Add(gravAcceleration.x * dt, gravAcceleration.y * dt);
@@ -168,12 +238,70 @@ package physics {
                     island.motion.x = CollisionResolver.ClampedMotion(island.motion.x);
                     island.motion.y = CollisionResolver.ClampedMotion(island.motion.y);
                     island.globalAnchor.AddV(island.motion);
-                    
-                    island.motion.MulD(1.1);
+                    island.columnAccumulator.Set(0, 0);
                 }
             }
             
+            // Accumulate Collision Between Islands
+            for each(var columnList:Array in columns) {
+                for each(var c1:CollisionColumn in columnList) {
+                    for each(var c2:CollisionColumn in columnList) {
+                        CollideColumns(c1, c2);
+                    }
+                }
+            }
+            
+            // Resolve Collisions Between Islands
+            for each(var island:PhysIsland in islands) {
+                var dy:Number = island.columnAccumulator.y - island.columnAccumulator.x;
+                if (dy != 0.0) {
+                    island.velocity.y = 0.0;
+                    island.motion.y += dy;
+                    island.globalAnchor.y += dy;
+                }
+                island.motion.MulD(1.1);
+            }
+            
+            // Refresh Edge Set
             CollisionResolver.BuildTrimmedEdgeSet(islands, 0.1);
+        }
+        private static function CollideColumns(c1:CollisionColumn, c2:CollisionColumn) {
+            if (c1 == c2 || (c1.island.isGrounded && c2.island.isGrounded)) return;
+            
+            var c1y:Number = (c1.pyEdge.center.y + c1.nyEdge.center.y) * 0.5 + c1.island.globalAnchor.y;
+            var c2y:Number = (c2.pyEdge.center.y + c2.nyEdge.center.y) * 0.5 + c2.island.globalAnchor.y;
+            
+            var off:Number;
+            var top:Number;
+            var bot:Number;
+            if (c1y > c2y) {
+                top = c1.nyEdge.center.y + c1.island.globalAnchor.y;
+                bot = c2.pyEdge.center.y + c2.island.globalAnchor.y;
+                off = top - bot;
+                if (off < 0) DisplaceIsland(c1, c2, -off);
+            }
+            else {
+                top = c2.nyEdge.center.y + c2.island.globalAnchor.y;
+                bot = c1.pyEdge.center.y + c1.island.globalAnchor.y;
+                off = top - bot;
+                if (off < 0) DisplaceIsland(c2, c1, -off);
+            }
+            
+        }
+        private static function DisplaceIsland(cPY:CollisionColumn, cNY:CollisionColumn, off:Number) {
+            if (!cNY.island.isGrounded) {
+                // Displace Lower One
+                cNY.island.columnAccumulator.x = Math.max(cNY.island.columnAccumulator.x, off);
+            }
+            else if(!cPY.island.isGrounded) {
+                // Displace Higher One
+                cPY.island.columnAccumulator.y = Math.max(cPY.island.columnAccumulator.y, off);
+            }
+            else {
+                // Displace Both
+                cPY.island.columnAccumulator.y = Math.max(cPY.island.columnAccumulator.y, off / 2);
+                cNY.island.columnAccumulator.x = Math.max(cNY.island.columnAccumulator.x, off / 2);
+            }
         }
     }
 }

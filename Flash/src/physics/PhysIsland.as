@@ -23,6 +23,8 @@ package physics {
         public var edges:Array;
         public var clippedEdges:Array;
         
+        public var columnAccumulator:Vector2 = new Vector2();
+        
         /**
          * Should This Island Be Hovering
          */

@@ -21,8 +21,8 @@ package physics {
          * @param grav Gravity Acceleration
          * @param dt Frame Delta-Time
          */
-        public static function updatePhysics(islands:Array, grav:Vector2, dt:Number) {
-            IslandSimulator.Simulate(islands, grav, dt);
+        public static function updatePhysics(islands:Array, columns:Array, grav:Vector2, dt:Number) {
+            IslandSimulator.Simulate(islands, columns, grav, dt);
         }
         
         /**

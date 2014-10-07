@@ -11,6 +11,7 @@ package pyrokid {
 		public var playerRect:PhysRectangle;
 		public var recipe:Object;
 		public var islands:Array;
+		public var columns:Array;
 		
 		public var islandViews:Array;
 		public var rectViews:Array;
@@ -95,6 +96,7 @@ package pyrokid {
 			}
 			
             islands = IslandSimulator.ConstructIslands(physBoxGrid);
+            columns = IslandSimulator.ConstructCollisionColumns(islands);
 			for (var i:int = 0; i < islands.length; i++) {
 				var isle:PhysIsland = islands[i];
 				var tileEntity:TileEntity = new TileEntity(

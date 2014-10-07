@@ -20,6 +20,7 @@ package physics {
         private var dropSprites:Array = [];
         
         private var islands:Array;
+        private var columns:Array;
         private var rect:PhysRectangle;
         
         public function PhysTest() {
@@ -39,9 +40,9 @@ package physics {
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 0],
                 [0, 0, 0, 0, 0, 0, 0, 2],
-                [0, 0, 0, 0, 2, 0, 2, 2],
+                [0, 0, 0, 0, 1, 0, 2, 2],
                 [0, 0, 0, 1, 1, 0, 0, 0],
-                [1, 1, 2, 1, 1, 1, 1, 1]
+                [1, 1, 1, 1, 1, 1, 1, 1]
             ];
             var tiles = new Array(7);
             for (var y:int = 0; y < 7; y++) {
@@ -49,10 +50,10 @@ package physics {
                 for (var x:int = 0; x < 8; x++) {
                     switch (walls[y][x]) {
                         case 1: 
-                            tiles[y][x] = new PhysBox();
+                            tiles[y][x] = new PhysBox(1);
                             break;
                         case 2: 
-                            tiles[y][x] = new PhysBox(true);
+                            tiles[y][x] = new PhysBox(2, true);
                             break;
                         default: 
                             tiles[y][x] = null;
@@ -63,6 +64,7 @@ package physics {
             
             // Make Islands
             islands = IslandSimulator.ConstructIslands(tiles);
+            columns = IslandSimulator.ConstructCollisionColumns(islands);
             islandSprites = [];
             for each (var i:PhysIsland in islands) {
                 var s:Sprite = new Sprite();
@@ -138,7 +140,7 @@ package physics {
                 d.Update(dt);
             }
             
-            IslandSimulator.Simulate(islands, new Vector2(0, 0), dt);
+            IslandSimulator.Simulate(islands, columns, new Vector2(0, 0.3), dt);
             
             isPlayerGrounded = false;
             CollisionResolver.Resolve(rect, islands, CR);
