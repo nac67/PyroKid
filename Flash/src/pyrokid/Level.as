@@ -23,8 +23,6 @@ package pyrokid {
         public var spiderView:ViewPRect;
         
         public var spiderList:Array;
-
-        
 		
 		public var islandViews:Array;
 		public var rectViews:Array;
@@ -38,6 +36,8 @@ package pyrokid {
         public var dynamicObjects:Array;
 		
 		public var onFire:Array;
+		
+		public var harmfulObjects:Array;
         
         public function Level(recipe:Object):void {
 			reset(recipe);
@@ -87,6 +87,7 @@ package pyrokid {
 			rectViews = [];
             
             spiderList = [];
+			harmfulObjects = [];
 			
 			tileEntityGrid = [];
             var physBoxGrid:Array = [];
@@ -198,6 +199,11 @@ package pyrokid {
                     self.removeChild(dispObj);
                 }
             });
+			
+			//populate harmful objects list
+			for each (var s:Spider in spiderList) {
+				harmfulObjects.push(s);
+			}
         }
         
     }

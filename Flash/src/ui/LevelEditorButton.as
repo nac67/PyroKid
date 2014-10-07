@@ -19,8 +19,8 @@ package ui {
 		private var isToggle:Boolean;
 
 		public function LevelEditorButton(onClick:Function, w:int, h:int, x:int, y:int, texts:Array, colors:Array) {
-			this.x = x;
-			this.y = y;
+			this.x = x - w/2;
+			this.y = y - h/2;
 			this.w = w;
 			this.h = h;
 			this.texts = texts;

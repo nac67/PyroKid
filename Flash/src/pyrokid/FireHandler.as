@@ -24,13 +24,13 @@ package pyrokid {
 		}
 		
 		// not spread every frame BUT should spread when touches something
-		public static function spreadFire(onFire:Array, fireGrid:Array, frameCount:int):void {
+		public static function spreadFire(onFire:Array, harmfulObjects:Array, fireGrid:Array, frameCount:int):void {
 			var numOnFire:int = onFire.length;
 			for (var i:int = 0; i < numOnFire; i++) {
 				var neighbors:Array = getNeighbors(onFire[i], fireGrid);
 				for (var j:int = 0; j < neighbors.length; j++) {
 					if (!neighbors[j].isOnFire()) {
-						neighbors[j].ignite(onFire, frameCount);
+						neighbors[j].ignite(onFire, frameCount, harmfulObjects);
 					}
 				}
 			}

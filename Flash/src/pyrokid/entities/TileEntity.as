@@ -60,7 +60,7 @@ package pyrokid.entities {
 			return coors;
 		}
 		
-		public override function ignite(onFire:Array, ignitionFrame:int):void {
+		public override function ignite(onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
 		}
 		
 		

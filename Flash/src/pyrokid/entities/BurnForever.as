@@ -18,7 +18,7 @@ package pyrokid.entities {
 			return mc;
 		}
 		
-		public override function ignite(onFire:Array, ignitionFrame:int):void {
+		public override function ignite(onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
             
             for (var i:int = 0; i < cellSprites.length; i++) {
                 var mc:MovieClip = cellSprites[i] as MovieClip;
@@ -27,6 +27,7 @@ package pyrokid.entities {
             
 			ignitionTime = ignitionFrame;
 			onFire.push(this);
+			harmfulObjects.push(this);
 		}
 		
 	}
