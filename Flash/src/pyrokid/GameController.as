@@ -122,14 +122,11 @@ package pyrokid {
 			level.fireballs.deleteAllMarked();
 			
 			
-			//firesplooshes
-			for (var i = 0; i < level.firesplooshes.size(); i++) {
-				var fsploosh:MovieClip = level.firesplooshes.get(i) as MovieClip;
-				if (fsploosh.currentFrame == fsploosh.totalFrames) {
-					level.firesplooshes.markForDeletion(fsploosh);
-				}
-			}
-			level.firesplooshes.deleteAllMarked();
+			//Brief Clips
+            level.briefClips.filter(function(o:Object):Boolean {
+               var mc:MovieClip = o as MovieClip;
+               return mc.currentFrame != mc.totalFrames;
+            });
 		}
 
 		private function keyboardActionListener(e:KeyboardEvent):void {
@@ -177,14 +174,28 @@ package pyrokid {
             var spider:Spider = level.spiderView.sprite as Spider;
             spider.update(level.spiderView.phys);
             
+            
+            //TODO DOTO TODO make the fireball and the firespark part of the
+            //same thang
             for (var i:int = 0; i < level.spiderList.length; i++) {
                 var spider:Spider = level.spiderList[i] as Spider;
-                for (var j:int = 0; j < level.fireballs.size(); j++) {
-                    var fball:Fireball = level.fireballs.get(j) as Fireball;
-                    
-                    if (fball.hitTestObject(spider)) {
-						// bullet hit spider
-					}
+                if(spider != null){
+                    for (var j:int = 0; j < level.fireballs.size(); j++) {
+                        var fball:Fireball = level.fireballs.get(j) as Fireball;
+                        
+                        if (fball.hitTestObject(spider)) {
+                            level.fireballs.remove(fball);
+                            level.removeChild(spider);
+                            level.spiderList[i] = null;
+                            var die = new Embedded.SpiderDieSWF();
+                            die.x = spider.x;
+                            die.y = spider.y-20;
+                            die.scaleX = spider.scaleX;
+                            die.scaleY = spider.scaleY;
+                            level.addChild(die);
+                            level.briefClips.push(die);
+                        }
+                    }
                 }
             }
             
@@ -219,7 +230,7 @@ package pyrokid {
             var spark:MovieClip = new Embedded.FiresplooshSWF();
             spark.x = level.player.x + (level.player.direction == Constants.DIR_RIGHT ? 25 : 5);
             spark.y = level.player.y + 25;
-            level.firesplooshes.push(spark);
+            level.briefClips.push(spark);
             level.addChild(spark);
         }
 		

@@ -19,7 +19,7 @@ package pyrokid {
         public static var DirtBMP:Class;
         
         [Embed(source="../../assets/tile_art/big_background.png")]
-        public static var BGBMP:Class;
+        public static var BGBMP:Class; //cast as Bitmap on instantiation
         
         [Embed(source='../../assets/swf/player.swf', symbol='playerLegs')]
         public static var PlayerLegsSWF:Class; //cast as MovieClip on instantiation
@@ -35,6 +35,15 @@ package pyrokid {
         
         [Embed(source='../../assets/swf/spider.swf', symbol='Spider')]
         public static var SpiderSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/spider.swf', symbol='spiderdie')]
+        public static var SpiderDieSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/spider.swf', symbol='spiderdie2')]
+        public static var SpiderDie2SWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/oil.swf', symbol='Oil')]
+        public static var OilSWF:Class; //cast as MovieClip on instantiation
         
     }
 

@@ -14,6 +14,8 @@ package pyrokid.entities {
 		public var cells:Array;
 		private var color:uint;
 		public var globalAnchor:Vector2;
+        
+        public var cellSprites:Array;
 		
 		private static var directNeighbors:Array = [
 			new Vector2i(0, -1),
@@ -28,18 +30,20 @@ package pyrokid.entities {
 			this.x = x;
 			this.y = y;
 			cells = [];
+            cellSprites = [];
 		}
 		
-		protected function getChild(cell:Vector2i):DisplayObject {
+		protected function getSpriteForCell(cell:Vector2i):DisplayObject {
 			return new Embedded.DirtBMP();
 		}
 		
 		public function finalizeCells():void {
 			for (var i:int = 0; i < cells.length; i++) {
-				var child:DisplayObject = getChild(cells[i]);
+				var child:DisplayObject = getSpriteForCell(cells[i]);
 				child.x = (cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL;
 				child.y = (cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL;
 				addChild(child);
+                cellSprites.push(child);
 			}
 		}
 		

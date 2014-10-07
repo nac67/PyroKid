@@ -138,6 +138,11 @@ package pyrokid {
             markedForDel = [];
         }
         
+        public function remove(o:Object):void {
+            markForDeletion(o);
+            deleteAllMarked();
+        }
+        
         /**
          * This is a method that goes through the structure
          * and deletes anything that doesn't match the given
