@@ -193,7 +193,7 @@ package pyrokid {
                                 level.fireballs.remove(attackObj.fireballSprite);
                             }
                             level.removeChild(spider);
-                            level.spiderList[i] = null;
+                            level.spiderList[j] = null;
                             
                             //XXX
                             level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
@@ -204,6 +204,7 @@ package pyrokid {
                             die.scaleY = spider.scaleY;
                             level.addChild(die);
                             level.briefClips.push(die);
+                            break;
                         }
                     }
                 }

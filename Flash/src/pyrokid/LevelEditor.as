@@ -54,6 +54,7 @@ package pyrokid {
 			options["spider"] = "Spider";
 			options["player"] = "Player";
 			buttons.push(new SelectorButton(options, changeSelectedObject));
+            trace(noObjectSelectedSprite.x);
 		}
 		
 		private function changeSelectedObject(selected):void {
