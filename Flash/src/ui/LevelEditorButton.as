@@ -5,29 +5,28 @@ package ui {
 	import flash.events.MouseEvent;
 
 	public class LevelEditorButton extends SimpleButton {
-		protected static var upColor:uint = 0x00CCFF;
-		protected static var overColor:uint = 0xCCFF00;
-		protected static var downColor:uint = 0xFFCC00;
+		public static var upColor:uint = 0x00CCFF;
+		public static var overColor:uint = 0xCCFF00;
+		public static var downColor:uint = 0xFFCC00;
 		
-		protected var mainText:String;
-		protected var alternateText:String;
-		protected var upC:uint;
-		protected var downC:uint;
+		private var texts:Array;
+		private var colors:Array;
+		private var toggleState:int;
+		
 		protected var w:int;
 		protected var h:int;
 		
 		private var isToggle:Boolean;
 
-		public function LevelEditorButton(onClick:Function, w:int, h:int, x:int, y:int, text:String, altText:String = null) {
+		public function LevelEditorButton(onClick:Function, w:int, h:int, x:int, y:int, texts:Array, colors:Array) {
 			this.x = x;
 			this.y = y;
 			this.w = w;
 			this.h = h;
-			mainText = text;
-			isToggle = altText != null;
-			alternateText = isToggle ? altText : mainText;
-			upC = upColor;
-			downC = downColor;
+			this.texts = texts;
+			this.colors = colors;
+			toggleState = 0;
+			isToggle = texts.length > 1;
 			
 			setBackgroundStates();
 			hitTestState = upState;
@@ -35,15 +34,13 @@ package ui {
 			setOnClick(onClick);
 		}
 		
+		public function reset():void {
+			toggleState = 0;
+			setBackgroundStates();
+		}
+		
 		public function toggle():void {
-			var temp = mainText;
-			mainText = alternateText;
-			alternateText = temp;
-			
-			var temp = upC;
-			upC = downC;
-			downC = temp;
-			
+			toggleState = (toggleState + 1) % texts.length;
 			setBackgroundStates();
 		}
 		
@@ -62,9 +59,9 @@ package ui {
 		}
 		
 		protected function setBackgroundStates():void {
-			upState = new ButtonBackground(upC, w, h, mainText);
-			downState = new ButtonBackground(downC, w, h, mainText);
-			overState = new ButtonBackground(overColor, w, h, mainText);
+			upState = new ButtonBackground(colors[toggleState], w, h, texts[toggleState]);
+			downState = new ButtonBackground(downColor, w, h, texts[toggleState]);
+			overState = new ButtonBackground(overColor, w, h, texts[toggleState]);
 		}
 	}
 }

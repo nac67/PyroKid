@@ -15,7 +15,7 @@ package ui {
 			var i:int = 0;
 			for (var key:Object in options) {
 				var value:String = options[key];
-				var button:LevelEditorButton = new LevelEditorButton(null, 120, 20, 650, 200 + i * 20, value, value);
+				var button:LevelEditorButton = new LevelEditorButton(null, 120, 20, 650, 200 + i * 20, [value, value], [LevelEditorButton.upColor, 0xFF0000]);
 				button.setOnClick(getSelectorFunction(key, button));
 				addChild(button);
 				if (i == 0) {

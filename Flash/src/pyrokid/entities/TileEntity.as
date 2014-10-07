@@ -1,5 +1,6 @@
 package pyrokid.entities {
 	import flash.display.Bitmap;
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import physics.PhysBox;
 	import physics.Vector2;
@@ -28,22 +29,17 @@ package pyrokid.entities {
 			cells = [];
 		}
 		
+		protected function getChild(cell:Vector2i):DisplayObject {
+			return new Embedded.DirtBMP();
+		}
+		
 		public function finalizeCells():void {
-            graphics.lineStyle(0x000000);
-			graphics.beginFill(color);
 			for (var i:int = 0; i < cells.length; i++) {
-				/*graphics.drawRect(
-					(cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL,
-					(cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL,
-					w,
-					h
-				);*/
-				var bm:Bitmap = new Embedded.DirtBMP();
-				bm.x = (cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL;
-				bm.y = (cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL;
-				addChild(bm);
+				var child:DisplayObject = getChild(cells[i]);
+				child.x = (cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL;
+				child.y = (cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL;
+				addChild(child);
 			}
-			graphics.endFill();
 		}
 		
 		// TODO optimize this. It should be calculated once, and it should not
@@ -61,20 +57,6 @@ package pyrokid.entities {
 		}
 		
 		public override function ignite(onFire:Array, ignitionFrame:int):void {
-			// TODO make it draw on the appropriate cell
-			for (var i:int = 0; i < cells.length; i++) {
-				graphics.lineStyle(0x000000);
-				graphics.beginFill(0xFF0088);
-				graphics.drawRect(
-					(cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL + 20,
-					(cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL + 20,
-					10,
-					10
-				);
-				graphics.endFill();
-			}
-			ignitionTime = ignitionFrame;
-			onFire.push(this);
 		}
 		
 		

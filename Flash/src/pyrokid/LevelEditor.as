@@ -8,38 +8,71 @@ package pyrokid {
 	import flash.text.TextFormat;
 	import flash.utils.Dictionary;
 	import Math;
+	import physics.Vector2i;
 	import ui.*;
     
     public class LevelEditor extends Sprite {
 		
 		private var level:Level;
-		private var backgroundMode:Boolean;
 		private var buttons:Array;
-        
+		
+		private var objectEditor:Sprite;
+		private var selectedHighlighter:Sprite;
+		private var selectedButton:LevelEditorButton;
+		private var noObjectSelectedSprite:Sprite;
+		
+		private var editMode:int;
+		private var numEditModes:int = 3;
+		private var typeSelected:int = 0;
+		private var selectedCell:Vector2i;
+	        
         public function LevelEditor(level:Level):void {
 			this.level = level;
-			backgroundMode = true;
-
+			editMode = 0;
+			
+			objectEditor = new Sprite();
+			selectedHighlighter = new Sprite();
+			selectedHighlighter.graphics.lineStyle(2, 0x00FF00);
+			selectedHighlighter.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
+			noObjectSelectedSprite = new ButtonBackground(0xFF0000, 120, 25, "none selected");
+			noObjectSelectedSprite.x = 650;
+			noObjectSelectedSprite.y = 300;
+			selectedButton = new LevelEditorButton(toggleGravity, 120, 25, 650, 300, ["No Gravity", "Gravity"], [LevelEditorButton.upColor, 0xFF0000]);
+			objectEditor.addChild(noObjectSelectedSprite);
+			
 			buttons = [];
-			buttons.push(new LevelEditorButton(toggleBackgroundMode, 120, 25, 650, 50, "Editing Background", "Editing Objects"));
+			buttons.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Background", "Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
 			
 			buttons.push(new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth));
 			buttons.push(new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight));
 			
 			var options:Dictionary = new Dictionary();
-			options[1] = "yisssss";
-			options[2] = "lester";
-			options[20] = "malvo";
-			options[4] = "nooooo";
+			options[0] = "Empty";
+			options[1] = "Dirt Tile";
+			options[2] = "Eternal Flame";
+			options[3] = "Quick Burn";
 			buttons.push(new SelectorButton(options, changeSelectedObject));
 		}
 		
 		private function changeSelectedObject(selected):void {
-			trace("selected has changed to " + String(selected));
+			typeSelected = int(selected);
 		}
 		
-		private function toggleBackgroundMode():void {
-			backgroundMode = !backgroundMode;
+		private function toggleGravity():void {
+			var cellX:int = selectedCell.x;
+			var cellY:int = selectedCell.y;
+			level.recipe.walls[cellY][cellX] = -level.recipe.walls[cellY][cellX];
+			level.reset(level.recipe);
+		}
+		
+		private function toggleEditMode():void {
+			if (editMode == 2) {
+				removeChild(objectEditor);
+			}
+			editMode = (editMode + 1) % numEditModes;
+			if (editMode == 2) {
+				addChild(objectEditor);
+			}
 		}
 		
 		public function turnEditorOn():void {
@@ -47,6 +80,7 @@ package pyrokid {
 			for (var i:int = 0; i < buttons.length; i++) {
 				addChild(buttons[i]);
 			}
+			addChild(objectEditor);
 			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
 		}
 		
@@ -110,6 +144,8 @@ package pyrokid {
 		private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
 			level.scaleX = Math.min(1, 450 / (Constants.CELL * numCellsTall), 600 / (Constants.CELL * numCellsWide));
 			level.scaleY = level.scaleX;
+			selectedHighlighter.scaleX = level.scaleX;
+			selectedHighlighter.scaleY = level.scaleY;
 			level.reset(level.recipe);
 		}
 		
@@ -119,7 +155,7 @@ package pyrokid {
 			if (cellX >= level.numCellsWide() || cellY >= level.numCellsTall()) {
 				return;
 			}
-			if (backgroundMode) {
+			if (editMode == 0) {
 				var currentCode:int = level.recipe.walls[cellY][cellX];
 				if (currentCode == 0) {
 					currentCode = 1;
@@ -129,8 +165,25 @@ package pyrokid {
 					return;
 				}
 				level.recipe.walls[cellY][cellX] = currentCode;
+			} else if (editMode == 1) {
+				level.recipe.walls[cellY][cellX] = typeSelected;
 			} else {
-				trace("not in background mode");
+				if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
+					if (noObjectSelectedSprite.parent == objectEditor) {
+						objectEditor.removeChild(noObjectSelectedSprite);
+						objectEditor.addChild(selectedHighlighter);
+						objectEditor.addChild(selectedButton);
+					}
+					selectedCell = new Vector2i(cellX, cellY);
+					selectedButton.reset();
+					if (level.recipe.walls[cellY][cellX] < -1) {
+						selectedButton.toggle();
+					}
+					selectedHighlighter.x = cellX * Constants.CELL * level.scaleX;
+					selectedHighlighter.y = cellY * Constants.CELL * level.scaleY;
+					selectedHighlighter.scaleX = level.scaleX;
+					selectedHighlighter.scaleY = level.scaleY;
+				}
 			}
 			level.reset(level.recipe);
 		}

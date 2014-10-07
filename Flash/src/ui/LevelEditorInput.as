@@ -33,7 +33,7 @@ package ui {
 			input.restrict = "0-9";
 			input.text = String(content);
 			
-			var confirm:LevelEditorButton = new LevelEditorButton(updateOnValue, 70, 25, x + 50, y, label);
+			var confirm:LevelEditorButton = new LevelEditorButton(updateOnValue, 70, 25, x + 50, y, [label], [LevelEditorButton.upColor]);
 
 			addChild(input);
 			addChild(confirm);

@@ -28,6 +28,8 @@ package pyrokid {
 		
 		public var islandViews:Array;
 		public var rectViews:Array;
+		
+		public var background:CaveBackground;
         
         //2d grid, tile locked objects, non moving
 		public var tileEntityGrid:Array;
@@ -48,6 +50,18 @@ package pyrokid {
 		public function numCellsTall():int {
 			return walls.length;
 		}
+		
+		private function getObjectCode(island:PhysIsland, cornerCellX:int, cornerCellY:int):int {
+			for (var iy:int = 0; iy < island.tileGrid.length; iy++) {
+				for (var ix:int = 0; ix < island.tileGrid[0].length; ix++) {
+					var partOfIsland:Boolean = island.tileGrid[iy][ix] != null;
+					if (partOfIsland) {
+						return walls[cornerCellY + iy][cornerCellX + ix];
+					}
+				}
+			}
+			return 0;
+		}
 
         public function reset(recipe:Object):void {
             var x:int, y:int, w:int, h:int, self:Level = this;
@@ -59,11 +73,15 @@ package pyrokid {
 			//recipe.walls[0][7] = 2;
 			//recipe.multiTileObjects.push([new Vector2i(7, 0), new Vector2i(6, 0)]);
 
-            
-            this.addChild(new CaveBackground(recipe.walls[0].length, recipe.walls.length));
+            background = new CaveBackground(recipe.walls[0].length, recipe.walls.length);
+            this.addChild(background);
             
 			this.recipe = recipe;
             walls = recipe.walls;
+			/*trace("tracing walls");
+			for (var i:int = 0; i < walls.length; i++) {
+				trace(walls[i]);
+			}*/
 			onFire = [];
 			islandViews = [];
 			rectViews = [];
@@ -83,11 +101,16 @@ package pyrokid {
                 var row:Array = walls[y];
                 for (x = 0; x < row.length; x++) {
 					var objCode:int = row[x];
+					var falling = false;
+					if (objCode < 0) {
+						falling = true;
+						objCode = -objCode;
+					}
 					
 					if (objCode == 1) {
 						physBoxGrid[y][x] = new PhysBox(1);
 					} else if (objCode != 0) {
-						physBoxGrid[y][x] = new PhysBox(objId, objCode == 2);
+						physBoxGrid[y][x] = new PhysBox(objId, falling);
 						objId += 1;
 					}
                 }
@@ -106,18 +129,27 @@ package pyrokid {
             columns = IslandSimulator.ConstructCollisionColumns(islands);
 			for (var i:int = 0; i < islands.length; i++) {
 				var isle:PhysIsland = islands[i];
-				var tileEntity:TileEntity = new TileEntity(
-					Utils.cellToPixel(Math.floor(isle.globalAnchor.x)),
-					Utils.cellToPixel(Math.floor(isle.globalAnchor.y))
-				);
+				var cornerCellX:int = Math.floor(isle.globalAnchor.x);
+				var cornerCellY:int = Math.floor(isle.globalAnchor.y);
+				var objCode = getObjectCode(isle, cornerCellX, cornerCellY);
+				var spriteX:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.x));
+				var spriteY:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.y));
+				var tileEntity:TileEntity;
+				if (Math.abs(objCode) == 2) {
+					tileEntity = new BurnForever(spriteX, spriteY);
+				} else if (Math.abs(objCode) == 3) {
+					tileEntity = new BurnQuickly(spriteX, spriteY);
+				} else {
+					tileEntity = new TileEntity(spriteX, spriteY);
+				}
 				tileEntity.globalAnchor = isle.globalAnchor;
 				addChild(tileEntity);
 				for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
 					for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
 						var tile:IPhysTile = isle.tileGrid[iy][ix];
 						if (tile != null && tile is PhysBox) {
-							var cellX:int = ix + Math.floor(isle.globalAnchor.x);
-							var cellY:int = iy + Math.floor(isle.globalAnchor.y);
+							var cellX:int = ix + cornerCellX;
+							var cellY:int = iy + cornerCellY;
 							tileEntity.cells.push(new Vector2i(cellX, cellY));
 							tileEntityGrid[cellY][cellX] = tileEntity;
 						}
@@ -145,9 +177,7 @@ package pyrokid {
             spiderView = new ViewPRect(spider, spiderRect)
             rectViews.push(spiderView);
             spiderList.push(spider);
-			
-			//tileEntityGrid[1][8].ignite(onFire, 0);
-			            
+						            
             fireballs = new RingBuffer(5, function(o:Object) {
                 if (o is DisplayObject) {
                     var dispObj = o as DisplayObject;
