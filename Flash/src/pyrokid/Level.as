@@ -42,6 +42,8 @@ package pyrokid {
 		
 		public var harmfulObjects:Array;
 		
+		public var movingTiles:Array;
+		
 		//SOUNDS
 		[Embed(source="../../assets/sound/fireball-sound.mp3")]
 		private const fireballSoundClass:Class;
@@ -94,6 +96,8 @@ package pyrokid {
 			onFire = [];
 			islandViews = [];
 			rectViews = [];
+			
+			movingTiles = [];
             
             spiderList = [];
             playerAttackObjects = [];
@@ -217,6 +221,7 @@ package pyrokid {
 			for each (var s:Spider in spiderList) {
 				harmfulObjects.push(s);
 			}
+			
         }
 		
 		
@@ -234,7 +239,9 @@ package pyrokid {
             var oldViews = islandViews;
             islandViews = [];
             for each(var v:ViewPIsland in oldViews) {
-                if (v.phys == island) removeChild(v.sprite);
+                if (v.phys == island) {
+					removeChild(v.sprite);
+				}
                 else islandViews.push(v);
             }
 
@@ -282,11 +289,11 @@ package pyrokid {
          */
         public function destroyTilePosition(gx:Number, gy:Number) {
             for each (var island:PhysIsland in islands) {
-                var lx:Number = gx - island.globalAnchor.x;
+                var lx:Number = gx - Math.round(island.globalAnchor.x);
                 var ilx = int(lx);
                 if (ilx < 0 || ilx >= island.tilesWidth) continue;
 
-                var ly:Number = gy - island.globalAnchor.y;
+                var ly:Number = gy - Math.round(island.globalAnchor.y);
                 var ily = int(ly);
                 if (ily < 0 || ily >= island.tilesHeight) continue;
                 

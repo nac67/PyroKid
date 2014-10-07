@@ -19,9 +19,10 @@ package pyrokid.entities {
 			return child;
 		}
 		
-		public override function ignite(level:Level, onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
+		public override function ignite(level:Level, ignitionFrame:int):void {
 			for (var i:int = 0; i < cells.length; i++) {
 				level.destroyTilePosition(cells[i].x, cells[i].y);
+				level.tileEntityGrid[cells[i].y][cells[i].x] = null;
 			}
 		}
 		

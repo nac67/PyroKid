@@ -6,6 +6,7 @@ package pyrokid {
 	import flash.net.FileReference;
     import flash.events.KeyboardEvent;
 	import physics.*;
+	import pyrokid.entities.BurnForever;
 	import pyrokid.entities.FreeEntity;
 	import pyrokid.entities.TileEntity;
 	import flash.ui.Keyboard;
@@ -116,11 +117,12 @@ package pyrokid {
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
 					level.fireballs.markForDeletion(fball);
-					entity.ignite(level, level.onFire, frameCount, level.harmfulObjects);
+					if (!entity.isOnFire()) {
+						entity.ignite(level, frameCount);
+					}
 				}
 			}
-			level.fireballs.deleteAllMarked();
-			
+			level.fireballs.deleteAllMarked();			
             
             level.playerAttackObjects = level.playerAttackObjects.filter(function(o) {
                var pao:PlayerAttackObject = o as PlayerAttackObject;
@@ -227,8 +229,41 @@ package pyrokid {
 			}
 			
 			if (frameCount % 30 == 0) {
-				FireHandler.spreadFire(level, level.onFire, level.tileEntityGrid, frameCount, level.harmfulObjects);
+				FireHandler.spreadFire(level, frameCount);
 			}
+			
+			// TODO this goes away once we move velocity into game logic 
+			for each (var islandView:ViewPIsland in level.islandViews) {
+				if (Math.abs(islandView.phys.velocity.y) > 0.01) {
+					var tileEntity:TileEntity = islandView.sprite as TileEntity;
+					if (level.movingTiles.indexOf(islandView) == -1) {
+						//trace("adding to moving tiles");
+						for each (var cell:Vector2i in tileEntity.cells) {
+							level.tileEntityGrid[cell.y][cell.x] = null;
+						}
+						level.movingTiles.push(islandView);
+						tileEntity.oldGlobalAnchor = new Vector2(tileEntity.globalAnchor.x, tileEntity.globalAnchor.y);
+					}
+				}
+			}
+			level.movingTiles = level.movingTiles.filter(function(islandView) {
+				if (Math.abs(islandView.phys.velocity.y) < 0.01) {
+					//trace("deleting from moving tiles");
+					var tileEntity:TileEntity = islandView.sprite as TileEntity;
+					var moveX:int = Math.round(islandView.phys.globalAnchor.x - tileEntity.oldGlobalAnchor.x);
+					var moveY:int = Math.round(islandView.phys.globalAnchor.y - tileEntity.oldGlobalAnchor.y);
+					tileEntity.globalAnchor = islandView.phys.globalAnchor;
+					tileEntity.cells = tileEntity.cells.map(function(cell) {
+						return new Vector2i(cell.x + moveX, cell.y + moveY);
+					});
+					for each (var cell:Vector2i in tileEntity.cells) {
+						level.tileEntityGrid[cell.y][cell.x] = tileEntity;
+					}
+				} else {
+					return true;
+				}
+			});
+			
 			level.x = Math.floor(level.x * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.x + 400));
 			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * ( -level.player.y + 300));
 			

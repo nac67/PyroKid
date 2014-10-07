@@ -27,7 +27,7 @@ package pyrokid.entities {
 			return ignitionTime >= 0;
 		}
 		
-		public function ignite(level:Level, onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
+		public function ignite(level:Level, ignitionFrame:int):void {
 		}
 	}
 	

@@ -19,15 +19,14 @@ package pyrokid.entities {
 			return mc;
 		}
 		
-		public override function ignite(level:Level, onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
+		public override function ignite(level:Level, ignitionFrame:int):void {
             for (var i:int = 0; i < cellSprites.length; i++) {
                 var mc:MovieClip = cellSprites[i] as MovieClip;
                 mc.gotoAndStop(2);
             }
             
 			ignitionTime = ignitionFrame;
-			onFire.push(this);
-			harmfulObjects.push(this);
+			level.onFire.push(this);
 		}
 		
 	}

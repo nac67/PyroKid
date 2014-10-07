@@ -14,6 +14,8 @@ package pyrokid.entities {
 		public var cells:Array;
 		private var color:uint;
 		public var globalAnchor:Vector2;
+		
+		public var oldGlobalAnchor:Vector2;
         
         public var cellSprites:Array;
 		
@@ -61,7 +63,7 @@ package pyrokid.entities {
 			return coors;
 		}
 		
-		public override function ignite(level:Level, onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
+		public override function ignite(level:Level, ignitionFrame:int):void {
 		}
 		
 		
