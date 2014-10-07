@@ -117,6 +117,7 @@ package pyrokid {
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
 					level.fireballs.markForDeletion(fball);
+					entity.ignite(level.onFire, frameCount);
 				}
 			}
 			level.fireballs.deleteAllMarked();

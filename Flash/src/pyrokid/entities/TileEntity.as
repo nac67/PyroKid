@@ -57,20 +57,6 @@ package pyrokid.entities {
 		}
 		
 		public override function ignite(onFire:Array, ignitionFrame:int):void {
-			// TODO make it draw on the appropriate cell
-			for (var i:int = 0; i < cells.length; i++) {
-				graphics.lineStyle(0x000000);
-				graphics.beginFill(0xFF0088);
-				graphics.drawRect(
-					(cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL + 20,
-					(cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL + 20,
-					10,
-					10
-				);
-				graphics.endFill();
-			}
-			ignitionTime = ignitionFrame;
-			onFire.push(this);
 		}
 		
 		

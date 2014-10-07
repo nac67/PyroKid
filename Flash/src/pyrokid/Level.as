@@ -43,6 +43,18 @@ package pyrokid {
 		public function numCellsTall():int {
 			return walls.length;
 		}
+		
+		private function getObjectCode(island:PhysIsland, cornerCellX:int, cornerCellY:int):int {
+			for (var iy:int = 0; iy < island.tileGrid.length; iy++) {
+				for (var ix:int = 0; ix < island.tileGrid[0].length; ix++) {
+					var partOfIsland:Boolean = island.tileGrid[iy][ix] != null;
+					if (partOfIsland) {
+						return walls[cornerCellY + iy][cornerCellX + ix];
+					}
+				}
+			}
+			return 0;
+		}
 
         public function reset(recipe:Object):void {
             var x:int, y:int, w:int, h:int, self:Level = this;
@@ -59,6 +71,10 @@ package pyrokid {
             
 			this.recipe = recipe;
             walls = recipe.walls;
+			/*trace("tracing walls");
+			for (var i:int = 0; i < walls.length; i++) {
+				trace(walls[i]);
+			}*/
 			onFire = [];
 			islandViews = [];
 			rectViews = [];
@@ -106,12 +122,13 @@ package pyrokid {
 				var isle:PhysIsland = islands[i];
 				var cornerCellX:int = Math.floor(isle.globalAnchor.x);
 				var cornerCellY:int = Math.floor(isle.globalAnchor.y);
+				var objCode = getObjectCode(isle, cornerCellX, cornerCellY);
 				var spriteX:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.x));
 				var spriteY:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.y));
 				var tileEntity:TileEntity;
-				if (Math.abs(walls[cornerCellY][cornerCellX]) == 2) {
+				if (Math.abs(objCode) == 2) {
 					tileEntity = new BurnForever(spriteX, spriteY);
-				} else if (Math.abs(walls[cornerCellY][cornerCellX]) == 3) {
+				} else if (Math.abs(objCode) == 3) {
 					tileEntity = new BurnQuickly(spriteX, spriteY);
 				} else {
 					tileEntity = new TileEntity(spriteX, spriteY);
