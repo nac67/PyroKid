@@ -199,6 +199,84 @@ package pyrokid {
                 }
             });
         }
+		
+		
+		////// ---------- Deleting tiles ----------------- /////
+		
+		        /**
+         * Destroy A Tile In An Island And Update Level
+         * @param island Island Where Destruction Occurs
+         * @param tx X Index In Island's Tile Grid
+         * @param ty Y Index In Island's Tile Grid
+         */
+        public function destroyTile(island:PhysIsland, tx:int, ty:int) {
+            // Remove Islands
+            islands = islands.filter(function (arg) { return arg != island; });
+            var oldViews = islandViews;
+            islandViews = [];
+            for each(var v:ViewPIsland in oldViews) {
+                if (v.phys == island) removeChild(v.sprite);
+                else islandViews.push(v);
+            }
+
+            // Split Island Apart
+            if (island.tilesWidth > 1 || island.tilesHeight > 1) {
+                island.tileGrid[ty][tx] = null;
+                var newIslands:Array = IslandSimulator.ConstructIslands(island.tileGrid);
+                for each (var ni:PhysIsland in newIslands) {
+                    ni.globalAnchor.AddV(island.globalAnchor);
+                    islands.push(ni);
+                }
+                
+                // Rebuild Views
+                for (var i:int = 0; i < newIslands.length; i++) {
+                    var isle:PhysIsland = newIslands[i];
+                    var tileEntity:TileEntity = new TileEntity(
+                        Utils.cellToPixel(Math.floor(isle.globalAnchor.x)),
+                        Utils.cellToPixel(Math.floor(isle.globalAnchor.y))
+                    );
+                    tileEntity.globalAnchor = isle.globalAnchor;
+                    addChild(tileEntity);
+                    for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
+                        for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
+                            var tile:IPhysTile = isle.tileGrid[iy][ix];
+                            if (tile != null && tile is PhysBox) {
+                                var cellX:int = ix + Math.floor(isle.globalAnchor.x);
+                                var cellY:int = iy + Math.floor(isle.globalAnchor.y);
+                                tileEntity.cells.push(new Vector2i(cellX, cellY));
+                                tileEntityGrid[cellY][cellX] = tileEntity;
+                            }
+                        }
+                    }
+                    tileEntity.finalizeCells();
+                    islandViews.push(new ViewPIsland(tileEntity, isle));
+                }
+            }
+            
+            // Rebuild Sets
+            columns = IslandSimulator.ConstructCollisionColumns(islands);
+        }
+        /**
+         * Destroy A Tile At A Certain Location And Update Level
+         * @param gx Global X Position In Physics World
+         * @param gy Global Y Position In Physics World
+         */
+        public function destroyTilePosition(gx:Number, gy:Number) {
+            for each (var island:PhysIsland in islands) {
+                var lx:Number = gx - island.globalAnchor.x;
+                var ilx = int(lx);
+                if (ilx < 0 || ilx >= island.tilesWidth) continue;
+
+                var ly:Number = gy - island.globalAnchor.y;
+                var ily = int(ly);
+                if (ily < 0 || ily >= island.tilesHeight) continue;
+                
+                if (island.tileGrid[ily][ilx] != null) {
+                    destroyTile(island, ilx, ily);
+                    return;
+                }
+            }
+        }
         
     }
 

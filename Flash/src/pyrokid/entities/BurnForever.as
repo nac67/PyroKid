@@ -3,6 +3,7 @@ package pyrokid.entities {
 	import physics.Vector2i;
 	import flash.display.DisplayObject;
 	import pyrokid.Constants;
+	import pyrokid.Level;
 	
 	public class BurnForever extends TileEntity {
 		
@@ -19,7 +20,7 @@ package pyrokid.entities {
 			return child;
 		}
 		
-		public override function ignite(onFire:Array, ignitionFrame:int):void {
+		public override function ignite(level:Level, onFire:Array, ignitionFrame:int):void {
 			for (var i:int = 0; i < cells.length; i++) {
 				var child:Sprite = new Sprite();
 				child.graphics.lineStyle(0x000000);

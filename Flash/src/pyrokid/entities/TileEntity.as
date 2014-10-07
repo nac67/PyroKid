@@ -7,6 +7,7 @@ package pyrokid.entities {
 	import physics.Vector2i;
 	import pyrokid.Constants;
 	import pyrokid.Embedded;
+	import pyrokid.Level;
 	
 	public class TileEntity extends GameEntity {
 		
@@ -56,7 +57,7 @@ package pyrokid.entities {
 			return coors;
 		}
 		
-		public override function ignite(onFire:Array, ignitionFrame:int):void {
+		public override function ignite(level:Level, onFire:Array, ignitionFrame:int):void {
 		}
 		
 		
