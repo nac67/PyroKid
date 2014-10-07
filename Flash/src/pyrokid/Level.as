@@ -54,34 +54,20 @@ package pyrokid {
 				tileEntityGrid.push(new Array(width));
             }
             
-			var objId:int = 1;
+			var objId:int = 2;
             for (y = 0; y < walls.length; y++) {
                 var row:Array = walls[y];
                 for (x = 0; x < row.length; x++) {
 					var objCode:int = row[x];
 					
 					if (objCode == 1) {
+						physBoxGrid[y][x] = new PhysBox(1);
+					} else if (objCode != 0) {
 						physBoxGrid[y][x] = new PhysBox(objId);
 						objId += 1;
 					}
                 }
             }
-			/*tileEntityGrid[6][5].ignite(onFire, 0);
-			var cells:Array = [];
-			cells.push(new Vector2i(1, 0));
-			cells.push(new Vector2i(1, 1));
-			cells.push(new Vector2i(2, 1));
-			cells.push(new Vector2i(3, 1));
-			var multiTile:MultiTileGameEntity = new MultiTileGameEntity([]);
-			for (var i:int = 0; i < cells.length; i++) {
-				var obj:PhysBox = new PhysBox(true, 0xCCCCFF);
-				obj.x = cells[i].x * Constants.CELL;
-				obj.y = cells[i].y * Constants.CELL;
-				staticObjects[cells[i].y][cells[i].x] = obj;
-				tileEntityGrid[cells[i].y][cells[i].x] = multiTile;
-				multiTile.entities.push(obj);
-				addChild(obj);
-			}*/
 
 			for (var i:int = 0; i < recipe.multiTileObjects.length; i++) {
 				var multiTileObj:Array = recipe.multiTileObjects[i];
@@ -126,7 +112,7 @@ package pyrokid {
 			rectViews.push(new ViewPRect(player, playerRect));
 			
 			
-			//tileEntityGrid[1][8].ignite(onFire, 0);
+			tileEntityGrid[1][8].ignite(onFire, 0);
         }
         
     }

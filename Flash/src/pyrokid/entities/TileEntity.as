@@ -40,6 +40,8 @@ package pyrokid.entities {
 			graphics.endFill();
 		}
 		
+		// TODO optimize this. It should be calculated once, and it should not
+		// do the same neighbor multiple times
 		public function getNeighborCoordinates(grid:Array):Array {
 			var coors:Array = [];
 			for (var i:int = 0; i < cells.length; i++) {
@@ -57,7 +59,12 @@ package pyrokid.entities {
 			for (var i:int = 0; i < cells.length; i++) {
 				graphics.lineStyle(0x000000);
 				graphics.beginFill(0xFF0088);
-				graphics.drawRect(20, 20, 10, 10);
+				graphics.drawRect(
+					(cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL + 20,
+					(cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL + 20,
+					10,
+					10
+				);
 				graphics.endFill();
 			}
 			ignitionTime = ignitionFrame;

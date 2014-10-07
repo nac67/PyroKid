@@ -40,9 +40,8 @@ package physics {
         }
         public function CanBind(side:int, neighbor:IPhysTile):Boolean {
 			if (neighbor is PhysBox) {
-				return true;
-				//var neighborBox:PhysBox = neighbor as PhysBox;
-				//return id > 0 && id == neighborBox.id;
+				var neighborBox:PhysBox = neighbor as PhysBox;
+				return id > 0 && id == neighborBox.id;
 			} else {
 				return false;
 			}
