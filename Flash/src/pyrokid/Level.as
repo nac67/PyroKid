@@ -122,6 +122,60 @@ package pyrokid {
 			//tileEntityGrid[1][8].ignite(onFire, 0);
         }
         
+        public function destroyTile(island:PhysIsland, tx:int, ty:int) {
+            // Remove Islands
+            islands = islands.filter(function (arg) { return arg != island; });
+            var oldViews = islandViews;
+            islandViews = [];
+            for each(var v:ViewPIsland in oldViews) {
+                if (v.phys == island) removeChild(v.sprite);
+                else islandViews.push(v);
+            }
+
+            // Split Island Apart
+            if (island.tilesWidth > 1 || island.tilesHeight > 1) {
+                island.tileGrid[ty][tx] = null;
+                var newIslands:Array = IslandSimulator.ConstructIslands(island.tileGrid);
+                for each (var ni:PhysIsland in newIslands) {
+                    ni.globalAnchor.AddV(island.globalAnchor);
+                    islands.push(ni);
+                }
+                
+                // Rebuild Views
+                for (var i:int = 0; i < newIslands.length; i++) {
+                    var isle:PhysIsland = newIslands[i];
+                    var tileEntity:TileEntity = new TileEntity(
+                        Utils.cellToPixel(Math.floor(isle.globalAnchor.x)),
+                        Utils.cellToPixel(Math.floor(isle.globalAnchor.y))
+                    );
+                    tileEntity.globalAnchor = isle.globalAnchor;
+                    addChild(tileEntity);
+                    for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
+                        for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
+                            var tile:IPhysTile = isle.tileGrid[iy][ix];
+                            if (tile != null && tile is PhysBox) {
+                                var cellX:int = ix + Math.floor(isle.globalAnchor.x);
+                                var cellY:int = iy + Math.floor(isle.globalAnchor.y);
+                                tileEntity.cells.push(new Vector2i(cellX, cellY));
+                                tileEntityGrid[cellY][cellX] = tileEntity;
+                            }
+                        }
+                    }
+                    tileEntity.finalizeCells();
+                    islandViews.push(new ViewPIsland(tileEntity, isle));
+                }
+            }
+            
+            // Rebuild Sets
+            columns = IslandSimulator.ConstructCollisionColumns(islands);
+        }
+        public function destroyTilePosition(gx:Number, gy:Number) {
+            for each (var island:PhysIsland in islands) {
+                var lx:Number = gx - island.globalAnchor.x;
+                var ly:Number = gy - island.globalAnchor.y;
+                //TODO
+            }
+        }
     }
 
 }

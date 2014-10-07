@@ -86,6 +86,11 @@ package pyrokid {
 			}
 			if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN)) {
 				level.playerRect.velocity.y = -6;
+                var rIsland:int = int(Math.random() * level.islands.length);
+                var island:PhysIsland = level.islands[rIsland];
+                var rX:int = int(Math.random() * island.tilesWidth);
+                var rY:int = int(Math.random() * island.tilesHeight);
+                level.destroyTile(island, rX, rY);
 			}
 			isPlayerGrounded = false;
 			
