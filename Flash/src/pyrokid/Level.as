@@ -82,8 +82,6 @@ package pyrokid {
 				multiTile.entities.push(obj);
 				addChild(obj);
 			}*/
-			
-			recipe.multiTileObjects = [];
 
 			for (var i:int = 0; i < recipe.multiTileObjects.length; i++) {
 				var multiTileObj:Array = recipe.multiTileObjects[i];
@@ -95,12 +93,14 @@ package pyrokid {
 			}
 			
             islands = IslandSimulator.ConstructIslands(physBoxGrid);
+			trace(islands.length);
 			for (var i:int = 0; i < islands.length; i++) {
 				var isle:PhysIsland = islands[i];
 				var tileEntity:TileEntity = new TileEntity(
 					Utils.cellToPixel(Math.floor(isle.globalAnchor.x)),
 					Utils.cellToPixel(Math.floor(isle.globalAnchor.y))
 				);
+				tileEntity.globalAnchor = isle.globalAnchor;
 				addChild(tileEntity);
 				for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
 					for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
@@ -113,16 +113,20 @@ package pyrokid {
 						}
 					}
 				}
+				tileEntity.finalizeCells();
 				islandViews.push(new ViewPIsland(tileEntity, isle));
 			}
 			
 			player = new FreeEntity(0.8, 0.9);
-			player.x = 250;
-			player.y = 0;
 			addChild(player);
 			playerRect = new PhysRectangle();
 			playerRect.halfSize = new Vector2(0.4, 0.45);
+			playerRect.center.x = recipe.playerStart[0] + playerRect.halfSize.x;
+			playerRect.center.y = recipe.playerStart[1] + playerRect.halfSize.y;
 			rectViews.push(new ViewPRect(player, playerRect));
+			
+			
+			//tileEntityGrid[1][8].ignite(onFire, 0);
         }
         
     }
