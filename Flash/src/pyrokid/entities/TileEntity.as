@@ -1,9 +1,11 @@
 package pyrokid.entities {
+	import flash.display.Bitmap;
 	import flash.display.Sprite;
 	import physics.PhysBox;
 	import physics.Vector2;
 	import physics.Vector2i;
 	import pyrokid.Constants;
+	import pyrokid.Embedded;
 	
 	public class TileEntity extends GameEntity {
 		
@@ -30,12 +32,16 @@ package pyrokid.entities {
             graphics.lineStyle(0x000000);
 			graphics.beginFill(color);
 			for (var i:int = 0; i < cells.length; i++) {
-				graphics.drawRect(
+				/*graphics.drawRect(
 					(cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL,
 					(cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL,
 					w,
 					h
-				);
+				);*/
+				var bm:Bitmap = new Embedded.DirtBMP();
+				bm.x = (cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL;
+				bm.y = (cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL;
+				addChild(bm);
 			}
 			graphics.endFill();
 		}
