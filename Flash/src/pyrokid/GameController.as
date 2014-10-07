@@ -116,27 +116,36 @@ package pyrokid {
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
 					level.fireballs.markForDeletion(fball);
-					entity.ignite(level, level.onFire, frameCount);
+					entity.ignite(level, level.onFire, frameCount, level.harmfulObjects);
 				}
 			}
 			level.fireballs.deleteAllMarked();
 			
-			
-			//Brief Clips
-            level.briefClips.filter(function(o:Object):Boolean {
-               var mc:MovieClip = o as MovieClip;
-               return mc.currentFrame != mc.totalFrames;
+            
+            level.playerAttackObjects = level.playerAttackObjects.filter(function(o) {
+               var pao:PlayerAttackObject = o as PlayerAttackObject;
+               return !PlayerAttackObject.deleteThis(level, pao); 
             });
+			
 		}
 
 		private function keyboardActionListener(e:KeyboardEvent):void {
 			if (e.keyCode == Keyboard.ESCAPE) {
-				isGameOver = true;
-				createGameOverScreenFunc(false);
-				trace("over");
-				Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
-
+				doGameOver();
 			}
+		}
+		
+		private function doGameOver() {
+			isGameOver = true;
+			Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+			removeEventListener(Event.ENTER_FRAME, update);
+			createGameOverScreenFunc(false);
+		}
+		private function doGameWon() {
+			isGameOver = true;
+			Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+			removeEventListener(Event.ENTER_FRAME, update);
+			createGameOverScreenFunc(true);
 		}
 		    
         private function update(event:Event):void {
@@ -166,24 +175,23 @@ package pyrokid {
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
 			level.playerRect.Update(Constants.dt);
 			level.player.updateAnimation(level.player.isGrounded, level.playerRect);
-			//level.player.isGrounded = false;
             
             for each (var spiderView:ViewPRect in level.spiderViews) {
 				var spider:Spider = spiderView.sprite as Spider;
 				spider.update(spiderView.phys);
 			}
             
+            fireballUpdate();
             
-            //TODO DOTO TODO make the fireball and the firespark part of the
-            //same thang
-            for (var i:int = 0; i < level.spiderList.length; i++) {
-                var spider:Spider = level.spiderList[i] as Spider;
-                if(spider != null){
-                    for (var j:int = 0; j < level.fireballs.size(); j++) {
-                        var fball:Fireball = level.fireballs.get(j) as Fireball;
-                        
-                        if (fball.hitTestObject(spider)) {
-                            level.fireballs.remove(fball);
+            for (var i:int = 0; i < level.playerAttackObjects.length; i++) {
+                var attackObj:PlayerAttackObject = level.playerAttackObjects[i] as PlayerAttackObject;
+                for (var j:int = 0; j < level.spiderList.length; j++) {
+                    var spider:Spider = level.spiderList[j] as Spider;
+                    if(spider != null){
+                        if (attackObj.collidingWith(spider)) {
+                            if(attackObj.isFireball){
+                                level.fireballs.remove(attackObj.fireballSprite);
+                            }
                             level.removeChild(spider);
                             level.spiderList[i] = null;
                             var die = new Embedded.SpiderDieSWF();
@@ -199,7 +207,13 @@ package pyrokid {
             }
             
 			
-			fireballUpdate();
+			
+            
+            //Brief Clips
+            level.briefClips.filter(function(o:Object):Boolean {
+               var mc:MovieClip = o as MovieClip;
+               return mc.currentFrame != mc.totalFrames;
+            });
             
 			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9), Constants.dt);
 			for (var i:int = 0; i < level.islandViews.length; i++) {
@@ -210,10 +224,22 @@ package pyrokid {
 			}
 			
 			if (frameCount % 30 == 0) {
-				FireHandler.spreadFire(level, level.onFire, level.tileEntityGrid, frameCount);
+				FireHandler.spreadFire(level, level.onFire, level.tileEntityGrid, frameCount, level.harmfulObjects);
 			}
 			level.x = Math.floor(level.x * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.x + 400));
-			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.y + 300));
+			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * ( -level.player.y + 300));
+			
+			//resolve game over conditions
+			for each (var s:Sprite in level.harmfulObjects) {
+				if (level.player.hitTestObject(s)) {
+					doGameOver();
+                    return;
+				}
+			}
+			
+			if (level.player.x > stage.stageWidth) {
+				doGameWon();
+			}
         }
         
         function launchFireball():void {
@@ -223,6 +249,8 @@ package pyrokid {
             fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
             level.fireballs.push(fball);
             level.addChild(fball);
+            level.playerAttackObjects.push(new PlayerAttackObject(fball));
+			level.fireballSound.play();
         }
         
         function launchSpark():void {
@@ -231,6 +259,7 @@ package pyrokid {
             spark.y = level.player.y + 25;
             level.briefClips.push(spark);
             level.addChild(spark);
+            level.playerAttackObjects.push(new PlayerAttackObject(null,new Vector2(spark.x, spark.y)));
         }
 		
 	}

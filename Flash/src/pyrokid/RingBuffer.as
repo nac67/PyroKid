@@ -143,6 +143,10 @@ package pyrokid {
             deleteAllMarked();
         }
         
+        public function contains(o:Object):Boolean {
+            return buffer.indexOf(o) != -1;
+        }
+        
         /**
          * This is a method that goes through the structure
          * and deletes anything that doesn't match the given

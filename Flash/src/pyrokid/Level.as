@@ -1,7 +1,8 @@
 package pyrokid {
-    import flash.display.DisplayObject;
-    import flash.display.MovieClip;
-    import flash.display.Sprite;
+	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	import flash.media.Sound;
 	import physics.*;
 	import pyrokid.entities.*;
     
@@ -16,13 +17,15 @@ package pyrokid {
         public var fireballs:RingBuffer;
         public var briefClips:RingBuffer;
         
+        // All current objects that player uses to attack, list of PlayerAttackObject
+        // Contains fireballs, and contains sparks for a duration of one frame.
+        public var playerAttackObjects:Array;
+        
         public var player:Player;
 		public var playerRect:PhysRectangle;
                 
         public var spiderList:Array;
 		public var spiderViews:Array;
-
-        
 		
 		public var islandViews:Array;
 		public var rectViews:Array;
@@ -36,6 +39,14 @@ package pyrokid {
         public var dynamicObjects:Array;
 		
 		public var onFire:Array;
+		
+		public var harmfulObjects:Array;
+		
+		//SOUNDS
+		[Embed(source="../../assets/sound/fireball-sound.mp3")]
+		private const fireballSoundClass:Class;
+		public var fireballSound:Sound = new fireballSoundClass();
+		
         
         public function Level(recipe:Object):void {
 			reset(recipe);
@@ -85,6 +96,8 @@ package pyrokid {
 			rectViews = [];
             
             spiderList = [];
+            playerAttackObjects = [];
+			harmfulObjects = [];
 			
 			tileEntityGrid = [];
             var physBoxGrid:Array = [];
@@ -199,6 +212,11 @@ package pyrokid {
                     self.removeChild(dispObj);
                 }
             });
+			
+			//populate harmful objects list
+			for each (var s:Spider in spiderList) {
+				harmfulObjects.push(s);
+			}
         }
 		
 		
