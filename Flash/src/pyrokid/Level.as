@@ -122,6 +122,12 @@ package pyrokid {
 			//tileEntityGrid[1][8].ignite(onFire, 0);
         }
         
+        /**
+         * Destroy A Tile In An Island And Update Level
+         * @param island Island Where Destruction Occurs
+         * @param tx X Index In Island's Tile Grid
+         * @param ty Y Index In Island's Tile Grid
+         */
         public function destroyTile(island:PhysIsland, tx:int, ty:int) {
             // Remove Islands
             islands = islands.filter(function (arg) { return arg != island; });
@@ -169,11 +175,25 @@ package pyrokid {
             // Rebuild Sets
             columns = IslandSimulator.ConstructCollisionColumns(islands);
         }
+        /**
+         * Destroy A Tile At A Certain Location And Update Level
+         * @param gx Global X Position In Physics World
+         * @param gy Global Y Position In Physics World
+         */
         public function destroyTilePosition(gx:Number, gy:Number) {
             for each (var island:PhysIsland in islands) {
                 var lx:Number = gx - island.globalAnchor.x;
+                var ilx = int(lx);
+                if (ilx < 0 || ilx >= island.tilesWidth) continue;
+
                 var ly:Number = gy - island.globalAnchor.y;
-                //TODO
+                var ily = int(ly);
+                if (ily < 0 || ily >= island.tilesHeight) continue;
+                
+                if (island.tileGrid[ily][ilx] != null) {
+                    destroyTile(island, ilx, ily);
+                    return;
+                }
             }
         }
     }
