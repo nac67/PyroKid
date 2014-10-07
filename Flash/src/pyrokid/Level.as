@@ -14,7 +14,7 @@ package pyrokid {
 		public var columns:Array;
 
         public var fireballs:RingBuffer;
-        public var firesplooshes:RingBuffer;
+        public var briefClips:RingBuffer;
         
         public var player:Player;
 		public var playerRect:PhysRectangle;
@@ -156,13 +156,13 @@ package pyrokid {
                     sploosh.x = dispObj.x;
                     sploosh.y = dispObj.y;
                     self.addChild(sploosh);
-                    self.firesplooshes.push(sploosh);
+                    self.briefClips.push(sploosh);
                     
                     self.removeChild(dispObj);
                 }
             });
             
-            firesplooshes = new RingBuffer(5, function(o:Object) {
+            briefClips = new RingBuffer(50, function(o:Object) {
                 if (o is DisplayObject) {
                     var dispObj = o as DisplayObject;
                     self.removeChild(dispObj);
