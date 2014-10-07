@@ -1,6 +1,4 @@
 package physics {
-	import pyrokid.Constants;
-	import flash.display.Sprite;
     
     /**
      * ...
@@ -9,18 +7,23 @@ package physics {
     public class PhysIsland {
         // The Location Of The Island In World For Relative Calculations
         public var globalAnchor:Vector2 = new Vector2();
+        public var velocity:Vector2 = new Vector2();
+        public var motion:Vector2 = new Vector2();
         
         // Width And Height Of Island In Tiles
         public var tilesWidth:int;
         public var tilesHeight:int;
         
         // Tiles Of The Island
-        public var tiles:Array;
+        public var tileGrid:Array;
         
         /**
          * List Of PhysEdge Objects
          */
         public var edges:Array;
+        public var clippedEdges:Array;
+        
+        public var columnAccumulator:Vector2 = new Vector2();
         
         /**
          * Should This Island Be Hovering
@@ -31,9 +34,9 @@ package physics {
             tilesWidth = w;
             tilesHeight = h;
             
-            tiles = new Array(tilesHeight);
-            for (var i:int; i < tiles.length; i++) {
-                tiles[i] = new Array(tilesWidth);
+            tileGrid = new Array(tilesHeight);
+            for (var i:int; i < tileGrid.length; i++) {
+                tileGrid[i] = new Array(tilesWidth);
             }
         }
         
@@ -41,21 +44,17 @@ package physics {
             if (tile == null)
                 return;
             
-            tiles[y][x] = tile;
+            tileGrid[y][x] = tile;
             
             // Add Grounding To The Island
             isGrounded = isGrounded || tile.IsGrounded;
-			var child:Sprite = tile as Sprite;
-			child.x = (x + globalAnchor.x) * Constants.CELL;
-			child.y = (y + globalAnchor.y) * Constants.CELL;
         }
         public function AddFullBlock(x:int, y:int) {
             AddTile(x, y, new PhysBox());
         }
         
         public function RebuildEdges():void {
-            edges = CollisionResolver.ConstructEdges(tiles);
+            edges = CollisionResolver.ConstructEdges(tileGrid);
         }
     }
 }
-

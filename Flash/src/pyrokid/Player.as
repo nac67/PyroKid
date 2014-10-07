@@ -2,13 +2,14 @@ package pyrokid {
     import flash.display.MovieClip;
     import flash.display.Sprite;
     import flash.utils.ByteArray;
-    import physics.DynamicEntity;
+	import physics.PhysRectangle;
+	import pyrokid.entities.FreeEntity;
     
     /**
      * Player can be any width <= 50
      * @author Nick Cheng
      */
-    public class Player extends DynamicEntity {
+    public class Player extends FreeEntity {
         
         private var _direction:int;
         private var _width:Number;
@@ -25,7 +26,7 @@ package pyrokid {
         public var isShooting:Boolean = false;
 
         public function Player(width:Number, height:Number) {
-            super(width, height, 0xCCCCFF);
+            super(width, height);
             
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
             legsSWF.stop();
@@ -63,7 +64,7 @@ package pyrokid {
             return _direction;
         }
         
-        public function updateAnimation(isPlayerGrounded:Boolean) {
+        public function updateAnimation(isPlayerGrounded:Boolean, playerRect:PhysRectangle) {
             // Legs
             if (!isPlayerGrounded) {
                 legsSWF.gotoAndStop(3);
@@ -77,8 +78,6 @@ package pyrokid {
             if (isShooting) {
                 if (torsoSWF.playershoot.currentFrame == torsoSWF.playershoot.totalFrames) {
                     isShooting = false;
-                    //updateAnimation(isPlayerGrounded);
-                    //return;
                 }
                 torsoSWF.gotoAndStop(4);
                 
@@ -91,7 +90,7 @@ package pyrokid {
                 
             } else {
                 if (!isPlayerGrounded) {
-                    if (velocity.y < 0) {
+                    if (playerRect.velocity.y < 0) {
                         torsoSWF.gotoAndStop(2);
                     } else {
                         torsoSWF.gotoAndStop(3);
@@ -100,31 +99,6 @@ package pyrokid {
                     torsoSWF.gotoAndStop(1);
                 }
             }
-            
-            
-            
-            /*if (animIsShooting) {
-                playerSwf.gotoAndStop(5);
-                if (playerSwf.playershoot.currentFrame == playerSwf.playershoot.totalFrames) {
-                    animIsShooting = false;
-                }
-            } else {
-                if(!isPlayerGrounded){
-                    if (velocity.y > 0) {
-                        playerSwf.gotoAndStop(4);
-                        return;
-                    } else {
-                        playerSwf.gotoAndStop(3);
-                        return;
-                    }
-                }
-                
-                if (animIsRunning) {
-                    playerSwf.gotoAndStop(2);
-                } else {
-                    playerSwf.gotoAndStop(1);
-                }
-            }*/
         }
     
     }

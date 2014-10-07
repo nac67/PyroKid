@@ -6,6 +6,8 @@ package pyrokid {
 	import flash.net.FileReference;
     import flash.events.KeyboardEvent;
 	import physics.*;
+	import pyrokid.entities.FreeEntity;
+	import pyrokid.entities.TileEntity;
 	
 	public class GameController extends Sprite {
 		
@@ -23,6 +25,9 @@ package pyrokid {
 		// TODO remove
         private var isPlayerGrounded:Boolean = false;
 		
+		// TODO reset to 0 when level editor turned off
+		private var frameCount:int = 0;
+		
 		public function GameController() {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             LevelIO.loadLevel(function(levelRecipe):void {
@@ -31,25 +36,6 @@ package pyrokid {
 				addChild(levelEditor);
 				addEventListener(Event.ENTER_FRAME, update);
 			});
-            
-            var buf:RingBuffer = new RingBuffer(5);
-            buf
-            buf.push("a");
-            buf.push("b");
-            buf.push("c");
-            buf.push("d");
-            buf.push("e");
-            buf.push("FFFF");
-            trace(buf.buffer);
-            //buf.preparePurge("c");
-            //buf.preparePurge("e");
-            //buf.purgeThoseWhichArePrepared();
-            
-            buf.filter(function(item) {
-               return !(item == "c" ||  item == "e");
-            });
-            
-            trace(buf.buffer);
 		}
 
 		public function reloadLevel(levelRecipe):void {
@@ -86,112 +72,109 @@ package pyrokid {
                 
             }
         }
-		
-        public function resolveCollision(r:GameEntity, a:CollisionAccumulator):Boolean {
+
+        public function resolveCollision(r:PhysRectangle, a:CollisionAccumulator):Boolean {
             if (a.accumNY > 0) {
                 isPlayerGrounded = true;
             }
             return true;
         }
+		
+		private function fireballUpdate():void {
+			if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
+				// Fire button just pressed
+				level.player.fireballCharge = 0;
+				level.player.isCharging = true;
+			}else if (Key.isDown(Constants.FIRE_BTN)) {
+				// Fire button is being held
+				level.player.fireballCharge++;
+			}else if(prevFrameFireBtn) {
+				// Fire button is released
+				level.player.isCharging = false;
+				level.player.isShooting = true;
+				if (level.player.fireballCharge > Constants.FIREBALL_CHARGE) {
+					launchFireball();
+				}else {
+					launchSpark();
+				}
+			}
+			prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
+			
+
+			//fireballs
+			for (var i = 0; i < level.fireballs.size(); i++) {
+				var fball:Fireball = level.fireballs.get(i) as Fireball;
+				fball.x += fball.speedX;
+				var cellX = CoordinateHelper.realToCell(fball.x);
+				var cellY = CoordinateHelper.realToCell(fball.y);
+				var entity:TileEntity;
+				try {
+					entity = level.tileEntityGrid[cellY][cellX];
+				} catch (exc) {
+					entity = null;
+				}
+				if (entity != null) {
+					// remove fireball from list, also delete from stage
+					level.fireballs.markForDeletion(fball);
+				}
+			}
+			level.fireballs.deleteAllMarked();
+			
+			
+			//firesplooshes
+			for (var i = 0; i < level.firesplooshes.size(); i++) {
+				var fsploosh:MovieClip = level.firesplooshes.get(i) as MovieClip;
+				if (fsploosh.currentFrame == fsploosh.totalFrames) {
+					level.firesplooshes.markForDeletion(fsploosh);
+				}
+			}
+			level.firesplooshes.deleteAllMarked();
+		}
 		    
         private function update(event:Event):void {
-			if (!editorMode) {
-				
-				
-				var dt:Number = 1 / 30.0;
-				level.player.velocity.Add(0, 9 * dt);
-				level.player.velocity.x = 0;
-				if (Key.isDown(Constants.LEFT_BTN)) {
-					level.player.velocity.x -= 2;
-                    level.player.direction = Constants.DIR_LEFT;
-                    level.player.animIsRunning = true;
-				} else if (Key.isDown(Constants.RIGHT_BTN)) {
-					level.player.velocity.x += 2;
-                    level.player.direction = Constants.DIR_RIGHT;
-                    level.player.animIsRunning = true;
-				} else {
-                    level.player.animIsRunning = false;                    
-                }
-				if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN) && !prevFrameJumpBtn) {
-					level.player.velocity.y = -6;
-				}
-                prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
-				level.player.Update(dt);
-                level.player.updateAnimation(isPlayerGrounded);
-				isPlayerGrounded = false;
-				CollisionResolver.Resolve(level.player, level.islands, resolveCollision);
-                
-                if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
-                    // Fire button just pressed
-                    level.player.fireballCharge = 0;
-                    level.player.isCharging = true;
-                }else if (Key.isDown(Constants.FIRE_BTN)) {
-                    // Fire button is being held
-                    level.player.fireballCharge++;
-                }else if(prevFrameFireBtn) {
-                    // Fire button is released
-                    level.player.isCharging = false;
-                    level.player.isShooting = true;
-                    if (level.player.fireballCharge > Constants.FIREBALL_CHARGE) {
-                        launchFireball();
-                    }else {
-                        launchSpark();
-                    }
-                }
-                prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
-				
-				/*
-				if (Math.random() < 0.05) {
-					var fireGrid:Array = [];
-					var onFire:Array = [];
-					for (var y:int = 0; y < level.staticObjects.length; y++) {
-						fireGrid.push(new Array(level.staticObjects[0].length));
-						for (var x:int = 0; x < level.staticObjects[0].length; x++) {
-							var box = level.staticObjects[y][x];
-							if (box != null) {
-								fireGrid[y][x] = box.fire;
-								if (box.fire.isOnFire()) {
-									onFire.push(box.fire);
-								}
-							}
-						}
-					}
-					Fire.spreadFire(onFire, fireGrid);
-				}*/
-                
-                
-                //fireballs
-                for (var i = 0; i < level.fireballs.size(); i++) {
-                    var fball:Fireball = level.fireballs.get(i) as Fireball;
-                    fball.x += fball.speedX;
-                    var cellX = CoordinateHelper.realToCell(fball.x);
-                    var cellY = CoordinateHelper.realToCell(fball.y);
-                    var entity:GameEntity;
-                    try{
-                        entity = level.staticObjects[cellY][cellX];
-                    } catch (exc) {
-                        entity = null;
-                    }
-                    if (entity != null) {
-                        // remove fireball from list, also delete from stage
-                        level.fireballs.markForDeletion(fball);
-                    }
-                }
-                level.fireballs.deleteAllMarked();
-                
-                
-                //firesplooshes
-                for (var i = 0; i < level.firesplooshes.size(); i++) {
-                    var fsploosh:MovieClip = level.firesplooshes.get(i) as MovieClip;
-                    if (fsploosh.currentFrame == fsploosh.totalFrames) {
-                        level.firesplooshes.markForDeletion(fsploosh);
-                    }
-                }
-                level.firesplooshes.deleteAllMarked();
-                
-                level.x = Math.floor(- level.player.x + 400);
-				
-            }
+			if (editorMode) {
+				return;
+			}
+			frameCount += 1;
+			
+			var dt:Number = 1 / 30.0;
+			level.playerRect.velocity.Add(0, 9 * dt);
+			level.playerRect.velocity.x = 0;
+			if (Key.isDown(Constants.LEFT_BTN)) {
+				level.playerRect.velocity.x -= 2;
+				level.player.direction = Constants.DIR_LEFT;
+				level.player.animIsRunning = true;
+			} else if (Key.isDown(Constants.RIGHT_BTN)) {
+				level.playerRect.velocity.x += 2;
+				level.player.direction = Constants.DIR_RIGHT;
+				level.player.animIsRunning = true;
+			} else {
+				level.player.animIsRunning = false;                    
+			}
+			
+			if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN) && !prevFrameJumpBtn) {
+				level.playerRect.velocity.y = -6;
+			}
+			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
+			level.playerRect.Update(dt);
+			level.player.updateAnimation(isPlayerGrounded, level.playerRect);
+			isPlayerGrounded = false;
+			
+			fireballUpdate();
+            
+			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9), dt);
+			for (var i:int = 0; i < level.islandViews.length; i++) {
+				level.islandViews[i].onUpdate();
+			}
+			for (var i:int = 0; i < level.rectViews.length; i++) {
+				level.rectViews[i].onUpdate(level.islands, dt, resolveCollision);
+			}
+			
+			if (frameCount % 30 == 0) {
+				FireHandler.spreadFire(level.onFire, level.tileEntityGrid, frameCount);
+			}
+			level.x = Math.floor(level.x * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.x + 400));
+			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.y + 300));
         }
         
         function launchFireball():void {

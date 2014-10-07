@@ -17,6 +17,8 @@ package pyrokid {
         
         public static var FBALL_SPEED:int = 10;
         public static var FIREBALL_CHARGE:int = 20;
+		
+		public static var CAMERA_LAG:Number = 0.92;
     
     }
 

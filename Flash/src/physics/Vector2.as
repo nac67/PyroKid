@@ -4,45 +4,21 @@ package physics {
      * @author Cristian Zaloj
      */
     public class Vector2 {
-        private var _x:Number;
-        private var _y:Number;
-		
-		private var callbackX:Function;
-		private var callbackY:Function;
+        public var x:Number;
+        public var y:Number;
         
-        public function Vector2(_x:Number = 0, _y:Number = 0, callbackX:Function = null, callbackY:Function = null) {
-			this.callbackX = callbackX;
-			this.callbackY = callbackY;
+        public function Vector2(_x:Number = 0, _y:Number = 0) {
             x = _x;
             y = _y;
         }
-		
-		public function get x():Number {
-			return _x;
-		}
-		
-		public function set x(_x:Number):void {
-			this._x = _x;
-			if (callbackX != null) {
-				callbackX(_x);
-			}
-		}
-		
-		public function get y():Number {
-			return _y;
-		}
-		
-		public function set y(_y:Number):void {
-			this._y = _y;
-			if (callbackY != null) {
-				callbackY(_y);
-			}
-		}
 
         public function Set(_x:Number, _y:Number):Vector2 {
             x = _x;
             y = _y;
             return this;
+        }
+        public function SetV(v:Vector2):Vector2 {
+            return Set(v.x, v.y);
         }
         
         public function Add(_x:Number, _y:Number):Vector2 {
@@ -92,7 +68,7 @@ package physics {
         public function DivV(v:Vector2):Vector2 {
             return Div(v.x, v.y);
         }
-
+        
         public function toString():String {
             return x.toString() + " " + y.toString();
         }
