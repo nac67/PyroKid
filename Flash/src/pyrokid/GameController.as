@@ -44,6 +44,7 @@ package pyrokid {
 			}
 			level = new Level(levelRecipe);
 			addChild(level);
+			setChildIndex(level, 0);
 			if (editorMode) {
 				levelEditor.loadLevel(level);
 			}

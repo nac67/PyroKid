@@ -21,6 +21,8 @@ package pyrokid {
 		
 		public var islandViews:Array;
 		public var rectViews:Array;
+		
+		public var background:CaveBackground;
         
         //2d grid, tile locked objects, non moving
 		public var tileEntityGrid:Array;
@@ -52,8 +54,8 @@ package pyrokid {
 			//recipe.walls[0][7] = 2;
 			//recipe.multiTileObjects.push([new Vector2i(7, 0), new Vector2i(6, 0)]);
 
-            
-            this.addChild(new CaveBackground(recipe.walls[0].length, recipe.walls.length));
+            background = new CaveBackground(recipe.walls[0].length, recipe.walls.length);
+            this.addChild(background);
             
 			this.recipe = recipe;
             walls = recipe.walls;
@@ -74,11 +76,16 @@ package pyrokid {
                 var row:Array = walls[y];
                 for (x = 0; x < row.length; x++) {
 					var objCode:int = row[x];
+					var falling = false;
+					if (objCode < 0) {
+						falling = true;
+						objCode = -objCode;
+					}
 					
 					if (objCode == 1) {
 						physBoxGrid[y][x] = new PhysBox(1);
 					} else if (objCode != 0) {
-						physBoxGrid[y][x] = new PhysBox(objId, objCode == 2);
+						physBoxGrid[y][x] = new PhysBox(objId, falling);
 						objId += 1;
 					}
                 }
@@ -97,18 +104,26 @@ package pyrokid {
             columns = IslandSimulator.ConstructCollisionColumns(islands);
 			for (var i:int = 0; i < islands.length; i++) {
 				var isle:PhysIsland = islands[i];
-				var tileEntity:TileEntity = new TileEntity(
-					Utils.cellToPixel(Math.floor(isle.globalAnchor.x)),
-					Utils.cellToPixel(Math.floor(isle.globalAnchor.y))
-				);
+				var cornerCellX:int = Math.floor(isle.globalAnchor.x);
+				var cornerCellY:int = Math.floor(isle.globalAnchor.y);
+				var spriteX:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.x));
+				var spriteY:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.y));
+				var tileEntity:TileEntity;
+				if (Math.abs(walls[cornerCellY][cornerCellX]) == 2) {
+					tileEntity = new BurnForever(spriteX, spriteY);
+				} else if (Math.abs(walls[cornerCellY][cornerCellX]) == 3) {
+					tileEntity = new BurnQuickly(spriteX, spriteY);
+				} else {
+					tileEntity = new TileEntity(spriteX, spriteY);
+				}
 				tileEntity.globalAnchor = isle.globalAnchor;
 				addChild(tileEntity);
 				for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
 					for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
 						var tile:IPhysTile = isle.tileGrid[iy][ix];
 						if (tile != null && tile is PhysBox) {
-							var cellX:int = ix + Math.floor(isle.globalAnchor.x);
-							var cellY:int = iy + Math.floor(isle.globalAnchor.y);
+							var cellX:int = ix + cornerCellX;
+							var cellY:int = iy + cornerCellY;
 							tileEntity.cells.push(new Vector2i(cellX, cellY));
 							tileEntityGrid[cellY][cellX] = tileEntity;
 						}
