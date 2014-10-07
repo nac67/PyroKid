@@ -42,6 +42,7 @@ package pyrokid {
                 });
             }else {
                 reloadLevel(levelRecipe.readObject());
+                levelRecipe.position = 0;
                 levelEditor = new LevelEditor(level);
                 addChild(levelEditor);
                 addEventListener(Event.ENTER_FRAME, update);
@@ -62,6 +63,7 @@ package pyrokid {
 			if (editorMode) {
 				levelEditor.loadLevel(level);
 			}
+            Main.MainStage.focus = level;
 		}
 		
 		private function levelEditorListener(e:KeyboardEvent):void {
