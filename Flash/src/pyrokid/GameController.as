@@ -32,7 +32,7 @@ package pyrokid {
 				addEventListener(Event.ENTER_FRAME, update);
 			});
             
-            /*var buf:RingBuffer = new RingBuffer(5);
+            var buf:RingBuffer = new RingBuffer(5);
             buf
             buf.push("a");
             buf.push("b");
@@ -41,10 +41,15 @@ package pyrokid {
             buf.push("e");
             buf.push("FFFF");
             trace(buf.buffer);
-            buf.preparePurge("c");
-            buf.preparePurge("e");
-            buf.purgeThoseWhichArePrepared();
-            trace(buf.buffer);*/
+            //buf.preparePurge("c");
+            //buf.preparePurge("e");
+            //buf.purgeThoseWhichArePrepared();
+            
+            buf.filter(function(item) {
+               return !(item == "c" ||  item == "e");
+            });
+            
+            trace(buf.buffer);
 		}
 
 		public function reloadLevel(levelRecipe):void {

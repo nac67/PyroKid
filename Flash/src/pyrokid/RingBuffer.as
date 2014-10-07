@@ -138,6 +138,24 @@ package pyrokid {
             markedForDel = [];
         }
         
+        /**
+         * This is a method that goes through the structure
+         * and deletes anything that doesn't match the given
+         * criteria
+         * @param fcn callback function that takes in item,
+         * returns true of false. False means that it should
+         * delete the item.
+         */
+        public function filter(fcn:Function):void {
+            for (var i = 0; i < size(); i++) {
+                var item:Object = get(i);
+                if (!fcn(item)) {
+                    markForDeletion(item);
+                }
+            }
+            deleteAllMarked();
+        }
+        
         private function clamp(v:int):int {
             return (v+maxItems) % maxItems;
         }
