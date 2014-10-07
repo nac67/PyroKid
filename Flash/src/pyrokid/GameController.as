@@ -168,11 +168,10 @@ package pyrokid {
 			level.player.updateAnimation(level.player.isGrounded, level.playerRect);
 			//level.player.isGrounded = false;
             
-            
-            
-            //XXX spiders oh my!
-            var spider:Spider = level.spiderView.sprite as Spider;
-            spider.update(level.spiderView.phys);
+            for each (var spiderView:ViewPRect in level.spiderViews) {
+				var spider:Spider = spiderView.sprite as Spider;
+				spider.update(spiderView.phys);
+			}
             
             
             //TODO DOTO TODO make the fireball and the firespark part of the

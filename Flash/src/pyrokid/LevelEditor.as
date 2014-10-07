@@ -23,7 +23,7 @@ package pyrokid {
 		
 		private var editMode:int;
 		private var numEditModes:int = 3;
-		private var typeSelected:int = 0;
+		private var typeSelected = 0;
 		private var selectedCell:Vector2i;
 	        
         public function LevelEditor(level:Level):void {
@@ -36,8 +36,8 @@ package pyrokid {
 			selectedHighlighter.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
 			noObjectSelectedSprite = new ButtonBackground(0xFF0000, 120, 25, "none selected");
 			noObjectSelectedSprite.x = 650;
-			noObjectSelectedSprite.y = 300;
-			selectedButton = new LevelEditorButton(toggleGravity, 120, 25, 650, 300, ["No Gravity", "Gravity"], [LevelEditorButton.upColor, 0xFF0000]);
+			noObjectSelectedSprite.y = 400;
+			selectedButton = new LevelEditorButton(toggleGravity, 120, 25, 650, 400, ["No Gravity", "Gravity"], [LevelEditorButton.upColor, 0xFF0000]);
 			objectEditor.addChild(noObjectSelectedSprite);
 			
 			buttons = [];
@@ -51,11 +51,13 @@ package pyrokid {
 			options[1] = "Dirt Tile";
 			options[2] = "Eternal Flame";
 			options[3] = "Quick Burn";
+			options["spider"] = "Spider";
+			options["player"] = "Player";
 			buttons.push(new SelectorButton(options, changeSelectedObject));
 		}
 		
 		private function changeSelectedObject(selected):void {
-			typeSelected = int(selected);
+			typeSelected = selected;
 		}
 		
 		private function toggleGravity():void {
@@ -166,7 +168,16 @@ package pyrokid {
 				}
 				level.recipe.walls[cellY][cellX] = currentCode;
 			} else if (editMode == 1) {
-				level.recipe.walls[cellY][cellX] = typeSelected;
+				if (typeSelected == "spider") {
+					level.recipe.freeEntities.push([cellX, cellY, 0]);
+				} else if (typeSelected == "player") {
+					level.recipe.playerStart = [cellX, cellY];
+				} else {
+					level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
+						return ent[0] != cellX || ent[1] != cellY;
+					});
+					level.recipe.walls[cellY][cellX] = int(typeSelected);
+				}
 			} else {
 				if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
 					if (noObjectSelectedSprite.parent == objectEditor) {

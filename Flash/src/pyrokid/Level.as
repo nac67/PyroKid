@@ -18,11 +18,9 @@ package pyrokid {
         
         public var player:Player;
 		public var playerRect:PhysRectangle;
-        
-        //XXX this shouldn't be here
-        public var spiderView:ViewPRect;
-        
+                
         public var spiderList:Array;
+		public var spiderViews:Array;
 
         
 		
@@ -163,20 +161,23 @@ package pyrokid {
 			addChild(player);
 			playerRect = new PhysRectangle();
 			playerRect.halfSize = new Vector2(0.275, 0.43);
-			playerRect.center.x = recipe.playerStart[0] + playerRect.halfSize.x;
-			playerRect.center.y = recipe.playerStart[1] + playerRect.halfSize.y;
+			player.x = recipe.playerStart[0] * Constants.CELL;
+			player.y = recipe.playerStart[1] * Constants.CELL;
 			rectViews.push(new ViewPRect(player, playerRect));
             
-            
-            var spider:Spider = new Spider(.9, .6);
-            spider.x = 150;
-            spider.y = 0;
-            addChild(spider);
-            var spiderRect:PhysRectangle = new PhysRectangle();
-            spiderRect.halfSize = new Vector2(.45, .3);
-            spiderView = new ViewPRect(spider, spiderRect)
-            rectViews.push(spiderView);
-            spiderList.push(spider);
+			spiderViews = [];
+            for (var i:int = 0; i < recipe.freeEntities.length; i++) {
+				var spider:Spider = new Spider(.9, .6);
+				spider.x = recipe.freeEntities[i][0] * Constants.CELL;
+				spider.y = recipe.freeEntities[i][1] * Constants.CELL;
+				addChild(spider);
+				var spiderRect:PhysRectangle = new PhysRectangle();
+				spiderRect.halfSize = new Vector2(.45, .3);
+				var spiderView:ViewPRect = new ViewPRect(spider, spiderRect)
+				rectViews.push(spiderView);
+				spiderList.push(spider);
+				spiderViews.push(spiderView);
+			}
 						            
             fireballs = new RingBuffer(5, function(o:Object) {
                 if (o is DisplayObject) {
