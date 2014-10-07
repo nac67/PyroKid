@@ -9,7 +9,7 @@ package pyrokid.entities {
 			super(x, y);
 		}
 		
-		protected override function getChild(cell:Vector2i):DisplayObject {
+		protected override function getSpriteForCell(cell:Vector2i):DisplayObject {
 			var child:Sprite = new Sprite();
 			child.graphics.lineStyle(0x000000);
 			child.graphics.beginFill(0x0000FF);
