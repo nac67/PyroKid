@@ -1,6 +1,7 @@
 package pyrokid.entities {
 	import flash.display.Sprite;
 	import pyrokid.Constants;
+	import pyrokid.Level;
 	
 	/* DO NOT directly instantiate this class. Use one of the subclasses. */
 	public class GameEntity extends Sprite {
@@ -26,7 +27,7 @@ package pyrokid.entities {
 			return ignitionTime >= 0;
 		}
 		
-		public function ignite(onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
+		public function ignite(level:Level, onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
 		}
 	}
 	

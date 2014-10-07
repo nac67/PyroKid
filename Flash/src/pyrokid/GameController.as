@@ -116,7 +116,7 @@ package pyrokid {
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
 					level.fireballs.markForDeletion(fball);
-					entity.ignite(level.onFire, frameCount, level.harmfulObjects);
+					entity.ignite(level, level.onFire, frameCount, level.harmfulObjects);
 				}
 			}
 			level.fireballs.deleteAllMarked();
@@ -214,7 +214,7 @@ package pyrokid {
 			}
 			
 			if (frameCount % 30 == 0) {
-				FireHandler.spreadFire(level.onFire, level.harmfulObjects, level.tileEntityGrid, frameCount);
+				FireHandler.spreadFire(level, level.onFire, level.harmfulObjects, level.tileEntityGrid, frameCount);
 			}
 			level.x = Math.floor(level.x * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.x + 400));
 			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * ( -level.player.y + 300));
