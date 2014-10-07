@@ -6,84 +6,188 @@ package pyrokid {
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
+	import flash.utils.Dictionary;
+	import Math;
+	import physics.Vector2i;
+	import ui.*;
     
     public class LevelEditor extends Sprite {
 		
 		private var level:Level;
-        
+		private var buttons:Array;
+		
+		private var objectEditor:Sprite;
+		private var selectedHighlighter:Sprite;
+		private var selectedButton:LevelEditorButton;
+		private var noObjectSelectedSprite:Sprite;
+		
+		private var editMode:int;
+		private var numEditModes:int = 3;
+		private var typeSelected:int = 0;
+		private var selectedCell:Vector2i;
+	        
         public function LevelEditor(level:Level):void {
-			
 			this.level = level;
-			Main.MainStage.addEventListener(MouseEvent.CLICK, clickHandler);
-
-			var button:LevelEditorButton = new LevelEditorButton("shwiggity", buttonify, 100, 50, 600, 50);
-			addChild(button);
-			var button2:LevelEditorButton = new LevelEditorButton("figgity", buttonify, 100, 50, 600, 150);
-			addChild(button2);
+			editMode = 0;
 			
-			addChild(new LevelEditorInput("Map Width", level.walls.length, 600, 300, function(w:int):void {
-				// TODO not reset, and also use the recipe only instead of the level object
-				// TODO if shrinking in size, delete all crates/items that go beyond the edge
-				if (w < 1) {
-					trace("cannot set size to less than 1");
-					return;
-				}
-				if (w >= level.recipe.walls.length) {
-					for (var x = level.recipe.walls.length; x < w; x++) {
-						var newCol:Array = [];
-						for (var y = 0; y < level.recipe.walls[0].length; y++) {
-							newCol.push(1);
-						}
-						level.recipe.walls.push(newCol);
-					}
-				} else {
-					level.recipe.walls.splice(w);
-				}
-				level.reset(level.recipe);
-			}));
-			addChild(new LevelEditorInput("Map Height", level.walls[0].length, 600, 350, function(h:int):void {
-				// TODO make height changes work
-				trace("width is: " + h);
-			}));
+			objectEditor = new Sprite();
+			selectedHighlighter = new Sprite();
+			selectedHighlighter.graphics.lineStyle(2, 0x00FF00);
+			selectedHighlighter.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
+			noObjectSelectedSprite = new ButtonBackground(0xFF0000, 120, 25, "none selected");
+			noObjectSelectedSprite.x = 650;
+			noObjectSelectedSprite.y = 300;
+			selectedButton = new LevelEditorButton(toggleGravity, 120, 25, 650, 300, ["No Gravity", "Gravity"], [LevelEditorButton.upColor, 0xFF0000]);
+			objectEditor.addChild(noObjectSelectedSprite);
+			
+			buttons = [];
+			buttons.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Background", "Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
+			
+			buttons.push(new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth));
+			buttons.push(new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight));
+			
+			var options:Dictionary = new Dictionary();
+			options[0] = "Empty";
+			options[1] = "Dirt Tile";
+			options[2] = "Eternal Flame";
+			options[3] = "Quick Burn";
+			buttons.push(new SelectorButton(options, changeSelectedObject));
 		}
 		
-		private function buttonify(event:MouseEvent):void {
-			trace("poooop");
+		private function changeSelectedObject(selected):void {
+			typeSelected = int(selected);
+		}
+		
+		private function toggleGravity():void {
+			var cellX:int = selectedCell.x;
+			var cellY:int = selectedCell.y;
+			level.recipe.walls[cellY][cellX] = -level.recipe.walls[cellY][cellX];
+			level.reset(level.recipe);
+		}
+		
+		private function toggleEditMode():void {
+			if (editMode == 2) {
+				removeChild(objectEditor);
+			}
+			editMode = (editMode + 1) % numEditModes;
+			if (editMode == 2) {
+				addChild(objectEditor);
+			}
+		}
+		
+		public function turnEditorOn():void {
+			Main.MainStage.addEventListener(MouseEvent.CLICK, clickHandler);
+			for (var i:int = 0; i < buttons.length; i++) {
+				addChild(buttons[i]);
+			}
+			addChild(objectEditor);
+			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
 		}
 		
 		public function turnEditorOff():void {
 			Main.MainStage.removeEventListener(MouseEvent.CLICK, clickHandler);
+			Utils.removeAllChildren(this);
+		}
+		
+		public function loadLevel(level:Level):void {
+			this.level = level;
+			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+		}
+		
+		private function updateHeight(newHeight:int):void {
+			// TODO if shrinking in size, delete all crates/items that go beyond the edge
+			if (newHeight < 1) {
+				trace("cannot set size to less than 1");
+				return;
+			}
+			var walls:Array = level.recipe.walls;
+			var width:int = walls[0].length;
+			var height:int = walls.length;
+			if (newHeight >= height) {
+				for (var y = height; y < newHeight; y++) {
+					var newRow:Array = [];
+					for (var x = 0; x < width; x++) {
+						newRow.push(1);
+					}
+					walls.push(newRow);
+				}
+			} else {
+				walls.splice(newHeight);
+			}
+			level.recipe.walls = walls;
+			scaleAndResetLevel(width, newHeight);
+		}
+		
+		private function updateWidth(newWidth:int):void {
+			if (newWidth < 1) {
+				trace("cannot set size to less than 1");
+				return;
+			}
+			var walls:Array = level.recipe.walls;
+			var width:int = walls[0].length;
+			var height:int = walls.length;
+			if (newWidth >= width) {
+				for (var y = 0; y < height; y++) {
+					for (var x = width; x < newWidth; x++) {
+						walls[y].push(1);
+					}
+				}
+			} else {
+				for (var y = 0; y < height; y++) {
+					walls[y].splice(newWidth);
+				}
+			}
+			level.recipe.walls = walls;
+			scaleAndResetLevel(newWidth, height);
+		}
+		
+		private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
+			level.scaleX = Math.min(1, 450 / (Constants.CELL * numCellsTall), 600 / (Constants.CELL * numCellsWide));
+			level.scaleY = level.scaleX;
+			selectedHighlighter.scaleX = level.scaleX;
+			selectedHighlighter.scaleY = level.scaleY;
+			level.reset(level.recipe);
 		}
 		
 		private function clickHandler(event:MouseEvent):void {
-			var cellX:int = event.stageX / Constants.CELL;
-			var cellY:int = event.stageY / Constants.CELL;
-			if (cellX >= level.walls.length || cellY >= level.walls[0].length) {
+			var cellX:int = event.stageX / (Constants.CELL * level.scaleX);
+			var cellY:int = event.stageY / (Constants.CELL * level.scaleY);
+			if (cellX >= level.numCellsWide() || cellY >= level.numCellsTall()) {
 				return;
 			}
-			
-			trace("stage x, y: " + cellX + ", " + cellY);
-			var wallObj = level.getStaticObject(cellX, cellY);
-			if (wallObj != null) {
-				level.removeChild(wallObj);
-				level.setStaticObject(cellX, cellY, null);
+			if (editMode == 0) {
+				var currentCode:int = level.recipe.walls[cellY][cellX];
+				if (currentCode == 0) {
+					currentCode = 1;
+				} else if (currentCode == 1) {
+					currentCode = 0;
+				} else {
+					return;
+				}
+				level.recipe.walls[cellY][cellX] = currentCode;
+			} else if (editMode == 1) {
+				level.recipe.walls[cellY][cellX] = typeSelected;
 			} else {
-				var a:GroundTile = new GroundTile();
-				a.x = cellX * Constants.CELL;
-				a.y = cellY * Constants.CELL;
-				level.addChild(a);
-				level.setStaticObject(cellX, cellY, a);
+				if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
+					if (noObjectSelectedSprite.parent == objectEditor) {
+						objectEditor.removeChild(noObjectSelectedSprite);
+						objectEditor.addChild(selectedHighlighter);
+						objectEditor.addChild(selectedButton);
+					}
+					selectedCell = new Vector2i(cellX, cellY);
+					selectedButton.reset();
+					if (level.recipe.walls[cellY][cellX] < -1) {
+						selectedButton.toggle();
+					}
+					selectedHighlighter.x = cellX * Constants.CELL * level.scaleX;
+					selectedHighlighter.y = cellY * Constants.CELL * level.scaleY;
+					selectedHighlighter.scaleX = level.scaleX;
+					selectedHighlighter.scaleY = level.scaleY;
+				}
 			}
-			//toggleWall(cellX, cellY);
-			level.recipe.walls[cellX][cellY] = (level.recipe.walls[cellX][cellY] + 1) % 2;
-		}
-		
-		public function toggleWall(x:int, y:int):void {
-			level.recipe.walls[x][y] = (level.recipe.walls[x][y] + 1) % 2;
-			// TODO not reset every time?
 			level.reset(level.recipe);
 		}
-    
+		
     }
 
 }
