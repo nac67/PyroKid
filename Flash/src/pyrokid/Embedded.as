@@ -45,6 +45,9 @@ package pyrokid {
         [Embed(source='../../assets/swf/oil.swf', symbol='Oil')]
         public static var OilSWF:Class; //cast as MovieClip on instantiation
         
+        [Embed(source='../../assets/tile_art/wood.png')]
+        public static var WoodBMP:Class; //cast as Bitmap on instantiation
+        
     }
 
 }

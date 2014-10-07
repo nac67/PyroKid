@@ -1,7 +1,9 @@
 package pyrokid.entities {
+    import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import physics.Vector2i;
+    import pyrokid.Embedded;
 	import pyrokid.Level;
 	
 	public class BurnQuickly extends TileEntity {
@@ -12,10 +14,8 @@ package pyrokid.entities {
 		
 		protected override function getSpriteForCell(cell:Vector2i):DisplayObject {
 			var child:Sprite = new Sprite();
-			child.graphics.lineStyle(0x000000);
-			child.graphics.beginFill(0x0000FF);
-			child.graphics.drawRect(0, 0, w, h);
-			child.graphics.endFill();
+            var bmp:Bitmap = new Embedded.WoodBMP() as Bitmap;
+			child.addChild(bmp);
 			return child;
 		}
 		
