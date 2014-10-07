@@ -118,10 +118,10 @@ package pyrokid {
 				islandViews.push(new ViewPIsland(tileEntity, isle));
 			}
 			
-			player = new Player(0.8, 0.9);
+			player = new Player(0.55, 0.86);
 			addChild(player);
 			playerRect = new PhysRectangle();
-			playerRect.halfSize = new Vector2(0.4, 0.45);
+			playerRect.halfSize = new Vector2(0.275, 0.43);
 			playerRect.center.x = recipe.playerStart[0] + playerRect.halfSize.x;
 			playerRect.center.y = recipe.playerStart[1] + playerRect.halfSize.y;
 			rectViews.push(new ViewPRect(player, playerRect));

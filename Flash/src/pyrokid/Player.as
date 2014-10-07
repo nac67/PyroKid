@@ -30,10 +30,12 @@ package pyrokid {
             
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
             legsSWF.stop();
+            legsSWF.y = -5;
             addChild(legsSWF);
             
             torsoSWF = new Embedded.PlayerTorsoSWF() as MovieClip;
             torsoSWF.stop();
+            torsoSWF.y = -5;
             addChild(torsoSWF);
             
             this._width = width;
