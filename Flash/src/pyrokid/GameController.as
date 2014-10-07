@@ -141,6 +141,12 @@ package pyrokid {
 			removeEventListener(Event.ENTER_FRAME, update);
 			createGameOverScreenFunc(false);
 		}
+		private function doGameWon() {
+			isGameOver = true;
+			Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+			removeEventListener(Event.ENTER_FRAME, update);
+			createGameOverScreenFunc(true);
+		}
 		    
         private function update(event:Event):void {
 			if (editorMode) {
@@ -225,6 +231,10 @@ package pyrokid {
 					doGameOver();
 				}
 			}
+			
+			if (level.player.x > stage.stageWidth) {
+				doGameWon();
+			}
         }
         
         function launchFireball():void {
@@ -234,6 +244,8 @@ package pyrokid {
             fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
             level.fireballs.push(fball);
             level.addChild(fball);
+			
+			level.fireballSound.play();
         }
         
         function launchSpark():void {

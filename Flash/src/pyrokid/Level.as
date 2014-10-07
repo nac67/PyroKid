@@ -1,7 +1,8 @@
 package pyrokid {
-    import flash.display.DisplayObject;
-    import flash.display.MovieClip;
-    import flash.display.Sprite;
+	import flash.display.DisplayObject;
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	import flash.media.Sound;
 	import physics.*;
 	import pyrokid.entities.*;
     
@@ -38,6 +39,12 @@ package pyrokid {
 		public var onFire:Array;
 		
 		public var harmfulObjects:Array;
+		
+		//SOUNDS
+		[Embed(source="../../assets/sound/fireball-sound.mp3")]
+		private const fireballSoundClass:Class;
+		public var fireballSound:Sound = new fireballSoundClass();
+		
         
         public function Level(recipe:Object):void {
 			reset(recipe);
