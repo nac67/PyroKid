@@ -1,4 +1,4 @@
-package pyrokid {
+package ui {
 	import flash.display.Sprite;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
@@ -33,7 +33,7 @@ package pyrokid {
 			input.restrict = "0-9";
 			input.text = String(content);
 			
-			var confirm:LevelEditorButton = new LevelEditorButton(label, updateOnValue, 70, 25, x + 50, y);
+			var confirm:LevelEditorButton = new LevelEditorButton(updateOnValue, 70, 25, x + 50, y, label);
 
 			addChild(input);
 			addChild(confirm);
@@ -45,11 +45,6 @@ package pyrokid {
 		
 		private function updateOnValue(event:MouseEvent):void {
 			onUpdate(input.text);
-			trace(input.text);
-			//input.text = String(poop);
-			//storedValue = poop;
-			//storedValue = int(poop);
-			//trace("yoyo");
 		}
 		
 		private function enterFocus(event:FocusEvent):void {

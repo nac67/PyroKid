@@ -6,6 +6,7 @@ package pyrokid {
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
+	import ui.*;
     
     public class LevelEditor extends Sprite {
 		
@@ -16,11 +17,11 @@ package pyrokid {
 			this.level = level;
 			Main.MainStage.addEventListener(MouseEvent.CLICK, clickHandler);
 
-			var button:LevelEditorButton = new LevelEditorButton("shwiggity", buttonify, 100, 50, 600, 50);
+			/*var button:LevelEditorButton = new LevelEditorButton("shwiggity", buttonify, 100, 50, 600, 50);
 			addChild(button);
 			var button2:LevelEditorButton = new LevelEditorButton("figgity", buttonify, 100, 50, 600, 150);
 			addChild(button2);
-			
+			*/
 			addChild(new LevelEditorInput("Map Width", level.walls.length, 600, 300, function(w:int):void {
 				// TODO not reset, and also use the recipe only instead of the level object
 				// TODO if shrinking in size, delete all crates/items that go beyond the edge

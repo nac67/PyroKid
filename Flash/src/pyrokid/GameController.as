@@ -14,6 +14,7 @@ package pyrokid {
 		public var level:Level;
 		
 		public var isGameOver:Boolean = false;
+		public var createGameOverScreenFunc:Function;
 		
 		public function GameController() {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
@@ -21,6 +22,7 @@ package pyrokid {
             level = new Level(new LevelRecipe());
             addChild(level);
             addEventListener(Event.ENTER_FRAME, update);
+			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
 		}
 
 		public function reloadLevel(levelRecipe):void {
@@ -53,11 +55,18 @@ package pyrokid {
             } else { 
                 
             }
-			
-			if (e.keyCode == Keyboard.ESCAPE) { //this should not be in this method
-				isGameOver = true;
-			}
         }
+		
+		private function keyboardActionListener(e:KeyboardEvent):void
+		{
+			if (e.keyCode == Keyboard.ESCAPE) {
+				isGameOver = true;
+				createGameOverScreenFunc(false);
+				trace("over");
+				Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+
+			}
+		}
 		    
         private function update(event:Event):void {
             if(!editorMode){
