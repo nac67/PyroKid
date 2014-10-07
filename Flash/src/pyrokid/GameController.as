@@ -90,7 +90,7 @@ package pyrokid {
 			isPlayerGrounded = false;
 			
             
-			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 0.1), dt);
+			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9), dt);
 			for (var i:int = 0; i < level.islandViews.length; i++) {
 				level.islandViews[i].onUpdate();
 			}

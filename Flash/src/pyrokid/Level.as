@@ -40,6 +40,12 @@ package pyrokid {
             var x:int, y:int, w:int, h:int;
             
             Utils.removeAllChildren(this);
+			
+			recipe.walls[0][3] = 2;
+			recipe.walls[0][6] = 2;
+			recipe.walls[0][7] = 2;
+			recipe.multiTileObjects.push([new Vector2i(7, 0), new Vector2i(6, 0)]);
+
             
 			this.recipe = recipe;
             walls = recipe.walls;
@@ -64,7 +70,7 @@ package pyrokid {
 					if (objCode == 1) {
 						physBoxGrid[y][x] = new PhysBox(1);
 					} else if (objCode != 0) {
-						physBoxGrid[y][x] = new PhysBox(objId);
+						physBoxGrid[y][x] = new PhysBox(objId, objCode == 2);
 						objId += 1;
 					}
                 }
@@ -113,7 +119,7 @@ package pyrokid {
 			rectViews.push(new ViewPRect(player, playerRect));
 			
 			
-			tileEntityGrid[1][8].ignite(onFire, 0);
+			//tileEntityGrid[1][8].ignite(onFire, 0);
         }
         
     }
