@@ -4,6 +4,7 @@ package pyrokid.entities {
 	import physics.Vector2i;
 	import flash.display.DisplayObject;
 	import pyrokid.Constants;
+	import pyrokid.Level;
     import pyrokid.Embedded;
 	
 	public class BurnForever extends TileEntity {
@@ -18,8 +19,7 @@ package pyrokid.entities {
 			return mc;
 		}
 		
-		public override function ignite(onFire:Array, ignitionFrame:int):void {
-            
+		public override function ignite(level:Level, onFire:Array, ignitionFrame:int, harmfulObjects:Array):void {
             for (var i:int = 0; i < cellSprites.length; i++) {
                 var mc:MovieClip = cellSprites[i] as MovieClip;
                 mc.gotoAndStop(2);
@@ -27,6 +27,7 @@ package pyrokid.entities {
             
 			ignitionTime = ignitionFrame;
 			onFire.push(this);
+			harmfulObjects.push(this);
 		}
 		
 	}

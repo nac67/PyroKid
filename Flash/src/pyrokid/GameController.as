@@ -116,7 +116,7 @@ package pyrokid {
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
 					level.fireballs.markForDeletion(fball);
-					entity.ignite(level.onFire, frameCount);
+					entity.ignite(level, level.onFire, frameCount, level.harmfulObjects);
 				}
 			}
 			level.fireballs.deleteAllMarked();
@@ -131,12 +131,21 @@ package pyrokid {
 
 		private function keyboardActionListener(e:KeyboardEvent):void {
 			if (e.keyCode == Keyboard.ESCAPE) {
-				isGameOver = true;
-				createGameOverScreenFunc(false);
-				trace("over");
-				Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
-
+				doGameOver();
 			}
+		}
+		
+		private function doGameOver() {
+			isGameOver = true;
+			Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+			removeEventListener(Event.ENTER_FRAME, update);
+			createGameOverScreenFunc(false);
+		}
+		private function doGameWon() {
+			isGameOver = true;
+			Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+			removeEventListener(Event.ENTER_FRAME, update);
+			createGameOverScreenFunc(true);
 		}
 		    
         private function update(event:Event):void {
@@ -217,10 +226,22 @@ package pyrokid {
 			}
 			
 			if (frameCount % 30 == 0) {
-				FireHandler.spreadFire(level.onFire, level.tileEntityGrid, frameCount);
+				FireHandler.spreadFire(level, level.onFire, level.harmfulObjects, level.tileEntityGrid, frameCount);
 			}
 			level.x = Math.floor(level.x * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.x + 400));
-			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.y + 300));
+			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * ( -level.player.y + 300));
+			
+			//resolve game over conditions
+			for each (var s:Sprite in level.harmfulObjects) {
+				if (level.player.hitTestObject(s)) {
+					doGameOver();
+                    return;
+				}
+			}
+			
+			if (level.player.x > stage.stageWidth) {
+				doGameWon();
+			}
         }
         
         function launchFireball():void {
@@ -231,6 +252,7 @@ package pyrokid {
             level.fireballs.push(fball);
             level.addChild(fball);
             level.playerAttackObjects.push(new PlayerAttackObject(fball));
+			level.fireballSound.play();
         }
         
         function launchSpark():void {
