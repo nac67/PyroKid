@@ -1,12 +1,15 @@
 package pyrokid.entities {
 	import flash.display.Sprite;
 	import physics.PhysBox;
+	import physics.Vector2;
 	import physics.Vector2i;
 	import pyrokid.Constants;
 	
 	public class TileEntity extends GameEntity {
 		
 		public var cells:Array;
+		private var color:uint;
+		public var globalAnchor:Vector2;
 		
 		private static var directNeighbors:Array = [
 			new Vector2i(0, -1),
@@ -16,39 +19,53 @@ package pyrokid.entities {
 		];
 		
 		public function TileEntity(x:int, y:int) {
-			super(1, 1, 0x00FF00);
+			this.color = 0x00FF00;
+			super(1, 1);
 			this.x = x;
 			this.y = y;
 			cells = [];
-            /*graphics.lineStyle(0x000000);
-            graphics.beginFill(0x00FF00);
-            graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
-            graphics.endFill();*/
-			/*entities = [];
-			for (var i:int = 0; i < cells.length; i++) {
-				var entity:PhysBox = new PhysBox(true, 0xCCCCFF);
-				entity.x = cells[i].x * Constants.CELL;
-				entity.y = cells[i].y * Constants.CELL;
-				entities.push(entity);
-			}*/
 		}
 		
+		public function finalizeCells():void {
+            graphics.lineStyle(0x000000);
+			graphics.beginFill(color);
+			for (var i:int = 0; i < cells.length; i++) {
+				graphics.drawRect(
+					(cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL,
+					(cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL,
+					w,
+					h
+				);
+			}
+			graphics.endFill();
+		}
+		
+		// TODO optimize this. It should be calculated once, and it should not
+		// do the same neighbor multiple times
 		public function getNeighborCoordinates(grid:Array):Array {
 			var coors:Array = [];
 			for (var i:int = 0; i < cells.length; i++) {
 				for (var j:int = 0; j < directNeighbors.length; j++) {
-					coors.push(cells[i].AddV(directNeighbors[j]));
+					var a:Vector2i = cells[i];
+					var b:Vector2i = directNeighbors[j];
+					coors.push(new Vector2i(a.x + b.x, a.y + b.y));
 				}
 			}
 			return coors;
 		}
 		
 		public override function ignite(onFire:Array, ignitionFrame:int):void {
+			// TODO make it draw on the appropriate cell
 			for (var i:int = 0; i < cells.length; i++) {
-				cells[i].graphics.lineStyle(0x000000);
-				cells[i].graphics.beginFill(0xFF0088);
-				cells[i].graphics.drawRect(20, 20, 10, 10);
-				cells[i].graphics.endFill();
+				graphics.lineStyle(0x000000);
+				graphics.beginFill(0xFF0088);
+				graphics.drawRect(
+					(cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL + 20,
+					(cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL + 20,
+					10,
+					10
+				);
+				graphics.endFill();
 			}
 			ignitionTime = ignitionFrame;
 			onFire.push(this);

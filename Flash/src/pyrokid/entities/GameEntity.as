@@ -5,17 +5,13 @@ package pyrokid.entities {
 	/* DO NOT directly instantiate this class. Use one of the subclasses. */
 	public class GameEntity extends Sprite {
 		
-		protected var ignitionTime:int = -1;
+		public var ignitionTime:int = -1;
 		private var _w:int;
 		private var _h:int;
 		
-		public function GameEntity(width:Number = 1, height:Number = 1, color:uint = 0xFF0000) {
-			_w = width;
-			_h = height;
-            graphics.lineStyle(0x000000);
-            graphics.beginFill(color);
-            graphics.drawRect(0, 0, Constants.CELL * width, Constants.CELL * height);
-            graphics.endFill();
+		public function GameEntity(width:Number = 1, height:Number = 1) {
+			_w = width * Constants.CELL;
+			_h = height * Constants.CELL;
         }
 		
 		public function get w():int {
