@@ -3,6 +3,7 @@ package pyrokid {
 	import flash.display.Stage;
     import flash.events.Event;
 	import flash.events.MouseEvent;
+    import flash.utils.ByteArray;
 	import ui.*;
     
     public class Main extends Sprite {
@@ -36,19 +37,24 @@ package pyrokid {
 			createStartMenu();
         }
 		
-		public function startGameFunc(level_num:int = -1):void //change this to level select maybe? or use parameter
+		public function startGameFunc(levelRecipe:ByteArray = null):void //change this to level select maybe? or use parameter
 		{
 			
-			if (level_num == -1) { //default, start normal game controller
-				trace("starting level "+level_num);
+			if (levelRecipe == null) { //default, start normal game controller
+				trace("starting null level");
 				Utils.removeAllChildren(this);
 				mainGame = new GameController();
 				mainGame.createGameOverScreenFunc = createGameOverMenu;
 				addChild(mainGame);
 				curr_state = STATE_IN_GAME;
 			} else {
-				trace("asked to start level "+level_num+" but that doesn't exist yet");
-			}
+				trace("starting actual level");
+			    Utils.removeAllChildren(this);
+				mainGame = new GameController(levelRecipe);
+				mainGame.createGameOverScreenFunc = createGameOverMenu;
+				addChild(mainGame);
+				curr_state = STATE_IN_GAME;
+            }
 			
 		}
 		

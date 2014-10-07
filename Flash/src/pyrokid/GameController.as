@@ -29,15 +29,23 @@ package pyrokid {
 		public var isGameOver:Boolean = false;
 		public var createGameOverScreenFunc:Function;
 		
-		public function GameController() {
+		public function GameController(levelRecipe:ByteArray=null) {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
-            LevelIO.loadLevel(function(levelRecipe):void {
-				reloadLevel(levelRecipe);
-				levelEditor = new LevelEditor(level);
-				addChild(levelEditor);
-				addEventListener(Event.ENTER_FRAME, update);
-			});
+            
+            if(levelRecipe == null){
+                LevelIO.loadLevel(function(levelRecipe):void {
+                    reloadLevel(levelRecipe);
+                    levelEditor = new LevelEditor(level);
+                    addChild(levelEditor);
+                    addEventListener(Event.ENTER_FRAME, update);
+                });
+            }else {
+                reloadLevel(levelRecipe.readObject());
+                levelEditor = new LevelEditor(level);
+                addChild(levelEditor);
+                addEventListener(Event.ENTER_FRAME, update);
+            }
             
             //level = new Level(new LevelRecipe());
             //addChild(level);
@@ -240,6 +248,12 @@ package pyrokid {
                     return;
 				}
 			}
+            
+            if (level.player.y > stage.stageHeight+500) {
+                trace("fell to your doom, bitch");
+                doGameOver();
+                return;
+            }
 			
 			if (level.player.x > stage.stageWidth) {
 				doGameWon();
