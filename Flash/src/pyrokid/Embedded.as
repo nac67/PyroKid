@@ -21,8 +21,11 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/big_background.png")]
         public static var BGBMP:Class;
         
-        [Embed(source='../../assets/swf/player.swf', symbol='PlayerAnim')]
-        public static var PlayerSWF:Class; //cast as MovieClip on instantiation
+        [Embed(source='../../assets/swf/player.swf', symbol='playerLegs')]
+        public static var PlayerLegsSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/player.swf', symbol='playerTorso')]
+        public static var PlayerTorsoSWF:Class; //cast as MovieClip on instantiation
         
         [Embed(source='../../assets/swf/fireball.swf')]
         public static var FireballSWF:Class; //cast as MovieClip on instantiation

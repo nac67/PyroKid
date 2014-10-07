@@ -124,11 +124,14 @@ package pyrokid {
                 if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
                     // Fire button just pressed
                     level.player.fireballCharge = 0;
+                    level.player.isCharging = true;
                 }else if (Key.isDown(Constants.FIRE_BTN)) {
                     // Fire button is being held
                     level.player.fireballCharge++;
                 }else if(prevFrameFireBtn) {
                     // Fire button is released
+                    level.player.isCharging = false;
+                    level.player.isShooting = true;
                     if (level.player.fireballCharge > Constants.FIREBALL_CHARGE) {
                         launchFireball();
                     }else {
@@ -198,7 +201,6 @@ package pyrokid {
             fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
             level.fireballs.push(fball);
             level.addChild(fball);
-            level.player.animIsShooting = true;
         }
         
         function launchSpark() {
@@ -207,7 +209,6 @@ package pyrokid {
             spark.y = level.player.y + 25;
             level.firesplooshes.push(spark);
             level.addChild(spark);
-            level.player.animIsShooting = true;
         }
 		
 	}
