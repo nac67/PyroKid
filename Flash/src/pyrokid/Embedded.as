@@ -33,6 +33,9 @@ package pyrokid {
         [Embed(source='../../assets/swf/firesploosh.swf', symbol='Sploosh')]
         public static var FiresplooshSWF:Class; //cast as MovieClip on instantiation
         
+        [Embed(source='../../assets/swf/spider.swf', symbol='Spider')]
+        public static var SpiderSWF:Class; //cast as MovieClip on instantiation
+        
     }
 
 }

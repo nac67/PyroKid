@@ -18,6 +18,13 @@ package pyrokid {
         
         public var player:Player;
 		public var playerRect:PhysRectangle;
+        
+        //XXX this shouldn't be here
+        public var spiderView:ViewPRect;
+        
+        public var spiderList:Array;
+
+        
 		
 		public var islandViews:Array;
 		public var rectViews:Array;
@@ -60,6 +67,8 @@ package pyrokid {
 			onFire = [];
 			islandViews = [];
 			rectViews = [];
+            
+            spiderList = [];
 			
 			tileEntityGrid = [];
             var physBoxGrid:Array = [];
@@ -125,6 +134,17 @@ package pyrokid {
 			playerRect.center.x = recipe.playerStart[0] + playerRect.halfSize.x;
 			playerRect.center.y = recipe.playerStart[1] + playerRect.halfSize.y;
 			rectViews.push(new ViewPRect(player, playerRect));
+            
+            
+            var spider:Spider = new Spider(.9, .6);
+            spider.x = 150;
+            spider.y = 0;
+            addChild(spider);
+            var spiderRect:PhysRectangle = new PhysRectangle();
+            spiderRect.halfSize = new Vector2(.45, .3);
+            spiderView = new ViewPRect(spider, spiderRect)
+            rectViews.push(spiderView);
+            spiderList.push(spider);
 			
 			//tileEntityGrid[1][8].ignite(onFire, 0);
 			            
