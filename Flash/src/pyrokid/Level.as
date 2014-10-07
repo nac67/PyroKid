@@ -90,8 +90,8 @@ package pyrokid {
                     var dispObj = o as DisplayObject;
                     
                     var sploosh:MovieClip = new Embedded.FiresplooshSWF() as MovieClip;
-                    sploosh.x = dispObj.x-30;
-                    sploosh.y = dispObj.y-13;
+                    sploosh.x = dispObj.x;
+                    sploosh.y = dispObj.y;
                     self.addChild(sploosh);
                     self.firesplooshes.push(sploosh);
                     

@@ -194,18 +194,18 @@ package pyrokid {
             }
         }
         
-        function launchFireball() {
+        function launchFireball():void {
             var fball:Fireball = new Fireball();
-            fball.x = level.player.x+25;
+            fball.x = level.player.x+ (level.player.direction == Constants.DIR_RIGHT ? 25 : 5);
             fball.y = level.player.y+25;
             fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
             level.fireballs.push(fball);
             level.addChild(fball);
         }
         
-        function launchSpark() {
+        function launchSpark():void {
             var spark:MovieClip = new Embedded.FiresplooshSWF();
-            spark.x = level.player.x + 25;
+            spark.x = level.player.x + (level.player.direction == Constants.DIR_RIGHT ? 25 : 5);
             spark.y = level.player.y + 25;
             level.firesplooshes.push(spark);
             level.addChild(spark);
