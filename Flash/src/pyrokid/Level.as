@@ -16,6 +16,10 @@ package pyrokid {
         public var fireballs:RingBuffer;
         public var briefClips:RingBuffer;
         
+        // All current objects that player uses to attack, list of PlayerAttackObject
+        // Contains fireballs, and contains sparks for a duration of one frame.
+        public var playerAttackObjects:Array;
+        
         public var player:Player;
 		public var playerRect:PhysRectangle;
         
@@ -87,6 +91,7 @@ package pyrokid {
 			rectViews = [];
             
             spiderList = [];
+            playerAttackObjects = [];
 			
 			tileEntityGrid = [];
             var physBoxGrid:Array = [];
