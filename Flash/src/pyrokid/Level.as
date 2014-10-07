@@ -41,10 +41,10 @@ package pyrokid {
             
             Utils.removeAllChildren(this);
 			
-			recipe.walls[0][3] = 2;
-			recipe.walls[0][6] = 2;
-			recipe.walls[0][7] = 2;
-			recipe.multiTileObjects.push([new Vector2i(7, 0), new Vector2i(6, 0)]);
+			//recipe.walls[0][3] = 2;
+			//recipe.walls[0][6] = 2;
+			//recipe.walls[0][7] = 2;
+			//recipe.multiTileObjects.push([new Vector2i(7, 0), new Vector2i(6, 0)]);
 
             
 			this.recipe = recipe;
