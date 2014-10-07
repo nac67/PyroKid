@@ -18,6 +18,13 @@ package pyrokid {
         
         public var player:Player;
 		public var playerRect:PhysRectangle;
+        
+        //XXX this shouldn't be here
+        public var spiderView:ViewPRect;
+        
+        public var spiderList:Array;
+
+        
 		
 		public var islandViews:Array;
 		public var rectViews:Array;
@@ -78,6 +85,8 @@ package pyrokid {
 			onFire = [];
 			islandViews = [];
 			rectViews = [];
+            
+            spiderList = [];
 			
 			tileEntityGrid = [];
             var physBoxGrid:Array = [];
@@ -150,16 +159,25 @@ package pyrokid {
 				islandViews.push(new ViewPIsland(tileEntity, isle));
 			}
 			
-			player = new Player(0.8, 0.9);
+			player = new Player(0.55, 0.86);
 			addChild(player);
 			playerRect = new PhysRectangle();
-			playerRect.halfSize = new Vector2(0.4, 0.45);
+			playerRect.halfSize = new Vector2(0.275, 0.43);
 			playerRect.center.x = recipe.playerStart[0] + playerRect.halfSize.x;
 			playerRect.center.y = recipe.playerStart[1] + playerRect.halfSize.y;
 			rectViews.push(new ViewPRect(player, playerRect));
-			
-			//tileEntityGrid[1][8].ignite(onFire, 0);
-			            
+            
+            
+            var spider:Spider = new Spider(.9, .6);
+            spider.x = 150;
+            spider.y = 0;
+            addChild(spider);
+            var spiderRect:PhysRectangle = new PhysRectangle();
+            spiderRect.halfSize = new Vector2(.45, .3);
+            spiderView = new ViewPRect(spider, spiderRect)
+            rectViews.push(spiderView);
+            spiderList.push(spider);
+						            
             fireballs = new RingBuffer(5, function(o:Object) {
                 if (o is DisplayObject) {
                     var dispObj = o as DisplayObject;

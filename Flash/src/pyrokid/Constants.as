@@ -19,6 +19,9 @@ package pyrokid {
         public static var FIREBALL_CHARGE:int = 20;
 		
 		public static var CAMERA_LAG:Number = 0.92;
+        public static var GRAVITY:Number = 9;
+        public static var SPIDER_SPEED:Number = 1.5;
+        public static var dt:Number = 1 / 30.0;
     
     }
 

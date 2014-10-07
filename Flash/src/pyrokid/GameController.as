@@ -22,9 +22,6 @@ package pyrokid {
         private var prevFrameFireBtn:Boolean = false;
         private var prevFrameJumpBtn:Boolean = false;
 		
-		// TODO remove
-        private var isPlayerGrounded:Boolean = false;
-		
 		// TODO reset to 0 when level editor turned off
 		private var frameCount:int = 0;
 		
@@ -72,13 +69,6 @@ package pyrokid {
             } else { 
                 
             }
-        }
-
-        public function resolveCollision(r:PhysRectangle, a:CollisionAccumulator):Boolean {
-            if (a.accumNY > 0) {
-                isPlayerGrounded = true;
-            }
-            return true;
         }
 		
 		private function fireballUpdate():void {
@@ -139,8 +129,8 @@ package pyrokid {
 			}
 			frameCount += 1;
 			
-			var dt:Number = 1 / 30.0;
-			level.playerRect.velocity.Add(0, 9 * dt);
+			
+			level.playerRect.velocity.Add(0, Constants.GRAVITY * Constants.dt);
 			level.playerRect.velocity.x = 0;
 			if (Key.isDown(Constants.LEFT_BTN)) {
 				level.playerRect.velocity.x -= 2;
@@ -154,22 +144,40 @@ package pyrokid {
 				level.player.animIsRunning = false;                    
 			}
 			
-			if (isPlayerGrounded && Key.isDown(Constants.JUMP_BTN) && !prevFrameJumpBtn) {
+			if (level.player.isGrounded && Key.isDown(Constants.JUMP_BTN) && !prevFrameJumpBtn) {
 				level.playerRect.velocity.y = -6;
 			}
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
-			level.playerRect.Update(dt);
-			level.player.updateAnimation(isPlayerGrounded, level.playerRect);
-			isPlayerGrounded = false;
+			level.playerRect.Update(Constants.dt);
+			level.player.updateAnimation(level.player.isGrounded, level.playerRect);
+			//level.player.isGrounded = false;
+            
+            
+            
+            //XXX spiders oh my!
+            var spider:Spider = level.spiderView.sprite as Spider;
+            spider.update(level.spiderView.phys);
+            
+            for (var i:int = 0; i < level.spiderList.length; i++) {
+                var spider:Spider = level.spiderList[i] as Spider;
+                for (var j:int = 0; j < level.fireballs.size(); j++) {
+                    var fball:Fireball = level.fireballs.get(j) as Fireball;
+                    
+                    if (fball.hitTestObject(spider)) {
+						// bullet hit spider
+					}
+                }
+            }
+            
 			
 			fireballUpdate();
             
-			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9), dt);
+			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9), Constants.dt);
 			for (var i:int = 0; i < level.islandViews.length; i++) {
 				level.islandViews[i].onUpdate();
 			}
 			for (var i:int = 0; i < level.rectViews.length; i++) {
-				level.rectViews[i].onUpdate(level.islands, dt, resolveCollision);
+				level.rectViews[i].onUpdate(level.islands, Constants.dt, level.rectViews[i].sprite.resolveCollision);
 			}
 			
 			if (frameCount % 30 == 0) {
