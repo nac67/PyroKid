@@ -194,6 +194,9 @@ package pyrokid {
                             }
                             level.removeChild(spider);
                             level.spiderList[i] = null;
+                            
+                            //XXX
+                            level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
                             var die = new Embedded.SpiderDieSWF();
                             die.x = spider.x;
                             die.y = spider.y-20;
