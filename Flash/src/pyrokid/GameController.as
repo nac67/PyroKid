@@ -8,6 +8,7 @@ package pyrokid {
 	import physics.*;
 	import pyrokid.entities.FreeEntity;
 	import pyrokid.entities.TileEntity;
+	import flash.ui.Keyboard;
 	
 	public class GameController extends Sprite {
 		
@@ -25,14 +26,22 @@ package pyrokid {
 		// TODO reset to 0 when level editor turned off
 		private var frameCount:int = 0;
 		
+		public var isGameOver:Boolean = false;
+		public var createGameOverScreenFunc:Function;
+		
 		public function GameController() {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
+			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             LevelIO.loadLevel(function(levelRecipe):void {
 				reloadLevel(levelRecipe);
 				levelEditor = new LevelEditor(level);
 				addChild(levelEditor);
 				addEventListener(Event.ENTER_FRAME, update);
 			});
+            
+            //level = new Level(new LevelRecipe());
+            //addChild(level);
+            //addEventListener(Event.ENTER_FRAME, update);
 		}
 
 		public function reloadLevel(levelRecipe):void {
@@ -121,6 +130,16 @@ package pyrokid {
 				}
 			}
 			level.firesplooshes.deleteAllMarked();
+		}
+
+		private function keyboardActionListener(e:KeyboardEvent):void {
+			if (e.keyCode == Keyboard.ESCAPE) {
+				isGameOver = true;
+				createGameOverScreenFunc(false);
+				trace("over");
+				Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+
+			}
 		}
 		    
         private function update(event:Event):void {
