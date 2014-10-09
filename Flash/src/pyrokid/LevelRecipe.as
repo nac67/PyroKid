@@ -2,10 +2,26 @@ package pyrokid {
     
     public class LevelRecipe {
         
-        public var walls:Array; //2d array where walls[y][x] is how you lookup. 1 is wall 0 is empty
-        public var playerStart:Array; //[xtile, ytile]
+		/* 2D array of integers representing the TileEntities of the map,
+		 * where lookup is walls[y][x]. Absolute value of the integer
+		 * represents type of entity, and a negative value indicates
+		 * that it is affected by gravity. */
+        public var walls:Array;
+		
+		/* Tile the player starts on. [cellX, cellY]. */
+        public var playerStart:Array;
+		
+		/* All objects that consist of multiple cells. Each object is
+		 * an array of Vector2i. Example of two multiTiled objects:
+		 * [
+		 *     [(0, 4), (0, 5)],
+		 *     [(3, 2), (3, 3), (2, 3)]
+		 * ] */
 		public var multiTileObjects:Array;
-		public var freeEntities:Array; // [[x0, y0, objCode0], [x1, y1, objCode1], ...]
+		
+		/* All FreeEntities in the game. Each object is an array of
+		 * [cellX, cellY, objectType, . . . optional properties . . .] */
+		public var freeEntities:Array;
     
     }
 
