@@ -20,6 +20,7 @@ package pyrokid.entities {
 		}
 		
 		public override function ignite(level:Level, ignitionFrame:int):void {
+			ignitionTime = ignitionFrame;
 			for (var i:int = 0; i < cells.length; i++) {
 				level.destroyTilePosition(cells[i].x, cells[i].y);
 				level.tileEntityGrid[cells[i].y][cells[i].x] = null;

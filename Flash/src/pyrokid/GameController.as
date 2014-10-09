@@ -74,6 +74,7 @@ package pyrokid {
 					levelEditor.turnEditorOn();
 				} else {
 					levelEditor.turnEditorOff();
+					frameCount = 0;
 				}
                 reloadLevel(level.recipe);
             }

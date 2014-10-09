@@ -22,6 +22,9 @@ package pyrokid {
         public static var GRAVITY:Number = 9;
         public static var SPIDER_SPEED:Number = 1.5;
         public static var dt:Number = 1 / 30.0;
+		
+		public static var EMPTY_TILE_CODE:int = 0;
+		public static var WALL_TILE_CODE:int = 1;
     
     }
 
