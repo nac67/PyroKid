@@ -7,6 +7,7 @@ package pyrokid
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
 	import flash.ui.Keyboard;
+    import flash.utils.ByteArray;
 	import ui.*;
 	
 	/**
@@ -61,9 +62,9 @@ package pyrokid
 			}
 		}
 		
-		private function generateStartGameFunc(levelNum:int):Function {
+		private function generateStartGameFunc(levelRecipe:ByteArray):Function {
 			return function():void {
-				startGameFunc(levelNum);
+				startGameFunc(levelRecipe);
 			}
 		}
 		
@@ -86,10 +87,10 @@ package pyrokid
 					
 					
 					addChild(welcomeText);
-					for (var i:int = -1; i < 3; i++) {
-						addChild(new LevelEditorButton(generateStartGameFunc(i), 80, 40,300 + (200*i), stage.stageHeight / 2, ["Start Level "+i], [LevelEditorButton.upColor]));
-					}
-					
+					addChild(new LevelEditorButton(generateStartGameFunc(Embedded.level1b), 80, 40, 100 + (100), stage.stageHeight / 2, ["Easy"], [LevelEditorButton.upColor]));
+					addChild(new LevelEditorButton(generateStartGameFunc(Embedded.level2b), 80, 40, 100 + (300), stage.stageHeight / 2, ["Medium"], [LevelEditorButton.upColor]));
+                    addChild(new LevelEditorButton(generateStartGameFunc(Embedded.level3b), 80, 40, 100 + (500), stage.stageHeight / 2, ["Hard"], [LevelEditorButton.upColor]));
+                    
 					break;
 				case STATE_GAME_OVER:
 					var byeText:TextField = new TextField();

@@ -11,9 +11,17 @@ package pyrokid {
      */
     public class Embedded {
         
-        //[Embed(source="../../assets/nicklevel.txt", mimeType="application/octet-stream")]
-        //private static var Level1:Class;
-        //public static var level1b:ByteArray = new Level1();
+        [Embed(source="../../assets/easylevel.txt", mimeType="application/octet-stream")]
+        private static var Level1:Class;
+        public static var level1b:ByteArray = new Level1();
+        
+        [Embed(source="../../assets/nlevel4.txt", mimeType="application/octet-stream")]
+        private static var Level2:Class;
+        public static var level2b:ByteArray = new Level2();
+        
+        [Embed(source="../../assets/nlevel6.txt", mimeType="application/octet-stream")]
+        private static var Level3:Class;
+        public static var level3b:ByteArray = new Level3();
         
         [Embed(source="../../assets/tile_art/dirt.png")]
         public static var DirtBMP:Class;
@@ -44,6 +52,9 @@ package pyrokid {
         
         [Embed(source='../../assets/swf/oil.swf', symbol='Oil')]
         public static var OilSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/tile_art/wood.png')]
+        public static var WoodBMP:Class; //cast as Bitmap on instantiation
         
     }
 

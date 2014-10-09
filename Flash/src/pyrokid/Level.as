@@ -75,6 +75,9 @@ package pyrokid {
 		}
 
         public function reset(recipe:Object):void {
+            
+            Key.reset();
+            
             var x:int, y:int, w:int, h:int, self:Level = this;
             
             Utils.removeAllChildren(this);

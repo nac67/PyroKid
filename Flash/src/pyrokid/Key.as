@@ -40,5 +40,11 @@ package pyrokid {
         private static function keyUp(e:KeyboardEvent):void {
             keysDown[e.keyCode] = false;
         }
+        
+        public static function reset():void {
+            for (var i:int = 0; i < 128; i++) {
+                keysDown[i] = false;
+            }
+        }
     }
 }
