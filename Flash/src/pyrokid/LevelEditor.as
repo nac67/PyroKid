@@ -27,7 +27,7 @@ package pyrokid {
 		private var selectedCell:Vector2i;
         
         private var levelScale:Number;
-        private var holdingSpace:Boolean = false;
+        private var dragging:Boolean = false;
         private var holdStart:Vector2i;
         private var draggingRect:Sprite;
 	        
@@ -170,20 +170,18 @@ package pyrokid {
 		}
         
         private function mouseDown(event:MouseEvent):void {
-            holdingSpace = Key.isDown(Key.SPACE);
-            if (holdingSpace) {
-                var cellX:int = event.stageX / (Constants.CELL * levelScale);
-			    var cellY:int = event.stageY / (Constants.CELL * levelScale);
-                holdStart = new Vector2i(cellX, cellY);
-                draggingRect.scaleX = draggingRect.scaleY = levelScale;
-                draggingRect.x = cellX * (Constants.CELL * levelScale)
-                draggingRect.y = cellY * (Constants.CELL * levelScale)
-                draggingRect.visible = true;
-            }
+            dragging = true;
+            var cellX:int = event.stageX / (Constants.CELL * levelScale);
+            var cellY:int = event.stageY / (Constants.CELL * levelScale);
+            holdStart = new Vector2i(cellX, cellY);
+            draggingRect.scaleX = draggingRect.scaleY = levelScale;
+            draggingRect.x = cellX * (Constants.CELL * levelScale)
+            draggingRect.y = cellY * (Constants.CELL * levelScale)
+            draggingRect.visible = true;
         }
         
         private function mouseMove(event:MouseEvent):void {
-            if(holdingSpace){
+            if(dragging){
                 var cellX:int = event.stageX / (Constants.CELL * levelScale);
                 var cellY:int = event.stageY / (Constants.CELL * levelScale);
                 
@@ -196,6 +194,7 @@ package pyrokid {
         }
 		
 		private function mouseUp(event:MouseEvent):void {
+            dragging = false;
             draggingRect.visible = false;
 			var cellX:int = event.stageX / (Constants.CELL * levelScale);
 			var cellY:int = event.stageY / (Constants.CELL * levelScale);
@@ -213,14 +212,10 @@ package pyrokid {
 				}
 				level.recipe.walls[cellY][cellX] = currentCode;
 			} else if (editMode == 1) {
-                if(!holdingSpace) {
-				    placeObject(cellX, cellY);
-                } else {
-                    for (var cx:int = holdStart.x; cx <= cellX; cx++) {
-                        for (var cy:int = holdStart.y; cy <= cellY; cy++) {
-                            placeObject(cx, cy);
-                        }   
-                    }
+                for (var cx:int = holdStart.x; cx <= cellX; cx++) {
+                    for (var cy:int = holdStart.y; cy <= cellY; cy++) {
+                        placeObject(cx, cy);
+                    }   
                 }
 			} else {
 				if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
