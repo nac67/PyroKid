@@ -45,15 +45,15 @@ package pyrokid {
             var c:Crate;
             
             c = new Crate();
-            c.x = 5 * Constants.CELL;
-            c.y = 2 * Constants.CELL;
+            c.x = 7 * Constants.CELL;
+            c.y = 1 * Constants.CELL;
             addChild(c);
             dynamics.push(c);
             
             c = new Crate();
             c.x = 7 * Constants.CELL;
-            c.y = 1 * Constants.CELL;
-            c.setCellSize(3, 2);
+            c.y = 2 * Constants.CELL;
+            c.setCellSize(3, 1);
             addChild(c);
             dynamics.push(c);
             // ---------- END MESSY TEMPORARY CODE

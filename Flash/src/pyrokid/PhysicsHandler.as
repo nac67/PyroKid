@@ -40,6 +40,7 @@ package pyrokid {
          */        
          
         public static var MARGIN:Number = .1;
+        public static var space = false;
         
         /**
          * Handles player's x and y movement
@@ -139,10 +140,12 @@ package pyrokid {
                 object.speedY = 0;
                 object.y = CoordinateHelper.topOfCell(CoordinateHelper.realToCell(baseY-object.h));
                 
-                if (isPlayer && Key.isDown(Constants.JUMP_BTN)) {
+                if (isPlayer && Key.isDown(Constants.JUMP_BTN) && !space) {
                     object.speedY = -JUMP_POWER;
                 }
+                
             }
+            if(isPlayer) space = Key.isDown(Constants.JUMP_BTN);
         }
         
         /**
@@ -172,13 +175,13 @@ package pyrokid {
             // TODO: make islands to manage this ~O(1)
             for (var i:int = 0; i < dynamics.length; i++) {
                 if (dynamics[i] != self) {
-                    var dx:int = dynamics[i].getCellPosition().x;
-                    var dy:int = dynamics[i].getCellPosition().y;
-                    var dw:int = dynamics[i].w / Constants.CELL;
-                    var dh:int = dynamics[i].h / Constants.CELL;
+                    var dx:int = dynamics[i].x;
+                    var dy:int = dynamics[i].y;
+                    var dw:int = dynamics[i].w;
+                    var dh:int = dynamics[i].h;
                     
-                    if (cellX >= dx && cellX < dx + dw) {
-                        if (cellY >= dy && cellY < dy + dh) {
+                    if (x >= dx && x <= dx + dw) {
+                        if (y >= dy && y <= dy + dh) {
                             return true;
                         }
                     }
