@@ -1,5 +1,6 @@
 package pyrokid.world {
     import flash.display.Sprite;
+    import pyrokid.Constants;
 	/**
      * ...
      * @author Cristian Zaloj

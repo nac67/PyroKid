@@ -130,10 +130,10 @@ package pyrokid {
         }
         
         private function centerOnPlayer():void {
-            camera.xCamera = Utils.lerp(camera.xCamera, level.player.x - Constants.WIDTH / 2, Constants.CAMERA_LAG);
-            camera.yCamera = Utils.lerp(camera.yCamera, level.player.y - Constants.HEIGHT / 2, Constants.CAMERA_LAG);
-            camera.x = 0;
-            camera.y = 0;
+            camera.xCamera = Utils.lerp(camera.xCamera, level.player.x, Constants.CAMERA_LAG);
+            camera.yCamera = Utils.lerp(camera.yCamera, level.player.y, Constants.CAMERA_LAG);
+            camera.x = Constants.WIDTH / 2;
+            camera.y = Constants.HEIGHT / 2;
         }
         
         private function handlePhysics():void {
@@ -191,6 +191,7 @@ package pyrokid {
                 return;
             }
             level.frameCount += 1;
+            camera.rotationCamera += 0.1;
             
             // ------------------------- Game logic ------------------------ //
             level.player.update(level);
