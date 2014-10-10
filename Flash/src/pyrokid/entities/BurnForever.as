@@ -25,7 +25,7 @@ package pyrokid.entities {
                 mc.gotoAndStop(2);
             }
             
-			ignitionTime = ignitionFrame;
+			_ignitionTime = ignitionFrame;
 			level.onFire.push(this);
 		}
 		

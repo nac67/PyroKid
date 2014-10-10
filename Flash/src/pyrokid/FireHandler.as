@@ -17,17 +17,16 @@ package pyrokid {
 		
 		// not spread every frame BUT should spread when touches something
 		public static function spreadFire(level:Level):void {
-			if (level.frameCount % 30 != 0) {
-                return;
-            }
-			var numOnFire:int = level.onFire.length;
-			for (var i:int = 0; i < numOnFire; i++) {
-				var neighbors:Array = getNeighbors(level.onFire[i], level.tileEntityGrid);
-				for (var j:int = 0; j < neighbors.length; j++) {
-					if (!neighbors[j].isOnFire()) {
-						neighbors[j].ignite(level, level.frameCount);
-					}
-				}
+			for each (var entity:TileEntity in level.onFire) {
+                entity.updateFire(level, level.frameCount);
+                if (level.frameCount % Constants.SPREAD_RATE == (entity.ignitionTime - 1) % Constants.SPREAD_RATE) {
+                    var neighbors:Array = getNeighbors(entity, level.tileEntityGrid);
+                    for (var j:int = 0; j < neighbors.length; j++) {
+                        if (!neighbors[j].isOnFire()) {
+                            neighbors[j].ignite(level, level.frameCount);
+                        }
+                    }
+                }
 			}
 		}
 		
