@@ -61,23 +61,44 @@ package physics {
                 var igX:int = int(island.globalAnchor.x + 0.5);
                 igX -= minX;
                 var columns = BuildIslandCollisionColumns(island);
-                for (var x:int = 0; x < columns.length; x++) {
-                    hashSet[igX + x].push(columns[x]);
+                for each(var cc:CollisionColumn in columns) {
+                    var cx:int = int(cc.pyEdge.center.x);
+                    hashSet[igX + cx].push(cc);
                 }
             }
             
             return hashSet;
         }
         private static function BuildIslandCollisionColumns(island:PhysIsland):Array { 
-            var cols = new Array(island.tilesWidth);
-            for (var i:int = 0; i < island.tilesWidth; i++) {
-                cols[i] = new CollisionColumn(island);
+            var cols:Array = [];
+            for (var x:int = 0; x < island.tilesWidth; x++) {
+                var y:int = 0;
+                while (y < island.tilesHeight) {
+                    while (y < island.tilesHeight && island.tileGrid[y][x] == null) y++;
+                    if (y == island.tilesHeight) continue;
+                    var sy:int = y;
+                    while (y < island.tilesHeight && island.tileGrid[y][x] != null) y++;
+
+                    cols.push(CreateColumn(island, x, sy, y - sy));
+                }
             }
             
-            for each(var e:PhysEdge in island.edges) {
-                var ex:int = int(e.center.x);
-                if (ex < 0 || ex >= island.tilesWidth) continue;
-                var col:CollisionColumn = cols[ex];
+            return cols;
+        }
+        private static function CreateColumn(island:PhysIsland, x:int, sy:int, c:int):CollisionColumn {
+            var cEdges:Array = [];
+            var vOff:Vector2 = new Vector2(x, sy);
+            for (var i:int = 0; i < c; i++) {
+                island.tileGrid[sy + i][x].ProvideEdgesSpecial(cEdges, vOff);
+                vOff.y += 1;
+            }
+            vOff.y = sy;
+            island.tileGrid[sy][x].ProvideEdgesDirection(Cardinal.NY, cEdges, vOff);
+            vOff.y = sy + c - 1;
+            island.tileGrid[sy + c - 1][x].ProvideEdgesDirection(Cardinal.PY, cEdges, vOff);
+            
+            var col:CollisionColumn = new CollisionColumn(island);
+            for each(var e:PhysEdge in cEdges) {
                 switch(e.direction) {
                     case Cardinal.NY:
                         if (col.nyEdge == null)
@@ -93,8 +114,7 @@ package physics {
                         break;
                 }
             }
-            
-            return cols;
+            return col;
         }
         
         private static function BuildIDs(tiles:Array, queue:Array):Array {
