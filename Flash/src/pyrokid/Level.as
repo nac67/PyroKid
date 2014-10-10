@@ -75,6 +75,17 @@ package pyrokid {
 			}
 			return 0;
 		}
+        private function getObjectCodeZ(island:PhysIsland, cornerCellX:int, cornerCellY:int):int {
+			for (var iy:int = 0; iy < island.tileGrid.length; iy++) {
+				for (var ix:int = 0; ix < island.tileGrid[0].length; ix++) {
+					var partOfIsland:Boolean = island.tileGrid[iy][ix] != null;
+					if (partOfIsland) {
+						return recipe.tiles[cornerCellY + iy][cornerCellX + ix].entityType;
+					}
+				}
+			}
+			return 0;
+		}
 
         public function reset(recipe:Object):void {
             
@@ -200,6 +211,112 @@ package pyrokid {
 				spiderList.push(spider);
 				spiderViews.push(spiderView);
 			}
+						            
+            fireballs = new RingBuffer(5, function(o:Object) {
+                if (o is DisplayObject) {
+                    var dispObj = o as DisplayObject;
+                    
+                    var sploosh:MovieClip = new Embedded.FiresplooshSWF() as MovieClip;
+                    sploosh.x = dispObj.x;
+                    sploosh.y = dispObj.y;
+                    self.addChild(sploosh);
+                    self.briefClips.push(sploosh);
+                    
+                    self.removeChild(dispObj);
+                }
+            });
+            
+            briefClips = new RingBuffer(50, function(o:Object) {
+                if (o is DisplayObject) {
+                    var dispObj = o as DisplayObject;
+                    self.removeChild(dispObj);
+                }
+            });
+			
+			//populate harmful objects list
+			for each (var s:Spider in spiderList) {
+				harmfulObjects.push(s);
+			}
+			
+        }
+		
+        public function resetZ(recipe:Object):void {
+            var x:int, y:int, w:int, h:int, self:Level = this;
+            
+            Key.reset();
+			onFire = [];
+			islandViews = [];
+			rectViews = [];
+			movingTiles = [];
+            spiderList = [];
+			spiderViews = [];
+            //playerAttackObjects = [];
+			harmfulObjects = [];
+			
+            Utils.removeAllChildren(this);
+			
+            background = new CaveBackground(recipe.tiles[0].length, recipe.tiles.length);
+            this.addChild(background);
+            
+			this.recipe = recipe;
+            walls = recipe.walls;
+			tileEntityGrid = [];
+            var physBoxGrid:Array = recipe.toPhysTiles();
+			
+            islands = IslandSimulator.ConstructIslands(physBoxGrid);
+            columns = IslandSimulator.ConstructCollisionColumns(islands);
+			for (var i:int = 0; i < islands.length; i++) {
+				var isle:PhysIsland = islands[i];
+				var cornerCellX:int = Math.floor(isle.globalAnchor.x);
+				var cornerCellY:int = Math.floor(isle.globalAnchor.y);
+				var objCode = getObjectCodeZ(isle, cornerCellX, cornerCellY);
+				var spriteX:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.x));
+				var spriteY:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.y));
+				var tileEntity:TileEntity;
+				if (Math.abs(objCode) == 2) {
+					tileEntity = new BurnForever(spriteX, spriteY);
+				} else if (Math.abs(objCode) == 3) {
+					tileEntity = new BurnQuickly(spriteX, spriteY);
+				} else {
+					tileEntity = new TileEntity(spriteX, spriteY);
+				}
+				tileEntity.globalAnchor = isle.globalAnchor;
+				addChild(tileEntity);
+				for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
+					for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
+						var tile:IPhysTile = isle.tileGrid[iy][ix];
+						if (tile != null && tile is PhysBox) {
+							var cellX:int = ix + cornerCellX;
+							var cellY:int = iy + cornerCellY;
+							tileEntity.cells.push(new Vector2i(cellX, cellY));
+							tileEntityGrid[cellY][cellX] = tileEntity;
+						}
+					}
+				}
+				tileEntity.finalizeCells();
+				islandViews.push(new ViewPIsland(tileEntity, isle));
+			}
+			
+			player = new Player(0.55, 0.86);
+			addChild(player);
+			playerRect = new PhysRectangle();
+			playerRect.halfSize = new Vector2(0.275, 0.43);
+			player.x = recipe.playerStart.x * Constants.CELL;
+			player.y = recipe.playerStart.y * Constants.CELL;
+			rectViews.push(new ViewPRect(player, playerRect));
+            
+            //for (var i:int = 0; i < recipe.freeEntities.length; i++) {
+				//var spider:Spider = new Spider(.9, .6);
+				//spider.x = recipe.freeEntities[i][0] * Constants.CELL;
+				//spider.y = recipe.freeEntities[i][1] * Constants.CELL;
+				//addChild(spider);
+				//var spiderRect:PhysRectangle = new PhysRectangle();
+				//spiderRect.halfSize = new Vector2(.45, .3);
+				//var spiderView:ViewPRect = new ViewPRect(spider, spiderRect)
+				//rectViews.push(spiderView);
+				//spiderList.push(spider);
+				//spiderViews.push(spiderView);
+			//}
 						            
             fireballs = new RingBuffer(5, function(o:Object) {
                 if (o is DisplayObject) {
