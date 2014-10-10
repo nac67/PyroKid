@@ -7,7 +7,7 @@ package pyrokid {
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.utils.Dictionary;
-	import Math;
+    import physics.Vector2;
 	import physics.Vector2i;
 	import ui.*;
     
@@ -25,6 +25,11 @@ package pyrokid {
 		private var numEditModes:int = 3;
 		private var typeSelected = 0;
 		private var selectedCell:Vector2i;
+        
+        private var levelScale:Number;
+        private var holdingSpace:Boolean = false;
+        private var holdStart:Vector2i;
+        private var draggingRect:Sprite;
 	        
         public function LevelEditor(level:Level):void {
 			this.level = level;
@@ -54,7 +59,12 @@ package pyrokid {
 			options["spider"] = "Spider";
 			options["player"] = "Player";
 			buttons.push(new SelectorButton(options, changeSelectedObject));
-            trace(noObjectSelectedSprite.x);
+            
+            draggingRect = new Sprite();
+            draggingRect.graphics.lineStyle(0, 0xFF00FF);
+            draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
+            draggingRect.visible = false;
+            objectEditor.addChild(draggingRect);
             
             toggleEditMode();
 		}
@@ -81,7 +91,9 @@ package pyrokid {
 		}
 		
 		public function turnEditorOn():void {
-			Main.MainStage.addEventListener(MouseEvent.CLICK, clickHandler);
+            Main.MainStage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
+            Main.MainStage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
+			Main.MainStage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
 			for (var i:int = 0; i < buttons.length; i++) {
 				addChild(buttons[i]);
 			}
@@ -90,7 +102,9 @@ package pyrokid {
 		}
 		
 		public function turnEditorOff():void {
-			Main.MainStage.removeEventListener(MouseEvent.CLICK, clickHandler);
+            Main.MainStage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
+            Main.MainStage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
+			Main.MainStage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
 			Utils.removeAllChildren(this);
 		}
 		
@@ -147,16 +161,44 @@ package pyrokid {
 		}
 		
 		private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
-			level.scaleX = Math.min(1, 450 / (Constants.CELL * numCellsTall), 600 / (Constants.CELL * numCellsWide));
-			level.scaleY = level.scaleX;
-			selectedHighlighter.scaleX = level.scaleX;
-			selectedHighlighter.scaleY = level.scaleY;
+            levelScale = Math.min(1, 450 / (Constants.CELL * numCellsTall), 600 / (Constants.CELL * numCellsWide));
+			level.scaleX = level.scaleY = levelScale;
+            levelScale = levelScale;
+			selectedHighlighter.scaleX = levelScale;
+			selectedHighlighter.scaleY = levelScale;
 			level.reset(level.recipe);
 		}
+        
+        private function mouseDown(event:MouseEvent):void {
+            holdingSpace = Key.isDown(Key.SPACE);
+            if (holdingSpace) {
+                var cellX:int = event.stageX / (Constants.CELL * levelScale);
+			    var cellY:int = event.stageY / (Constants.CELL * levelScale);
+                holdStart = new Vector2i(cellX, cellY);
+                draggingRect.scaleX = draggingRect.scaleY = levelScale;
+                draggingRect.x = cellX * (Constants.CELL * levelScale)
+                draggingRect.y = cellY * (Constants.CELL * levelScale)
+                draggingRect.visible = true;
+            }
+        }
+        
+        private function mouseMove(event:MouseEvent):void {
+            if(holdingSpace){
+                var cellX:int = event.stageX / (Constants.CELL * levelScale);
+                var cellY:int = event.stageY / (Constants.CELL * levelScale);
+                
+                var w = cellX - holdStart.x + 1;
+                var h = cellY - holdStart.y + 1;
+                
+                draggingRect.width = w * (Constants.CELL * levelScale);
+                draggingRect.height = h * (Constants.CELL * levelScale);
+            }
+        }
 		
-		private function clickHandler(event:MouseEvent):void {
-			var cellX:int = event.stageX / (Constants.CELL * level.scaleX);
-			var cellY:int = event.stageY / (Constants.CELL * level.scaleY);
+		private function mouseUp(event:MouseEvent):void {
+            draggingRect.visible = false;
+			var cellX:int = event.stageX / (Constants.CELL * levelScale);
+			var cellY:int = event.stageY / (Constants.CELL * levelScale);
 			if (cellX >= level.numCellsWide() || cellY >= level.numCellsTall()) {
 				return;
 			}
@@ -171,16 +213,15 @@ package pyrokid {
 				}
 				level.recipe.walls[cellY][cellX] = currentCode;
 			} else if (editMode == 1) {
-				if (typeSelected == "spider") {
-					level.recipe.freeEntities.push([cellX, cellY, 0]);
-				} else if (typeSelected == "player") {
-					level.recipe.playerStart = [cellX, cellY];
-				} else {
-					level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
-						return ent[0] != cellX || ent[1] != cellY;
-					});
-					level.recipe.walls[cellY][cellX] = int(typeSelected);
-				}
+                if(!holdingSpace) {
+				    placeObject(cellX, cellY);
+                } else {
+                    for (var cx:int = holdStart.x; cx <= cellX; cx++) {
+                        for (var cy:int = holdStart.y; cy <= cellY; cy++) {
+                            placeObject(cx, cy);
+                        }   
+                    }
+                }
 			} else {
 				if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
 					if (noObjectSelectedSprite.parent == objectEditor) {
@@ -193,14 +234,27 @@ package pyrokid {
 					if (level.recipe.walls[cellY][cellX] < -1) {
 						selectedButton.toggle();
 					}
-					selectedHighlighter.x = cellX * Constants.CELL * level.scaleX;
-					selectedHighlighter.y = cellY * Constants.CELL * level.scaleY;
-					selectedHighlighter.scaleX = level.scaleX;
-					selectedHighlighter.scaleY = level.scaleY;
+					selectedHighlighter.x = cellX * Constants.CELL * levelScale;
+					selectedHighlighter.y = cellY * Constants.CELL * levelScale;
+					selectedHighlighter.scaleX = levelScale;
+					selectedHighlighter.scaleY = levelScale;
 				}
 			}
 			level.reset(level.recipe);
 		}
+        
+        private function placeObject(cellX:int, cellY:int):void {
+            if (typeSelected == "spider") {
+                level.recipe.freeEntities.push([cellX, cellY, 0]);
+            } else if (typeSelected == "player") {
+                level.recipe.playerStart = [cellX, cellY];
+            } else {
+                level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
+                    return ent[0] != cellX || ent[1] != cellY;
+                });
+                level.recipe.walls[cellY][cellX] = int(typeSelected);
+            }
+        }
 		
     }
 
