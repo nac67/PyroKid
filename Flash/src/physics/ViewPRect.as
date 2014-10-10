@@ -27,7 +27,7 @@ package physics {
          * Resolve Physics And Update Sprite
          * @param islands Array Of PhysIslands
          */
-        public function onUpdate(islands:Array, callback:Function):void {
+        public function onUpdate(islands:Array, accumCallback:Function = null, collisionCallback:Function = null):void {
             phys.center.Set(sprite.x, sprite.y).DivD(Constants.CELL).AddV(phys.halfSize);
             phys.velocity.x = sprite.velocity.x / Constants.CELL;
             phys.velocity.y = sprite.velocity.y / Constants.CELL;
@@ -39,7 +39,7 @@ package physics {
             sprite.touchTop = false;
             
             phys.Update();
-            CollisionResolver.Resolve(phys, islands, callback);
+            CollisionResolver.Resolve(phys, islands, accumCallback, collisionCallback);
             
             sprite.x = (phys.center.x - phys.halfSize.x) * Constants.CELL;
 			sprite.y = (phys.center.y - phys.halfSize.y) * Constants.CELL;

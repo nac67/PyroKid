@@ -9,7 +9,7 @@ package pyrokid.entities {
         public var touchRight:Boolean = false;
         public var touchTop:Boolean = false;
         
-        public function resolveCollision(r:PhysRectangle, a:CollisionAccumulator):Boolean {
+        public function resolveCollision(r:PhysRectangle, a:CollisionAccumulator, o:PhysCallbackOptions):Boolean {
             if (a.accumNY > 0) isGrounded = true;
             if (a.accumPY > 0) touchTop = true;
             if (a.accumNX > 0) touchRight = true;
@@ -27,7 +27,6 @@ package pyrokid.entities {
 			    graphics.endFill();
             }
 		}
-		
 	}
 	
 }
