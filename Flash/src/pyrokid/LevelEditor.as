@@ -55,6 +55,8 @@ package pyrokid {
 			options["player"] = "Player";
 			buttons.push(new SelectorButton(options, changeSelectedObject));
             trace(noObjectSelectedSprite.x);
+            
+            toggleEditMode();
 		}
 		
 		private function changeSelectedObject(selected):void {

@@ -21,8 +21,18 @@ package pyrokid.entities {
         public override function updateFire(level:Level, currentFrame:int):void {
             if (currentFrame - ignitionTime == Constants.QUICK_BURN_TIME) {
                 for (var i:int = 0; i < cells.length; i++) {
+                    
+                    var w = new Embedded.WoodExplodeSWF();
+                    w.x = cells[i].x*Constants.CELL;
+                    w.y = cells[i].y*Constants.CELL;
+                    trace(w.x);
+                    level.briefClips.push(w);
+                    level.addChild(w);
+                    
                     level.destroyTilePosition(cells[i].x, cells[i].y);
                     level.tileEntityGrid[cells[i].y][cells[i].x] = null;
+                    
+                    
                 }
             }
         }

@@ -40,6 +40,7 @@ package pyrokid {
  
         private static function onComplete(evt:Event):void {
 			var levelRecipe = fileRef.data.readObject();
+            fileRef.removeEventListener(Event.SELECT, onFileSelected);
 			loadLevelCallback(levelRecipe);
         }
     } 
