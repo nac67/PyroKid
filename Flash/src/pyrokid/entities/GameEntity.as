@@ -7,7 +7,7 @@ package pyrokid.entities {
 	/* DO NOT directly instantiate this class. Use one of the subclasses. */
 	public class GameEntity extends Sprite {
 		
-		protected var ignitionTime:int = -1;
+		protected var _ignitionTime:int = -1;
 		private var _w:int;
 		private var _h:int;
         
@@ -17,6 +17,10 @@ package pyrokid.entities {
 			_w = width * Constants.CELL;
 			_h = height * Constants.CELL;
             velocity = new Vector2();
+        }
+        
+        public function get ignitionTime():int {
+            return _ignitionTime;
         }
 		
 		public function get w():int {

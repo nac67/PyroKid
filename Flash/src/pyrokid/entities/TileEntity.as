@@ -65,6 +65,10 @@ package pyrokid.entities {
 		
 		public override function ignite(level:Level, ignitionFrame:int):void {
 		}
+        
+        public function updateFire(level:Level, currentFrame:int):void {
+            
+        }
 		
 		
 	}
