@@ -240,43 +240,65 @@ package pyrokid {
 				// Fire button just pressed
 				player.fireballCharge = 0;
 				player.isCharging = true;
-			}else if (Key.isDown(Constants.FIRE_BTN)) {
+			} else if (Key.isDown(Constants.FIRE_BTN)) {
 				// Fire button is being held
 				player.fireballCharge++;
-			}else if(player.prevFrameFireBtn) {
+			} else if(player.prevFrameFireBtn) {
 				// Fire button is released
 				player.isCharging = false;
 				player.isShooting = true;
 				if (player.fireballCharge > Constants.FIREBALL_CHARGE) {
 					launchFireball();
-				}else {
+				} else {
 					//launchSpark(level);
 				}
 			}
 			player.prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
 			
-
-			//fireballs
-			for (var i = 0; i < fireballs.size(); i++) {
-				var fball:Fireball = fireballs.get(i) as Fireball;
-				fball.x += fball.speedX;
-				var cellX = CoordinateHelper.realToCell(fball.x);
-				var cellY = CoordinateHelper.realToCell(fball.y);
-				var entity:TileEntity;
-				try {
-					entity = tileEntityGrid[cellY][cellX];
-				} catch (exc) {
-					entity = null;
-				}
+            
+            for (var i:int = 0; i < fireballs.size(); i++) {
+                var fireball:Fireball = fireballs.get(i) as Fireball;
+				fireball.x += fireball.speedX;
+                
+                // ignite TileEntities
+				var cellX = CoordinateHelper.realToCell(fireball.x);
+				var cellY = CoordinateHelper.realToCell(fireball.y);
+				var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
-					fireballs.markForDeletion(fball);
+					fireballs.markForDeletion(fireball);
+                    // TODO move isOnFire check inside ignite function.
 					if (!entity.isOnFire()) {
 						entity.ignite(this, frameCount);
 					}
 				}
-			}
-			fireballs.deleteAllMarked();			
+                
+                // ignite FreeEntities
+                for (var j:int = 0; j < spiderList.length; j++) {
+                    var spider:Spider = spiderList[j] as Spider;
+                    if(spider != null) {
+                        if (fireball.hitTestObject(spider)) {
+                            fireballs.markForDeletion(fireball);
+                            removeChild(spider);
+                            spiderList[j] = null;
+                            
+                            //XXX
+                            //level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
+                            var die = new Embedded.SpiderDieSWF();
+                            die.x = spider.x;
+                            die.y = spider.y-20;
+                            die.scaleX = spider.scaleX;
+                            die.scaleY = spider.scaleY;
+                            addChild(die);
+                            briefClips.push(die);
+                            break;
+                        }
+                    }
+                }
+                spiderList = Utils.filterNull(spiderList);
+            }
+            
+			fireballs.deleteAllMarked();
             
             //playerAttackObjects = playerAttackObjects.filter(function(o) {
                //var pao:PlayerAttackObject = o as PlayerAttackObject;

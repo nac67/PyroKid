@@ -10,17 +10,9 @@ package pyrokid {
 			for (var i:int = 0; i < neiCoors.length; i++) {
 				var x:int = neiCoors[i].x;
 				var y:int = neiCoors[i].y;
-				if (inBounds(fireGrid, x, y)) {
-					neighbors.push(fireGrid[y][x]);
-				}
+			    neighbors.push(Utils.index(fireGrid, x, y));
 			}
-			return neighbors.filter(function(obj) {
-				return obj != null;
-			});
-		}
-		
-		private static function inBounds(array:Array, x:int, y:int):Boolean {
-			return y >= 0 && x >= 0 && y < array.length && x < array[0].length;
+			return Utils.filterNull(neighbors);
 		}
 		
 		// not spread every frame BUT should spread when touches something

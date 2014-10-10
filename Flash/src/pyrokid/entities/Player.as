@@ -93,8 +93,6 @@ package pyrokid.entities {
 			}
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
             
-            level.fireballUpdate();
-            
             updateAnimation();
         }
         

@@ -16,37 +16,31 @@ package pyrokid {
         
 		public var level:Level;
         
-        
-        
-		
-		
-		
 		public var isGameOver:Boolean = false;
 		public var createGameOverScreenFunc:Function;
 		
-		public function GameController(levelRecipe:ByteArray=null) {
+        /* levelRecipe is not specified if you want to load from browser
+         * Otherwise give it a byte array from an embedded level file */
+		public function GameController(levelBytes:ByteArray=null) {
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
 			Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
-            if(levelRecipe == null){
-                LevelIO.loadLevel(function(levelRecipe):void {
-                    reloadLevel(levelRecipe);
-                    levelEditor = new LevelEditor(level);
-                    addChild(levelEditor);
-                    addEventListener(Event.ENTER_FRAME, update);
-                });
-            }else {
-                reloadLevel(levelRecipe.readObject());
-                levelRecipe.position = 0;
-                levelEditor = new LevelEditor(level);
-                addChild(levelEditor);
-                addEventListener(Event.ENTER_FRAME, update);
+            if (levelBytes == null) {
+                // Load level with browser
+                LevelIO.loadLevel(initializeLevelAndEditor);
+            } else {
+                // Load embedded level
+                levelBytes.position = 0;
+                initializeLevelAndEditor(levelBytes.readObject());
             }
-            
-            //level = new Level(new LevelRecipe());
-            //addChild(level);
-            //addEventListener(Event.ENTER_FRAME, update);
 		}
+        
+        private function initializeLevelAndEditor(levelRecipe:Object):void {
+            reloadLevel(levelRecipe);
+            levelEditor = new LevelEditor(level);
+            addChild(levelEditor);
+            addEventListener(Event.ENTER_FRAME, update);
+        }
 
 		public function reloadLevel(levelRecipe):void {
 			if (level != null) {
@@ -94,13 +88,13 @@ package pyrokid {
 			}
 		}
 		
-		private function doGameOver() {
+		private function doGameOver():void {
 			isGameOver = true;
 			Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
 			removeEventListener(Event.ENTER_FRAME, update);
 			createGameOverScreenFunc(false);
 		}
-		private function doGameWon() {
+		private function doGameWon():void {
 			isGameOver = true;
 			Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
 			removeEventListener(Event.ENTER_FRAME, update);
@@ -113,39 +107,15 @@ package pyrokid {
 			}
 			level.frameCount += 1;
 			
+            // ------------------------- Game logic ------------------------- //
 			level.player.update(level);
-            
             for each (var spider:Spider in level.spiderList) {
-                if(spider != null) {
-                    spider.update();
-                }
+                spider.update();
             }
             
+            level.fireballUpdate();
             
-            for (var i:int = 0; i < level.fireballs.size(); i++) {
-                var fireball:Fireball = level.fireballs.get(i) as Fireball;
-                for (var j:int = 0; j < level.spiderList.length; j++) {
-                    var spider:Spider = level.spiderList[j] as Spider;
-                    if(spider != null){
-                        if (fireball.hitTestObject(spider)) {
-                            level.fireballs.remove(fireball);
-                            level.removeChild(spider);
-                            level.spiderList[j] = null;
-                            
-                            //XXX
-                            //level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
-                            var die = new Embedded.SpiderDieSWF();
-                            die.x = spider.x;
-                            die.y = spider.y-20;
-                            die.scaleX = spider.scaleX;
-                            die.scaleY = spider.scaleY;
-                            level.addChild(die);
-                            level.briefClips.push(die);
-                            break;
-                        }
-                    }
-                }
-            }
+            
             
 			
 			
@@ -157,7 +127,7 @@ package pyrokid {
             });
             
             // calculate new positions of islands
-			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9), Constants.DT);
+			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9));
             
             // Make sprites islands match physics islands
 			for (var i:int = 0; i < level.islandViews.length; i++) {
@@ -166,7 +136,7 @@ package pyrokid {
             
             // update new positions of dynamic objects and update sprite stuff sequentially
 			for (var i:int = 0; i < level.rectViews.length; i++) {
-				level.rectViews[i].onUpdate(level.islands, Constants.DT, level.rectViews[i].sprite.resolveCollision);
+				level.rectViews[i].onUpdate(level.islands, level.rectViews[i].sprite.resolveCollision);
 			}
 			
 			if (level.frameCount % 30 == 0) {
@@ -225,17 +195,6 @@ package pyrokid {
 			if (level.player.x > stage.stageWidth) {
 				doGameWon();
 			}
-        }
-        
-        
-        
-        function launchSpark():void {
-            //var spark:MovieClip = new Embedded.FiresplooshSWF();
-            //spark.x = level.player.x + (level.player.direction == Constants.DIR_RIGHT ? 25 : 5);
-            //spark.y = level.player.y + 25;
-            //level.briefClips.push(spark);
-            //level.addChild(spark);
-            //level.playerAttackObjects.push(new PlayerAttackObject(null,new Vector2(spark.x, spark.y)));
         }
 		
 	}

@@ -26,9 +26,8 @@ package physics {
         /**
          * Resolve Physics And Update Sprite
          * @param islands Array Of PhysIslands
-         * @param dt Frame Delta-Time
          */
-        public function onUpdate(islands:Array, dt:Number, callback:Function):void {
+        public function onUpdate(islands:Array, callback:Function):void {
             phys.center.Set(sprite.x, sprite.y).DivD(Constants.CELL).AddV(phys.halfSize);
             phys.velocity.x = sprite.velocity.x / Constants.CELL;
             phys.velocity.y = sprite.velocity.y / Constants.CELL;
