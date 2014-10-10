@@ -192,6 +192,7 @@ package pyrokid {
             }
             level.frameCount += 1;
             camera.rotationCamera += 0.1;
+            camera.scaleCamera(1.001);
             
             // ------------------------- Game logic ------------------------ //
             level.player.update(level);

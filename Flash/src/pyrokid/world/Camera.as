@@ -16,27 +16,28 @@ package pyrokid.world {
         public function set xCamera(x:Number):void {
             world.x = -x;
         }
-        public function set yCamera(y:Number):void {
-            world.y = -y;
-        }
-        public function set rotationCamera(r:Number):void {
-            rotation = r;
-        }
-        public function set scaleCamera(s:Number):void {
-            scaleX = scaleY = s;
-        }
-        
         public function get xCamera():Number {
             return -world.x;
+        }
+
+        public function set yCamera(y:Number):void {
+            world.y = -y;
         }
         public function get yCamera():Number {
             return -world.y;
         }
+        
+        public function set rotationCamera(r:Number):void {
+            rotation = r;
+        }
         public function get rotationCamera():Number {
             return rotation;
         }
-        public function get scaleCamera():Number {
-            return scaleX;
+
+        public function scaleCamera(s:Number):void {
+            scaleX *= s;
+            scaleY *= s;
         }
+    
     }
 }
