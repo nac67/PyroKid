@@ -53,6 +53,10 @@ package pyrokid {
         [Embed(source='../../assets/swf/oil.swf', symbol='Oil')]
         public static var OilSWF:Class; //cast as MovieClip on instantiation
         
+        [Embed(source='../../assets/swf/oil.swf', symbol='Crate')]
+        public static var WoodSWF:Class; //cast as MovieClip on instantiation
+        
+        // should no longer be used
         [Embed(source='../../assets/tile_art/wood.png')]
         public static var WoodBMP:Class; //cast as Bitmap on instantiation
         
