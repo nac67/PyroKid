@@ -202,17 +202,25 @@ package pyrokid {
 			}
 						            
             fireballs = new RingBuffer(5, function(o:Object) {
-                if (o is DisplayObject) {
-                    var dispObj = o as DisplayObject;
+                var dispObj:Fireball = o as Fireball;
+                
+                if (dispObj.fizzOut) {
+                    var fizz:MovieClip = new Embedded.FireballFizzSWF() as MovieClip;
+                    fizz.x = dispObj.x;
+                    fizz.y = dispObj.y;
+                    fizz.scaleX = dispObj.scaleX;
+                    self.addChild(fizz);
+                    self.briefClips.push(fizz);
                     
+                } else {
                     var sploosh:MovieClip = new Embedded.FiresplooshSWF() as MovieClip;
                     sploosh.x = dispObj.x;
                     sploosh.y = dispObj.y;
                     self.addChild(sploosh);
                     self.briefClips.push(sploosh);
-                    
-                    self.removeChild(dispObj);
                 }
+                
+                self.removeChild(dispObj);
             });
             
             briefClips = new RingBuffer(50, function(o:Object) {
@@ -310,6 +318,7 @@ package pyrokid {
                 
                 // fireball expiration
                 if (fireball.isDead()) {
+                    fireball.fizzOut = true;
                     fireballs.markForDeletion(fireball);
                 }
             }
@@ -321,7 +330,7 @@ package pyrokid {
             var fball:Fireball = new Fireball();
             fball.setRange(range);
             fball.x = player.x+ (player.direction == Constants.DIR_RIGHT ? 25 : 5);
-            fball.y = player.y+25;
+            fball.y = player.y+22;
             fball.speedX = (player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
             fireballs.push(fball);
             addChild(fball);

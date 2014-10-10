@@ -9,12 +9,17 @@ package pyrokid {
         private var age:int;
         public var range:Number;
         
+        /* False means play impact animation upon removal
+         * True means play fizzing out animation upon removal
+         * This is set inside fireballUpdate in Level.as
+         * Actual creation of the animations is inside the callback
+         * function defined in level reset */
+        public var fizzOut:Boolean = false; 
+        
         public function Fireball() {
             
             //origin at center of ball
             fball = new Embedded.FireballSWF() as MovieClip;
-            fball.x = -30;
-            fball.y = -10;
             addChild(fball);
             age = 0;
             setRange(Constants.MAX_BALL_RANGE);

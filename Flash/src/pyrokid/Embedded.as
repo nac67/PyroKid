@@ -19,7 +19,7 @@ package pyrokid {
         private static var Level2:Class;
         public static var level2b:ByteArray = new Level2();
         
-        [Embed(source="../../assets/nlevel6.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levelfuck.txt", mimeType="application/octet-stream")]
         private static var Level3:Class;
         public static var level3b:ByteArray = new Level3();
         
@@ -35,8 +35,11 @@ package pyrokid {
         [Embed(source='../../assets/swf/player.swf', symbol='playerTorso')]
         public static var PlayerTorsoSWF:Class; //cast as MovieClip on instantiation
         
-        [Embed(source='../../assets/swf/fireball.swf')]
+        [Embed(source='../../assets/swf/fireball.swf', symbol='fireball')]
         public static var FireballSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/fireball.swf', symbol='fizzout')]
+        public static var FireballFizzSWF:Class; //cast as MovieClip on instantiation
         
         [Embed(source='../../assets/swf/firesploosh.swf', symbol='Sploosh')]
         public static var FiresplooshSWF:Class; //cast as MovieClip on instantiation
