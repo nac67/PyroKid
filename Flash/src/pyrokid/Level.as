@@ -19,7 +19,7 @@ package pyrokid {
         
         // All current objects that player uses to attack, list of PlayerAttackObject
         // Contains fireballs, and contains sparks for a duration of one frame.
-        public var playerAttackObjects:Array;
+        //public var playerAttackObjects:Array;
         
         public var player:Player;
 		public var playerRect:PhysRectangle;
@@ -43,6 +43,8 @@ package pyrokid {
 		public var harmfulObjects:Array;
 		
 		public var movingTiles:Array;
+        
+		public var frameCount:int = 0;
 		
 		//SOUNDS
 		[Embed(source="../../assets/sound/fireball-sound.mp3")]
@@ -103,7 +105,7 @@ package pyrokid {
 			movingTiles = [];
             
             spiderList = [];
-            playerAttackObjects = [];
+            //playerAttackObjects = [];
 			harmfulObjects = [];
 			
 			tileEntityGrid = [];
@@ -227,6 +229,73 @@ package pyrokid {
 			
         }
 		
+        
+        //////////////////////////////////
+        //////////////////////////////////
+        //////////////////////////////////
+        //////////////////////////////////
+        
+        public function fireballUpdate():void {
+			if (Key.isDown(Constants.FIRE_BTN) && !player.prevFrameFireBtn) {
+				// Fire button just pressed
+				player.fireballCharge = 0;
+				player.isCharging = true;
+			}else if (Key.isDown(Constants.FIRE_BTN)) {
+				// Fire button is being held
+				player.fireballCharge++;
+			}else if(player.prevFrameFireBtn) {
+				// Fire button is released
+				player.isCharging = false;
+				player.isShooting = true;
+				if (player.fireballCharge > Constants.FIREBALL_CHARGE) {
+					launchFireball();
+				}else {
+					//launchSpark(level);
+				}
+			}
+			player.prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
+			
+
+			//fireballs
+			for (var i = 0; i < fireballs.size(); i++) {
+				var fball:Fireball = fireballs.get(i) as Fireball;
+				fball.x += fball.speedX;
+				var cellX = CoordinateHelper.realToCell(fball.x);
+				var cellY = CoordinateHelper.realToCell(fball.y);
+				var entity:TileEntity;
+				try {
+					entity = tileEntityGrid[cellY][cellX];
+				} catch (exc) {
+					entity = null;
+				}
+				if (entity != null) {
+					// remove fireball from list, also delete from stage
+					fireballs.markForDeletion(fball);
+					if (!entity.isOnFire()) {
+						entity.ignite(this, frameCount);
+					}
+				}
+			}
+			fireballs.deleteAllMarked();			
+            
+            //playerAttackObjects = playerAttackObjects.filter(function(o) {
+               //var pao:PlayerAttackObject = o as PlayerAttackObject;
+               //return !PlayerAttackObject.deleteThis(this, pao); 
+            //});
+			
+		}
+        
+        function launchFireball():void {
+            var fball:Fireball = new Fireball();
+            fball.x = player.x+ (player.direction == Constants.DIR_RIGHT ? 25 : 5);
+            fball.y = player.y+25;
+            fball.speedX = (player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
+            fireballs.push(fball);
+            addChild(fball);
+            //playerAttackObjects.push(new PlayerAttackObject(fball));
+			fireballSound.play();
+        }
+        
 		
 		////// ---------- Deleting tiles ----------------- /////
 		

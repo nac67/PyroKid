@@ -8,15 +8,19 @@ package physics {
      * @author Cristian Zaloj
      */
     public class ViewPRect {
-        public var sprite:Sprite;
+        public var sprite:FreeEntity;
         public var phys:PhysRectangle;
         public var isFreeEntity:Boolean;
         //public var callback:Function = null;
         
-        public function ViewPRect(s:Sprite, p:PhysRectangle) {
+        public function ViewPRect(s:FreeEntity, p:PhysRectangle) {
             sprite = s;
             phys = p;
             isFreeEntity = sprite is FreeEntity;
+        }
+        
+        public function updateMovement():void {
+            
         }
         
         /**
@@ -26,20 +30,22 @@ package physics {
          */
         public function onUpdate(islands:Array, dt:Number, callback:Function):void {
             phys.center.Set(sprite.x, sprite.y).DivD(Constants.CELL).AddV(phys.halfSize);
-           
-            if (isFreeEntity) {
-                var freeEntity:FreeEntity = sprite as FreeEntity;
-                freeEntity.isGrounded = false;
-                freeEntity.touchLeft = false;
-                freeEntity.touchRight = false;
-                freeEntity.touchTop = false;
-            }
+            phys.velocity.x = sprite.velocity.x / Constants.CELL;
+            phys.velocity.y = sprite.velocity.y / Constants.CELL;
             
-            phys.Update(dt);
+           
+            sprite.isGrounded = false;
+            sprite.touchLeft = false;
+            sprite.touchRight = false;
+            sprite.touchTop = false;
+            
+            phys.Update();
             CollisionResolver.Resolve(phys, islands, callback);
             
             sprite.x = (phys.center.x - phys.halfSize.x) * Constants.CELL;
 			sprite.y = (phys.center.y - phys.halfSize.y) * Constants.CELL;
+            sprite.velocity.x = phys.velocity.x * Constants.CELL;
+            sprite.velocity.y = phys.velocity.y * Constants.CELL;
         }
     }
 

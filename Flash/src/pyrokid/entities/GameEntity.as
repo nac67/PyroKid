@@ -1,18 +1,22 @@
 package pyrokid.entities {
 	import flash.display.Sprite;
+    import physics.Vector2;
 	import pyrokid.Constants;
 	import pyrokid.Level;
 	
 	/* DO NOT directly instantiate this class. Use one of the subclasses. */
 	public class GameEntity extends Sprite {
 		
-		public var ignitionTime:int = -1;
+		protected var ignitionTime:int = -1;
 		private var _w:int;
 		private var _h:int;
+        
+        public var velocity:Vector2;
 		
 		public function GameEntity(width:Number = 1, height:Number = 1) {
 			_w = width * Constants.CELL;
 			_h = height * Constants.CELL;
+            velocity = new Vector2();
         }
 		
 		public function get w():int {

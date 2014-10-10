@@ -1,5 +1,6 @@
 package physics {
     import flash.geom.Rectangle;
+    import pyrokid.Constants;
 	/**
      * ...
      * @author Cristian Zaloj
@@ -24,8 +25,8 @@ package physics {
             return center.y + halfSize.y;
         }
     
-        public function Update(dt:Number) {
-            motion.SetV(velocity).MulD(dt);
+        public function Update():void {
+            motion.SetV(velocity).MulD(Constants.DT);
             motion.x = CollisionResolver.ClampedMotion(motion.x);
             motion.y = CollisionResolver.ClampedMotion(motion.y);
             center.AddV(motion);

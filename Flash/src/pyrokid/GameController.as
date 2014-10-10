@@ -6,9 +6,7 @@ package pyrokid {
 	import flash.net.FileReference;
     import flash.events.KeyboardEvent;
 	import physics.*;
-	import pyrokid.entities.BurnForever;
-	import pyrokid.entities.FreeEntity;
-	import pyrokid.entities.TileEntity;
+	import pyrokid.entities.*;
 	import flash.ui.Keyboard;
 	
 	public class GameController extends Sprite {
@@ -18,14 +16,10 @@ package pyrokid {
         
 		public var level:Level;
         
-        private var buf:RingBuffer;
         
-        // TODO move these somewhere logical
-        private var prevFrameFireBtn:Boolean = false;
-        private var prevFrameJumpBtn:Boolean = false;
+        
 		
-		// TODO reset to 0 when level editor turned off
-		private var frameCount:int = 0;
+		
 		
 		public var isGameOver:Boolean = false;
 		public var createGameOverScreenFunc:Function;
@@ -74,7 +68,7 @@ package pyrokid {
 					levelEditor.turnEditorOn();
 				} else {
 					levelEditor.turnEditorOff();
-					frameCount = 0;
+					level.frameCount = 0;
 				}
                 reloadLevel(level.recipe);
             }
@@ -92,55 +86,7 @@ package pyrokid {
             }
         }
 		
-		private function fireballUpdate():void {
-			if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
-				// Fire button just pressed
-				level.player.fireballCharge = 0;
-				level.player.isCharging = true;
-			}else if (Key.isDown(Constants.FIRE_BTN)) {
-				// Fire button is being held
-				level.player.fireballCharge++;
-			}else if(prevFrameFireBtn) {
-				// Fire button is released
-				level.player.isCharging = false;
-				level.player.isShooting = true;
-				if (level.player.fireballCharge > Constants.FIREBALL_CHARGE) {
-					launchFireball();
-				}else {
-					launchSpark();
-				}
-			}
-			prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
-			
-
-			//fireballs
-			for (var i = 0; i < level.fireballs.size(); i++) {
-				var fball:Fireball = level.fireballs.get(i) as Fireball;
-				fball.x += fball.speedX;
-				var cellX = CoordinateHelper.realToCell(fball.x);
-				var cellY = CoordinateHelper.realToCell(fball.y);
-				var entity:TileEntity;
-				try {
-					entity = level.tileEntityGrid[cellY][cellX];
-				} catch (exc) {
-					entity = null;
-				}
-				if (entity != null) {
-					// remove fireball from list, also delete from stage
-					level.fireballs.markForDeletion(fball);
-					if (!entity.isOnFire()) {
-						entity.ignite(level, frameCount);
-					}
-				}
-			}
-			level.fireballs.deleteAllMarked();			
-            
-            level.playerAttackObjects = level.playerAttackObjects.filter(function(o) {
-               var pao:PlayerAttackObject = o as PlayerAttackObject;
-               return !PlayerAttackObject.deleteThis(level, pao); 
-            });
-			
-		}
+		
 
 		private function keyboardActionListener(e:KeyboardEvent):void {
 			if (e.keyCode == Keyboard.ESCAPE) {
@@ -165,51 +111,29 @@ package pyrokid {
 			if (editorMode) {
 				return;
 			}
-			frameCount += 1;
+			level.frameCount += 1;
 			
-			
-			level.playerRect.velocity.Add(0, Constants.GRAVITY * Constants.dt);
-			level.playerRect.velocity.x = 0;
-			if (Key.isDown(Constants.LEFT_BTN)) {
-				level.playerRect.velocity.x -= 2;
-				level.player.direction = Constants.DIR_LEFT;
-				level.player.animIsRunning = true;
-			} else if (Key.isDown(Constants.RIGHT_BTN)) {
-				level.playerRect.velocity.x += 2;
-				level.player.direction = Constants.DIR_RIGHT;
-				level.player.animIsRunning = true;
-			} else {
-				level.player.animIsRunning = false;                    
-			}
-			
-			if (level.player.isGrounded && Key.isDown(Constants.JUMP_BTN) && !prevFrameJumpBtn) {
-				level.playerRect.velocity.y = -6;
-			}
-			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
-			level.playerRect.Update(Constants.dt);
-			level.player.updateAnimation(level.player.isGrounded, level.playerRect);
+			level.player.update(level);
             
-            for each (var spiderView:ViewPRect in level.spiderViews) {
-				var spider:Spider = spiderView.sprite as Spider;
-				spider.update(spiderView.phys);
-			}
+            for each (var spider:Spider in level.spiderList) {
+                if(spider != null) {
+                    spider.update();
+                }
+            }
             
-            fireballUpdate();
             
-            for (var i:int = 0; i < level.playerAttackObjects.length; i++) {
-                var attackObj:PlayerAttackObject = level.playerAttackObjects[i] as PlayerAttackObject;
+            for (var i:int = 0; i < level.fireballs.size(); i++) {
+                var fireball:Fireball = level.fireballs.get(i) as Fireball;
                 for (var j:int = 0; j < level.spiderList.length; j++) {
                     var spider:Spider = level.spiderList[j] as Spider;
                     if(spider != null){
-                        if (attackObj.collidingWith(spider)) {
-                            if(attackObj.isFireball){
-                                level.fireballs.remove(attackObj.fireballSprite);
-                            }
+                        if (fireball.hitTestObject(spider)) {
+                            level.fireballs.remove(fireball);
                             level.removeChild(spider);
                             level.spiderList[j] = null;
                             
                             //XXX
-                            level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
+                            //level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
                             var die = new Embedded.SpiderDieSWF();
                             die.x = spider.x;
                             die.y = spider.y-20;
@@ -232,16 +156,21 @@ package pyrokid {
                return mc.currentFrame != mc.totalFrames;
             });
             
-			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9), Constants.dt);
+            // calculate new positions of islands
+			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9), Constants.DT);
+            
+            // Make sprites islands match physics islands
 			for (var i:int = 0; i < level.islandViews.length; i++) {
 				level.islandViews[i].onUpdate();
 			}
+            
+            // update new positions of dynamic objects and update sprite stuff sequentially
 			for (var i:int = 0; i < level.rectViews.length; i++) {
-				level.rectViews[i].onUpdate(level.islands, Constants.dt, level.rectViews[i].sprite.resolveCollision);
+				level.rectViews[i].onUpdate(level.islands, Constants.DT, level.rectViews[i].sprite.resolveCollision);
 			}
 			
-			if (frameCount % 30 == 0) {
-				FireHandler.spreadFire(level, frameCount);
+			if (level.frameCount % 30 == 0) {
+				FireHandler.spreadFire(level, level.frameCount);
 			}
 			
 			// TODO this goes away once we move velocity into game logic 
@@ -280,12 +209,12 @@ package pyrokid {
 			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * ( -level.player.y + 300));
 			
 			//resolve game over conditions
-			for each (var s:Sprite in level.harmfulObjects) {
-				if (level.player.hitTestObject(s)) {
-					doGameOver();
-                    return;
-				}
-			}
+			//for each (var s:Sprite in level.harmfulObjects) {
+				//if (level.player.hitTestObject(s)) {
+					//doGameOver();
+                    //return;
+				//}
+			//}
             
             if (level.player.y > stage.stageHeight+500) {
                 trace("fell to your doom, bitch");
@@ -298,24 +227,15 @@ package pyrokid {
 			}
         }
         
-        function launchFireball():void {
-            var fball:Fireball = new Fireball();
-            fball.x = level.player.x+ (level.player.direction == Constants.DIR_RIGHT ? 25 : 5);
-            fball.y = level.player.y+25;
-            fball.speedX = (level.player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
-            level.fireballs.push(fball);
-            level.addChild(fball);
-            level.playerAttackObjects.push(new PlayerAttackObject(fball));
-			level.fireballSound.play();
-        }
+        
         
         function launchSpark():void {
-            var spark:MovieClip = new Embedded.FiresplooshSWF();
-            spark.x = level.player.x + (level.player.direction == Constants.DIR_RIGHT ? 25 : 5);
-            spark.y = level.player.y + 25;
-            level.briefClips.push(spark);
-            level.addChild(spark);
-            level.playerAttackObjects.push(new PlayerAttackObject(null,new Vector2(spark.x, spark.y)));
+            //var spark:MovieClip = new Embedded.FiresplooshSWF();
+            //spark.x = level.player.x + (level.player.direction == Constants.DIR_RIGHT ? 25 : 5);
+            //spark.y = level.player.y + 25;
+            //level.briefClips.push(spark);
+            //level.addChild(spark);
+            //level.playerAttackObjects.push(new PlayerAttackObject(null,new Vector2(spark.x, spark.y)));
         }
 		
 	}
