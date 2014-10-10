@@ -13,10 +13,9 @@ package pyrokid.entities {
 		}
 		
 		protected override function getSpriteForCell(cell:Vector2i):DisplayObject {
-			var child:Sprite = new Sprite();
-            var bmp:Bitmap = new Embedded.WoodBMP() as Bitmap;
-			child.addChild(bmp);
-			return child;
+            var mc:MovieClip = new Embedded.WoodSWF();
+            mc.gotoAndStop(1);
+			return mc;
 		}
         
         public override function updateFire(level:Level, currentFrame:int):void {
@@ -29,10 +28,10 @@ package pyrokid.entities {
         }
 		
 		public override function ignite(level:Level, ignitionFrame:int):void {
-            //for (var i:int = 0; i < cellSprites.length; i++) {
-                //var mc:MovieClip = cellSprites[i] as MovieClip;
-                //mc.gotoAndStop(2);
-            //}
+            for (var i:int = 0; i < cellSprites.length; i++) {
+                var mc:MovieClip = cellSprites[i] as MovieClip;
+                mc.gotoAndStop(2);
+            }
             
 			_ignitionTime = ignitionFrame;
 			level.onFire.push(this);
