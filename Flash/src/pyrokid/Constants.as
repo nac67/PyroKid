@@ -1,4 +1,5 @@
 package pyrokid {
+    import physics.Vector2;
     
     public class Constants {
         
@@ -22,6 +23,7 @@ package pyrokid {
 		
 		public static var CAMERA_LAG:Number = 0.92;
         public static var GRAVITY:Number = 9;
+        public static var GRAVITY_VECTOR = new Vector2(0, GRAVITY);
         public static var SPIDER_SPEED:Number = 1.5*CELL;
         public static var DT:Number = 1 / 30.0;
 		

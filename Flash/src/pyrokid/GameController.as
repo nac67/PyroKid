@@ -87,6 +87,26 @@ package pyrokid {
 				doGameOver();
 			}
 		}
+        
+        private function checkGameOver():void {
+            //resolve game over conditions
+			//for each (var s:Sprite in level.harmfulObjects) {
+				//if (level.player.hitTestObject(s)) {
+					//doGameOver();
+                    //return;
+				//}
+			//}
+            
+            if (level.player.y > stage.stageHeight+500) {
+                trace("fell to your doom, bitch");
+                doGameOver();
+                return;
+            }
+			
+			if (level.player.x > stage.stageWidth) {
+				doGameWon();
+			}
+        }
 		
 		private function doGameOver():void {
 			isGameOver = true;
@@ -100,6 +120,31 @@ package pyrokid {
 			removeEventListener(Event.ENTER_FRAME, update);
 			createGameOverScreenFunc(true);
 		}
+        
+        private function getCenteredCoor(levelCoor:int, playerCoor:int, levelSize:int):int {
+            var shiftToPlayer:Number = (1 - Constants.CAMERA_LAG) * (levelSize / 2 - playerCoor);
+            return Math.floor(levelCoor * Constants.CAMERA_LAG + shiftToPlayer);
+        }
+        
+        private function centerOnPlayer():void {
+			level.x = getCenteredCoor(level.x, level.player.x, Constants.WIDTH);
+			level.y = getCenteredCoor(level.y, level.player.y, Constants.HEIGHT);
+        }
+        
+        private function handlePhysics():void {
+            // calculate new positions of islands
+			ViewPIsland.updatePhysics(level.islands, level.columns, Constants.GRAVITY_VECTOR);
+            
+            // Make sprites islands match physics islands
+			for (var i:int = 0; i < level.islandViews.length; i++) {
+				level.islandViews[i].onUpdate();
+			}
+            
+            // update new positions of dynamic objects and update sprite stuff sequentially
+			for (var i:int = 0; i < level.rectViews.length; i++) {
+				level.rectViews[i].onUpdate(level.islands, level.rectViews[i].sprite.resolveCollision);
+			}
+        }
 		    
         private function update(event:Event):void {
 			if (editorMode) {
@@ -115,29 +160,7 @@ package pyrokid {
             
             level.fireballUpdate();
             
-            
-            
-			
-			
-            
-            //Brief Clips
-            level.briefClips.filter(function(o:Object):Boolean {
-               var mc:MovieClip = o as MovieClip;
-               return mc.currentFrame != mc.totalFrames;
-            });
-            
-            // calculate new positions of islands
-			ViewPIsland.updatePhysics(level.islands, level.columns, new Vector2(0, 9));
-            
-            // Make sprites islands match physics islands
-			for (var i:int = 0; i < level.islandViews.length; i++) {
-				level.islandViews[i].onUpdate();
-			}
-            
-            // update new positions of dynamic objects and update sprite stuff sequentially
-			for (var i:int = 0; i < level.rectViews.length; i++) {
-				level.rectViews[i].onUpdate(level.islands, level.rectViews[i].sprite.resolveCollision);
-			}
+            handlePhysics();
 			
 			if (level.frameCount % 30 == 0) {
 				FireHandler.spreadFire(level, level.frameCount);
@@ -175,26 +198,15 @@ package pyrokid {
 				}
 			});
 			
-			level.x = Math.floor(level.x * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * (-level.player.x + 400));
-			level.y = Math.floor(level.y * Constants.CAMERA_LAG + (1 - Constants.CAMERA_LAG) * ( -level.player.y + 300));
-			
-			//resolve game over conditions
-			//for each (var s:Sprite in level.harmfulObjects) {
-				//if (level.player.hitTestObject(s)) {
-					//doGameOver();
-                    //return;
-				//}
-			//}
+            // ------------------------- Visuals ------------------------- //
+			centerOnPlayer();
             
-            if (level.player.y > stage.stageHeight+500) {
-                trace("fell to your doom, bitch");
-                doGameOver();
-                return;
-            }
-			
-			if (level.player.x > stage.stageWidth) {
-				doGameWon();
-			}
+            level.briefClips.filter(function(o:Object):Boolean {
+               var mc:MovieClip = o as MovieClip;
+               return mc.currentFrame != mc.totalFrames;
+            });
+            
+            checkGameOver();
         }
 		
 	}
