@@ -145,28 +145,9 @@ package pyrokid {
 				level.rectViews[i].onUpdate(level.islands, level.rectViews[i].sprite.resolveCollision);
 			}
         }
-		    
-        private function update(event:Event):void {
-			if (editorMode) {
-				return;
-			}
-			level.frameCount += 1;
-			
-            // ------------------------- Game logic ------------------------- //
-			level.player.update(level);
-            for each (var spider:Spider in level.spiderList) {
-                spider.update();
-            }
-            
-            level.fireballUpdate();
-            
-            handlePhysics();
-			
-			if (level.frameCount % 30 == 0) {
-				FireHandler.spreadFire(level, level.frameCount);
-			}
-			
-			// TODO this goes away once we move velocity into game logic 
+        
+        private function processMovingTilesInGrid():void {
+            // TODO this goes away once we move velocity into game logic 
 			for each (var islandView:ViewPIsland in level.islandViews) {
 				if (Math.abs(islandView.phys.velocity.y) > 0.01) {
 					var tileEntity:TileEntity = islandView.sprite as TileEntity;
@@ -193,19 +174,39 @@ package pyrokid {
 					for each (var cell:Vector2i in tileEntity.cells) {
 						level.tileEntityGrid[cell.y][cell.x] = tileEntity;
 					}
+                    return false;
 				} else {
 					return true;
 				}
 			});
+        }
+		    
+        private function update(event:Event):void {
+			if (editorMode) {
+				return;
+			}
+			level.frameCount += 1;
 			
-            // ------------------------- Visuals ------------------------- //
-			centerOnPlayer();
+            // ------------------------- Game logic ------------------------ //
+			level.player.update(level);
+            for each (var spider:Spider in level.spiderList) {
+                spider.update();
+            }
+            level.fireballUpdate();
+			FireHandler.spreadFire(level);
+            processMovingTilesInGrid();
             
+            // -------------------------- Physics --------------------------- //
+            handlePhysics();
+            
+            // --------------------------- Visuals -------------------------- //
+			centerOnPlayer();
             level.briefClips.filter(function(o:Object):Boolean {
                var mc:MovieClip = o as MovieClip;
                return mc.currentFrame != mc.totalFrames;
             });
             
+            // ---------------------- End Game Conditions -------------------- //
             checkGameOver();
         }
 		
