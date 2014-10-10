@@ -7,7 +7,6 @@ package pyrokid {
 	import pyrokid.entities.*;
     
     public class Level extends Sprite {
-		
         // Level object instances
         public var walls:Array;
 		public var recipe:Object;
