@@ -18,8 +18,11 @@ package pyrokid {
         public static var DIR_LEFT:int = 103;
         public static var DIR_RIGHT:int = 104;
         
-        public static var FBALL_SPEED:int = 10;
-        public static var FIREBALL_CHARGE:int = 20;
+        public static var FBALL_SPEED:int = 10; //pixels per frame
+        public static var FIREBALL_CHARGE:int = 60; //maximum charge
+        public static var MIN_BALL_RANGE:Number = .5; //tiles travelled with no charge
+        public static var MAX_BALL_RANGE:Number = 5.5; //tiles travelled with max charge
+        public static var FIREBALL_COOLDOWN:int = 30; //frames to wait between shots
 		
 		public static var CAMERA_LAG:Number = 0.92;
         public static var GRAVITY:Number = 9;

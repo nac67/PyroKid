@@ -237,22 +237,33 @@ package pyrokid {
         
         public function fireballUpdate():void {
 			if (Key.isDown(Constants.FIRE_BTN) && !player.prevFrameFireBtn) {
-				// Fire button just pressed
-				player.fireballCharge = 0;
-				player.isCharging = true;
+                // Fire button just pressed
+                if(player.fireballCooldown == 0){
+                    player.fireballCharge = 0;
+                    player.isCharging = true;
+                    player.fireballCooldown = Constants.FIREBALL_COOLDOWN;
+                }
 			} else if (Key.isDown(Constants.FIRE_BTN)) {
 				// Fire button is being held
-				player.fireballCharge++;
+                if (player.isCharging && player.fireballCharge < Constants.FIREBALL_CHARGE) {
+				    player.fireballCharge++;
+                }
 			} else if(player.prevFrameFireBtn) {
 				// Fire button is released
-				player.isCharging = false;
-				player.isShooting = true;
-				if (player.fireballCharge > Constants.FIREBALL_CHARGE) {
-					launchFireball();
-				} else {
-					//launchSpark(level);
-				}
+                if(player.isCharging){
+                    player.isCharging = false;
+                    player.isShooting = true;
+                    
+                    if (player.fireballCharge > Constants.FIREBALL_CHARGE) {
+                        launchFireball(Constants.MAX_BALL_RANGE);
+                    } else {
+                        var range = Fireball.calculateRangeInCells(player.fireballCharge);
+                        launchFireball(range);
+                    }
+                }
+                player.fireballCharge = 0;
 			}
+            if (player.fireballCooldown > 0) player.fireballCooldown--;
 			player.prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
 			
             
@@ -296,19 +307,19 @@ package pyrokid {
                     }
                 }
                 spiderList = Utils.filterNull(spiderList);
+                
+                // fireball expiration
+                if (fireball.isDead()) {
+                    fireballs.markForDeletion(fireball);
+                }
             }
             
-			fireballs.deleteAllMarked();
-            
-            //playerAttackObjects = playerAttackObjects.filter(function(o) {
-               //var pao:PlayerAttackObject = o as PlayerAttackObject;
-               //return !PlayerAttackObject.deleteThis(this, pao); 
-            //});
-			
+			fireballs.deleteAllMarked();			
 		}
         
-        function launchFireball():void {
+        function launchFireball(range:Number):void {
             var fball:Fireball = new Fireball();
+            fball.setRange(range);
             fball.x = player.x+ (player.direction == Constants.DIR_RIGHT ? 25 : 5);
             fball.y = player.y+25;
             fball.speedX = (player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);

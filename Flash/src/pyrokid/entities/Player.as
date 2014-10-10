@@ -17,7 +17,9 @@ package pyrokid.entities {
         
         private var legsSWF:MovieClip;
         private var torsoSWF:MovieClip;
+        private var aimSWF:Sprite;
         
+        public var fireballCooldown:int = 0; //0 = ready to shoot, otherwise decrement
         public var fireballCharge:int = 0;
         
         public var animIsRunning:Boolean = false;
@@ -28,6 +30,10 @@ package pyrokid.entities {
         
         public var prevFrameFireBtn:Boolean = false;
         public var prevFrameJumpBtn:Boolean = false;
+        
+        //this is kind of a magic number right now, it should be 
+        //better once all the graphics are consistent.
+        private var HALF_SWF_WIDTH:int = 20;
 
         public function Player(width:Number, height:Number) {
             super(width, height);
@@ -41,6 +47,12 @@ package pyrokid.entities {
             torsoSWF.stop();
             torsoSWF.y = -5;
             addChild(torsoSWF);
+            
+            aimSWF = new Embedded.CrosshairSWF() as Sprite;
+            aimSWF.y = 20;
+            aimSWF.scaleX = aimSWF.scaleY = .7;
+            addChild(aimSWF);
+            
             
             this._width = width;
             this._height = height;
@@ -132,6 +144,16 @@ package pyrokid.entities {
                 } else {
                     torsoSWF.gotoAndStop(1);
                 }
+            }
+            
+            // Aimer
+            aimSWF.alpha = .2 + .8 * (fireballCharge / Constants.FIREBALL_CHARGE);
+            var scale = (fireballCharge == Constants.FIREBALL_CHARGE ? .9 : .7);
+            aimSWF.scaleX = aimSWF.scaleY = scale;
+            if(direction == Constants.DIR_RIGHT){
+                aimSWF.x = HALF_SWF_WIDTH + Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
+            }else {
+                aimSWF.x = -Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
             }
         }
     

@@ -6,6 +6,8 @@ package pyrokid {
         
         public var _speedX:int;
         public var fball:MovieClip;
+        private var age:int;
+        public var range:Number;
         
         public function Fireball() {
             
@@ -14,6 +16,8 @@ package pyrokid {
             fball.x = -30;
             fball.y = -10;
             addChild(fball);
+            age = 0;
+            setRange(Constants.MAX_BALL_RANGE);
         }
         
         public function set speedX (val:int) {
@@ -23,6 +27,24 @@ package pyrokid {
         
         public function get speedX ():int {
             return _speedX;
+        }
+        
+        /* set range in number of cells, converts to time till expiration */
+        public function setRange(numCells:Number) {
+            range = numCells * Constants.CELL / Constants.FBALL_SPEED
+        }
+        
+        public function isDead ():Boolean {
+            age++;
+            if (age > range) {
+                return true;
+            }
+            return false;
+        }
+        
+        /* Takes in a charge time and figures out how far it will travel */
+        public static function calculateRangeInCells(charge:int):Number {
+            return (Constants.MAX_BALL_RANGE-Constants.MIN_BALL_RANGE) * (Number(charge) / Constants.FIREBALL_CHARGE) + Constants.MIN_BALL_RANGE
         }
     
     }
