@@ -5,7 +5,15 @@ package physics {
      * @author Cristian Zaloj
      */
     public class CollisionResolver {
+        /**
+         * If An Object Moves More Than This Amount In A Single Step, Shit Will Get Shat
+         */
         public static var MAX_MOTION:Number = 0.2;
+        /**
+         * A Utility Used Upon Motion Values To Ensure Your Game Runs Without A Glitch
+         * @param v Displacement Amount Desired In A Frame
+         * @return A Displacement That Physics Engine Likes
+         */
         public static function ClampedMotion(v:Number):Number {
             if (v < -MAX_MOTION) return -MAX_MOTION;
             if (v > MAX_MOTION) return MAX_MOTION;
@@ -137,10 +145,14 @@ package physics {
          * Resolves Collision Between A Dynamic Body And A Set Of Islands
          * @param r Dynamic Body
          * @param iList List Of Islands
-         * @param fCallback Callback Function For When A Collision Occurs Inside Of An Island
-         * func(PhysRectangle, CollisionAccumulator):Boolean
+         * @param fCallback Callback Function For When Collision Inside Of An Island Wants To Be Resolved
+         * (After Aggregation Step)
+         * func(rect:PhysRectangle, accum:CollisionAccumulator, opt:PhysCallbackOptions):Boolean
+         * @param fCollisionCallback Callback Function For When A Collision Occurs Inside Of An Island
+         * (All Physics Objects Are In A Localized Coordinate Frame, Not A Global One)
+         * func(rect:PhysRectangle, edgeOfCollision:PhysEdge, penetration:Number):void
          */
-        public static function Resolve(r:PhysRectangle, iList:Array, fCallback:Function):void {
+        public static function Resolve(r:PhysRectangle, iList:Array, fCallback:Function = null, fCollisionCallback:Function = null):void {
             r.motion.MulD(1.1);
             
             for each (var i:PhysIsland in iList) {
@@ -151,10 +163,7 @@ package physics {
                 r.motion.SubV(i.motion);
                 
                 // Perform Collision Detection
-                if(i.isGrounded)
-                    ResolveIsland(r, i.clippedEdges, fCallback);
-                else
-                    ResolveIsland(r, i.clippedEdges, fCallback);
+                ResolveIsland(r, i.clippedEdges, fCallback, fCollisionCallback);
                     
                 // Move Back In Global Frame Of Reference
                 r.center.AddV(i.globalAnchor);
@@ -162,64 +171,77 @@ package physics {
                 r.motion.AddV(i.motion);
             }
         }
-        private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function):void {
+        private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function, fCollisionCallback:Function):void {
             // Accumulate All Collisions
             var a:CollisionAccumulator = new CollisionAccumulator();
             for each (var e:PhysEdge in eList) {
-                ResolveCollision(r, e, a);
+                ResolveCollision(r, e, a, fCollisionCallback);
             }
             
             // Use The Callback And Check If Resolution Should Continue
-            var doResolve:Boolean = fCallback == null ? true : fCallback.call(null, r, a);
+            var opt:PhysCallbackOptions = new PhysCallbackOptions();
+            var doResolve:Boolean = fCallback == null ? true : fCallback.call(null, r, a, opt);
             
             // Resolve The Collision
             if (doResolve) {
                 var dx = a.accumPX - a.accumNX;
                 var dy = a.accumPY - a.accumNY;
                 
-                if (dx != 0)
+                if (dx != 0 && opt.breakXVelocity)
                     r.velocity.x = 0;
-                if (dy != 0)
+                if (dy != 0 && opt.breakXVelocity)
                     r.velocity.y = 0;
-                
-                r.center.Add(dx, dy);
+                if (opt.resolveXDisplacement)
+                    r.center.x += dx;
+                if (opt.resolveYDisplacement)
+                    r.center.y += dy;
             }
         }
-        private static function ResolveCollision(r:PhysRectangle, e:PhysEdge, a:CollisionAccumulator):void {
+        private static function ResolveCollision(r:PhysRectangle, e:PhysEdge, a:CollisionAccumulator, fCollisionCallback:Function):void {
+            var disp:Number;
             switch (e.direction) {
                 case Cardinal.NX: 
                     if (r.motion.x < 0 || (r.PX - e.center.x) > r.motion.x)
-                        break;
+                        return;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
-                        if (r.PX > e.center.x)
-                            a.accumNX = Math.max(a.accumNX, r.PX - e.center.x);
+                        if (r.PX > e.center.x) {
+                            disp = r.PX - e.center.x;
+                            a.accumNX = Math.max(a.accumNX, disp);
+                        }
                     }
                     break;
                 case Cardinal.PX:
                     if (r.motion.x > 0 || (e.center.x - r.NX) > -r.motion.x)
-                        break;
+                        return;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
-                        if (r.NX < e.center.x)
-                            a.accumPX = Math.max(a.accumPX, e.center.x - r.NX);
+                        if (r.NX < e.center.x) {
+                            disp = e.center.x - r.NX;
+                            a.accumPX = Math.max(a.accumPX, disp);
+                        }
                     }
                     break;
                 case Cardinal.NY:
                     if (r.motion.y < 0 || (r.PY - e.center.y) > r.motion.y)
-                        break;
+                        return;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
-                        if (r.PY > e.center.y)
-                            a.accumNY = Math.max(a.accumNY, r.PY - e.center.y);
+                        if (r.PY > e.center.y) {
+                            disp = r.PY - e.center.y;
+                            a.accumNY = Math.max(a.accumNY, disp);
+                        }
                     }
                     break;
                 case Cardinal.PY:
                     if (r.motion.y > 0 || (e.center.y - r.NY) > -r.motion.y)
-                        break;
+                        return;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
-                        if (r.NY < e.center.y)
-                            a.accumPY = Math.max(a.accumPY, e.center.y - r.NY);
+                        if (r.NY < e.center.y) {
+                            disp = e.center.y - r.NY;
+                            a.accumPY = Math.max(a.accumPY, disp);
+                        }
                     }
                     break;
             }
+            if (fCollisionCallback != null) fCollisionCallback.call(null, r, e, disp);
         }
         private static function AreEdgesOverlapping(c1:Number, hs1:Number, c2:Number, hs2:Number):Boolean {
             var d:Number = c2 > c1 ? c2 - c1 : c1 - c2;
