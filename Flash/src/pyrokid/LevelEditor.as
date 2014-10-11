@@ -208,8 +208,17 @@ package pyrokid {
             if(editMode == 0 && dragging){
                 var cellX:int = event.stageX / (Constants.CELL * levelScale);
                 var cellY:int = event.stageY / (Constants.CELL * levelScale);
-                var w = cellX - holdStart.x + 1;
-                var h = cellY - holdStart.y + 1;
+                
+                var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
+                var highX = (cellX < holdStart.x ? holdStart.x : cellX);
+                var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
+                var highY = (cellY < holdStart.y ? holdStart.y : cellY);
+                
+                var w = highX - lowX + 1;
+                var h = highY - lowY + 1;
+                
+                draggingRect.x = lowX * Constants.CELL * levelScale;
+                draggingRect.y = lowY * Constants.CELL * levelScale;
                 draggingRect.width = w * (Constants.CELL * levelScale);
                 draggingRect.height = h * (Constants.CELL * levelScale);
             }
@@ -227,9 +236,14 @@ package pyrokid {
             
             // Object addition and removal
 			if (editMode == 0) {
-                if(holdStart!=null){
-                    for (var cx:int = holdStart.x; cx <= cellX; cx++) {
-                        for (var cy:int = holdStart.y; cy <= cellY; cy++) {
+                if (holdStart != null) {
+                    var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
+                    var highX = (cellX < holdStart.x ? holdStart.x : cellX);
+                    var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
+                    var highY = (cellY < holdStart.y ? holdStart.y : cellY);
+                    
+                    for (var cx:int = lowX; cx <= highX; cx++) {
+                        for (var cy:int = lowY; cy <= highY; cy++) {
                             placeObject(cx, cy);
                         }   
                     }
