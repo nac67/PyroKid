@@ -18,7 +18,7 @@ package pyrokid {
         
         private var editMode:int;
 		private var numEditModes:int = 2;
-        private var buttons:Array;
+        private var UI_Elements:Array; // All level editor UI elements
 		
         // Edit mode 0: Placing objects
         private var dragging:Boolean = false;
@@ -40,10 +40,10 @@ package pyrokid {
 			editMode = 0;
             
             // Universal
-            buttons = [];
-			buttons.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
-			buttons.push(new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth));
-			buttons.push(new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight));
+            UI_Elements = [];
+			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
+			UI_Elements.push(new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth));
+			UI_Elements.push(new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight));
 			
             // Edit Mode 0: Placing objects
 			var options:Dictionary = new Dictionary();
@@ -54,10 +54,11 @@ package pyrokid {
 			options["spider"] = "Spider";
 			options["player"] = "Player";
             allObjectTypesButton = new SelectorButton(options, changeSelectedObject);
-			buttons.push(allObjectTypesButton);
+			UI_Elements.push(allObjectTypesButton);
             draggingRect = new Sprite();
             draggingRect.graphics.lineStyle(0, 0xFF00FF);
             draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
+            UI_Elements.push(draggingRect);
 			
             // Edit mode 1: object properties
 			objectEditor = new Sprite();
@@ -71,18 +72,21 @@ package pyrokid {
 			objectEditor.addChild(noObjectSelectedSprite);
             objectEditor.addChild(selectedHighlighter);
 			objectEditor.addChild(selectedButton);
+            UI_Elements.push(objectEditor);
 			
             renderVisibleObjects();
-            
 		}
         
         private function renderVisibleObjects():void {
+            // Edit mode 0
+            draggingRect.visible = false;
+            allObjectTypesButton.visible = editMode == 0;
+            
+            // Edit mode 1
             objectEditor.visible = editMode == 1;
             noObjectSelectedSprite.visible = editMode == 1 && selectedCell == null;
             selectedHighlighter.visible = editMode == 1 && selectedCell != null;
 			selectedButton.visible = editMode == 1 && selectedCell != null;
-            draggingRect.visible = false;
-            allObjectTypesButton.visible = editMode == 0;
         }
 		
         // ----------------------UI Callback Functions---------------------
@@ -166,11 +170,9 @@ package pyrokid {
             Main.MainStage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
             Main.MainStage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
 			Main.MainStage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
-			for (var i:int = 0; i < buttons.length; i++) {
-				addChild(buttons[i]);
+			for (var i:int = 0; i < UI_Elements.length; i++) {
+				addChild(UI_Elements[i]);
 			}
-			addChild(objectEditor);
-            addChild(draggingRect);
 			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
 		}
 		

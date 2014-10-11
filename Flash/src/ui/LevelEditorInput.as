@@ -24,6 +24,7 @@ package ui {
 			input.defaultTextFormat = format;
 			
 			input.border = true;
+            input.background = true;
 			input.width = 50;
 			input.height = 25;
 			input.x = x;
