@@ -14,51 +14,38 @@ package pyrokid {
     public class LevelEditor extends Sprite {
 		
 		private var level:Level;
-		private var buttons:Array;
+        private var levelScale:Number;
+        
+        private var editMode:int;
+		private var numEditModes:int = 2;
+        private var buttons:Array;
 		
+        // Edit mode 0: Placing objects
+        private var dragging:Boolean = false;
+        private var holdStart:Vector2i;
+        private var draggingRect:Sprite;
+        private var allObjectTypesButton:SelectorButton;
+		
+        // Edit mode 1: Object properties
+        private var selectedCell:Vector2i;
+        private var typeSelected = 0;
 		private var objectEditor:Sprite;
 		private var selectedHighlighter:Sprite;
 		private var selectedButton:LevelEditorButton;
 		private var noObjectSelectedSprite:Sprite;
 		
-		private var editMode:int;
-		private var numEditModes:int = 2;
-		private var typeSelected = 0;
-		private var selectedCell:Vector2i;
         
-        private var levelScale:Number;
-        private var dragging:Boolean = false;
-        private var holdStart:Vector2i;
-        private var draggingRect:Sprite;
-	        
         public function LevelEditor(level:Level):void {
 			this.level = level;
 			editMode = 0;
-			
-            // Thing that shows properties of objects
-			objectEditor = new Sprite();
             
-            // Green box around selected object
-			selectedHighlighter = new Sprite();
-			selectedHighlighter.graphics.lineStyle(2, 0x00FF00);
-			selectedHighlighter.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
-			noObjectSelectedSprite = new ButtonBackground(0xFF0000, 120, 25, "none selected");
-			noObjectSelectedSprite.x = 650;
-			noObjectSelectedSprite.y = 400;
-			selectedButton = new LevelEditorButton(toggleGravity, 120, 25, 650, 400, ["No Gravity", "Gravity"], [LevelEditorButton.upColor, 0xFF0000]);
-			objectEditor.addChild(noObjectSelectedSprite);
-            noObjectSelectedSprite.x = 600;
-            objectEditor.addChild(selectedHighlighter);
-            selectedHighlighter.x = 630;
-			objectEditor.addChild(selectedButton);
-            selectedButton.x = 700;
-			
-			buttons = [];
+            // Universal
+            buttons = [];
 			buttons.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
-			
 			buttons.push(new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth));
 			buttons.push(new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight));
 			
+            // Edit Mode 0: Placing objects
 			var options:Dictionary = new Dictionary();
 			options[0] = "Empty";
 			options[1] = "Dirt Tile";
@@ -66,14 +53,40 @@ package pyrokid {
 			options[3] = "Quick Burn";
 			options["spider"] = "Spider";
 			options["player"] = "Player";
-			buttons.push(new SelectorButton(options, changeSelectedObject));
-            
+            allObjectTypesButton = new SelectorButton(options, changeSelectedObject);
+			buttons.push(allObjectTypesButton);
             draggingRect = new Sprite();
             draggingRect.graphics.lineStyle(0, 0xFF00FF);
             draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
-            draggingRect.visible = false;
+			
+            // Edit mode 1: object properties
+			objectEditor = new Sprite();
+			selectedHighlighter = new Sprite();
+			selectedHighlighter.graphics.lineStyle(2, 0x00FF00);
+			selectedHighlighter.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
+			noObjectSelectedSprite = new ButtonBackground(0xFF0000, 120, 25, "none selected");
+			noObjectSelectedSprite.x = 650;
+			noObjectSelectedSprite.y = 200;
+			selectedButton = new LevelEditorButton(toggleGravity, 120, 25, 650, 200, ["No Gravity", "Gravity"], [LevelEditorButton.upColor, 0xFF0000]);
+			objectEditor.addChild(noObjectSelectedSprite);
+            objectEditor.addChild(selectedHighlighter);
+			objectEditor.addChild(selectedButton);
+			
+            renderVisibleObjects();
+            
 		}
+        
+        private function renderVisibleObjects():void {
+            objectEditor.visible = editMode == 1;
+            noObjectSelectedSprite.visible = editMode == 1 && selectedCell == null;
+            selectedHighlighter.visible = editMode == 1 && selectedCell != null;
+			selectedButton.visible = editMode == 1 && selectedCell != null;
+            draggingRect.visible = false;
+            allObjectTypesButton.visible = editMode == 0;
+        }
 		
+        // ----------------------UI Callback Functions---------------------
+        
 		private function changeSelectedObject(selected):void {
 			typeSelected = selected;
 		}
@@ -87,34 +100,11 @@ package pyrokid {
 		
 		private function toggleEditMode():void {
 			editMode = (editMode + 1) % numEditModes;
-            objectEditor.visible = editMode == 1;
+            selectedCell = null;
+            renderVisibleObjects();
 		}
-		
-		public function turnEditorOn():void {
-            Main.MainStage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
-            Main.MainStage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
-			Main.MainStage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
-			for (var i:int = 0; i < buttons.length; i++) {
-				addChild(buttons[i]);
-			}
-			addChild(objectEditor);
-            addChild(draggingRect);
-			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
-		}
-		
-		public function turnEditorOff():void {
-            Main.MainStage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
-            Main.MainStage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
-			Main.MainStage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
-			Utils.removeAllChildren(this);
-		}
-		
-		public function loadLevel(level:Level):void {
-			this.level = level;
-			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
-		}
-		
-		private function updateHeight(newHeight:int):void {
+        
+        private function updateHeight(newHeight:int):void {
 			// TODO if shrinking in size, delete all crates/items that go beyond the edge
 			if (newHeight < 1) {
 				trace("cannot set size to less than 1");
@@ -160,8 +150,8 @@ package pyrokid {
 			level.recipe.walls = walls;
 			scaleAndResetLevel(newWidth, height);
 		}
-		
-		private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
+        
+        private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
             levelScale = Math.min(1, 450 / (Constants.CELL * numCellsTall), 600 / (Constants.CELL * numCellsWide));
 			level.scaleX = level.scaleY = levelScale;
             levelScale = levelScale;
@@ -169,6 +159,35 @@ package pyrokid {
 			selectedHighlighter.scaleY = levelScale;
 			level.reset(level.recipe);
 		}
+        
+        // ----------------------Editor on off---------------------
+		
+		public function turnEditorOn():void {
+            Main.MainStage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
+            Main.MainStage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
+			Main.MainStage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
+			for (var i:int = 0; i < buttons.length; i++) {
+				addChild(buttons[i]);
+			}
+			addChild(objectEditor);
+            addChild(draggingRect);
+			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+		}
+		
+		public function turnEditorOff():void {
+            Main.MainStage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
+            Main.MainStage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
+			Main.MainStage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
+			Utils.removeAllChildren(this);
+		}
+		
+		public function loadLevel(level:Level):void {
+			this.level = level;
+			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+		}
+		
+		
+		// ----------------------Mouse Listeners---------------------
         
         private function mouseDown(event:MouseEvent):void {
             if (editMode == 0){
@@ -206,17 +225,19 @@ package pyrokid {
             
             // Object addition and removal
 			if (editMode == 0) {
-                for (var cx:int = holdStart.x; cx <= cellX; cx++) {
-                    for (var cy:int = holdStart.y; cy <= cellY; cy++) {
-                        placeObject(cx, cy);
-                    }   
+                if(holdStart!=null){
+                    for (var cx:int = holdStart.x; cx <= cellX; cx++) {
+                        for (var cy:int = holdStart.y; cy <= cellY; cy++) {
+                            placeObject(cx, cy);
+                        }   
+                    }
                 }
 			} 
             
             // Object properties
             else if(editMode == 1) {
 				if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
-					selectedCell = new Vector2i(cellX, cellY);
+                    selectedCell = new Vector2i(cellX, cellY);
 					selectedButton.reset();
 					if (level.recipe.walls[cellY][cellX] < -1) {
 						selectedButton.toggle();
@@ -228,6 +249,7 @@ package pyrokid {
 				}
 			}
             
+            renderVisibleObjects();
 			level.reset(level.recipe);
 		}
         
