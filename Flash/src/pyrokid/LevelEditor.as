@@ -47,6 +47,11 @@ package pyrokid {
 			noObjectSelectedSprite.y = 400;
 			selectedButton = new LevelEditorButton(toggleGravity, 120, 25, 650, 400, ["No Gravity", "Gravity"], [LevelEditorButton.upColor, 0xFF0000]);
 			objectEditor.addChild(noObjectSelectedSprite);
+            noObjectSelectedSprite.x = 600;
+            objectEditor.addChild(selectedHighlighter);
+            selectedHighlighter.x = 630;
+			objectEditor.addChild(selectedButton);
+            selectedButton.x = 700;
 			
 			buttons = [];
 			buttons.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
@@ -67,9 +72,6 @@ package pyrokid {
             draggingRect.graphics.lineStyle(0, 0xFF00FF);
             draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
             draggingRect.visible = false;
-            
-            
-            //toggleEditMode();
 		}
 		
 		private function changeSelectedObject(selected):void {
@@ -214,11 +216,6 @@ package pyrokid {
             // Object properties
             else if(editMode == 1) {
 				if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
-					if (noObjectSelectedSprite.parent == objectEditor) {
-						objectEditor.removeChild(noObjectSelectedSprite);
-						objectEditor.addChild(selectedHighlighter);
-						objectEditor.addChild(selectedButton);
-					}
 					selectedCell = new Vector2i(cellX, cellY);
 					selectedButton.reset();
 					if (level.recipe.walls[cellY][cellX] < -1) {
