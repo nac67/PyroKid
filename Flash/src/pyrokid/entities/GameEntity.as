@@ -1,6 +1,7 @@
 package pyrokid.entities {
 	import flash.display.Sprite;
     import physics.Vector2;
+    import physics.Vector2i;
 	import pyrokid.Constants;
 	import pyrokid.Level;
 	
@@ -37,6 +38,22 @@ package pyrokid.entities {
 		
 		public function ignite(level:Level, ignitionFrame:int):void {
 		}
+        
+        /* Returns the center of the object in pixel space W.R.T. the level*/
+        public function getCenter():Vector2i {
+            return new Vector2i(x + (_w / 2), y + (_h / 2));
+        }
+        
+        /* Returns the center of the object in pixel space W.R.T. this*/
+        public function getCenterLocal():Vector2i {
+            return new Vector2i((_w / 2), (_h / 2));
+        }
+        
+        /* Sets the center of the object in pixel space */
+        public function setCenter(_x:int, _y:int) {
+            this.x = _x - (_w / 2);
+            this.y = _y - (_h / 2);
+        }
 	}
 	
 }

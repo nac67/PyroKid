@@ -210,7 +210,7 @@ package pyrokid {
             level.briefClips.filter(function(o:Object):Boolean {
                var mc:MovieClip = o as MovieClip;
                if (mc is Embedded.FireballFizzSWF) {
-                   mc.x += (mc.scaleX > 0 ? Constants.FBALL_SPEED/2 : -Constants.FBALL_SPEED/2);
+                   Utils.moveInDirFacing(mc, Constants.FBALL_SPEED / 2);
                }
                return mc.currentFrame != mc.totalFrames;
             });

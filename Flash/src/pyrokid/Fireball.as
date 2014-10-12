@@ -4,7 +4,8 @@ package pyrokid {
     
     public class Fireball extends Sprite {
         
-        public var _speedX:int;
+        public var speedX:int;
+        public var speedY:int;
         public var fball:MovieClip;
         private var age:int;
         public var range:Number;
@@ -25,13 +26,20 @@ package pyrokid {
             setRange(Constants.MAX_BALL_RANGE);
         }
         
-        public function set speedX (val:int) {
-            _speedX = val;
-            if(_speedX < 0) scaleX = -1;
-        }
-        
-        public function get speedX ():int {
-            return _speedX;
+        public function setDirection(dir:int) {
+            if (dir == Constants.DIR_LEFT) {
+                speedX = -Constants.FBALL_SPEED;
+                rotation = 180;
+            } else if (dir == Constants.DIR_RIGHT) {
+                speedX = Constants.FBALL_SPEED;
+                rotation = 0;
+            } else if (dir == Constants.DIR_UP) {
+                speedY = -Constants.FBALL_SPEED;
+                rotation = 270;
+            } else if (dir == Constants.DIR_DOWN) {
+                speedY = Constants.FBALL_SPEED;
+                rotation = 90;
+            }
         }
         
         /* set range in number of cells, converts to time till expiration */

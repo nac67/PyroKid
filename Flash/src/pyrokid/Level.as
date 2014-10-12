@@ -207,7 +207,7 @@ package pyrokid {
                     var fizz:MovieClip = new Embedded.FireballFizzSWF() as MovieClip;
                     fizz.x = dispObj.x;
                     fizz.y = dispObj.y;
-                    fizz.scaleX = dispObj.scaleX;
+                    fizz.rotation = dispObj.rotation;
                     self.addChild(fizz);
                     self.briefClips.push(fizz);
                     
@@ -262,10 +262,10 @@ package pyrokid {
                     player.isShooting = true;
                     
                     if (player.fireballCharge > Constants.FIREBALL_CHARGE) {
-                        launchFireball(Constants.MAX_BALL_RANGE);
+                        launchFireball(Constants.MAX_BALL_RANGE, player.direction);
                     } else {
                         var range = Fireball.calculateRangeInCells(player.fireballCharge);
-                        launchFireball(range);
+                        launchFireball(range, player.direction);
                     }
                 }
                 player.fireballCharge = 0;
@@ -277,6 +277,7 @@ package pyrokid {
             for (var i:int = 0; i < fireballs.size(); i++) {
                 var fireball:Fireball = fireballs.get(i) as Fireball;
 				fireball.x += fireball.speedX;
+                fireball.y += fireball.speedY;
                 
                 // ignite TileEntities
 				var cellX = CoordinateHelper.realToCell(fireball.x);
@@ -325,15 +326,14 @@ package pyrokid {
 			fireballs.deleteAllMarked();			
 		}
         
-        function launchFireball(range:Number):void {
+        function launchFireball(range:Number, direction:int):void {
             var fball:Fireball = new Fireball();
             fball.setRange(range);
-            fball.x = player.x+ (player.direction == Constants.DIR_RIGHT ? 25 : 5);
-            fball.y = player.y+22;
-            fball.speedX = (player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
+            fball.x = player.getCenter().x;
+            fball.y = player.getCenter().y;
+            fball.setDirection(direction);
             fireballs.push(fball);
             addChild(fball);
-            //playerAttackObjects.push(new PlayerAttackObject(fball));
 			fireballSound.play();
         }
         
