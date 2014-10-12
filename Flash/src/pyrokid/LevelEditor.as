@@ -213,7 +213,6 @@ package pyrokid {
                 draggingRect.scaleX = draggingRect.scaleY = levelScale;
                 draggingRect.x = cellX * (Constants.CELL * levelScale)
                 draggingRect.y = cellY * (Constants.CELL * levelScale)
-                draggingRect.visible = true;
             }
         }
         
@@ -234,6 +233,8 @@ package pyrokid {
                 draggingRect.y = lowY * Constants.CELL * levelScale;
                 draggingRect.width = w * (Constants.CELL * levelScale);
                 draggingRect.height = h * (Constants.CELL * levelScale);
+                
+                draggingRect.visible = w > 1 || h > 1;
             }
         }
 		
