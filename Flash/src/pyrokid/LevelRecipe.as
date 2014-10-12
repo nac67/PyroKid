@@ -23,19 +23,19 @@ package pyrokid {
 		 * [cellX, cellY, objectType, . . . optional properties . . .] */
 		public var freeEntities:Array;
         
-        public static function generateTemplate():LevelRecipe {
+        public static function generateTemplate(cellsWide:int, cellsTall:int):LevelRecipe {
             var rec:LevelRecipe = new LevelRecipe();
-            rec.walls = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]];
+            
+            rec.walls = new Array();
+            for (var i:int = 0; i < cellsTall; i++) {
+                rec.walls.push(new Array());
+                for (var j:int = 0; j < cellsWide; j++) {
+                    var wall:Boolean = i == 0 || j == 0 || i == cellsTall - 1 || j == cellsWide-1;
+                    rec.walls[i].push(wall ? 1 : 0);
+                }
+            }
                          
-            rec.playerStart = [1, 7];
+            rec.playerStart = [1, cellsTall-2];
             rec.multiTileObjects = [];
             rec.freeEntities = [];
                          

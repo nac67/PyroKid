@@ -43,6 +43,9 @@ package ui {
 			input.addEventListener(FocusEvent.FOCUS_OUT, exitFocus);
 		}
 		
+        public function changeText(txt:String):void {
+            input.text = txt;
+        }
 		
 		private function updateOnValue(event:MouseEvent):void {
 			onUpdate(input.text);

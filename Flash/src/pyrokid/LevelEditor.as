@@ -20,6 +20,8 @@ package pyrokid {
         private var editMode:int;
 		private var numEditModes:int = 2;
         private var UI_Elements:Array; // All level editor UI elements
+        private var cellsWidthInput:LevelEditorInput;
+        private var cellsHeightInput:LevelEditorInput;
 		
         // Edit mode 0: Placing objects
         private var dragging:Boolean = false;
@@ -43,8 +45,9 @@ package pyrokid {
             // Universal
             UI_Elements = [];
 			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
-			UI_Elements.push(new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth));
-			UI_Elements.push(new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight));
+			cellsWidthInput = new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth);
+			cellsHeightInput = new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight);
+            UI_Elements.push(cellsWidthInput, cellsHeightInput);
             UI_Elements.push(new LevelEditorButton(newLevel, 120, 25, 650, 460, ["New Level"], [LevelEditorButton.upColor, LevelEditorButton.overColor, LevelEditorButton.downColor]));
 			
             // Edit Mode 0: Placing objects
@@ -80,6 +83,9 @@ package pyrokid {
 		}
         
         private function renderVisibleObjects():void {
+            cellsWidthInput.changeText(String(level.walls[0].length));
+            cellsHeightInput.changeText(String(level.walls.length));
+            
             // Edit mode 0
             draggingRect.visible = false;
             allObjectTypesButton.visible = editMode == 0;
@@ -111,7 +117,7 @@ package pyrokid {
 		}
         
         private function newLevel(event:MouseEvent):void {
-            reloadLevel(LevelRecipe.generateTemplate());
+            reloadLevel(LevelRecipe.generateTemplate(15,10));
         }
         
         private function updateHeight(newHeight:int):void {
@@ -192,6 +198,7 @@ package pyrokid {
 		public function loadLevel(level:Level):void {
 			this.level = level;
 			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+            renderVisibleObjects();
 		}
 		
 		
