@@ -6,6 +6,9 @@ package pyrokid {
 	import pyrokid.entities.*;
     
     public class Utils {
+        public static function lerp(a:Number, b:Number, r:Number):Number {
+            return a + r * (b - a);
+        }
         
         public static function removeAllChildren(obj:Sprite):void {
             while (obj.numChildren > 0) {
