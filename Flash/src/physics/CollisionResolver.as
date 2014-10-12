@@ -207,8 +207,8 @@ package physics {
                         if (r.PX > e.center.x) {
                             disp = r.PX - e.center.x;
                             a.accumNX = Math.max(a.accumNX, disp);
-                        }
-                    }
+                        } else return;
+                    } else return;
                     break;
                 case Cardinal.PX:
                     if (r.motion.x > 0 || (e.center.x - r.NX) > -r.motion.x)
@@ -217,8 +217,8 @@ package physics {
                         if (r.NX < e.center.x) {
                             disp = e.center.x - r.NX;
                             a.accumPX = Math.max(a.accumPX, disp);
-                        }
-                    }
+                        } else return;
+                    } else return;
                     break;
                 case Cardinal.NY:
                     if (r.motion.y < 0 || (r.PY - e.center.y) > r.motion.y)
@@ -227,8 +227,8 @@ package physics {
                         if (r.PY > e.center.y) {
                             disp = r.PY - e.center.y;
                             a.accumNY = Math.max(a.accumNY, disp);
-                        }
-                    }
+                        } else return;
+                    } else return;
                     break;
                 case Cardinal.PY:
                     if (r.motion.y > 0 || (e.center.y - r.NY) > -r.motion.y)
@@ -237,8 +237,8 @@ package physics {
                         if (r.NY < e.center.y) {
                             disp = e.center.y - r.NY;
                             a.accumPY = Math.max(a.accumPY, disp);
-                        }
-                    }
+                        } else return;
+                    } else return;
                     break;
             }
             if (fCollisionCallback != null) fCollisionCallback.call(null, r, e, disp);
