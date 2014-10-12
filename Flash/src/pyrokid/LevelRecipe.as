@@ -22,7 +22,26 @@ package pyrokid {
 		/* All FreeEntities in the game. Each object is an array of
 		 * [cellX, cellY, objectType, . . . optional properties . . .] */
 		public var freeEntities:Array;
+        
+        public static function generateTemplate():LevelRecipe {
+            var rec:LevelRecipe = new LevelRecipe();
+            rec.walls = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]];
+                         
+            rec.playerStart = [1, 7];
+            rec.multiTileObjects = [];
+            rec.freeEntities = [];
+                         
+            return rec;
+        }
     
     }
-
+    
 }

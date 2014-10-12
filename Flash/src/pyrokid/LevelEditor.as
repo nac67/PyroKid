@@ -15,6 +15,7 @@ package pyrokid {
 		
 		private var level:Level;
         private var levelScale:Number;
+        public var reloadLevel:Function;
         
         private var editMode:int;
 		private var numEditModes:int = 2;
@@ -44,6 +45,7 @@ package pyrokid {
 			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
 			UI_Elements.push(new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth));
 			UI_Elements.push(new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight));
+            UI_Elements.push(new LevelEditorButton(newLevel, 120, 25, 650, 460, ["New Level"], [LevelEditorButton.upColor, LevelEditorButton.overColor, LevelEditorButton.downColor]));
 			
             // Edit Mode 0: Placing objects
 			var options:Dictionary = new Dictionary();
@@ -107,6 +109,10 @@ package pyrokid {
             selectedCell = null;
             renderVisibleObjects();
 		}
+        
+        private function newLevel(event:MouseEvent):void {
+            reloadLevel(LevelRecipe.generateTemplate());
+        }
         
         private function updateHeight(newHeight:int):void {
 			// TODO if shrinking in size, delete all crates/items that go beyond the edge
