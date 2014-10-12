@@ -125,11 +125,6 @@ package pyrokid {
             createGameOverScreenFunc(true);
         }
         
-        private function getCenteredCoor(levelCoor:int, playerCoor:int, levelSize:int):int {
-            var shiftToPlayer:Number = (1 - Constants.CAMERA_LAG) * (levelSize / 2 - playerCoor);
-            return Math.floor(levelCoor * Constants.CAMERA_LAG + shiftToPlayer);
-        }
-        
         private function centerOnPlayer():void {
             camera.xCamera = Utils.lerp(camera.xCamera, level.player.x, Constants.CAMERA_LAG);
             camera.yCamera = Utils.lerp(camera.yCamera, level.player.y, Constants.CAMERA_LAG);
@@ -148,7 +143,10 @@ package pyrokid {
             
             // update new positions of dynamic objects and update sprite stuff sequentially
             for (var i:int = 0; i < level.rectViews.length; i++) {
-                level.rectViews[i].onUpdate(level.islands, level.rectViews[i].sprite.resolveCollision);
+                var func:Function = function(rect:PhysRectangle, edgeOfCollision:PhysEdge, penetration:Number):void {
+                    //trace(edgeOfCollision.center + ", frame: " + level.frameCount);
+                };
+                level.rectViews[i].onUpdate(level.islands, level.rectViews[i].sprite.resolveCollision, func);
             }
         }
         
@@ -168,23 +166,23 @@ package pyrokid {
                 }
             }
             level.movingTiles = level.movingTiles.filter(function(islandView) {
-                    if (Math.abs(islandView.phys.velocity.y) < 0.01) {
-                        //trace("deleting from moving tiles");
-                        var tileEntity:TileEntity = islandView.sprite as TileEntity;
-                        var moveX:int = Math.round(islandView.phys.globalAnchor.x - tileEntity.oldGlobalAnchor.x);
-                        var moveY:int = Math.round(islandView.phys.globalAnchor.y - tileEntity.oldGlobalAnchor.y);
-                        tileEntity.globalAnchor = islandView.phys.globalAnchor;
-                        tileEntity.cells = tileEntity.cells.map(function(cell) {
-                                return new Vector2i(cell.x + moveX, cell.y + moveY);
-                            });
-                        for each (var cell:Vector2i in tileEntity.cells) {
-                            level.tileEntityGrid[cell.y][cell.x] = tileEntity;
-                        }
-                        return false;
-                    } else {
-                        return true;
+                if (Math.abs(islandView.phys.velocity.y) < 0.01) {
+                    //trace("deleting from moving tiles");
+                    var tileEntity:TileEntity = islandView.sprite as TileEntity;
+                    var moveX:int = Math.round(islandView.phys.globalAnchor.x - tileEntity.oldGlobalAnchor.x);
+                    var moveY:int = Math.round(islandView.phys.globalAnchor.y - tileEntity.oldGlobalAnchor.y);
+                    tileEntity.globalAnchor = islandView.phys.globalAnchor;
+                    tileEntity.cells = tileEntity.cells.map(function(cell) {
+                            return new Vector2i(cell.x + moveX, cell.y + moveY);
+                        });
+                    for each (var cell:Vector2i in tileEntity.cells) {
+                        level.tileEntityGrid[cell.y][cell.x] = tileEntity;
                     }
-                });
+                    return false;
+                } else {
+                    return true;
+                }
+            });
         }
         
         private function update(event:Event):void {

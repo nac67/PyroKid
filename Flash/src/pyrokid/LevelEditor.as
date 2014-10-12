@@ -52,10 +52,11 @@ package pyrokid {
 			
             // Edit Mode 0: Placing objects
 			var options:Dictionary = new Dictionary();
-			options[0] = "Empty";
-			options[1] = "Dirt Tile";
-			options[2] = "Eternal Flame";
-			options[3] = "Quick Burn";
+			options[Constants.EMPTY_TILE_CODE] = "Empty";
+			options[Constants.WALL_TILE_CODE] = "Dirt Tile";
+			options[Constants.OIL_TILE_CODE] = "Eternal Flame";
+			options[Constants.WOOD_TILE_CODE] = "Quick Burn";
+            options[Constants.METAL_TILE_CODE] = "Metal";
 			options["spider"] = "Spider";
 			options["player"] = "Player";
             allObjectTypesButton = new SelectorButton(options, changeSelectedObject);

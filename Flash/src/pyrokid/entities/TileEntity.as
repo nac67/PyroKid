@@ -18,6 +18,8 @@ package pyrokid.entities {
 		public var oldGlobalAnchor:Vector2;
         
         public var cellSprites:Array;
+        
+        private var objectCode:int;
 		
 		private static var directNeighbors:Array = [
 			new Vector2i(0, -1),
@@ -26,7 +28,8 @@ package pyrokid.entities {
 			new Vector2i(1, 0)
 		];
 		
-		public function TileEntity(x:int, y:int) {
+		public function TileEntity(x:int, y:int, objCode:int = 1) {
+            objectCode = objCode;
 			this.color = 0x00FF00;
 			super(1, 1);
 			this.x = x;
@@ -36,7 +39,11 @@ package pyrokid.entities {
 		}
 		
 		protected function getSpriteForCell(cell:Vector2i):DisplayObject {
-			return new Embedded.DirtBMP();
+            if (objectCode == Constants.METAL_TILE_CODE) {
+			    return new Embedded.MetalBMP();
+            } else {
+                return new Embedded.DirtBMP();
+            }
 		}
 		
 		public function finalizeCells():void {

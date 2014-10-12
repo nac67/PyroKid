@@ -28,7 +28,7 @@ package pyrokid {
         public static var MAX_BALL_RANGE:Number = 5.5; //tiles travelled with max charge
         public static var FIREBALL_COOLDOWN:int = 30; //frames to wait between shots
 		
-		public static var CAMERA_LAG:Number = 0.92;
+		public static var CAMERA_LAG:Number = 0.08;
         public static var GRAVITY:Number = 9;
         public static var GRAVITY_VECTOR = new Vector2(0, GRAVITY);
         public static var SPIDER_SPEED:Number = 1.5*CELL;
@@ -36,6 +36,9 @@ package pyrokid {
 		
 		public static var EMPTY_TILE_CODE:int = 0;
 		public static var WALL_TILE_CODE:int = 1;
+        public static var OIL_TILE_CODE:int = 2;
+        public static var WOOD_TILE_CODE:int = 3;
+        public static var METAL_TILE_CODE:int = 4;
     
     }
 

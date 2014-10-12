@@ -126,9 +126,9 @@ package pyrokid {
 						objCode = -objCode;
 					}
 					
-					if (objCode == 1) {
+					if (objCode == Constants.WALL_TILE_CODE) {
 						physBoxGrid[y][x] = new PhysBox(1);
-					} else if (objCode != 0) {
+					} else if (objCode != Constants.EMPTY_TILE_CODE) {
 						physBoxGrid[y][x] = new PhysBox(objId, falling);
 						objId += 1;
 					}
@@ -154,12 +154,12 @@ package pyrokid {
 				var spriteX:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.x));
 				var spriteY:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.y));
 				var tileEntity:TileEntity;
-				if (Math.abs(objCode) == 2) {
+				if (Math.abs(objCode) == Constants.OIL_TILE_CODE) {
 					tileEntity = new BurnForever(spriteX, spriteY);
-				} else if (Math.abs(objCode) == 3) {
+				} else if (Math.abs(objCode) == Constants.WOOD_TILE_CODE) {
 					tileEntity = new BurnQuickly(spriteX, spriteY);
 				} else {
-					tileEntity = new TileEntity(spriteX, spriteY);
+					tileEntity = new TileEntity(spriteX, spriteY, Math.abs(objCode));
 				}
 				tileEntity.globalAnchor = isle.globalAnchor;
 				addChild(tileEntity);
