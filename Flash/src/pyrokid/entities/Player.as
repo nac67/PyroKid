@@ -167,18 +167,40 @@ package pyrokid.entities {
             
             // Torso
             if (isShooting) {
-                if (torsoSWF.currentFrame == 7){
+                var onShootingFrame = torsoSWF.currentFrame == 7 || torsoSWF.currentFrame == 10 || torsoSWF.currentFrame == 13;
+                if (onShootingFrame){
                     if(torsoSWF.playershoot.currentFrame == torsoSWF.playershoot.totalFrames) {
                         isShooting = false;
                     }
+                }else {
+                    if (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT) {
+                        torsoSWF.gotoAndStop(7);
+                    } else if (shootDirection == Constants.DIR_UP) {
+                        torsoSWF.gotoAndStop(10);
+                    } else if (shootDirection == Constants.DIR_DOWN) {
+                        torsoSWF.gotoAndStop(13);
+                    }
                 }
-                torsoSWF.gotoAndStop(7);
                 
             } else if (isCharging) {
                 if (fireballCharge < Constants.FIREBALL_CHARGE) {
-                    torsoSWF.gotoAndStop(5);
+                    
+                    if (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT) {
+                        torsoSWF.gotoAndStop(5);
+                    } else if (shootDirection == Constants.DIR_UP) {
+                        torsoSWF.gotoAndStop(8);
+                    } else if (shootDirection == Constants.DIR_DOWN) {
+                        torsoSWF.gotoAndStop(11);
+                    }
+                
                 }else {
-                    torsoSWF.gotoAndStop(6);
+                    if (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT) {
+                        torsoSWF.gotoAndStop(6);
+                    } else if (shootDirection == Constants.DIR_UP) {
+                        torsoSWF.gotoAndStop(9);
+                    } else if (shootDirection == Constants.DIR_DOWN) {
+                        torsoSWF.gotoAndStop(12);
+                    }
                 }
                 
             } else {
