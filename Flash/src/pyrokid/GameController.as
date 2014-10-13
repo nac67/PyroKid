@@ -39,6 +39,13 @@ package pyrokid {
             }
         }
         
+        public function destroy ():void {
+            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
+            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+            removeEventListener(Event.ENTER_FRAME, update);
+        }
+        
         private function initializeLevelAndEditor(levelRecipe:Object):void {
             reloadLevel(levelRecipe);
             levelEditor = new LevelEditor(level);
@@ -113,15 +120,13 @@ package pyrokid {
         }
         
         private function doGameOver():void {
+            destroy();
             isGameOver = true;
-            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
-            removeEventListener(Event.ENTER_FRAME, update);
             createGameOverScreenFunc(false);
         }
         private function doGameWon():void {
+            destroy();
             isGameOver = true;
-            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
-            removeEventListener(Event.ENTER_FRAME, update);
             createGameOverScreenFunc(true);
         }
         
