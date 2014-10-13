@@ -63,18 +63,7 @@ package pyrokid.entities {
         
         public function set direction(dir:int):void {
             _direction = dir;
-            if (dir == Constants.DIR_RIGHT) {
-                legsSWF.scaleX = 1;                
-                legsSWF.x = 0;
-                torsoSWF.scaleX = 1;                
-                torsoSWF.x = 0;
-            }
-            if (dir == Constants.DIR_LEFT) {
-                legsSWF.scaleX = -1;
-                legsSWF.x = 30;
-                torsoSWF.scaleX = -1;
-                torsoSWF.x = 30;
-            }
+            
         }
         
         public function get direction():int {
@@ -156,6 +145,26 @@ package pyrokid.entities {
         
         
         public function updateAnimation():void {
+            // Direction of movie clips
+            var faceDirection = direction;
+            if (isCharging && (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT)) {
+                faceDirection = shootDirection;
+            }
+            
+            if (faceDirection == Constants.DIR_RIGHT) {
+                legsSWF.scaleX = 1;                
+                legsSWF.x = 0;
+                torsoSWF.scaleX = 1;                
+                torsoSWF.x = 0;
+            }
+            if (faceDirection == Constants.DIR_LEFT) {
+                legsSWF.scaleX = -1;
+                legsSWF.x = 30;
+                torsoSWF.scaleX = -1;
+                torsoSWF.x = 30;
+            }
+            
+            
             // Legs
             if (!isGrounded) {
                 legsSWF.gotoAndStop(3);
