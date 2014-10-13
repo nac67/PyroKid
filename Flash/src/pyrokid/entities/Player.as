@@ -36,6 +36,8 @@ package pyrokid.entities {
         public function Player(width:Number, height:Number) {
             super(width, height);
             
+            trace("TODO:\nMake it so that the player faces where he's shooting if you aim and walk. 2) Decide stuff on the cross hair 3) make the cooldown work so that if you start holding shoot before its ready, it wont just cancel, but instead wait until the cool down is ready and begin charging");
+            
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
             legsSWF.stop();
             legsSWF.y = -5;
