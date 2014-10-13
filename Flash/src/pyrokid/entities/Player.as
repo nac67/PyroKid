@@ -3,6 +3,7 @@ package pyrokid.entities {
     import flash.display.Sprite;
     import flash.utils.ByteArray;
 	import physics.PhysRectangle;
+    import physics.Vector2i;
 	import pyrokid.*;
     
     /**
@@ -11,7 +12,7 @@ package pyrokid.entities {
      */
     public class Player extends FreeEntity {
         
-        private var _direction:int;
+        public var direction:int;
         private var _width:Number;
         private var _height:Number;
         
@@ -59,17 +60,7 @@ package pyrokid.entities {
             this.direction = Constants.DIR_RIGHT;
             
             
-        }
-        
-        public function set direction(dir:int):void {
-            _direction = dir;
-            
-        }
-        
-        public function get direction():int {
-            return _direction;
-        }
-        
+        }        
         
         public function update(level:Level):void {
             
@@ -109,8 +100,8 @@ package pyrokid.entities {
             if (Key.isDown(Key.DOWN)) {
                 shootDirection = Constants.DIR_DOWN;
             }
-            if (shootButton && !prevFrameFireBtn) {
-                // Fire button just pressed
+            if (shootButton && !isCharging) {
+                // Fire button pressed and not already charging
                 if(fireballCooldown == 0){
                     fireballCharge = 0;
                     isCharging = true;
@@ -147,7 +138,7 @@ package pyrokid.entities {
         public function updateAnimation():void {
             // Direction of movie clips
             var faceDirection = direction;
-            if (isCharging && (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT)) {
+            if ((isCharging || isShooting) && (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT)) {
                 faceDirection = shootDirection;
             }
             
@@ -226,11 +217,10 @@ package pyrokid.entities {
             
             // Aimer
             aimSWF.alpha = .0 + 1.0 * (fireballCharge / Constants.FIREBALL_CHARGE);
-            var scale = (fireballCharge == Constants.FIREBALL_CHARGE ? .9 : .7);
+            var scale:Number = (fireballCharge == Constants.FIREBALL_CHARGE ? .9 : .7);
             aimSWF.scaleX = aimSWF.scaleY = scale;
             
-            //var shootDirection = (isAimingUp ? Constants.DIR_UP : direction);
-            var dirVec = Utils.getXYMultipliers(shootDirection);
+            var dirVec:Vector2i = Utils.getXYMultipliers(shootDirection);
             
             aimSWF.x = getCenterLocal().x + dirVec.x * Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
             aimSWF.y = getCenterLocal().y + dirVec.y * Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
