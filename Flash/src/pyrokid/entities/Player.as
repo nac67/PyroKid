@@ -30,6 +30,8 @@ package pyrokid.entities {
         
         public var prevFrameFireBtn:Boolean = false;
         public var prevFrameJumpBtn:Boolean = false;
+        
+        private var shootDirection:int=0;
 
         public function Player(width:Number, height:Number) {
             super(width, height);
@@ -105,14 +107,28 @@ package pyrokid.entities {
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
             
             // Firing
-            if (Key.isDown(Constants.FIRE_BTN) && !prevFrameFireBtn) {
+            var shootButton = Key.isDown(Key.LEFT) || Key.isDown(Key.RIGHT) || Key.isDown(Key.UP) || Key.isDown(Key.DOWN);
+  
+            if (Key.isDown(Key.LEFT)) {
+                shootDirection = Constants.DIR_LEFT;
+            }
+            if (Key.isDown(Key.RIGHT)) {
+                shootDirection = Constants.DIR_RIGHT;
+            }
+            if (Key.isDown(Key.UP)) {
+                shootDirection = Constants.DIR_UP;
+            }
+            if (Key.isDown(Key.DOWN)) {
+                shootDirection = Constants.DIR_DOWN;
+            }
+            if (shootButton && !prevFrameFireBtn) {
                 // Fire button just pressed
                 if(fireballCooldown == 0){
                     fireballCharge = 0;
                     isCharging = true;
                     fireballCooldown = Constants.FIREBALL_COOLDOWN;
                 }
-			} else if (Key.isDown(Constants.FIRE_BTN)) {
+			} else if (shootButton) {
 				// Fire button is being held
                 if (isCharging && fireballCharge < Constants.FIREBALL_CHARGE) {
 				    fireballCharge++;
@@ -122,7 +138,6 @@ package pyrokid.entities {
                 if(isCharging){
                     isCharging = false;
                     isShooting = true;
-                    var shootDirection = (isAimingUp ? Constants.DIR_UP : direction);
                     
                     if (fireballCharge > Constants.FIREBALL_CHARGE) {
                         level.launchFireball(Constants.MAX_BALL_RANGE, shootDirection);
@@ -134,7 +149,7 @@ package pyrokid.entities {
                 fireballCharge = 0;
 			}
             if (fireballCooldown > 0) fireballCooldown--;
-			prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
+			prevFrameFireBtn = shootButton;
             
             updateAnimation();
         }
@@ -178,11 +193,11 @@ package pyrokid.entities {
             }
             
             // Aimer
-            aimSWF.alpha = .2 + .8 * (fireballCharge / Constants.FIREBALL_CHARGE);
+            aimSWF.alpha = .0 + 1.0 * (fireballCharge / Constants.FIREBALL_CHARGE);
             var scale = (fireballCharge == Constants.FIREBALL_CHARGE ? .9 : .7);
             aimSWF.scaleX = aimSWF.scaleY = scale;
             
-            var shootDirection = (isAimingUp ? Constants.DIR_UP : direction);
+            //var shootDirection = (isAimingUp ? Constants.DIR_UP : direction);
             var dirVec = Utils.getXYMultipliers(shootDirection);
             
             aimSWF.x = getCenterLocal().x + dirVec.x * Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
