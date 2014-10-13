@@ -86,17 +86,15 @@ package pyrokid.entities {
             // Moving left right
 			velocity.x = 0;
             animIsRunning = false; 
-            if (!isAimingUp){
-                if (Key.isDown(Constants.LEFT_BTN)) {
-                    velocity.x -= 2*Constants.CELL;
-                    direction = Constants.DIR_LEFT;
-                    animIsRunning = true;
-                }
-                if (Key.isDown(Constants.RIGHT_BTN)) {
-                    velocity.x += 2*Constants.CELL;
-                    direction = Constants.DIR_RIGHT;
-                    animIsRunning = true;
-                }
+            if (Key.isDown(Constants.LEFT_BTN)) {
+                velocity.x -= 2*Constants.CELL;
+                direction = Constants.DIR_LEFT;
+                animIsRunning = true;
+            }
+            if (Key.isDown(Constants.RIGHT_BTN)) {
+                velocity.x += 2*Constants.CELL;
+                direction = Constants.DIR_RIGHT;
+                animIsRunning = true;
             }
             
             // Vertical movement
