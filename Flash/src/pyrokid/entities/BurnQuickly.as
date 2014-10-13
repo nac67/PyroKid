@@ -25,7 +25,6 @@ package pyrokid.entities {
                     var w = new Embedded.WoodExplodeSWF();
                     w.x = cells[i].x*Constants.CELL;
                     w.y = cells[i].y*Constants.CELL;
-                    trace(w.x);
                     level.briefClips.push(w);
                     level.addChild(w);
                     

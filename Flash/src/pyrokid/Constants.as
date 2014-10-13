@@ -15,6 +15,7 @@ package pyrokid {
         public static var RIGHT_BTN:int = Key.RIGHT;
         public static var JUMP_BTN:int = Key.UP;
         public static var FIRE_BTN:int = Key.SPACE;
+        public static var AIM_UP_BTN:int = Key.DOWN;
         
         // fake enums
         public static var DIR_UP:int = 101;
