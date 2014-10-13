@@ -35,8 +35,6 @@ package pyrokid.entities {
         public function Player(width:Number, height:Number) {
             super(width, height);
             
-            trace("TODO:\nMake it so that the player faces where he's shooting if you aim and walk. 2) Decide stuff on the cross hair 3) make the cooldown work so that if you start holding shoot before its ready, it wont just cancel, but instead wait until the cool down is ready and begin charging");
-            
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
             legsSWF.stop();
             legsSWF.y = -5;
@@ -86,7 +84,8 @@ package pyrokid.entities {
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
             
             // Firing
-            var shootButton = Key.isDown(Key.LEFT) || Key.isDown(Key.RIGHT) || Key.isDown(Key.UP) || Key.isDown(Key.DOWN);
+            var shootButton = Key.isDown(Key.LEFT) || Key.isDown(Key.RIGHT) ||
+                    Key.isDown(Key.UP) || Key.isDown(Key.DOWN);
   
             if (Key.isDown(Key.LEFT)) {
                 shootDirection = Constants.DIR_LEFT;
@@ -138,7 +137,8 @@ package pyrokid.entities {
         public function updateAnimation():void {
             // Direction of movie clips
             var faceDirection = direction;
-            if ((isCharging || isShooting) && (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT)) {
+            if ((isCharging || isShooting) && (shootDirection == Constants.DIR_LEFT ||
+                    shootDirection == Constants.DIR_RIGHT)) {
                 faceDirection = shootDirection;
             }
             
@@ -167,7 +167,8 @@ package pyrokid.entities {
             
             // Torso
             if (isShooting) {
-                var onShootingFrame = torsoSWF.currentFrame == 7 || torsoSWF.currentFrame == 10 || torsoSWF.currentFrame == 13;
+                var onShootingFrame = torsoSWF.currentFrame == 7 || 
+                        torsoSWF.currentFrame == 10 || torsoSWF.currentFrame == 13;
                 if (onShootingFrame){
                     if(torsoSWF.playershoot.currentFrame == torsoSWF.playershoot.totalFrames) {
                         isShooting = false;
