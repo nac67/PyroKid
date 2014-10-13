@@ -26,12 +26,10 @@ package pyrokid.entities {
         
         public var isCharging:Boolean = false;
         public var isShooting:Boolean = false;
-        public var isAimingUp:Boolean = false;
+        private var shootDirection:int=0;
         
         public var prevFrameFireBtn:Boolean = false;
         public var prevFrameJumpBtn:Boolean = false;
-        
-        private var shootDirection:int=0;
 
         public function Player(width:Number, height:Number) {
             super(width, height);
@@ -85,7 +83,6 @@ package pyrokid.entities {
         
         
         public function update(level:Level):void {
-            isAimingUp = Key.isDown(Constants.AIM_UP_BTN);
             
             // Moving left right
 			velocity.x = 0;
@@ -170,10 +167,12 @@ package pyrokid.entities {
             
             // Torso
             if (isShooting) {
-                if (torsoSWF.playershoot.currentFrame == torsoSWF.playershoot.totalFrames) {
-                    isShooting = false;
+                if (torsoSWF.currentFrame == 7){
+                    if(torsoSWF.playershoot.currentFrame == torsoSWF.playershoot.totalFrames) {
+                        isShooting = false;
+                    }
                 }
-                torsoSWF.gotoAndStop(4);
+                torsoSWF.gotoAndStop(7);
                 
             } else if (isCharging) {
                 if (fireballCharge < Constants.FIREBALL_CHARGE) {
@@ -185,9 +184,9 @@ package pyrokid.entities {
             } else {
                 if (!isGrounded) {
                     if (velocity.y < 0) {
-                        torsoSWF.gotoAndStop(2);
-                    } else {
                         torsoSWF.gotoAndStop(3);
+                    } else {
+                        torsoSWF.gotoAndStop(4);
                     }
                 } else {
                     torsoSWF.gotoAndStop(1);
