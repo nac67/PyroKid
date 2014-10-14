@@ -229,7 +229,11 @@ package pyrokid.entities {
                         torsoSWF.gotoAndStop(4);
                     }
                 } else {
-                    torsoSWF.gotoAndStop(1);
+                    if(velocity.x == 0) {
+                        torsoSWF.gotoAndStop(1);
+                    } else {
+                        torsoSWF.gotoAndStop(2);
+                    }
                 }
             }
             
