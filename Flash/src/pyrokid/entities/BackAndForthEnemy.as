@@ -7,7 +7,6 @@ package pyrokid.entities {
         
         private var _direction:int;
         protected var swf:MovieClip;
-        protected var _isDead:Boolean = false;
         
         private var scale:Number;
         private var wArt:int;
@@ -44,10 +43,6 @@ package pyrokid.entities {
                 swf.scaleX = -scale;
                 swf.x = scale * wArt;
             }
-        }
-        
-        public function get isDead():Boolean {
-            return _isDead;
         }
         
         public function get direction ():int {

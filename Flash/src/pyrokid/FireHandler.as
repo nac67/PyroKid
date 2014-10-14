@@ -19,6 +19,7 @@ package pyrokid {
 		
 		// not spread every frame BUT should spread when touches something
 		public static function spreadFire(level:Level):void {
+            // TODO not spread from things that are in movingTiles list
 			for each (var entity:TileEntity in level.onFire) {
                 entity.updateFire(level, level.frameCount);
                 if (level.frameCount % Constants.SPREAD_RATE == (entity.ignitionTime - 1) % Constants.SPREAD_RATE) {

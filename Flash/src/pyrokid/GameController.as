@@ -39,7 +39,7 @@ package pyrokid {
             }
         }
         
-        public function destroy ():void {
+        public function destroy():void {
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
@@ -173,10 +173,9 @@ package pyrokid {
                     var tileEntity:TileEntity = islandView.sprite as TileEntity;
                     var moveX:int = Math.round(islandView.phys.globalAnchor.x - tileEntity.oldGlobalAnchor.x);
                     var moveY:int = Math.round(islandView.phys.globalAnchor.y - tileEntity.oldGlobalAnchor.y);
-                    tileEntity.globalAnchor = islandView.phys.globalAnchor;
                     tileEntity.cells = tileEntity.cells.map(function(cell) {
-                            return new Vector2i(cell.x + moveX, cell.y + moveY);
-                        });
+                        return new Vector2i(cell.x + moveX, cell.y + moveY);
+                    });
                     for each (var cell:Vector2i in tileEntity.cells) {
                         level.tileEntityGrid[cell.y][cell.x] = tileEntity;
                     }
@@ -192,12 +191,13 @@ package pyrokid {
                 return;
             }
             level.frameCount += 1;
+            level.dirty = false;
             //camera.rotationCamera += 0.1;
             //camera.scaleCamera(1.001);
             
             // ------------------------- Game logic ------------------------ //
             level.player.update(level);
-            for each (var spider in level.spiderList) {
+            for each (var spider in level.enemies) {
                 spider.update();
             }
             level.fireballUpdate();
@@ -208,12 +208,7 @@ package pyrokid {
             handlePhysics();
             
             // ------------------------ After physics game logic ------------ //
-            level.spiderList = level.spiderList.filter(function(spi) {
-                if (spi.isDead) {
-                    level.removeChild(spi);
-                }
-                return !spi.isDead;
-            });
+            level.removeDead();
             
             // --------------------------- Visuals -------------------------- //
             centerOnPlayer();
