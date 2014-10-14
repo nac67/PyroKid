@@ -59,6 +59,7 @@ package pyrokid {
             options[Constants.METAL_TILE_CODE] = "Metal";
 			options["spider"] = "Spider";
 			options["player"] = "Player";
+            options["immune"] = "Immune Enemy";
             allObjectTypesButton = new SelectorButton(options, changeSelectedObject);
 			UI_Elements.push(allObjectTypesButton);
             draggingRect = new Sprite();
@@ -289,6 +290,8 @@ package pyrokid {
                 level.recipe.freeEntities.push([cellX, cellY, 0]);
             } else if (typeSelected == "player") {
                 level.recipe.playerStart = [cellX, cellY];
+            } else if (typeSelected == "immune") {
+                level.recipe.freeEntities.push([cellX, cellY, 1]);
             } else {
                 level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
                     return ent[0] != cellX || ent[1] != cellY;

@@ -163,7 +163,7 @@ package physics {
                 r.motion.SubV(i.motion);
                 
                 // Perform Collision Detection
-                ResolveIsland(r, i.clippedEdges, fCallback, fCollisionCallback);
+                ResolveIsland(r, i.clippedEdges, fCallback, fCollisionCallback, i.globalAnchor);
                     
                 // Move Back In Global Frame Of Reference
                 r.center.AddV(i.globalAnchor);
@@ -171,11 +171,11 @@ package physics {
                 r.motion.AddV(i.motion);
             }
         }
-        private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function, fCollisionCallback:Function):void {
+        private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function, fCollisionCallback:Function, islandAnchor:Vector2):void {
             // Accumulate All Collisions
             var a:CollisionAccumulator = new CollisionAccumulator();
             for each (var e:PhysEdge in eList) {
-                ResolveCollision(r, e, a, fCollisionCallback);
+                ResolveCollision(r, e, a, fCollisionCallback, islandAnchor);
             }
             
             // Use The Callback And Check If Resolution Should Continue
@@ -197,7 +197,7 @@ package physics {
                     r.center.y += dy;
             }
         }
-        private static function ResolveCollision(r:PhysRectangle, e:PhysEdge, a:CollisionAccumulator, fCollisionCallback:Function):void {
+        private static function ResolveCollision(r:PhysRectangle, e:PhysEdge, a:CollisionAccumulator, fCollisionCallback:Function, islandAnchor:Vector2):void {
             var disp:Number;
             switch (e.direction) {
                 case Cardinal.NX: 
@@ -241,7 +241,8 @@ package physics {
                     } else return;
                     break;
             }
-            if (fCollisionCallback != null) fCollisionCallback.call(null, r, e, disp);
+            if (fCollisionCallback != null) fCollisionCallback.call(null, e, islandAnchor);
+            //fCollisionCallback.call(null, r, e, disp, islandAnchor);
         }
         private static function AreEdgesOverlapping(c1:Number, hs1:Number, c2:Number, hs2:Number):Boolean {
             var d:Number = c2 > c1 ? c2 - c1 : c1 - c2;

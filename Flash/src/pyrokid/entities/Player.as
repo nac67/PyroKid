@@ -31,12 +31,14 @@ package pyrokid.entities {
         public var prevFrameFireBtn:Boolean = false;
         public var prevFrameJumpBtn:Boolean = false;
         
+        private var onFireSprite:Sprite;
+        
         //this is kind of a magic number right now, it should be 
         //better once all the graphics are consistent.
         private var HALF_SWF_WIDTH:int = 20;
 
-        public function Player(width:Number, height:Number) {
-            super(width, height);
+        public function Player(level:Level, width:Number, height:Number) {
+            super(level, width, height);
             
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
             legsSWF.stop();
@@ -53,13 +55,27 @@ package pyrokid.entities {
             aimSWF.scaleX = aimSWF.scaleY = .7;
             addChild(aimSWF);
             
-            
             this._width = width;
             this._height = height;
             
             this.direction = Constants.DIR_RIGHT;
             
-            
+            onFireSprite = new Sprite();
+            addChild(onFireSprite);
+            onFireSprite.x = x;
+            onFireSprite.y = y;
+            onFireSprite.graphics.lineStyle(0x000000);
+            onFireSprite.graphics.beginFill(0xFF0055);
+            onFireSprite.graphics.drawRect(0, 0, 20, 20);
+            onFireSprite.graphics.endFill();
+            onFireSprite.visible = false;
+        }
+        
+        public override function ignite(level:Level, ignitionFrame:int):void {
+            if (!isOnFire()) {
+                super.ignite(level, ignitionFrame);
+                onFireSprite.visible = true;
+            }
         }
         
         public function set direction(dir:int):void {

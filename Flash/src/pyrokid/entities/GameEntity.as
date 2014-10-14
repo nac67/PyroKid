@@ -36,6 +36,9 @@ package pyrokid.entities {
 		}
 		
 		public function ignite(level:Level, ignitionFrame:int):void {
+            if (!isOnFire()) {
+                _ignitionTime = ignitionFrame;
+            }
 		}
 	}
 	

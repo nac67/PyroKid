@@ -15,6 +15,10 @@ package pyrokid {
         private static var Level1:Class;
         public static var level1b:ByteArray = new Level1();
         
+        [Embed(source="../../assets/aarontestlevel.txt", mimeType="application/octet-stream")]
+        private static var LevelAaron:Class;
+        public static var levelAaronTest:ByteArray = new LevelAaron();
+        
         [Embed(source="../../assets/nlevel4.txt", mimeType="application/octet-stream")]
         private static var Level2:Class;
         public static var level2b:ByteArray = new Level2();

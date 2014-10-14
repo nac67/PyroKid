@@ -88,7 +88,7 @@ package pyrokid
 					
 					addChild(welcomeText);
 					addChild(new LevelEditorButton(generateStartGameFunc(null), 80, 40, 100, stage.stageHeight / 2, ["Choose Level"], [LevelEditorButton.upColor]));
-					addChild(new LevelEditorButton(generateStartGameFunc(Embedded.level1b), 80, 40, 100 + (100), stage.stageHeight / 2, ["Easy"], [LevelEditorButton.upColor]));
+					addChild(new LevelEditorButton(generateStartGameFunc(Embedded.levelAaronTest), 80, 40, 100 + (100), stage.stageHeight / 2, ["Easy"], [LevelEditorButton.upColor]));
 					addChild(new LevelEditorButton(generateStartGameFunc(Embedded.level2b), 80, 40, 100 + (300), stage.stageHeight / 2, ["Medium"], [LevelEditorButton.upColor]));
                     addChild(new LevelEditorButton(generateStartGameFunc(Embedded.level3b), 80, 40, 100 + (500), stage.stageHeight / 2, ["Hard"], [LevelEditorButton.upColor]));
                     

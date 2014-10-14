@@ -8,8 +8,8 @@ package pyrokid.entities {
 	
 	public class BurnQuickly extends TileEntity {
 		
-		public function BurnQuickly(x:int, y:int):void {
-			super(x, y);
+		public function BurnQuickly(x:int, y:int, objCode:int) {
+			super(x, y, objCode);
 		}
 		
 		protected override function getSpriteForCell(cell:Vector2i):DisplayObject {
@@ -18,14 +18,24 @@ package pyrokid.entities {
 			return mc;
 		}
         
+        public override function ignite(level:Level, ignitionFrame:int):void {
+            if (!isOnFire()) {
+                super.ignite(level, ignitionFrame);
+                for each (var cellSprite:DisplayObject in cellSprites) {
+                    var mc:MovieClip = cellSprite as MovieClip;
+                    mc.gotoAndStop(2);
+                }
+            }
+		}
+        
         public override function updateFire(level:Level, currentFrame:int):void {
             if (currentFrame - ignitionTime == Constants.QUICK_BURN_TIME) {
+                // TODO remove from onfire
                 for (var i:int = 0; i < cells.length; i++) {
                     
                     var w = new Embedded.WoodExplodeSWF();
                     w.x = cells[i].x*Constants.CELL;
                     w.y = cells[i].y*Constants.CELL;
-                    trace(w.x);
                     level.briefClips.push(w);
                     level.addChild(w);
                     
@@ -36,17 +46,6 @@ package pyrokid.entities {
                 }
             }
         }
-		
-		public override function ignite(level:Level, ignitionFrame:int):void {
-            for (var i:int = 0; i < cellSprites.length; i++) {
-                var mc:MovieClip = cellSprites[i] as MovieClip;
-                mc.gotoAndStop(2);
-            }
-            
-			_ignitionTime = ignitionFrame;
-			level.onFire.push(this);
-            
-		}
 		
 	}
 	

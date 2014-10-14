@@ -137,16 +137,13 @@ package pyrokid {
             ViewPIsland.updatePhysics(level.islands, level.columns, Constants.GRAVITY_VECTOR);
             
             // Make sprites islands match physics islands
-            for (var i:int = 0; i < level.islandViews.length; i++) {
-                level.islandViews[i].onUpdate();
+            for each (var island:ViewPIsland in level.islandViews) {
+                island.onUpdate();
             }
             
             // update new positions of dynamic objects and update sprite stuff sequentially
-            for (var i:int = 0; i < level.rectViews.length; i++) {
-                var func:Function = function(rect:PhysRectangle, edgeOfCollision:PhysEdge, penetration:Number):void {
-                    //trace(edgeOfCollision.center + ", frame: " + level.frameCount);
-                };
-                level.rectViews[i].onUpdate(level.islands, level.rectViews[i].sprite.resolveCollision, func);
+            for each (var rect:ViewPRect in level.rectViews) {
+                rect.onUpdate(level.islands, rect.sprite.resolveCollision, rect.sprite.collisionCallback);
             }
         }
         
@@ -195,7 +192,7 @@ package pyrokid {
             
             // ------------------------- Game logic ------------------------ //
             level.player.update(level);
-            for each (var spider:Spider in level.spiderList) {
+            for each (var spider in level.spiderList) {
                 spider.update();
             }
             level.fireballUpdate();
@@ -204,6 +201,14 @@ package pyrokid {
             
             // -------------------------- Physics --------------------------- //
             handlePhysics();
+            
+            // ------------------------ After physics game logic ------------ //
+            level.spiderList = level.spiderList.filter(function(spi) {
+                if (spi.isDead) {
+                    level.removeChild(spi);
+                }
+                return !spi.isDead;
+            });
             
             // --------------------------- Visuals -------------------------- //
             centerOnPlayer();

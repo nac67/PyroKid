@@ -2,12 +2,9 @@ package pyrokid.entities {
 	import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
-	import physics.PhysBox;
-	import physics.Vector2;
-	import physics.Vector2i;
-	import pyrokid.Constants;
-	import pyrokid.Embedded;
-	import pyrokid.Level;
+    import flash.display.MovieClip;
+	import physics.*;
+	import pyrokid.*;
 	
 	public class TileEntity extends GameEntity {
 		
@@ -19,7 +16,7 @@ package pyrokid.entities {
         
         public var cellSprites:Array;
         
-        private var objectCode:int;
+        protected var objectCode:int;
 		
 		private static var directNeighbors:Array = [
 			new Vector2i(0, -1),
@@ -28,7 +25,7 @@ package pyrokid.entities {
 			new Vector2i(1, 0)
 		];
 		
-		public function TileEntity(x:int, y:int, objCode:int = 1) {
+		public function TileEntity(x:int, y:int, objCode:int) {
             objectCode = objCode;
 			this.color = 0x00FF00;
 			super(1, 1);
@@ -39,12 +36,15 @@ package pyrokid.entities {
 		}
 		
 		protected function getSpriteForCell(cell:Vector2i):DisplayObject {
-            if (objectCode == Constants.METAL_TILE_CODE) {
-			    return new Embedded.MetalBMP();
-            } else {
-                return new Embedded.DirtBMP();
-            }
+            // TODO this shouldn't be here . . . this should be an abstract class
+            // with an abstract method but flash sucks...
+            trace("poop");
+            return new Sprite();
 		}
+        
+        private function isFlammable():Boolean {
+            return objectCode != Constants.METAL_TILE_CODE && objectCode != Constants.WALL_TILE_CODE;
+        }
 		
 		public function finalizeCells():void {
 			for (var i:int = 0; i < cells.length; i++) {
@@ -71,6 +71,10 @@ package pyrokid.entities {
 		}
 		
 		public override function ignite(level:Level, ignitionFrame:int):void {
+            if (!isOnFire()) {
+                super.ignite(level, ignitionFrame);
+                level.onFire.push(this);
+            }
 		}
         
         public function updateFire(level:Level, currentFrame:int):void {

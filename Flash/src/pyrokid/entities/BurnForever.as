@@ -9,8 +9,8 @@ package pyrokid.entities {
 	
 	public class BurnForever extends TileEntity {
 		
-		public function BurnForever(x:int, y:int):void {
-			super(x, y);
+		public function BurnForever(x:int, y:int, objCode:int) {
+			super(x, y, objCode);
 		}
 		
 		protected override function getSpriteForCell(cell:Vector2i):DisplayObject {
@@ -18,17 +18,16 @@ package pyrokid.entities {
             mc.gotoAndStop(1);
 			return mc;
 		}
-		
-		public override function ignite(level:Level, ignitionFrame:int):void {
-            for (var i:int = 0; i < cellSprites.length; i++) {
-                var mc:MovieClip = cellSprites[i] as MovieClip;
-                mc.gotoAndStop(2);
+        
+        public override function ignite(level:Level, ignitionFrame:int):void {
+            if (!isOnFire()) {
+                super.ignite(level, ignitionFrame);
+                for each (var cellSprite:DisplayObject in cellSprites) {
+                    var mc:MovieClip = cellSprite as MovieClip;
+                    mc.gotoAndStop(2);
+                }
             }
-            
-			_ignitionTime = ignitionFrame;
-			level.onFire.push(this);
 		}
-		
 	}
 	
 }

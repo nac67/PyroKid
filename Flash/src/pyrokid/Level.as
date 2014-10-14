@@ -154,12 +154,13 @@ package pyrokid {
 				var spriteX:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.x));
 				var spriteY:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.y));
 				var tileEntity:TileEntity;
-				if (Math.abs(objCode) == Constants.OIL_TILE_CODE) {
-					tileEntity = new BurnForever(spriteX, spriteY);
-				} else if (Math.abs(objCode) == Constants.WOOD_TILE_CODE) {
-					tileEntity = new BurnQuickly(spriteX, spriteY);
+                var realObjCode:int = Math.abs(objCode);
+				if (realObjCode == Constants.OIL_TILE_CODE) {
+					tileEntity = new BurnForever(spriteX, spriteY, realObjCode);
+				} else if (realObjCode == Constants.WOOD_TILE_CODE) {
+					tileEntity = new BurnQuickly(spriteX, spriteY, realObjCode);
 				} else {
-					tileEntity = new TileEntity(spriteX, spriteY, Math.abs(objCode));
+					tileEntity = new NonFlammableTile(spriteX, spriteY, realObjCode);
 				}
 				tileEntity.globalAnchor = isle.globalAnchor;
 				addChild(tileEntity);
@@ -178,7 +179,7 @@ package pyrokid {
 				islandViews.push(new ViewPIsland(tileEntity, isle));
 			}
 			
-			player = new Player(0.55, 0.86);
+			player = new Player(this, 0.55, 0.86);
 			addChild(player);
 			playerRect = new PhysRectangle();
 			playerRect.halfSize = new Vector2(0.275, 0.43);
@@ -188,16 +189,21 @@ package pyrokid {
             
 			spiderViews = [];
             for (var i:int = 0; i < recipe.freeEntities.length; i++) {
-				var spider:Spider = new Spider(.9, .6);
-				spider.x = recipe.freeEntities[i][0] * Constants.CELL;
-				spider.y = recipe.freeEntities[i][1] * Constants.CELL;
-				addChild(spider);
-				var spiderRect:PhysRectangle = new PhysRectangle();
-				spiderRect.halfSize = new Vector2(.45, .3);
-				var spiderView:ViewPRect = new ViewPRect(spider, spiderRect)
-				rectViews.push(spiderView);
-				spiderList.push(spider);
-				spiderViews.push(spiderView);
+                var spider:BackAndForthEnemy;
+                if (recipe.freeEntities[i][2] == 0) {
+                    spider = new Spider(this, .9, .6);
+                } else {
+                    spider = new BurnForeverEnemy(this, 0.9, 0.6);
+                }
+                spider.x = recipe.freeEntities[i][0] * Constants.CELL;
+                spider.y = recipe.freeEntities[i][1] * Constants.CELL;
+                addChild(spider);
+                var spiderRect:PhysRectangle = new PhysRectangle();
+                spiderRect.halfSize = new Vector2(.45, .3);
+                var spiderView:ViewPRect = new ViewPRect(spider, spiderRect)
+                rectViews.push(spiderView);
+                spiderList.push(spider);
+                spiderViews.push(spiderView);
 			}
 						            
             fireballs = new RingBuffer(5, function(o:Object) {
@@ -230,7 +236,7 @@ package pyrokid {
             });
 			
 			//populate harmful objects list
-			for each (var s:Spider in spiderList) {
+			for each (var s in spiderList) {
 				harmfulObjects.push(s);
 			}
 			
@@ -285,35 +291,25 @@ package pyrokid {
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
 					fireballs.markForDeletion(fireball);
-                    // TODO move isOnFire check inside ignite function.
-					if (!entity.isOnFire()) {
-						entity.ignite(this, frameCount);
-					}
+				    entity.ignite(this, frameCount);
 				}
                 
                 // ignite FreeEntities
                 for (var j:int = 0; j < spiderList.length; j++) {
-                    var spider:Spider = spiderList[j] as Spider;
+                    var spider:BackAndForthEnemy = spiderList[j] as BackAndForthEnemy;
                     if(spider != null) {
                         if (fireball.hitTestObject(spider)) {
                             fireballs.markForDeletion(fireball);
-                            removeChild(spider);
-                            spiderList[j] = null;
+                            spider.ignite(this, frameCount);
                             
                             //XXX
                             //level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
-                            var die = new Embedded.SpiderDieSWF();
-                            die.x = spider.x;
-                            die.y = spider.y-20;
-                            die.scaleX = spider.scaleX;
-                            die.scaleY = spider.scaleY;
-                            addChild(die);
-                            briefClips.push(die);
                             break;
+                        } else {
+                            trace("poo");
                         }
                     }
                 }
-                spiderList = Utils.filterNull(spiderList);
                 
                 // fireball expiration
                 if (fireball.isDead()) {
@@ -360,35 +356,39 @@ package pyrokid {
 
             // Split Island Apart
             if (island.tilesWidth > 1 || island.tilesHeight > 1) {
-                island.tileGrid[ty][tx] = null;
-                var newIslands:Array = IslandSimulator.ConstructIslands(island.tileGrid);
-                for each (var ni:PhysIsland in newIslands) {
-                    ni.globalAnchor.AddV(island.globalAnchor);
-                    islands.push(ni);
-                }
-                
-                // Rebuild Views
-                for (var i:int = 0; i < newIslands.length; i++) {
-                    var isle:PhysIsland = newIslands[i];
-                    var tileEntity:TileEntity = new TileEntity(
-                        Utils.cellToPixel(Math.floor(isle.globalAnchor.x)),
-                        Utils.cellToPixel(Math.floor(isle.globalAnchor.y))
-                    );
-                    tileEntity.globalAnchor = isle.globalAnchor;
-                    addChild(tileEntity);
-                    for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
-                        for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
-                            var tile:IPhysTile = isle.tileGrid[iy][ix];
-                            if (tile != null && tile is PhysBox) {
-                                var cellX:int = ix + Math.floor(isle.globalAnchor.x);
-                                var cellY:int = iy + Math.floor(isle.globalAnchor.y);
-                                tileEntity.cells.push(new Vector2i(cellX, cellY));
-                                tileEntityGrid[cellY][cellX] = tileEntity;
+                trace("We will not be destroying part of an island in this game");
+                // TODO get rid of this whole section
+                if (false) {
+                    island.tileGrid[ty][tx] = null;
+                    var newIslands:Array = IslandSimulator.ConstructIslands(island.tileGrid);
+                    for each (var ni:PhysIsland in newIslands) {
+                        ni.globalAnchor.AddV(island.globalAnchor);
+                        islands.push(ni);
+                    }
+                    
+                    // Rebuild Views
+                    for (var i:int = 0; i < newIslands.length; i++) {
+                        var isle:PhysIsland = newIslands[i];
+                        var tileEntity:TileEntity = new TileEntity(
+                            Utils.cellToPixel(Math.floor(isle.globalAnchor.x)),
+                            Utils.cellToPixel(Math.floor(isle.globalAnchor.y))
+                        );
+                        tileEntity.globalAnchor = isle.globalAnchor;
+                        addChild(tileEntity);
+                        for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
+                            for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
+                                var tile:IPhysTile = isle.tileGrid[iy][ix];
+                                if (tile != null && tile is PhysBox) {
+                                    var cellX:int = ix + Math.floor(isle.globalAnchor.x);
+                                    var cellY:int = iy + Math.floor(isle.globalAnchor.y);
+                                    tileEntity.cells.push(new Vector2i(cellX, cellY));
+                                    tileEntityGrid[cellY][cellX] = tileEntity;
+                                }
                             }
                         }
+                        tileEntity.finalizeCells();
+                        islandViews.push(new ViewPIsland(tileEntity, isle));
                     }
-                    tileEntity.finalizeCells();
-                    islandViews.push(new ViewPIsland(tileEntity, isle));
                 }
             }
             
