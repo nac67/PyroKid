@@ -7,8 +7,9 @@ package pyrokid {
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
 	import flash.utils.Dictionary;
-    import physics.Vector2;
-	import physics.Vector2i;
+    import physics.*;
+    import pyrokid.entities.*;
+    import pyrokid.tools.*;
 	import ui.*;
     
     public class LevelEditor extends Sprite {

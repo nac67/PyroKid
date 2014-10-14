@@ -1,4 +1,4 @@
-package pyrokid {
+package pyrokid.tools {
     import flash.display.Stage;
     import flash.events.KeyboardEvent;
     

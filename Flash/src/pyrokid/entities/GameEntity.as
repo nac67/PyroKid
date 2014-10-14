@@ -53,7 +53,7 @@ package pyrokid.entities {
         }
         
         /* Sets the center of the object in pixel space */
-        public function setCenter(_x:int, _y:int) {
+        public function setCenter(_x:int, _y:int):void {
             this.x = _x - (_w / 2);
             this.y = _y - (_h / 2);
         }

@@ -5,6 +5,9 @@ package pyrokid {
 	import flash.events.MouseEvent;
     import flash.utils.ByteArray;
 	import ui.*;
+    import physics.*;
+    import pyrokid.entities.*;
+    import pyrokid.tools.*;
     
     public class Main extends Sprite {
 		

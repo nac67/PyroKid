@@ -1,5 +1,7 @@
 package pyrokid {
-    import physics.Vector2;
+    import physics.*;
+    import pyrokid.entities.*;
+    import pyrokid.tools.*;
     
     public class Constants {
         

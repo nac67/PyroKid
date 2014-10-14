@@ -5,6 +5,7 @@ package pyrokid.entities {
 	import physics.PhysRectangle;
     import physics.Vector2i;
 	import pyrokid.*;
+    import pyrokid.tools.*;
     
     /**
      * Player can be any width <= 50

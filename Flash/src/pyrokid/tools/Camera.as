@@ -1,4 +1,4 @@
-package pyrokid.world {
+package pyrokid.tools {
     import flash.display.Sprite;
     import pyrokid.Constants;
 	/**

@@ -3,8 +3,9 @@ package pyrokid {
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.media.Sound;
-	import physics.*;
-	import pyrokid.entities.*;
+    import physics.*;
+    import pyrokid.entities.*;
+    import pyrokid.tools.*;
     
     public class Level extends Sprite {
         // Level object instances
@@ -257,8 +258,8 @@ package pyrokid {
                 fireball.y += fireball.speedY;
                 
                 // ignite TileEntities
-				var cellX = CoordinateHelper.realToCell(fireball.x);
-				var cellY = CoordinateHelper.realToCell(fireball.y);
+				var cellX = Utils.realToCell(fireball.x);
+				var cellY = Utils.realToCell(fireball.y);
 				var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
 				if (entity != null) {
 					// remove fireball from list, also delete from stage

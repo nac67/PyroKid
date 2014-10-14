@@ -6,9 +6,8 @@ package pyrokid {
     import flash.net.FileReference;
     import flash.events.KeyboardEvent;
     import physics.*;
-    import pyrokid.*;
     import pyrokid.entities.*;
-    import pyrokid.world.*;
+    import pyrokid.tools.*;
     import flash.ui.Keyboard;
     
     public class GameController extends Sprite {

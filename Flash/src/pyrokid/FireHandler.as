@@ -1,7 +1,8 @@
 package pyrokid {
 	import flash.display.Sprite;
-    import pyrokid.entities.FreeEntity;
-	import pyrokid.entities.TileEntity;
+    import physics.*;
+    import pyrokid.entities.*;
+    import pyrokid.tools.*;
 	
 	public class FireHandler extends Sprite {
 		

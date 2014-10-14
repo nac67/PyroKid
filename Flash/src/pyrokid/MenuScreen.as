@@ -9,6 +9,9 @@ package pyrokid
 	import flash.ui.Keyboard;
     import flash.utils.ByteArray;
 	import ui.*;
+    import physics.*;
+    import pyrokid.entities.*;
+    import pyrokid.tools.*;
 	
 	/**
 	 * ...

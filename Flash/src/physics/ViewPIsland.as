@@ -1,7 +1,7 @@
 package physics {
 	import flash.display.Sprite;
     import pyrokid.Constants;
-	import pyrokid.Utils;
+	import pyrokid.tools.Utils;
 	/**
      * ...
      * @author Cristian Zaloj

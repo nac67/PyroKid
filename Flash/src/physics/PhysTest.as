@@ -4,7 +4,7 @@ package physics {
     import flash.events.Event;
     import flash.ui.Keyboard;
     import pyrokid.Constants;
-    import pyrokid.Key;
+    import pyrokid.tools.Key;
     
     /**
      * ...
