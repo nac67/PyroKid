@@ -9,6 +9,7 @@ package pyrokid.entities {
 	public class GameEntity extends Sprite {
 		
 		protected var _ignitionTime:int = -1;
+        private var _isDead:Boolean = false;
 		private var _w:int;
 		private var _h:int;
         
@@ -20,8 +21,17 @@ package pyrokid.entities {
             velocity = new Vector2();
         }
         
+        public function kill(level:Level):void {
+            _isDead = true;
+            level.dirty = true;
+        }
+        
         public function get ignitionTime():int {
             return _ignitionTime;
+        }
+        
+        public function get isDead():Boolean {
+            return _isDead;
         }
 		
 		public function get w():int {

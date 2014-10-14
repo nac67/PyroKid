@@ -38,7 +38,7 @@ package pyrokid.entities {
 		protected function getSpriteForCell(cell:Vector2i):DisplayObject {
             // TODO this shouldn't be here . . . this should be an abstract class
             // with an abstract method but flash sucks...
-            trace("poop");
+            trace("poop. This shouldn't be called.");
             return new Sprite();
 		}
         

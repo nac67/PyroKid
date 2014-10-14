@@ -32,17 +32,12 @@ package pyrokid.entities {
             if (currentFrame - ignitionTime == Constants.QUICK_BURN_TIME) {
                 // TODO remove from onfire
                 for (var i:int = 0; i < cells.length; i++) {
-                    
                     var w = new Embedded.WoodExplodeSWF();
-                    w.x = cells[i].x*Constants.CELL;
-                    w.y = cells[i].y*Constants.CELL;
+                    w.x = (cells[i].x + globalAnchor.x) * Constants.CELL;
+                    w.y = (cells[i].y + globalAnchor.y) * Constants.CELL;
                     level.briefClips.push(w);
                     level.addChild(w);
-                    
-                    level.destroyTilePosition(cells[i].x, cells[i].y);
-                    level.tileEntityGrid[cells[i].y][cells[i].x] = null;
-                    
-                    
+                    kill(level);
                 }
             }
         }

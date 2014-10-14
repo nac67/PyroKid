@@ -2,6 +2,7 @@ package pyrokid {
     import flash.display.Bitmap;
     import flash.display.MovieClip;
     import flash.utils.ByteArray;
+	import flash.media.Sound;
     /**
      * Since we need to embed every asset into the compiled SWF file, all
      * assets must be known at compile time. This creates the unfortunate situation
@@ -78,6 +79,10 @@ package pyrokid {
         
         [Embed(source='../../assets/swf/crosshair.swf', symbol='crosshair')]
         public static var CrosshairSWF:Class; //cast as MovieClip on instantiation
+        
+		[Embed(source="../../assets/sound/fireball-sound.mp3")]
+		private static var fireballSoundClass:Class;
+		public static var fireballSound:Sound = new fireballSoundClass();
     }
 
 }

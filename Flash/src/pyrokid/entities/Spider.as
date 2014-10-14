@@ -14,7 +14,7 @@ package pyrokid.entities {
 		public override function ignite(level:Level, ignitionFrame:int):void {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
-                _isDead = true;
+                kill(level);
                 var die = new Embedded.SpiderDieSWF();
                 die.x = x;
                 die.y = y - 20;
@@ -22,7 +22,6 @@ package pyrokid.entities {
                 die.scaleY = swf.scaleY;
                 level.addChild(die);
                 level.briefClips.push(die);
-                trace("spider ignited");
             }
 		}
         
