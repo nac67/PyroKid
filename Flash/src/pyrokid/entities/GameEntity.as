@@ -13,9 +13,9 @@ package pyrokid.entities {
         
         public var velocity:Vector2;
 		
-		public function GameEntity(width:Number = 1, height:Number = 1) {
-			_w = width * Constants.CELL;
-			_h = height * Constants.CELL;
+		public function GameEntity(width:Number, height:Number) {
+			_w = width;
+			_h = height;
             velocity = new Vector2();
         }
         

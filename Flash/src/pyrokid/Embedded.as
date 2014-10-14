@@ -57,6 +57,9 @@ package pyrokid {
         [Embed(source='../../assets/swf/spider.swf', symbol='spiderdie2')]
         public static var SpiderDie2SWF:Class; //cast as MovieClip on instantiation
         
+        [Embed(source='../../assets/swf/BurningMan.swf', symbol='BurningMan')]
+        public static var BurningManSWF:Class; //cast as MovieClip on instantiation
+        
         [Embed(source='../../assets/swf/oil.swf', symbol='Oil')]
         public static var OilSWF:Class; //cast as MovieClip on instantiation
         

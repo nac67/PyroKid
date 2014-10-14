@@ -6,24 +6,43 @@ package pyrokid.entities {
     public class BackAndForthEnemy extends FreeEntity {
         
         private var _direction:int;
-        private var swf:DisplayObject;
+        protected var swf:MovieClip;
         protected var _isDead:Boolean = false;
         
-        public function BackAndForthEnemy(level:Level, width:Number, height:Number, swf:DisplayObject) {
-            super(level, width, height);
+        private var scale:Number;
+        private var wArt:int;
+        private var hArt:int;
+        private var xHit:int;
+        private var yHit:int;
+        private var wHit:int;
+        private var hHit:int;
+        
+        public function BackAndForthEnemy(level:Level, swf:MovieClip,
+                scale:Number, wArt:int, hArt:int, xHit:int, yHit:int, wHit:int, hHit:int) {
+            super(level, wArt, hArt, 0x00FF00);
+            
+            this.wArt = wArt;
+            this.hArt = hArt;
+            this.xHit = xHit;
+            this.yHit = yHit;
+            this.wHit = wHit;
+            this.hHit = hHit;
+            
             this.swf = swf;
             addChild(swf);
+            this.scale = scale;
+            swf.scaleX = swf.scaleY = scale;
             direction = Constants.DIR_RIGHT;
         }
         
         public function set direction (val:int):void {
             _direction = val;
             if (val == Constants.DIR_RIGHT) {
-                swf.scaleX = -.8;
-                swf.x = 47
-            }else {
-                swf.scaleX = .8;
+                swf.scaleX = scale;
                 swf.x = 0;
+            } else {
+                swf.scaleX = -scale;
+                swf.x = scale * wArt;
             }
         }
         

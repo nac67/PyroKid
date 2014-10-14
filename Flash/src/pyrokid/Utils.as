@@ -42,13 +42,13 @@ package pyrokid {
         
         public static function getXYMultipliers (direction:int):Vector2i {
             if (direction == Constants.DIR_LEFT) {
-                return new Vector2i( -1, 0);
+                return new Vector2i(-1, 0);
             } else if (direction == Constants.DIR_RIGHT) {
-                return new Vector2i( 1, 0);
+                return new Vector2i(1, 0);
             } else if (direction == Constants.DIR_UP) {
-                return new Vector2i( 0, -1);
+                return new Vector2i(0, -1);
             } else if (direction == Constants.DIR_DOWN) {
-                return new Vector2i( 0, 1);
+                return new Vector2i(0, 1);
             } else {
                 return new Vector2i(0, 0);
             }

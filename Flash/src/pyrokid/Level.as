@@ -305,8 +305,6 @@ package pyrokid {
                             //XXX
                             //level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
                             break;
-                        } else {
-                            trace("poo");
                         }
                     }
                 }

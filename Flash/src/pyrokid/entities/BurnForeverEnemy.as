@@ -1,25 +1,21 @@
 package pyrokid.entities {
+    import flash.display.MovieClip;
     import flash.display.Sprite;
     import pyrokid.*;
+    import pyrokid.Embedded;
     
     public class BurnForeverEnemy extends BackAndForthEnemy {
         
         public function BurnForeverEnemy(level:Level, width:Number, height:Number) {
-            var swf:Sprite = new Sprite();
-            swf.scaleY = .8
-            swf.x = 47;
-            swf.y = -10;
-            swf.graphics.lineStyle(0x000000);
-            swf.graphics.beginFill(0x00FF00);
-            swf.graphics.drawRect(0, 0, 100, 100);
-            swf.graphics.endFill();
-            super(level, width, height, swf);
+            var swf:MovieClip = new Embedded.BurningManSWF() as MovieClip;
+            swf.gotoAndStop(1);
+            super(level, swf, 1, 60, 25, 25, 5, 35, 22);
         }
         
 		public override function ignite(level:Level, ignitionFrame:int):void {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
-                var die = new Embedded.SpiderDieSWF();
+                swf.gotoAndStop(2);
             }
 		}
     }
