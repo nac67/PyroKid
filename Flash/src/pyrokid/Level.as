@@ -179,7 +179,7 @@ package pyrokid {
 				islandViews.push(new ViewPIsland(tileEntity, isle));
 			}
 			
-			player = new Player(this, 0.55, 0.86);
+			player = new Player(this, 0.55 * Constants.CELL, 0.86 * Constants.CELL);
 			addChild(player);
 			playerRect = new PhysRectangle();
 			playerRect.halfSize = new Vector2(0.275, 0.43);
@@ -213,7 +213,7 @@ package pyrokid {
                     var fizz:MovieClip = new Embedded.FireballFizzSWF() as MovieClip;
                     fizz.x = dispObj.x;
                     fizz.y = dispObj.y;
-                    fizz.scaleX = dispObj.scaleX;
+                    fizz.rotation = dispObj.rotation;
                     self.addChild(fizz);
                     self.briefClips.push(fizz);
                     
@@ -249,40 +249,12 @@ package pyrokid {
         //////////////////////////////////
         
         public function fireballUpdate():void {
-			if (Key.isDown(Constants.FIRE_BTN) && !player.prevFrameFireBtn) {
-                // Fire button just pressed
-                if(player.fireballCooldown == 0){
-                    player.fireballCharge = 0;
-                    player.isCharging = true;
-                    player.fireballCooldown = Constants.FIREBALL_COOLDOWN;
-                }
-			} else if (Key.isDown(Constants.FIRE_BTN)) {
-				// Fire button is being held
-                if (player.isCharging && player.fireballCharge < Constants.FIREBALL_CHARGE) {
-				    player.fireballCharge++;
-                }
-			} else if(player.prevFrameFireBtn) {
-				// Fire button is released
-                if(player.isCharging){
-                    player.isCharging = false;
-                    player.isShooting = true;
-                    
-                    if (player.fireballCharge > Constants.FIREBALL_CHARGE) {
-                        launchFireball(Constants.MAX_BALL_RANGE);
-                    } else {
-                        var range = Fireball.calculateRangeInCells(player.fireballCharge);
-                        launchFireball(range);
-                    }
-                }
-                player.fireballCharge = 0;
-			}
-            if (player.fireballCooldown > 0) player.fireballCooldown--;
-			player.prevFrameFireBtn = Key.isDown(Constants.FIRE_BTN);
-			
+				
             
             for (var i:int = 0; i < fireballs.size(); i++) {
                 var fireball:Fireball = fireballs.get(i) as Fireball;
 				fireball.x += fireball.speedX;
+                fireball.y += fireball.speedY;
                 
                 // ignite TileEntities
 				var cellX = CoordinateHelper.realToCell(fireball.x);
@@ -319,15 +291,14 @@ package pyrokid {
 			fireballs.deleteAllMarked();			
 		}
         
-        function launchFireball(range:Number):void {
+        public function launchFireball(range:Number, direction:int):void {
             var fball:Fireball = new Fireball();
             fball.setRange(range);
-            fball.x = player.x+ (player.direction == Constants.DIR_RIGHT ? 25 : 5);
-            fball.y = player.y+22;
-            fball.speedX = (player.direction == Constants.DIR_LEFT ? -Constants.FBALL_SPEED : Constants.FBALL_SPEED);
+            fball.x = player.getCenter().x;
+            fball.y = player.getCenter().y;
+            fball.setDirection(direction);
             fireballs.push(fball);
             addChild(fball);
-            //playerAttackObjects.push(new PlayerAttackObject(fball));
 			fireballSound.play();
         }
         
