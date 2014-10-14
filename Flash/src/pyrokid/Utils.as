@@ -1,4 +1,5 @@
 package pyrokid {
+    import flash.display.DisplayObject;
     import flash.display.Sprite;
 	import physics.PhysBox;
 	import physics.Vector2;
@@ -29,6 +30,28 @@ package pyrokid {
         
         public static function filterNull(array:Array):Array {
             return array.filter(function(o) { return o != null; });
+        }
+        
+        /* Moves obj by distance in the direction that obj is facing. You can offset the direction
+         * rotation by offset degrees */
+        public static function moveInDirFacing(obj:DisplayObject, distance:int, offset:Number = 0) {
+            obj.x += distance * Math.cos((obj.rotation + offset) * (Math.PI / 180));
+            obj.y += distance * Math.sin((obj.rotation + offset) * (Math.PI / 180));
+        }
+        
+        
+        public static function getXYMultipliers (direction:int):Vector2i {
+            if (direction == Constants.DIR_LEFT) {
+                return new Vector2i( -1, 0);
+            } else if (direction == Constants.DIR_RIGHT) {
+                return new Vector2i( 1, 0);
+            } else if (direction == Constants.DIR_UP) {
+                return new Vector2i( 0, -1);
+            } else if (direction == Constants.DIR_DOWN) {
+                return new Vector2i( 0, 1);
+            } else {
+                return new Vector2i(0, 0);
+            }
         }
 		
 		// -------------------- Coordinate Conversion Functions --------------------- //
