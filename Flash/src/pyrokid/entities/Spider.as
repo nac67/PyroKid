@@ -6,9 +6,9 @@ package pyrokid.entities {
     
     public class Spider extends BackAndForthEnemy {
         
-        public function Spider(level:Level, width:Number, height:Number) {
+        public function Spider(level:Level) {
             var swf:MovieClip = new Embedded.SpiderSWF();
-            super(level, swf, 1.8, 50, 50, 6, 17, 43, 32);
+            super(level, swf, 0.8, 50, 50, 6, 17, 43, 32);
         }
         
 		public override function ignite(level:Level, ignitionFrame:int):void {

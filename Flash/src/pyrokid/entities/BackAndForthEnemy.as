@@ -1,8 +1,12 @@
 package pyrokid.entities {
     import flash.display.DisplayObject;
+    import physics.PhysRectangle;
     import pyrokid.*;
     import flash.display.MovieClip;
+    import physics.Vector2;
     
+    /* This is an "abstract" class. Do not instantiate. Use a subclass that
+     * is a specific type of enemy. */
     public class BackAndForthEnemy extends FreeEntity {
         
         private var _direction:int;
@@ -18,7 +22,7 @@ package pyrokid.entities {
         
         public function BackAndForthEnemy(level:Level, swf:MovieClip,
                 scale:Number, wArt:int, hArt:int, xHit:int, yHit:int, wHit:int, hHit:int) {
-            super(level, wArt, hArt, 0x00FF00);
+            super(level, wArt*scale, hArt*scale, 0x00FF00);
             
             this.wArt = wArt;
             this.hArt = hArt;
@@ -32,6 +36,12 @@ package pyrokid.entities {
             this.scale = scale;
             swf.scaleX = swf.scaleY = scale;
             direction = Constants.DIR_RIGHT;
+        }
+        
+        public function genPhysRect():PhysRectangle {
+            var enemyRect:PhysRectangle = new PhysRectangle();
+            enemyRect.halfSize = new Vector2(wArt * scale / 2, hArt * scale / 2).DivD(Constants.CELL);
+            return enemyRect;
         }
         
         public function set direction (val:int):void {

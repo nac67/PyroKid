@@ -177,15 +177,14 @@ package pyrokid {
             for (var i:int = 0; i < recipe.freeEntities.length; i++) {
                 var enemy:BackAndForthEnemy;
                 if (recipe.freeEntities[i][2] == 0) {
-                    enemy = new Spider(this, .9, .6);
+                    enemy = new Spider(this);
                 } else {
-                    enemy = new BurnForeverEnemy(this, 0.9, 0.6);
+                    enemy = new BurnForeverEnemy(this);
                 }
                 enemy.x = recipe.freeEntities[i][0] * Constants.CELL;
                 enemy.y = recipe.freeEntities[i][1] * Constants.CELL;
                 addChild(enemy);
-                var enemyRect:PhysRectangle = new PhysRectangle();
-                enemyRect.halfSize = new Vector2(.45, .3);
+                var enemyRect:PhysRectangle = enemy.genPhysRect();
                 var enemyView:ViewPRect = new ViewPRect(enemy, enemyRect)
                 rectViews.push(enemyView);
                 enemies.push(enemy);
