@@ -36,14 +36,10 @@ package pyrokid {
             Key.init(stage);
             Constants.switchControlScheme(0);
 			
-			//addEventListener(Event.ENTER_FRAME, update);
-			
 			createStartMenu();
         }
 		
-		public function startGameFunc(levelRecipe:ByteArray = null):void //change this to level select maybe? or use parameter
-		{
-			
+    public function startGameFunc(levelRecipe:ByteArray = null):void {//change this to level select maybe? or use parameter			
 			if (levelRecipe == null) { //default, start normal game controller
 				trace("starting null level");
 				Utils.removeAllChildren(this);
@@ -62,8 +58,7 @@ package pyrokid {
 			
 		}
 		
-		public function createStartMenu(e:MouseEvent = null):void
-		{
+		public function createStartMenu(e:MouseEvent = null):void {
 			Utils.removeAllChildren(this);
 			startMenu = new MenuScreen(MenuScreen.STATE_START, this);
 			startMenu.startGameFunc = startGameFunc;
@@ -71,8 +66,7 @@ package pyrokid {
 			curr_state = STATE_START;
 		}
 		
-		public function createGameOverMenu(didPlayerWin:Boolean = false):void
-		{
+		public function createGameOverMenu(didPlayerWin:Boolean = false):void {
 			Utils.removeAllChildren(this);
 			overMenu = new MenuScreen(MenuScreen.STATE_GAME_OVER, this, didPlayerWin);
 			overMenu.showStartMenuFunc = createStartMenu;

@@ -109,7 +109,7 @@ package physics {
             if (ce.halfSize <= 0) {
                 ce.direction = -1;
                 se.direction = -1;
-                // TODO: Split In Two
+                // TODO: Split In Two -- Cristian
                 return;
             }
             if (off > 0)
@@ -132,7 +132,7 @@ package physics {
             if (ce.halfSize <= 0) {
                 ce.direction = -1;
                 se.direction = -1;
-                // TODO: Split In Two
+                // TODO: Split In Two -- Cristian
                 return;
             }
             if (off > 0)

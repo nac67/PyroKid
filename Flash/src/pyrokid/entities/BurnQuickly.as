@@ -30,7 +30,7 @@ package pyrokid.entities {
         
         public override function updateFire(level:Level, currentFrame:int):void {
             if (currentFrame - ignitionTime == Constants.QUICK_BURN_TIME) {
-                // TODO remove from onfire
+                // TODO remove from onfire -- Aaron
                 for (var i:int = 0; i < cells.length; i++) {
                     var w = new Embedded.WoodExplodeSWF();
                     w.x = (cells[i].x + globalAnchor.x) * Constants.CELL;

@@ -33,10 +33,8 @@ package pyrokid.entities {
 		}
 		
 		protected function getSpriteForCell(cell:Vector2i):DisplayObject {
-            // TODO this shouldn't be here . . . this should be an abstract class
-            // with an abstract method but flash sucks...
-            trace("poop. This shouldn't be called.");
-            return new Sprite();
+            trace("This is an \"Abstract Method\" and you should never see this printed out");
+            return null;
 		}
         
         private function isFlammable():Boolean {
@@ -54,8 +52,8 @@ package pyrokid.entities {
 		}
 		
 		// TODO optimize this. It should be calculated once, and it should not
-		// do the same neighbor multiple times
-        // TODO this should throw something if called when the tile entity is moving
+		// do the same neighbor multiple times -- Aaron
+        // TODO this should throw something if called when the tile entity is moving -- Aaron
 		public function getNeighborCoordinates(grid:Array):Array {
 			var coors:Array = [];
 			for (var i:int = 0; i < cells.length; i++) {

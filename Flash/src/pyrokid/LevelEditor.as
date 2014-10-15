@@ -124,7 +124,7 @@ package pyrokid {
         }
         
         private function updateHeight(newHeight:int):void {
-			// TODO if shrinking in size, delete all crates/items that go beyond the edge
+			// TODO if shrinking in size, delete all crates/items that go beyond the edge -- Aaron
 			if (newHeight < 1) {
 				trace("cannot set size to less than 1");
 				return;
@@ -287,6 +287,7 @@ package pyrokid {
 		}
         
         private function placeObject(cellX:int, cellY:int):void {
+            //TODO: This doesn't work -- Aaron
             if (typeSelected == "spider") {
                 level.recipe.freeEntities.push([cellX, cellY, 0]);
             } else if (typeSelected == "player") {

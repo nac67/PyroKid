@@ -114,7 +114,7 @@ package pyrokid.entities {
                 } else if (edgeOfCollision.direction == Cardinal.PY) {
                     cell = new Vector2i(Math.floor(center.x), center.y - 1);
                 } else {
-                    // TODO when is the direction not one of these?
+                    // TODO when is the direction not one of these? -- Cristian
                     return;
                 }
                 var entity:TileEntity = level.tileEntityGrid[cell.y][cell.x];

@@ -149,8 +149,8 @@ package pyrokid {
         }
         
         private function processMovingTilesInGrid():void {
-            // TODO this goes away once we move velocity into game logic 
             for each (var islandView:ViewPIsland in level.islandViews) {
+                //TODO: should this be equals 0? Ask Cristian if physics is precise enough
                 if (Math.abs(islandView.phys.velocity.y) > 0.01) {
                     var tileEntity:TileEntity = islandView.sprite as TileEntity;
                     if (level.movingTiles.indexOf(islandView) == -1) {
