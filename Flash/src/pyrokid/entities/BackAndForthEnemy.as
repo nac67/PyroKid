@@ -21,15 +21,20 @@ package pyrokid.entities {
         private var hHit:int;
         
         public function BackAndForthEnemy(level:Level, swf:MovieClip,
-                scale:Number, wArt:int, hArt:int, xHit:int, yHit:int, wHit:int, hHit:int) {
+                scale:Number, wArt:int, hArt:int, xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1) {
             super(level, wArt*scale, hArt*scale, 0x00FF00);
             
             this.wArt = wArt;
             this.hArt = hArt;
             this.xHit = xHit;
             this.yHit = yHit;
-            this.wHit = wHit;
-            this.hHit = hHit;
+            if (wHit == -1 || hHit == -1) {
+                this.wHit = this.wArt;
+                this.hHit = this.hArt;
+            } else {
+                this.wHit = wHit;
+                this.hHit = hHit;
+            }
             
             this.swf = swf;
             addChild(swf);

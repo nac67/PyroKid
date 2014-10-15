@@ -1,6 +1,7 @@
 package pyrokid.entities {
 	import flash.display.Sprite;
     import physics.*;
+    import pyrokid.*;
     import pyrokid.Level;
 	
 	public class FreeEntity extends GameEntity {
@@ -35,7 +36,7 @@ package pyrokid.entities {
             
             _collisionCallback = genCollisionCallback(level);
             
-            if(color != uint.MAX_VALUE){
+            if(color != uint.MAX_VALUE && Constants.DEBUG){
 			    graphics.lineStyle(0x000000);
 			    graphics.beginFill(color);
 			    graphics.drawRect(0, 0, w, h);

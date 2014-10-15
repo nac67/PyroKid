@@ -16,8 +16,8 @@ package pyrokid.entities {
                 super.ignite(level, ignitionFrame);
                 kill(level);
                 var die = new Embedded.SpiderDieSWF();
-                die.x = x;
-                die.y = y - 20;
+                die.x = swf.x + x;
+                die.y = swf.y + y;
                 die.scaleX = swf.scaleX;
                 die.scaleY = swf.scaleY;
                 level.addChild(die);
