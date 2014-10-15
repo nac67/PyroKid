@@ -34,6 +34,7 @@ package pyrokid {
             // entry point
 			MainStage = stage;
             Key.init(stage);
+            Constants.switchControlScheme(0);
 			
 			//addEventListener(Event.ENTER_FRAME, update);
 			

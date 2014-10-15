@@ -13,14 +13,13 @@ package pyrokid {
         public static var SPREAD_RATE:int = 30;
         public static var QUICK_BURN_TIME:int = SPREAD_RATE;
         
-        public static var LEFT_BTN:int = 65;
-        public static var RIGHT_BTN:int = 68;
-        public static var JUMP_BTN:int = 87;
-        
-        public static var AIM_UP_BTN:int = Key.UP;
-        public static var AIM_DOWN_BTN:int = Key.DOWN;
-        public static var AIM_LEFT_BTN:int = Key.LEFT;
-        public static var AIM_RIGHT_BTN:int = Key.RIGHT;
+        public static var LEFT_BTN:int;
+        public static var RIGHT_BTN:int;
+        public static var JUMP_BTN:int;
+        public static var AIM_UP_BTN:int;
+        public static var AIM_DOWN_BTN:int;
+        public static var AIM_LEFT_BTN:int;
+        public static var AIM_RIGHT_BTN:int;
         
         // fake enums
         public static var DIR_UP:int = 101;
@@ -45,6 +44,26 @@ package pyrokid {
         public static var OIL_TILE_CODE:int = 2;
         public static var WOOD_TILE_CODE:int = 3;
         public static var METAL_TILE_CODE:int = 4;
+        
+        public static function switchControlScheme(scheme:int) {
+            if (scheme == 0) {
+                LEFT_BTN = 65;
+                RIGHT_BTN = 68;
+                JUMP_BTN = 87;
+                AIM_UP_BTN = Key.UP;
+                AIM_DOWN_BTN = Key.DOWN;
+                AIM_LEFT_BTN = Key.LEFT;
+                AIM_RIGHT_BTN = Key.RIGHT;
+            } else if (scheme == 1) {
+                LEFT_BTN = Key.LEFT;
+                RIGHT_BTN = Key.RIGHT;
+                JUMP_BTN = Key.UP;
+                AIM_UP_BTN = 87;
+                AIM_DOWN_BTN = 83;
+                AIM_LEFT_BTN = 65;
+                AIM_RIGHT_BTN = 68;
+            }
+        }
     
     }
 

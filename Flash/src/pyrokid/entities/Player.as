@@ -101,8 +101,8 @@ package pyrokid.entities {
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
             
             // Firing
-            var shootButton = Key.isDown(Key.LEFT) || Key.isDown(Key.RIGHT) ||
-                    Key.isDown(Key.UP) || Key.isDown(Key.DOWN);
+            var shootButton = Key.isDown(Constants.AIM_LEFT_BTN) || Key.isDown(Constants.AIM_RIGHT_BTN) ||
+                    Key.isDown(Constants.AIM_UP_BTN) || Key.isDown(Constants.AIM_DOWN_BTN);
   
             if (Key.isDown(Constants.AIM_LEFT_BTN)) {
                 shootDirection = Constants.DIR_LEFT;
