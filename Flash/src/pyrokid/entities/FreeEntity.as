@@ -31,13 +31,13 @@ package pyrokid.entities {
             }
 		}
 		
-		public function FreeEntity(level:Level, width:Number = 1, height:Number = 1, color:uint = uint.MAX_VALUE) {
+		public function FreeEntity(level:Level, width:Number = 1, height:Number = 1, color:uint = 0x0000FF) {
 			super(width, height);
             
             _collisionCallback = genCollisionCallback(level);
             
-            if(color != uint.MAX_VALUE && Constants.DEBUG){
-			    graphics.lineStyle(0x000000);
+            if(Constants.DEBUG) {
+			    graphics.lineStyle(1, 0x000000);
 			    graphics.beginFill(color);
 			    graphics.drawRect(0, 0, w, h);
 			    graphics.endFill();

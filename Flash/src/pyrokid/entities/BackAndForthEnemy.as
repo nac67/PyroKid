@@ -1,9 +1,11 @@
 package pyrokid.entities {
     import flash.display.DisplayObject;
+    import flash.display.Sprite;
     import physics.PhysRectangle;
     import pyrokid.*;
     import flash.display.MovieClip;
     import physics.Vector2;
+    import pyrokid.tools.Box;
     
     /* This is an "abstract" class. Do not instantiate. Use a subclass that
      * is a specific type of enemy. */
@@ -11,6 +13,7 @@ package pyrokid.entities {
         
         private var _direction:int;
         protected var swf:MovieClip;
+        private var hitBox:Box;
         
         private var scale:Number;
         private var wArt:int;
@@ -40,6 +43,9 @@ package pyrokid.entities {
             addChild(swf);
             this.scale = scale;
             swf.scaleX = swf.scaleY = scale;
+            
+            hitBox = new Box(xHit * scale, yHit * scale, wHit * scale, hHit * scale);
+            addChild(hitBox);
             direction = Constants.DIR_RIGHT;
         }
         
@@ -54,9 +60,13 @@ package pyrokid.entities {
             if (val == Constants.DIR_RIGHT) {
                 swf.scaleX = scale;
                 swf.x = 0;
+                hitBox.x = xHit * scale;
+                hitBox.scaleX = 1;
             } else {
                 swf.scaleX = -scale;
                 swf.x = scale * wArt;
+                hitBox.x = scale * wArt - (xHit * scale);
+                hitBox.scaleX = -1;
             }
         }
         
