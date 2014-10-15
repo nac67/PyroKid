@@ -35,9 +35,6 @@ package pyrokid.entities {
                     var w = new Embedded.WoodExplodeSWF();
                     w.x = (cells[i].x + globalAnchor.x) * Constants.CELL;
                     w.y = (cells[i].y + globalAnchor.y) * Constants.CELL;
-                    trace(cells[i]);
-                    trace(globalAnchor);
-                    trace("poop");
                     level.briefClips.push(w);
                     level.addChild(w);
                     kill(level);
