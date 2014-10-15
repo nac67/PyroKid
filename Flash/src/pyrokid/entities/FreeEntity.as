@@ -119,16 +119,13 @@ package pyrokid.entities {
                 }
                 var entity:TileEntity = level.tileEntityGrid[cell.y][cell.x];
                 if (entity != null) {
-                    var thisOnFire:Boolean = self.isOnFire();
-                    var entityOnFire:Boolean = entity.isOnFire();
-                    if (entityOnFire) {
-                        self.ignite(level, level.frameCount);
-                    }
-                    if (thisOnFire) {
-                        entity.ignite(level, level.frameCount);
-                    }
+                    entity.mutualIgnite(level, self);
                 }
             };
+        }
+        
+        public function isTouching(freeEntity:FreeEntity):Boolean {
+            return this.hitBox.hitTestObject(freeEntity.hitBox);
         }
 	}
 	

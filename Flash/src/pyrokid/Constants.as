@@ -4,7 +4,7 @@ package pyrokid {
     import pyrokid.tools.*;
     
     public class Constants {
-        public static var DEBUG:Boolean = false;
+        public static var DEBUG:Boolean = true;
         public static var GOD_MODE:Boolean = true;
         
 		public static var WIDTH:int = 800;

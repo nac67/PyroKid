@@ -99,15 +99,11 @@ package pyrokid {
             }
         }
         
-        private function checkGameOver():void {
-            //resolve game over conditions
-            //for each (var s:Sprite in level.harmfulObjects) {
-            //if (level.player.hitTestObject(s)) {
-            //doGameOver();
-            //return;
-            //}
-            //}
-            
+        private function checkGameOver(over:Boolean):void {
+            if (over) {
+                doGameOver();
+                return;
+            }
             if (level.player.y > stage.stageHeight + 500) {
                 trace("fell to your doom, bitch");
                 doGameOver();
@@ -182,6 +178,22 @@ package pyrokid {
             });
         }
         
+        /* Returns true if the player died. */
+        private function resolveFreeEntityCollisions():Boolean {
+            var playerDead:Boolean = false;
+            for (var i:int = 0; i < level.enemies.length; i++) {
+                for (var j:int = i + 1; j < level.enemies.length; j++) {
+                    if (level.enemies[i].isTouching(level.enemies[j])) {
+                        level.enemies[i].mutualIgnite(level, level.enemies[j]);
+                    }
+                }
+                if (level.player.isTouching(level.enemies[i]) && !Constants.GOD_MODE) {
+                    playerDead = true;
+                }
+            }
+            return playerDead;
+        }
+        
         private function update(event:Event):void {
             if (editorMode) {
                 return;
@@ -202,6 +214,7 @@ package pyrokid {
             
             // -------------------------- Physics --------------------------- //
             handlePhysics();
+            var playerDied:Boolean = resolveFreeEntityCollisions();
             
             // ------------------------ After physics game logic ------------ //
             level.removeDead();
@@ -217,7 +230,7 @@ package pyrokid {
             });
 
             // ---------------------- End Game Conditions -------------------- //
-            checkGameOver();
+            checkGameOver(playerDied);
         }
     
     }
