@@ -158,26 +158,22 @@ package pyrokid {
                 if (Math.abs(islandView.phys.velocity.y) > 0.01) {
                     var tileEntity:TileEntity = islandView.sprite as TileEntity;
                     if (level.movingTiles.indexOf(islandView) == -1) {
-                        //trace("adding to moving tiles");
                         for each (var cell:Vector2i in tileEntity.cells) {
-                            level.tileEntityGrid[cell.y][cell.x] = null;
+                            var cellY:int = cell.y + Math.floor(tileEntity.globalAnchor.y);
+                            var cellX:int = cell.x + Math.floor(tileEntity.globalAnchor.x);
+                            level.tileEntityGrid[cellY][cellX] = null;
                         }
                         level.movingTiles.push(islandView);
-                        tileEntity.oldGlobalAnchor = new Vector2(tileEntity.globalAnchor.x, tileEntity.globalAnchor.y);
                     }
                 }
             }
             level.movingTiles = level.movingTiles.filter(function(islandView) {
                 if (Math.abs(islandView.phys.velocity.y) < 0.01) {
-                    //trace("deleting from moving tiles");
                     var tileEntity:TileEntity = islandView.sprite as TileEntity;
-                    var moveX:int = Math.round(islandView.phys.globalAnchor.x - tileEntity.oldGlobalAnchor.x);
-                    var moveY:int = Math.round(islandView.phys.globalAnchor.y - tileEntity.oldGlobalAnchor.y);
-                    tileEntity.cells = tileEntity.cells.map(function(cell) {
-                        return new Vector2i(cell.x + moveX, cell.y + moveY);
-                    });
                     for each (var cell:Vector2i in tileEntity.cells) {
-                        level.tileEntityGrid[cell.y][cell.x] = tileEntity;
+                        var cellY:int = cell.y + Math.round(tileEntity.globalAnchor.y);
+                        var cellX:int = cell.x + Math.round(tileEntity.globalAnchor.x);
+                        level.tileEntityGrid[cellY][cellX] = tileEntity;
                     }
                     return false;
                 } else {
