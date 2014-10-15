@@ -10,9 +10,9 @@ package pyrokid.entities {
 		
 		public var cells:Array;
 		private var color:uint;
+        
+        // in tile coordinates, not pixel space
 		public var globalAnchor:Vector2;
-		
-		public var oldGlobalAnchor:Vector2;
         
         public var cellSprites:Array;
         
@@ -49,8 +49,8 @@ package pyrokid.entities {
 		public function finalizeCells():void {
 			for (var i:int = 0; i < cells.length; i++) {
 				var child:DisplayObject = getSpriteForCell(cells[i]);
-				child.x = (cells[i].x - Math.floor(globalAnchor.x)) * Constants.CELL;
-				child.y = (cells[i].y - Math.floor(globalAnchor.y)) * Constants.CELL;
+				child.x = cells[i].x * Constants.CELL;
+				child.y = cells[i].y * Constants.CELL;
 				addChild(child);
                 cellSprites.push(child);
 			}
@@ -58,13 +58,17 @@ package pyrokid.entities {
 		
 		// TODO optimize this. It should be calculated once, and it should not
 		// do the same neighbor multiple times
+        // TODO this should throw something if called when the tile entity is moving
 		public function getNeighborCoordinates(grid:Array):Array {
 			var coors:Array = [];
 			for (var i:int = 0; i < cells.length; i++) {
 				for (var j:int = 0; j < directNeighbors.length; j++) {
 					var a:Vector2i = cells[i];
 					var b:Vector2i = directNeighbors[j];
-					coors.push(new Vector2i(a.x + b.x, a.y + b.y));
+					coors.push(new Vector2i(
+                        a.x + b.x + Math.round(globalAnchor.x),
+                        a.y + b.y + Math.round(globalAnchor.y)
+                    ));
 				}
 			}
 			return coors;
