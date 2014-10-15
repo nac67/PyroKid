@@ -61,6 +61,13 @@ package pyrokid {
 			}
 			return 0;
 		}
+        
+        private function initializeFreeEntity(freeEntity:FreeEntity, startCellX:int, startCellY:int):void {
+            freeEntity.x = startCellX * Constants.CELL;
+            freeEntity.y = startCellY * Constants.CELL;
+            addChild(freeEntity);
+            rectViews.push(new ViewPRect(freeEntity, freeEntity.genPhysRect()));
+        }
 
         public function reset(recipe:Object):void {
             
@@ -165,11 +172,7 @@ package pyrokid {
 			}
 			
 			player = new Player(this);
-			addChild(player);
-			var playerRect:PhysRectangle = player.genPhysRect();
-			player.x = recipe.playerStart[0] * Constants.CELL;
-			player.y = recipe.playerStart[1] * Constants.CELL;
-			rectViews.push(new ViewPRect(player, playerRect));
+			initializeFreeEntity(player, recipe.playerStart[0], recipe.playerStart[1]);
             
             for (var i:int = 0; i < recipe.freeEntities.length; i++) {
                 var enemy:BackAndForthEnemy;
@@ -178,12 +181,7 @@ package pyrokid {
                 } else {
                     enemy = new BurnForeverEnemy(this);
                 }
-                enemy.x = recipe.freeEntities[i][0] * Constants.CELL;
-                enemy.y = recipe.freeEntities[i][1] * Constants.CELL;
-                addChild(enemy);
-                var enemyRect:PhysRectangle = enemy.genPhysRect();
-                var enemyView:ViewPRect = new ViewPRect(enemy, enemyRect)
-                rectViews.push(enemyView);
+                initializeFreeEntity(enemy, recipe.freeEntities[i][0], recipe.freeEntities[i][1]);
                 enemies.push(enemy);
 			}
 						            
