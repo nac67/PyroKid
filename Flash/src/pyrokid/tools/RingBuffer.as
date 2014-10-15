@@ -20,8 +20,8 @@ package pyrokid.tools {
         
         private var maxItems:int;
         public var buffer:Array;
-        private var head = 0;
-        private var _size = 0;
+        private var head:int = 0;
+        private var _size:int = 0;
         private var evictFcn:Function;
         
         //can't delete things while in iterator,
@@ -39,7 +39,7 @@ package pyrokid.tools {
         public function RingBuffer(maxItems:int, evictFcn:Function=null) {
             this.maxItems = maxItems;
             buffer = new Array(maxItems);
-            for (var i = 0; i < maxItems; i++) {
+            for (var i:int = 0; i < maxItems; i++) {
                 buffer[i] = null;
             }
             markedForDel = [];
@@ -51,7 +51,7 @@ package pyrokid.tools {
         }
         
         public function push(o:Object):void {
-            var oldHead = buffer[head];
+            var oldHead:Object = buffer[head];
             if (oldHead != null) {
                 removeVisual(oldHead);                
             }
@@ -98,7 +98,7 @@ package pyrokid.tools {
          * for deletion in the order you encounter them it will be fine.
          * @param o
          */
-        public function markForDeletion(o:Object) {
+        public function markForDeletion(o:Object):void {
             markedForDel.push(o);
         }
         
@@ -108,12 +108,12 @@ package pyrokid.tools {
          */
         public function deleteAllMarked():void {
             var oldBuffer:Array = buffer.slice();
-            var oldHead = head;
-            var oldSize = _size;
+            var oldHead:int = head;
+            var oldSize:int = _size;
             
             //reset buffer
             buffer = new Array(maxItems);
-            for (var i = 0; i < maxItems; i++) {
+            for (var i:int = 0; i < maxItems; i++) {
                 buffer[i] = null;
             }
             head = 0;
@@ -123,10 +123,10 @@ package pyrokid.tools {
             //add them to the new buffer, if they are marked,
             //increment the markIndex, to look for the next item
             //to be purged.
-            var markIndex = 0;
-            for (var i = 0; i < oldSize; i++) {
-                var realIndex = clamp(oldHead - oldSize+i);
-                var oldObj = oldBuffer[realIndex];
+            var markIndex:int = 0;
+            for (i = 0; i < oldSize; i++) {
+                var realIndex:int = clamp(oldHead - oldSize+i);
+                var oldObj:Object = oldBuffer[realIndex];
                 if(markedForDel[markIndex] == oldObj){
                     markIndex++;
                     removeVisual(oldObj);
@@ -156,7 +156,7 @@ package pyrokid.tools {
          * delete the item.
          */
         public function filter(fcn:Function):void {
-            for (var i = 0; i < size(); i++) {
+            for (var i:int = 0; i < size(); i++) {
                 var item:Object = get(i);
                 if (!fcn(item)) {
                     markForDeletion(item);
@@ -169,7 +169,7 @@ package pyrokid.tools {
             return (v+maxItems) % maxItems;
         }
         
-        private function removeVisual(o:Object) {
+        private function removeVisual(o:Object):void {
             if (evictFcn != null) {
                 evictFcn(o);
             }
