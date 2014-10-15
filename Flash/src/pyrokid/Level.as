@@ -155,10 +155,8 @@ package pyrokid {
 					for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
 						var tile:IPhysTile = isle.tileGrid[iy][ix];
 						if (tile != null && tile is PhysBox) {
-							var cellX:int = ix + cornerCellX;
-							var cellY:int = iy + cornerCellY;
-							tileEntity.cells.push(new Vector2i(cellX, cellY));
-							tileEntityGrid[cellY][cellX] = tileEntity;
+							tileEntity.cells.push(new Vector2i(ix, iy));
+							tileEntityGrid[iy + cornerCellY][ix + cornerCellX] = tileEntity;
 						}
 					}
 				}
