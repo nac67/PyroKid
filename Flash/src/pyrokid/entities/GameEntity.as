@@ -28,6 +28,10 @@ package pyrokid.entities {
 		public function isOnFire():Boolean {
 			return ignitionTime >= 0;
 		}
+        
+        public function isMoving():Boolean {
+            return velocity.x + velocity.y != 0;
+        }
 		
 		public function ignite(level:Level, ignitionFrame:int):void {
             if (!isOnFire()) {

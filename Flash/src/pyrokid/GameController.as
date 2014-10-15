@@ -151,12 +151,11 @@ package pyrokid {
         private function processMovingTilesInGrid():void {
             for each (var islandView:ViewPIsland in level.islandViews) {
                 //TODO: should this be equals 0? Ask Cristian if physics is precise enough
-                if (Math.abs(islandView.phys.velocity.y) > 0.01) {
-                    var tileEntity:TileEntity = islandView.sprite as TileEntity;
+                if (islandView.sprite.isMoving()) {
                     if (level.movingTiles.indexOf(islandView) == -1) {
-                        for each (var cell:Vector2i in tileEntity.cells) {
-                            var cellY:int = cell.y + Math.floor(tileEntity.globalAnchor.y);
-                            var cellX:int = cell.x + Math.floor(tileEntity.globalAnchor.x);
+                        for each (var cell:Vector2i in islandView.sprite.cells) {
+                            var cellY:int = cell.y + Math.floor(islandView.sprite.globalAnchor.y);
+                            var cellX:int = cell.x + Math.floor(islandView.sprite.globalAnchor.x);
                             level.tileEntityGrid[cellY][cellX] = null;
                         }
                         level.movingTiles.push(islandView);
@@ -164,12 +163,11 @@ package pyrokid {
                 }
             }
             level.movingTiles = level.movingTiles.filter(function(islandView) {
-                if (Math.abs(islandView.phys.velocity.y) < 0.01) {
-                    var tileEntity:TileEntity = islandView.sprite as TileEntity;
-                    for each (var cell:Vector2i in tileEntity.cells) {
-                        var cellY:int = cell.y + Math.round(tileEntity.globalAnchor.y);
-                        var cellX:int = cell.x + Math.round(tileEntity.globalAnchor.x);
-                        level.tileEntityGrid[cellY][cellX] = tileEntity;
+                if (!islandView.sprite.isMoving()) {
+                    for each (var cell:Vector2i in islandView.sprite.cells) {
+                        var cellY:int = cell.y + Math.round(islandView.sprite.globalAnchor.y);
+                        var cellX:int = cell.x + Math.round(islandView.sprite.globalAnchor.x);
+                        level.tileEntityGrid[cellY][cellX] = islandView.sprite;
                     }
                     return false;
                 } else {
@@ -187,8 +185,12 @@ package pyrokid {
                         level.enemies[i].mutualIgnite(level, level.enemies[j]);
                     }
                 }
-                if (level.player.isTouching(level.enemies[i]) && !Constants.GOD_MODE) {
-                    playerDead = true;
+                if (level.player.isTouching(level.enemies[i])) {
+                    if (Constants.GOD_MODE) {
+                        level.player.mutualIgnite(level, level.enemies[i]);
+                    } else {
+                        playerDead = true;
+                    }
                 }
             }
             return playerDead;
