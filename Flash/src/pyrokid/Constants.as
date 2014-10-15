@@ -38,6 +38,8 @@ package pyrokid {
         public static var GRAVITY_VECTOR = new Vector2(0, GRAVITY);
         public static var SPIDER_SPEED:Number = 1.5*CELL;
         public static var DT:Number = 1 / 30.0;
+        public static var PLAYER_XSPEED:int = 2 * CELL;
+        public static var PLAYER_JUMP_SPEED:int = 6 * CELL;
 		
 		public static var EMPTY_TILE_CODE:int = 0;
 		public static var WALL_TILE_CODE:int = 1;

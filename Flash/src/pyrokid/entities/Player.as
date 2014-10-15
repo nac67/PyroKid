@@ -83,12 +83,12 @@ package pyrokid.entities {
 			velocity.x = 0;
             animIsRunning = false; 
             if (Key.isDown(Constants.LEFT_BTN)) {
-                velocity.x -= 2*Constants.CELL;
+                velocity.x -= Constants.PLAYER_XSPEED;
                 direction = Constants.DIR_LEFT;
                 animIsRunning = true;
             }
             if (Key.isDown(Constants.RIGHT_BTN)) {
-                velocity.x += 2*Constants.CELL;
+                velocity.x += Constants.PLAYER_XSPEED;
                 direction = Constants.DIR_RIGHT;
                 animIsRunning = true;
             }
@@ -96,7 +96,7 @@ package pyrokid.entities {
             // Vertical movement
 			velocity.Add(0, Constants.GRAVITY * Constants.CELL * Constants.DT);
 			if (isGrounded && Key.isDown(Constants.JUMP_BTN) && !prevFrameJumpBtn) {
-				velocity.y = -6*Constants.CELL;
+				velocity.y = -Constants.PLAYER_JUMP_SPEED;
 			}
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
             
@@ -140,6 +140,7 @@ package pyrokid.entities {
                         var range = Fireball.calculateRangeInCells(fireballCharge);
                         level.launchFireball(range, shootDirection);
                     }
+
                 }
                 fireballCharge = 0;
 			}
