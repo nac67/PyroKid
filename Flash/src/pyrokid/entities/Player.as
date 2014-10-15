@@ -104,16 +104,16 @@ package pyrokid.entities {
             var shootButton = Key.isDown(Key.LEFT) || Key.isDown(Key.RIGHT) ||
                     Key.isDown(Key.UP) || Key.isDown(Key.DOWN);
   
-            if (Key.isDown(Key.LEFT)) {
+            if (Key.isDown(Constants.AIM_LEFT_BTN)) {
                 shootDirection = Constants.DIR_LEFT;
             }
-            if (Key.isDown(Key.RIGHT)) {
+            if (Key.isDown(Constants.AIM_RIGHT_BTN)) {
                 shootDirection = Constants.DIR_RIGHT;
             }
-            if (Key.isDown(Key.UP)) {
+            if (Key.isDown(Constants.AIM_UP_BTN)) {
                 shootDirection = Constants.DIR_UP;
             }
-            if (Key.isDown(Key.DOWN)) {
+            if (Key.isDown(Constants.AIM_DOWN_BTN)) {
                 shootDirection = Constants.DIR_DOWN;
             }
             if (shootButton && !isCharging) {
