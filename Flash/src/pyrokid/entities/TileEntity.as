@@ -9,7 +9,6 @@ package pyrokid.entities {
 	public class TileEntity extends GameEntity {
 		
 		public var cells:Array;
-		private var color:uint;
         
         // in tile coordinates, not pixel space
 		public var globalAnchor:Vector2;
@@ -27,8 +26,6 @@ package pyrokid.entities {
 		
 		public function TileEntity(x:int, y:int, objCode:int) {
             objectCode = objCode;
-			this.color = 0x00FF00;
-			super(1, 1);
 			this.x = x;
 			this.y = y;
 			cells = [];

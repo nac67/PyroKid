@@ -13,7 +13,6 @@ package pyrokid.entities {
      */
     public class Player extends FreeEntity {
         
-        public var direction:int;
         private var _width:Number;
         private var _height:Number;
         
@@ -35,8 +34,8 @@ package pyrokid.entities {
         
         private var onFireSprite:Sprite;
 
-        public function Player(level:Level, width:Number, height:Number) {
-            super(level, width, height);
+        public function Player(level:Level) {
+            super(level, 1, 28, 44);
             
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
             legsSWF.stop();

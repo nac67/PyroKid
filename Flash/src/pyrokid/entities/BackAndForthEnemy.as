@@ -11,51 +11,23 @@ package pyrokid.entities {
      * is a specific type of enemy. */
     public class BackAndForthEnemy extends FreeEntity {
         
-        private var _direction:int;
         protected var swf:MovieClip;
-        private var hitBox:Box;
         
-        private var scale:Number;
-        private var wArt:int;
-        private var hArt:int;
-        private var xHit:int;
-        private var yHit:int;
-        private var wHit:int;
-        private var hHit:int;
-        
-        public function BackAndForthEnemy(level:Level, swf:MovieClip,
-                scale:Number, wArt:int, hArt:int, xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1) {
-            super(level, wArt*scale, hArt*scale, 0x00FF00);
-            
-            this.wArt = wArt;
-            this.hArt = hArt;
-            this.xHit = xHit;
-            this.yHit = yHit;
-            if (wHit == -1 || hHit == -1) {
-                this.wHit = this.wArt;
-                this.hHit = this.hArt;
-            } else {
-                this.wHit = wHit;
-                this.hHit = hHit;
-            }
-            
+        public function BackAndForthEnemy(level:Level, swf:MovieClip, scale:Number, wArt:int, hArt:int,
+                xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1) {
+            super(level, scale, wArt, hArt, xHit, yHit, wHit, hHit);
+
             this.swf = swf;
             addChild(swf);
-            this.scale = scale;
             swf.scaleX = swf.scaleY = scale;
-            
-            hitBox = new Box(xHit * scale, yHit * scale, wHit * scale, hHit * scale);
-            addChild(hitBox);
             direction = Constants.DIR_RIGHT;
+            
+            if (Constants.DEBUG) {
+                setChildIndex(this.swf, 0);
+            }
         }
         
-        public function genPhysRect():PhysRectangle {
-            var enemyRect:PhysRectangle = new PhysRectangle();
-            enemyRect.halfSize = new Vector2(wArt * scale / 2, hArt * scale / 2).DivD(Constants.CELL);
-            return enemyRect;
-        }
-        
-        public function set direction (val:int):void {
+        public override function set direction(val:int):void {
             _direction = val;
             if (val == Constants.DIR_RIGHT) {
                 swf.scaleX = scale;
@@ -70,14 +42,10 @@ package pyrokid.entities {
             }
         }
         
-        public function get direction ():int {
-            return _direction;
-        }
-        
         public function update():void {
             if (touchRight) {
                 direction = Constants.DIR_LEFT;
-            }else if (touchLeft) {
+            } else if (touchLeft) {
                 direction = Constants.DIR_RIGHT;
             }
             

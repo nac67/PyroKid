@@ -10,16 +10,7 @@ package pyrokid.entities {
 		
 		protected var _ignitionTime:int = -1;
         private var _isDead:Boolean = false;
-		private var _w:int;
-		private var _h:int;
-        
-        public var velocity:Vector2;
-		
-		public function GameEntity(width:Number, height:Number) {
-			_w = width;
-			_h = height;
-            velocity = new Vector2();
-        }
+        public var velocity:Vector2 = new Vector2();
         
         public function kill(level:Level):void {
             _isDead = true;
@@ -34,14 +25,6 @@ package pyrokid.entities {
             return _isDead;
         }
 		
-		public function get w():int {
-			return _w;
-		}
-		
-		public function get h():int {
-			return _h;
-		}
-		
 		public function isOnFire():Boolean {
 			return ignitionTime >= 0;
 		}
@@ -51,22 +34,6 @@ package pyrokid.entities {
                 _ignitionTime = ignitionFrame;
             }
 		}
-        
-        /* Returns the center of the object in pixel space W.R.T. the level*/
-        public function getCenter():Vector2i {
-            return new Vector2i(x + (_w / 2), y + (_h / 2));
-        }
-        
-        /* Returns the center of the object in pixel space W.R.T. this*/
-        public function getCenterLocal():Vector2i {
-            return new Vector2i((_w / 2), (_h / 2));
-        }
-        
-        /* Sets the center of the object in pixel space */
-        public function setCenter(_x:int, _y:int):void {
-            this.x = _x - (_w / 2);
-            this.y = _y - (_h / 2);
-        }
 	}
 	
 }
