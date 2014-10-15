@@ -9,8 +9,7 @@ package pyrokid.entities {
         public function BurnForeverEnemy(level:Level) {
             var swf:MovieClip = new Embedded.BurningManSWF() as MovieClip;
             swf.gotoAndStop(1);
-            //super(level, swf, 1, 60, 25, 25, 5, 35, 22);
-            super(level, swf, 1, 60, 25, 0, 0, 10, 30);
+            super(level, swf, 1, 60, 25, 25, 5, 35, 22);
         }
         
 		public override function ignite(level:Level, ignitionFrame:int):void {
