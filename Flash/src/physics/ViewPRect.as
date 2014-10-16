@@ -19,10 +19,6 @@ package physics {
             isFreeEntity = sprite is FreeEntity;
         }
         
-        public function updateMovement():void {
-            
-        }
-        
         /**
          * Resolve Physics And Update Sprite
          * @param islands Array Of PhysIslands
@@ -32,7 +28,6 @@ package physics {
             phys.velocity.x = sprite.velocity.x / Constants.CELL;
             phys.velocity.y = sprite.velocity.y / Constants.CELL;
             
-           
             sprite.isGrounded = false;
             sprite.touchLeft = false;
             sprite.touchRight = false;

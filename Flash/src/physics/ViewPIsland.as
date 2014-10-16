@@ -33,6 +33,8 @@ package physics {
             sprite.x = phys.globalAnchor.x * Constants.CELL;
 			sprite.y = phys.globalAnchor.y * Constants.CELL;
             sprite.globalAnchor = phys.globalAnchor;
+            sprite.velocity.x = phys.velocity.x * Constants.CELL;
+            sprite.velocity.y = phys.velocity.y * Constants.CELL;
         }
     }
 }

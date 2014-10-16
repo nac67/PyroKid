@@ -14,6 +14,7 @@ package pyrokid {
         // fire constants
         public static var SPREAD_RATE:int = 30;
         public static var QUICK_BURN_TIME:int = SPREAD_RATE;
+        public static var SPREAD_WHILE_FALLING:Boolean = false;
         
         public static var LEFT_BTN:int;
         public static var RIGHT_BTN:int;
