@@ -28,12 +28,12 @@ package pyrokid.graphics {
             texMap["2"] = (new TestBMP2() as Bitmap).bitmapData;
             
             var texIDs:Array = [
-                [0, 1, 1, 2, 2, 2, 1, 1, 0, 0],
-                [0, 1, 1, 2, 2, 2, 1, 1, 0, 0],
-                [0, 1, 0, 0, 2, 0, 2, 1, 0, 0],
-                [0, 1, 1, 2, 2, 0, 2, 2, 2, 2],
-                [0, 1, 1, 2, 2, 0, 2, 1, 0, 0],
-                [0, 1, 0, 0, 0, 2, 1, 1, 0, 0]
+                [0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
+                [0, 1, 1, 0, 1, 0, 1, 1, 0, 0],
+                [0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+                [0, 1, 1, 0, 1, 0, 0, 0, 0, 1],
+                [0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                [0, 1, 0, 0, 0, 0, 1, 1, 0, 0]
             ];
             
             var sprite:Bitmap = ConnectedSpriteBuilder.buildSprite(texIDs, texMap, new ConnectedSpriteOptions());
