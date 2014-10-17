@@ -41,6 +41,7 @@ package pyrokid {
         
         public function LevelEditor(level:Level):void {
 			this.level = level;
+            addChild(level);
 			editMode = 0;
             
             // Universal
@@ -100,6 +101,10 @@ package pyrokid {
 			selectedButton.visible = editMode == 1 && selectedCell != null;
         }
 		
+        public function getRecipe():Object {
+            return level.recipe;
+        }
+        
         // ----------------------UI Callback Functions---------------------
         
 		private function changeSelectedObject(selected):void {
