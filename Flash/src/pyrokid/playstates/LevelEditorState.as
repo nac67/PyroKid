@@ -20,14 +20,14 @@ package pyrokid.playstates {
             var level:Level = new Level(LevelRecipe.generateTemplate(15, 10));
             editor = new LevelEditor(level);
             addChild(editor);
-            editor.turnEditorOn();
+            editor.hookEvents();
             
             stage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
         }
         override protected function onExit(parent:StateList):void {
             stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
             
-            editor.turnEditorOff();
+            editor.unhookEvents();
             Utils.removeAllChildren(this);
         }
         
@@ -57,13 +57,8 @@ package pyrokid.playstates {
         }
         
         public function reloadLevel(levelRecipe):void {
-            editor.turnEditorOff();
-            Utils.removeAllChildren(this);
-            
             var level:Level = new Level(levelRecipe);
-            editor = new LevelEditor(level);
-            addChild(editor);
-            editor.turnEditorOn();
+            editor.loadLevel(level);
         }
     }
 

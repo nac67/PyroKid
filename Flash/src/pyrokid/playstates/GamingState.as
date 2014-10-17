@@ -36,7 +36,6 @@ package pyrokid.playstates {
             }
         }
         override public function updateVisuals(parent:StateList):void {
-            trace("ST: " + x + "," + y);
         }
         
         private function onKeyUp(e:KeyboardEvent = null) {
