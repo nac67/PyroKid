@@ -21,14 +21,12 @@ package pyrokid {
         public var level:Level;
         
         public var isGameOver:Boolean = false;
+        public var hasPlayerWon:Boolean = false;
         public var createGameOverScreenFunc:Function;
         
         /* levelRecipe is not specified if you want to load from browser
          * Otherwise give it a byte array from an embedded level file */
-        public function GameController(levelBytes:ByteArray = null) {
-            Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
-            Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
-            
+        public function init(levelBytes:ByteArray = null) {
             if (levelBytes == null) {
                 // Load level with browser
                 LevelIO.loadLevel(initializeLevelAndEditor);
@@ -39,19 +37,19 @@ package pyrokid {
             }
         }
         
+        private function begin():void {
+            stage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+            addEventListener(Event.ENTER_FRAME, update);
+        }
         public function destroy():void {
-            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
-            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
-            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
+            stage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             removeEventListener(Event.ENTER_FRAME, update);
         }
         
         private function initializeLevelAndEditor(levelRecipe:Object):void {
             reloadLevel(levelRecipe);
-            levelEditor = new LevelEditor(level);
-            levelEditor.reloadLevel = reloadLevel;
-            addChild(levelEditor);
-            addEventListener(Event.ENTER_FRAME, update);
+            addChild(level);
+            begin();
         }
         
         public function reloadLevel(levelRecipe):void {
@@ -61,35 +59,12 @@ package pyrokid {
             level = new Level(levelRecipe);
             camera = new Camera(level);
             addChild(camera);
+            camera.x = Constants.WIDTH / 2;
+            camera.y = Constants.HEIGHT / 2;
             setChildIndex(camera, 0);
+            stage.focus = camera;
             if (editorMode) {
                 levelEditor.loadLevel(level);
-            }
-            Main.MainStage.focus = camera;
-        }
-        
-        private function levelEditorListener(e:KeyboardEvent):void {
-            if (e.keyCode == 13) { //enter
-                editorMode = !editorMode;
-                if (editorMode) {
-                    levelEditor.turnEditorOn();
-                } else {
-                    levelEditor.turnEditorOff();
-                    level.frameCount = 0;
-                }
-                reloadLevel(level.recipe);
-            }
-            
-            if (editorMode) {
-                if (e.keyCode == 79) { //o
-                    trace("loading level");
-                    LevelIO.loadLevel(reloadLevel);
-                } else if (e.keyCode == 80) { //p
-                    trace("saving level");
-                    LevelIO.saveLevel(level.recipe);
-                }
-            } else {
-                
             }
         }
         
@@ -118,17 +93,18 @@ package pyrokid {
         private function doGameOver():void {
             destroy();
             isGameOver = true;
-            createGameOverScreenFunc(false);
+            hasPlayerWon = false;
         }
         private function doGameWon():void {
             destroy();
             isGameOver = true;
-            createGameOverScreenFunc(true);
+            hasPlayerWon = true;
         }
         
         private function centerOnPlayer():void {
-            camera.xCamera = Utils.lerp(camera.xCamera, level.player.x, Constants.CAMERA_LAG);
-            camera.yCamera = Utils.lerp(camera.yCamera, level.player.y, Constants.CAMERA_LAG);
+            // TODO: FIX THIS, WTF?
+            camera.xCamera = Utils.lerp(camera.xCamera, level.player.x - Constants.WIDTH / 2, Constants.CAMERA_LAG);
+            camera.yCamera = Utils.lerp(camera.yCamera, level.player.y - Constants.HEIGHT / 2, Constants.CAMERA_LAG);
             camera.x = Constants.WIDTH / 2;
             camera.y = Constants.HEIGHT / 2;
         }

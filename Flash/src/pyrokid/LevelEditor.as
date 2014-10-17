@@ -41,6 +41,7 @@ package pyrokid {
         
         public function LevelEditor(level:Level):void {
 			this.level = level;
+            addChild(level);
 			editMode = 0;
             
             // Universal
@@ -83,6 +84,12 @@ package pyrokid {
             UI_Elements.push(objectEditor);
 			
             renderVisibleObjects();
+            
+            // Add The UI
+            for (var i:int = 0; i < UI_Elements.length; i++) {
+				addChild(UI_Elements[i]);
+			}
+			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
 		}
         
         private function renderVisibleObjects():void {
@@ -100,6 +107,10 @@ package pyrokid {
 			selectedButton.visible = editMode == 1 && selectedCell != null;
         }
 		
+        public function getRecipe():Object {
+            return level.recipe;
+        }
+        
         // ----------------------UI Callback Functions---------------------
         
 		private function changeSelectedObject(selected):void {
@@ -180,33 +191,23 @@ package pyrokid {
 		}
         
         // ----------------------Editor on off---------------------
-		
-		public function turnEditorOn():void {
-            Main.MainStage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
-            Main.MainStage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
-			Main.MainStage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
-			for (var i:int = 0; i < UI_Elements.length; i++) {
-				addChild(UI_Elements[i]);
-			}
-			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+		public function hookEvents():void {
+            stage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
+            stage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
+			stage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
 		}
-		
-		public function turnEditorOff():void {
-            Main.MainStage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
-            Main.MainStage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
-			Main.MainStage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
-			Utils.removeAllChildren(this);
+		public function unhookEvents():void {
+            stage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
+            stage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
+			stage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
 		}
-		
 		public function loadLevel(level:Level):void {
 			this.level = level;
 			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
             renderVisibleObjects();
 		}
 		
-		
 		// ----------------------Mouse Listeners---------------------
-        
         private function mouseDown(event:MouseEvent):void {
             if (editMode == 0){
                 dragging = true;
@@ -218,7 +219,6 @@ package pyrokid {
                 draggingRect.y = cellY * (Constants.CELL * levelScale)
             }
         }
-        
         private function mouseMove(event:MouseEvent):void {
             if(editMode == 0 && dragging){
                 var cellX:int = event.stageX / (Constants.CELL * levelScale);
@@ -240,7 +240,6 @@ package pyrokid {
                 draggingRect.visible = w > 1 || h > 1;
             }
         }
-		
 		private function mouseUp(event:MouseEvent):void {
             dragging = false;
             draggingRect.visible = false;
@@ -285,7 +284,6 @@ package pyrokid {
             renderVisibleObjects();
 			level.reset(level.recipe);
 		}
-        
         private function placeObject(cellX:int, cellY:int):void {
             //TODO: This doesn't work -- Aaron
             if (typeSelected == "spider") {
@@ -301,7 +299,6 @@ package pyrokid {
                 level.recipe.walls[cellY][cellX] = int(typeSelected);
             }
         }
-		
     }
 
 }
