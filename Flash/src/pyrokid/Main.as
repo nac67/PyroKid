@@ -39,7 +39,7 @@ package pyrokid {
 			createStartMenu();
         }
 		
-    public function startGameFunc(levelRecipe:ByteArray = null):void {//change this to level select maybe? or use parameter			
+        public function startGameFunc(levelRecipe:ByteArray = null):void {//change this to level select maybe? or use parameter			
 			if (levelRecipe == null) { //default, start normal game controller
 				trace("starting null level");
 				Utils.removeAllChildren(this);
