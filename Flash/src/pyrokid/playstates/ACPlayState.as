@@ -1,15 +1,29 @@
 package pyrokid.playstates {
     import flash.display.Sprite;
 	/**
-     * ...
+     * This Represents A Unique Running State
      * @author Cristian Zaloj
      */
     public class ACPlayState extends Sprite {
+        /**
+         * True If This Is The Active State (False Signals A State Switch)
+         */
         private var isRunning:Boolean;
+        /**
+         * The State To Which This One Wants To Deliver Control
+         */
         private var desiredNextState:String;
         
+        /**
+         * The List Of All The States
+         */
         protected var parentList:StateList;
         
+        /**
+         * Signal The StateList Controller That This State Should Become
+         * Inactive And Move To A Different State
+         * @param state State's Identifier In StateList
+         */
         protected function moveToState(state:String) {
             isRunning = false
             desiredNextState = state;
