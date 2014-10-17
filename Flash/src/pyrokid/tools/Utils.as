@@ -46,8 +46,8 @@ package pyrokid.tools {
         }
         
         public static function removeAllChildren(obj:Sprite):void {
-            while (obj.numChildren > 0) {
-                obj.removeChildAt(0);
+            for (var i:int = obj.numChildren-1; i >= 0; i--) {
+               obj.removeChildAt(i);
             }
         }
         

@@ -12,6 +12,7 @@ package pyrokid.tools {
         public static var LEFT:int = 37;
         public static var RIGHT:int = 39;
         public static var SPACE:int = 32;
+        public static var ENTER:int = 13;
         public static var A:int = 65;
         public static var S:int = 83;
         public static var W:int = 87;
