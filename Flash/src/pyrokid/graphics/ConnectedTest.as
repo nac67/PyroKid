@@ -9,7 +9,7 @@ package pyrokid.graphics {
      * @author Cristian Zaloj
      */
     public class ConnectedTest extends Sprite {
-        [Embed(source="../../../assets/tile_art/test1.png")]
+        [Embed(source="../../../assets/tile_art/dirt_merge.png")]
         public static var TestBMP1:Class;
         
         [Embed(source="../../../assets/tile_art/test2.png")]

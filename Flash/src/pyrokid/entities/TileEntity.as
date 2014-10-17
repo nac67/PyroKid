@@ -49,6 +49,7 @@ package pyrokid.entities {
 				addChild(child);
                 cellSprites.push(child);
 			}
+            
 		}
 		
 		// TODO optimize this. It should be calculated once, and it should not

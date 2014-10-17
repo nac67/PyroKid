@@ -4,7 +4,7 @@ package pyrokid.graphics {
      * @author Cristian Zaloj
      */
     public class ConnectedSpriteOptions {
-        public static var DEFAULT_SPRITE_TILE_SIZE = 64;
+        public static var DEFAULT_SPRITE_TILE_SIZE = 50;
         public static var DEFAULT_IMAGE_TILE_SIZE = 50;
         
         /**
