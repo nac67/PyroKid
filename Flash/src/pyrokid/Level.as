@@ -2,6 +2,7 @@ package pyrokid {
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+    import flash.utils.Dictionary;
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.*;
@@ -70,6 +71,14 @@ package pyrokid {
         }
 
         public function reset(recipe:Object):void {
+            var searchOrder:Array = Utils.newArray(recipe.walls[0].length, recipe.walls.length);
+            var count:int = 0;
+            Utils.BFS(recipe.walls, new Vector2i(8, 4), function(a, b) { return recipe.walls[b.y][b.x] == 0; }, function(a) {
+                searchOrder[a.y][a.x] = count;
+                count++;
+            });
+            Utils.print2DArr(searchOrder);
+            
             Key.reset();
             
             frameCount = 0;

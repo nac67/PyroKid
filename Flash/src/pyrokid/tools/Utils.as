@@ -1,6 +1,7 @@
 package pyrokid.tools {
     import flash.display.DisplayObject;
     import flash.display.Sprite;
+    import flash.utils.Dictionary;
 	import physics.PhysBox;
 	import physics.Vector2;
 	import physics.Vector2i;
@@ -58,6 +59,48 @@ package pyrokid.tools {
             }
         }
         
+        /* Performs BFS on array, starting at start. */
+        public static function BFS(array:Array, start:Vector2i, isNeighbor:Function, processNode:Function):void {
+            var queue:Array = [];
+            var visited:Dictionary = new Dictionary();
+            visited[start.toString()] = true;
+            queue.push(start);
+            while (queue.length > 0) {
+                var coor:Vector2i = queue.shift();
+                var finishedSearch:Boolean = processNode(coor);
+                if (finishedSearch) {
+                    return;
+                }
+                
+                var neighbors:Array = getNeighborCoors(coor.x, coor.y);
+                neighbors = neighbors.filter(function(nei) {
+                    return isNeighbor(coor, nei) && inBounds(array, nei.x, nei.y);
+                });
+                for each (var neighbor:Vector2i in neighbors) {
+                    if (!visited[neighbor.toString()]) {
+                        queue.push(neighbor);
+                        visited[neighbor.toString()] = true;
+                    }
+                }
+            }
+        }
+        
+        public static function print2DArr(array:Array, spacing:int = 3):void {
+            for each (var row:Array in array) {
+                var rowStr:String = "";
+                for (var j:int = 0; j < row.length; j++) {
+                    var str:String = row[j] ? row[j].toString() : "NA";
+                    var padding = Math.max(spacing - str.length, 0);
+                    rowStr += str;
+                    for (var i:int = 0; i < padding; i++) {
+                        rowStr += " ";
+                    }
+                    rowStr += ",";
+                }
+                trace(rowStr);
+            }
+        }
+        
         /* Applies func to each element in the 2D array. func should have
          * the following signature: function(x:int, y:int, element):void */
         public static function foreach(array:Array, func:Function):void {
@@ -71,7 +114,7 @@ package pyrokid.tools {
         
         /* Returns an array of the neighboring values to (x, y) in the given 2D array. */
         public static function getNeighbors(array:Array, x:int, y:int):Array {
-            return filterNull(getNeighborCoors(x, y).map(function(coor) {
+            return filterNull(getNeighborCoors(x, y).map(function(coor:Vector2i) {
                 return index(array, coor.x, coor.y);
             }));
         }
