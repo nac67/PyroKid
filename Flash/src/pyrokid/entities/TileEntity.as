@@ -24,12 +24,16 @@ package pyrokid.entities {
 			new Vector2i(1, 0)
 		];
 		
-		public function TileEntity(x:int, y:int, objCode:int) {
+		public function TileEntity(x:int, y:int, objCode:int, sprite:DisplayObject = null) {
             objectCode = objCode;
 			this.x = x;
 			this.y = y;
 			cells = [];
-            cellSprites = [];
+            if (sprite == null) {
+                cellSprites = [];
+            } else {
+                addChild(sprite);
+            }
 		}
 		
 		protected function getSpriteForCell(cell:Vector2i):DisplayObject {
@@ -42,6 +46,9 @@ package pyrokid.entities {
         }
 		
 		public function finalizeCells():void {
+            if (cellSprites == null) {
+                return;
+            }
 			for (var i:int = 0; i < cells.length; i++) {
 				var child:DisplayObject = getSpriteForCell(cells[i]);
 				child.x = cells[i].x * Constants.CELL;
@@ -49,7 +56,6 @@ package pyrokid.entities {
 				addChild(child);
                 cellSprites.push(child);
 			}
-            
 		}
 		
 		// TODO optimize this. It should be calculated once, and it should not

@@ -28,18 +28,19 @@ package pyrokid.graphics {
             
             var offsets:Array = ConnectedAtlasStitcher.getConnectedTextureIndices(texIDGridPadded);
             
-            var bmpData:BitmapData = new BitmapData(w * opt.imageTileSize, h * opt.imageTileSize);
+            var bmpData:BitmapData = new BitmapData(w * opt.imageTileSize, h * opt.imageTileSize, true, 0x00000000); // makes it transparent background
             var sprite:Bitmap = new Bitmap(bmpData, PixelSnapping.ALWAYS, true);
             var cropArea:Rectangle = new Rectangle(0, 0, opt.imageTileSize, opt.imageTileSize);
             for (var y = 0; y < h; y++) {
                 for (var x = 0; x < w; x++) {
-                    trace(texIDGrid[y][x]);
-                    if (texIDGrid[y][x] != 0) {
+                    //trace(texIDGrid[y][x]);
+                    var objCode:int = texIDGrid[y][x];
+                    if (objCode != 0 && textureMap.hasOwnProperty(objCode)) {
                         // Find Correct Cropping Position
                         var off:int = offsets[y][x];
                         var ox:int = off % 12;
                         var oy:int = off / 12;
-                        trace(off + ": " + ox + "," + oy);
+                        //trace(off + ": " + ox + "," + oy);
                         cropArea.x = opt.imageTileSize * x;
                         cropArea.y = opt.imageTileSize * y;
 

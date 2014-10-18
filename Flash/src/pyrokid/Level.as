@@ -5,6 +5,8 @@ package pyrokid {
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.*;
+    import flash.display.Bitmap;
+    import pyrokid.graphics.*;
     
     public class Level extends Sprite {
         
@@ -89,6 +91,10 @@ package pyrokid {
             
 			this.recipe = recipe;
             walls = recipe.walls;
+            
+            var texMap:Object = new Object();
+            texMap["1"] = (new Embedded.DirtMergeBMP() as Bitmap).bitmapData;
+            var connectedDirt:Bitmap = ConnectedSpriteBuilder.buildSprite(walls, texMap, new ConnectedSpriteOptions());
 			/*trace("tracing walls");
 			for (var i:int = 0; i < walls.length; i++) {
 				trace(walls[i]);
@@ -154,7 +160,7 @@ package pyrokid {
 				} else if (realObjCode == Constants.WOOD_TILE_CODE) {
 					tileEntity = new BurnQuickly(spriteX, spriteY, realObjCode);
 				} else {
-					tileEntity = new NonFlammableTile(spriteX, spriteY, realObjCode);
+					tileEntity = new NonFlammableTile(spriteX, spriteY, realObjCode, null);// realObjCode == Constants.WALL_TILE_CODE ? connectedDirt : null);
 				}
 				tileEntity.globalAnchor = isle.globalAnchor;
 				addChild(tileEntity);
