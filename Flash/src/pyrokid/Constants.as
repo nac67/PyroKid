@@ -11,6 +11,11 @@ package pyrokid {
 		public static var HEIGHT:int = 600;
         public static var CELL:int = 50;
         
+        // level editor constants
+        public static var EDITOR_OBJECT_MODE:int = 0;
+        public static var EDITOR_PROPERTIES_MODE:int = 1;
+        public static var EDITOR_ISLAND_MODE:int = 2;
+        
         // fire constants
         public static var SPREAD_RATE:int = 30;
         public static var QUICK_BURN_TIME:int = SPREAD_RATE;

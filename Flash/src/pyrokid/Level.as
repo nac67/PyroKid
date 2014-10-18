@@ -70,7 +70,6 @@ package pyrokid {
         }
 
         public function reset(recipe:Object):void {
-            
             Key.reset();
             
             frameCount = 0;
@@ -101,33 +100,25 @@ package pyrokid {
             
             enemies = [];
 			
-			tileEntityGrid = [];
-            var physBoxGrid:Array = [];
-			var width:int = walls[x].length;
-            for (y = 0; y < walls.length; y++) {
-                physBoxGrid.push(new Array(width));
-				tileEntityGrid.push(new Array(width));
-            }
+			var width:int = walls[0].length;
+            var physBoxGrid:Array = Utils.newArray(width, walls.length);
+            tileEntityGrid = Utils.newArray(width, walls.length);
             
 			var objId:int = 2;
-            for (y = 0; y < walls.length; y++) {
-                var row:Array = walls[y];
-                for (x = 0; x < row.length; x++) {
-					var objCode:int = row[x];
-					var falling = false;
-					if (objCode < 0) {
-						falling = true;
-						objCode = -objCode;
-					}
-					
-					if (objCode == Constants.WALL_TILE_CODE) {
-						physBoxGrid[y][x] = new PhysBox(1);
-					} else if (objCode != Constants.EMPTY_TILE_CODE) {
-						physBoxGrid[y][x] = new PhysBox(objId, falling);
-						objId += 1;
-					}
+            Utils.foreach(walls, function(x:int, y:int, objCode:int):void {
+                var falling:Boolean = false;
+                if (objCode < 0) {
+                    falling = true;
+                    objCode = -objCode;
                 }
-            }
+                
+                if (objCode == Constants.WALL_TILE_CODE) {
+                    physBoxGrid[y][x] = new PhysBox(1);
+                } else if (objCode != Constants.EMPTY_TILE_CODE) {
+                    physBoxGrid[y][x] = new PhysBox(objId, falling);
+                    objId += 1;
+                }
+            });
 
 			for (var i:int = 0; i < recipe.multiTileObjects.length; i++) {
 				var multiTileObj:Array = recipe.multiTileObjects[i];

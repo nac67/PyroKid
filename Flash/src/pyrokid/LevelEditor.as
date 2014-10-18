@@ -91,13 +91,14 @@ package pyrokid {
             
             // Edit mode 0
             draggingRect.visible = false;
-            allObjectTypesButton.visible = editMode == 0;
+            allObjectTypesButton.visible = editMode == Constants.EDITOR_OBJECT_MODE;
             
             // Edit mode 1
-            objectEditor.visible = editMode == 1;
-            noObjectSelectedSprite.visible = editMode == 1 && selectedCell == null;
-            selectedHighlighter.visible = editMode == 1 && selectedCell != null;
-			selectedButton.visible = editMode == 1 && selectedCell != null;
+            objectEditor.visible = editMode == Constants.EDITOR_PROPERTIES_MODE;
+            var visible:Boolean = editMode == Constants.EDITOR_PROPERTIES_MODE && selectedCell == null;
+            noObjectSelectedSprite.visible = visible;
+            selectedHighlighter.visible = visible;
+			selectedButton.visible = visible;
         }
 		
         // ----------------------UI Callback Functions---------------------
@@ -208,7 +209,7 @@ package pyrokid {
 		// ----------------------Mouse Listeners---------------------
         
         private function mouseDown(event:MouseEvent):void {
-            if (editMode == 0){
+            if (editMode != Constants.EDITOR_PROPERTIES_MODE){
                 dragging = true;
                 var cellX:int = event.stageX / (Constants.CELL * levelScale);
                 var cellY:int = event.stageY / (Constants.CELL * levelScale);
@@ -220,7 +221,7 @@ package pyrokid {
         }
         
         private function mouseMove(event:MouseEvent):void {
-            if(editMode == 0 && dragging){
+            if (editMode != Constants.EDITOR_PROPERTIES_MODE && dragging){
                 var cellX:int = event.stageX / (Constants.CELL * levelScale);
                 var cellY:int = event.stageY / (Constants.CELL * levelScale);
                 

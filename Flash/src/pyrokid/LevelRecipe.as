@@ -7,6 +7,9 @@ package pyrokid {
 		 * represents type of entity, and a negative value indicates
 		 * that it is affected by gravity. */
         public var walls:Array;
+        
+        /* 2D array of integers representing which tiles are connected. */
+        public var connected:Array;
 		
 		/* Tile the player starts on. [cellX, cellY]. */
         public var playerStart:Array;

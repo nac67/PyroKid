@@ -5,6 +5,7 @@ package pyrokid.entities {
     import flash.display.MovieClip;
 	import physics.*;
 	import pyrokid.*;
+    import pyrokid.tools.Utils;
 	
 	public class TileEntity extends GameEntity {
 		
@@ -57,15 +58,10 @@ package pyrokid.entities {
         // TODO this should throw something if called when the tile entity is moving -- Aaron
 		public function getNeighborCoordinates(grid:Array):Array {
 			var coors:Array = [];
-			for (var i:int = 0; i < cells.length; i++) {
-				for (var j:int = 0; j < directNeighbors.length; j++) {
-					var a:Vector2i = cells[i];
-					var b:Vector2i = directNeighbors[j];
-					coors.push(new Vector2i(
-                        a.x + b.x + Math.round(globalAnchor.x),
-                        a.y + b.y + Math.round(globalAnchor.y)
-                    ));
-				}
+			for each (var cell:Vector2i in cells) {
+                var x:int = cell.x + Math.round(globalAnchor.x);
+                var y:int = cell.y + Math.round(globalAnchor.y);
+                Utils.getNeighborCoors(x, y, coors);
 			}
 			return coors;
 		}

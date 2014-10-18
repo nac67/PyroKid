@@ -18,7 +18,15 @@ package physics {
         public static function ConstructIslands(tiles:Array):Array {
             var queue = [];
             var ids:Array = BuildIDs(tiles, queue);
-            MergeIDs(tiles, ids, queue);
+            //trace("printing ids");
+            //for each (var row:Array in ids) {
+                //trace(row);
+            //}
+            //MergeIDs(tiles, ids, queue);
+            //trace("printing merged ids");
+            //for each (var row:Array in ids) {
+                //trace(row);
+            //}
             var islandPositions:Array = GetIslandPositions(ids);
             
             var islands = new Array(islandPositions.length);
