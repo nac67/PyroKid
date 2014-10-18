@@ -289,38 +289,63 @@ package pyrokid {
                     }   
                 }
             } else if (editMode == Constants.EDITOR_ISLAND_MODE) {
-                var nextId = getMaxId(level.recipe.islands) + 1;
-                var minValOfNewIds = nextId;
-                
-                for (var cx:int = lowX; cx <= highX; cx++) {
-                    for (var cy:int = lowY; cy <= highY; cy++) {
-                        if (level.recipe.walls[cy][cx] == 0 || level.recipe.islands[cy][cx] >= minValOfNewIds) {
-                            continue;
-                        }
-                        
-                        var idsBeingConnected:Dictionary = new Dictionary();
-                        
-                        var isNeighbor:Function = function(coor:Vector2i):Boolean {
-                            var notEmpty:Boolean = level.recipe.walls[coor.y][coor.x] != Constants.EMPTY_TILE_CODE;
-                            var inRectangle:Boolean = coor.x >= lowX && coor.x <= highX && coor.y >= lowY && coor.y <= highY;
-                            var alreadyConnected:Boolean = idsBeingConnected[level.recipe.islands[coor.y][coor.x]];
-                            return notEmpty && (alreadyConnected || inRectangle);
-                        }
-                        var processNode:Function = function(coor:Vector2i):Boolean {
-                            idsBeingConnected[level.recipe.islands[coor.y][coor.x]] = true;
-                            level.recipe.islands[coor.y][coor.x] = nextId;
-                            return false;
-                        }
-                        Utils.BFS(Utils.getWidth(level.recipe.islands), Utils.getHeight(level.recipe.islands),
-                                new Vector2i(cx, cy), isNeighbor, processNode);
-                        nextId += 1;
-                    }   
-                }
+                mergeRectangleTiles(level.recipe.islands, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
+                    return level.recipe.walls[coor.y][coor.x] != Constants.EMPTY_TILE_CODE;
+                });
+                mergeRectangleTiles(level.recipe.tileEntities, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
+                    return level.recipe.walls[coor.y][coor.x] == objCode;
+                });
                 trace("walls:");
                 Utils.print2DArr(level.recipe.walls);
                 trace("island (connected) ids:");
                 Utils.print2DArr(level.recipe.islands);
+                trace("tile entities:");
+                Utils.print2DArr(level.recipe.tileEntities);
             }
+        }
+        
+        private function mergeRectangleTiles(grid:Array, lowX:int, highX:int, lowY:int, highY:int, canMergeWith:Function):void {
+            var nextId:int = getMaxId(grid) + 1;
+            var minValOfNewIds:int = nextId;
+            
+            for (var cx:int = lowX; cx <= highX; cx++) {
+                for (var cy:int = lowY; cy <= highY; cy++) {
+                    var objCode:int = level.recipe.walls[cy][cx];
+                    if (objCode == Constants.EMPTY_TILE_CODE || grid[cy][cx] >= minValOfNewIds) {
+                        continue;
+                    }
+                    
+                    var idsBeingConnected:Dictionary = new Dictionary();
+                    
+                    var isNeighbor:Function = function(coor:Vector2i):Boolean {
+                        var inRectangle:Boolean = coor.x >= lowX && coor.x <= highX && coor.y >= lowY && coor.y <= highY;
+                        var alreadyConnected:Boolean = idsBeingConnected[grid[coor.y][coor.x]];
+                        return canMergeWith(coor, objCode) && (alreadyConnected || inRectangle);
+                    }
+                    var processNode:Function = function(coor:Vector2i):Boolean {
+                        idsBeingConnected[grid[coor.y][coor.x]] = true;
+                        grid[coor.y][coor.x] = nextId;
+                        return false;
+                    }
+                    Utils.BFS(Utils.getWidth(grid), Utils.getHeight(grid), new Vector2i(cx, cy), isNeighbor, processNode);
+                    nextId += 1;
+                }   
+            }
+            
+            normalizeIds(grid);
+        }
+        
+        private static function normalizeIds(grid:Array):void {
+            var newLowId:int = 1;
+            var oldIdsToNewIds:Dictionary = new Dictionary();
+            oldIdsToNewIds[0] = 0;
+            Utils.foreach(grid, function(x:int, y:int, id:int):void {
+                if (oldIdsToNewIds[id] == undefined) {
+                    oldIdsToNewIds[id] = newLowId;
+                    newLowId += 1;
+                }
+                grid[y][x] = oldIdsToNewIds[id];
+            });
         }
         
         private static function getMaxId(array:Array):int {
@@ -344,8 +369,8 @@ package pyrokid {
                     return ent[0] != cellX || ent[1] != cellY;
                 });
                 level.recipe.walls[cellY][cellX] = int(typeSelected);
-                var maxId:int = getMaxId(level.recipe.islands);
-                level.recipe.islands[cellY][cellX] = maxId + 1;
+                level.recipe.islands[cellY][cellX] = getMaxId(level.recipe.islands) + 1;
+                level.recipe.tileEntities[cellY][cellX] = getMaxId(level.recipe.tileEntities) + 1;
             }
         }
 		
