@@ -74,15 +74,16 @@ package pyrokid {
             var searchOrder:Array = Utils.newArray(recipe.walls[0].length, recipe.walls.length);
             var count:int = 0;
             var isNeighbor:Function = function(coor:Vector2i):Boolean {
-                return recipe.walls[coor.y][coor.x] == 0;
+                var code:int = recipe.walls[coor.y][coor.x];
+                //return code == 0;
+                return code != 0 && code != 1;
             }
             var processNode:Function = function(coor:Vector2i):Boolean {
                 searchOrder[coor.y][coor.x] = count;
                 count++;
-                if (count == 10) return true;
                 return false;
             }
-            Utils.BFS(recipe.walls, new Vector2i(7, 5), isNeighbor, processNode);
+            Utils.BFS(Utils.getWidth(recipe.walls), Utils.getHeight(recipe.walls), new Vector2i(7, 5), isNeighbor, processNode);
             Utils.print2DArr(searchOrder);
             
             Key.reset();

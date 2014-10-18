@@ -59,13 +59,14 @@ package pyrokid.tools {
             }
         }
         
-        /** Performs BFS on array, starting at start. It considers an element in the array a
-         *  neighbor if it is adjacent in one of the four cardinal directions and isNeighbor
+        /** Performs BFS on an array of size height by width, starting at start.
+         *  It considers an element in the array a neighbor if it is
+         *  adjacent in one of the four cardinal directions and isNeighbor
          *  returns true on that coordinate. processNode is called on each coordinate exactly
          *  once, and it returns true iff the BFS should terminate after that node.
          *  @param isNeighbor function(coor:Vector2i):Boolean
          *  @param processNode function(coor:Vector2i):Boolean */
-        public static function BFS(array:Array, start:Vector2i, isNeighbor:Function, processNode:Function):void {
+        public static function BFS(width:int, height:int, start:Vector2i, isNeighbor:Function, processNode:Function):void {
             var queue:Array = [];
             var visited:Dictionary = new Dictionary();
             visited[start.toString()] = true;
@@ -79,7 +80,7 @@ package pyrokid.tools {
                 
                 var neighbors:Array = getNeighborCoors(coor.x, coor.y);
                 neighbors = neighbors.filter(function(nei) {
-                    return inBounds(array, nei.x, nei.y) && isNeighbor(nei);
+                    return inBoundsWH(width, height, nei.x, nei.y) && isNeighbor(nei);
                 });
                 for each (var neighbor:Vector2i in neighbors) {
                     if (!visited[neighbor.toString()]) {
@@ -112,8 +113,8 @@ package pyrokid.tools {
         /* Applies func to each element in the 2D array. func should have
          * the following signature: function(x:int, y:int, element):void */
         public static function foreach(array:Array, func:Function):void {
-            for (var y:int = 0; y < array.length; y++) {
-                for (var x:int = 0; x < array[0].length; x++) {
+            for (var y:int = 0; y < getHeight(array); y++) {
+                for (var x:int = 0; x < getWidth(array); x++) {
                     func(x, y, array[y][x]);
                 }
             }
@@ -150,9 +151,22 @@ package pyrokid.tools {
             return array;
         }
         
+        public static function getWidth(array:Array):int {
+            return array[0].length;
+        }
+        
+        public static function getHeight(array:Array):int {
+            return array.length;
+        }
+        
         /* Returns true iff (x, y) is a valid index in the 2D array. */
 		public static function inBounds(array:Array, x:int, y:int):Boolean {
-			return y >= 0 && x >= 0 && y < array.length && x < array[0].length;
+            return inBoundsWH(getWidth(array), getHeight(array), x, y);
+		}
+        
+        /* Returns true iff (x, y) is a valid index in a 2D array of width by height. */
+		public static function inBoundsWH(width:int, height:int, x:int, y:int):Boolean {
+			return y >= 0 && x >= 0 && y < height && x < width;
 		}
 		
         /* Returns the item at (x, y) in the 2D array if it exists,
