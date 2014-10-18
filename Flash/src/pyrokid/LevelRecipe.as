@@ -1,4 +1,5 @@
 package pyrokid {
+    import pyrokid.tools.Utils;
     
     public class LevelRecipe {
         
@@ -8,8 +9,8 @@ package pyrokid {
 		 * that it is affected by gravity. */
         public var walls:Array;
         
-        /* 2D array of integers representing which tiles are connected. */
-        public var connected:Array;
+        public var islands:Array;
+        public var tileEntities:Array;
 		
 		/* Tile the player starts on. [cellX, cellY]. */
         public var playerStart:Array;
@@ -29,20 +30,41 @@ package pyrokid {
         public static function generateTemplate(cellsWide:int, cellsTall:int):LevelRecipe {
             var rec:LevelRecipe = new LevelRecipe();
             
-            rec.walls = new Array();
-            for (var i:int = 0; i < cellsTall; i++) {
-                rec.walls.push(new Array());
-                for (var j:int = 0; j < cellsWide; j++) {
-                    var wall:Boolean = i == 0 || j == 0 || i == cellsTall - 1 || j == cellsWide-1;
-                    rec.walls[i].push(wall ? 1 : 0);
-                }
-            }
+            rec.islands = Utils.newArray(cellsWide, cellsTall);
+            rec.tileEntities = Utils.newArray(cellsWide, cellsTall);
+            rec.walls = Utils.newArray(cellsWide, cellsTall);
+            Utils.foreach(rec.walls, function(x:int, y:int, element:int):void {
+                var wall:Boolean = y == 0 || x == 0 || y == cellsTall - 1 || x == cellsWide - 1;
+                var objCode:int = wall ? 1 : 0;
+                rec.walls[y][x] = objCode;
+                rec.islands[y][x] = objCode;
+                rec.tileEntities[y][x] = objCode;
+            });
                          
             rec.playerStart = [1, cellsTall-2];
             rec.multiTileObjects = [];
             rec.freeEntities = [];
                          
             return rec;
+        }
+        
+        // assumes walls is there, but checks everything else
+        public static function complete(recipe:Object):void {
+            if (recipe.multiTileObjects == null) {
+                recipe.multiTileObjects = [];
+            }
+            if (recipe.freeEntities == null) {
+                recipe.freeEntities = [];
+            }
+            if (recipe.playerStart == null) {
+                recipe.playerStart = [1, Utils.getHeight(recipe.walls) - 2];
+            }
+            if (recipe.islands == null) {
+                recipe.islands = Utils.newArrayOfSize(recipe.walls);
+            }
+            if (recipe.tileEntities == null) {
+                recipe.tileEntities = Utils.newArrayOfSize(recipe.walls);
+            }
         }
     
     }

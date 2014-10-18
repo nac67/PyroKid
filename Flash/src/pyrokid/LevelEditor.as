@@ -19,7 +19,7 @@ package pyrokid {
         public var reloadLevel:Function;
         
         private var editMode:int;
-		private var numEditModes:int = 2;
+		private var numEditModes:int = 3;
         private var UI_Elements:Array; // All level editor UI elements
         private var cellsWidthInput:LevelEditorInput;
         private var cellsHeightInput:LevelEditorInput;
@@ -45,7 +45,7 @@ package pyrokid {
             
             // Universal
             UI_Elements = [];
-			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00]));
+			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties", "Clumping Objects"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF]));
 			cellsWidthInput = new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth);
 			cellsHeightInput = new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight);
             UI_Elements.push(cellsWidthInput, cellsHeightInput);
@@ -253,39 +253,83 @@ package pyrokid {
 			}
             
             // Object addition and removal
-			if (editMode == 0) {
+			if (editMode != Constants.EDITOR_PROPERTIES_MODE) {
                 if (holdStart != null) {
                     var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
                     var highX = (cellX < holdStart.x ? holdStart.x : cellX);
                     var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
                     var highY = (cellY < holdStart.y ? holdStart.y : cellY);
                     
-                    for (var cx:int = lowX; cx <= highX; cx++) {
-                        for (var cy:int = lowY; cy <= highY; cy++) {
-                            placeObject(cx, cy);
-                        }   
-                    }
+                    handleRectangle(lowX, highX, lowY, highY);
                 }
 			} 
             
             // Object properties
-            else if(editMode == 1) {
-				if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
-                    selectedCell = new Vector2i(cellX, cellY);
-					selectedButton.reset();
-					if (level.recipe.walls[cellY][cellX] < -1) {
-						selectedButton.toggle();
-					}
-					selectedHighlighter.x = cellX * Constants.CELL * levelScale;
-					selectedHighlighter.y = cellY * Constants.CELL * levelScale;
-					selectedHighlighter.scaleX = levelScale;
-					selectedHighlighter.scaleY = levelScale;
-				}
+            else if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
+                selectedCell = new Vector2i(cellX, cellY);
+                selectedButton.reset();
+                if (level.recipe.walls[cellY][cellX] < -1) {
+                    selectedButton.toggle();
+                }
+                selectedHighlighter.x = cellX * Constants.CELL * levelScale;
+                selectedHighlighter.y = cellY * Constants.CELL * levelScale;
+                selectedHighlighter.scaleX = levelScale;
+                selectedHighlighter.scaleY = levelScale;
 			}
             
             renderVisibleObjects();
 			level.reset(level.recipe);
 		}
+        
+        private function handleRectangle(lowX:int, highX:int, lowY:int, highY:int):void {
+            if (editMode == Constants.EDITOR_OBJECT_MODE) {
+                for (var cx:int = lowX; cx <= highX; cx++) {
+                    for (var cy:int = lowY; cy <= highY; cy++) {
+                        placeObject(cx, cy);
+                    }   
+                }
+            } else if (editMode == Constants.EDITOR_ISLAND_MODE) {
+                var nextId = getMaxId(level.recipe.islands) + 1;
+                var minValOfNewIds = nextId;
+                
+                for (var cx:int = lowX; cx <= highX; cx++) {
+                    for (var cy:int = lowY; cy <= highY; cy++) {
+                        if (level.recipe.walls[cy][cx] == 0 || level.recipe.islands[cy][cx] >= minValOfNewIds) {
+                            continue;
+                        }
+                        
+                        var idsBeingConnected:Dictionary = new Dictionary();
+                        
+                        var isNeighbor:Function = function(coor:Vector2i):Boolean {
+                            var notEmpty:Boolean = level.recipe.walls[coor.y][coor.x] != Constants.EMPTY_TILE_CODE;
+                            var inRectangle:Boolean = coor.x >= lowX && coor.x <= highX && coor.y >= lowY && coor.y <= highY;
+                            var alreadyConnected:Boolean = idsBeingConnected[level.recipe.islands[coor.y][coor.x]];
+                            return notEmpty && (alreadyConnected || inRectangle);
+                        }
+                        var processNode:Function = function(coor:Vector2i):Boolean {
+                            idsBeingConnected[level.recipe.islands[coor.y][coor.x]] = true;
+                            level.recipe.islands[coor.y][coor.x] = nextId;
+                            return false;
+                        }
+                        Utils.BFS(Utils.getWidth(level.recipe.islands), Utils.getHeight(level.recipe.islands),
+                                new Vector2i(cx, cy), isNeighbor, processNode);
+                        nextId += 1;
+                    }   
+                }
+                trace("walls:");
+                Utils.print2DArr(level.recipe.walls);
+                trace("island (connected) ids:");
+                Utils.print2DArr(level.recipe.islands);
+            }
+        }
+        
+        private static function getMaxId(array:Array):int {
+            var maxId:int = 0;
+            Utils.foreach(array, function(x:int, y:int, element:int):void {
+                maxId = Math.max(maxId, element);
+            });
+            return maxId;
+        }
         
         private function placeObject(cellX:int, cellY:int):void {
             //TODO: This doesn't work -- Aaron
@@ -300,6 +344,8 @@ package pyrokid {
                     return ent[0] != cellX || ent[1] != cellY;
                 });
                 level.recipe.walls[cellY][cellX] = int(typeSelected);
+                var maxId:int = getMaxId(level.recipe.islands);
+                level.recipe.islands[cellY][cellX] = maxId + 1;
             }
         }
 		

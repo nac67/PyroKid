@@ -71,6 +71,8 @@ package pyrokid {
         }
 
         public function reset(recipe:Object):void {
+            LevelRecipe.complete(recipe);
+            
             var searchOrder:Array = Utils.newArray(recipe.walls[0].length, recipe.walls.length);
             var count:int = 0;
             var isNeighbor:Function = function(coor:Vector2i):Boolean {
@@ -83,8 +85,8 @@ package pyrokid {
                 count++;
                 return false;
             }
-            Utils.BFS(Utils.getWidth(recipe.walls), Utils.getHeight(recipe.walls), new Vector2i(7, 5), isNeighbor, processNode);
-            Utils.print2DArr(searchOrder);
+            //Utils.BFS(Utils.getWidth(recipe.walls), Utils.getHeight(recipe.walls), new Vector2i(7, 5), isNeighbor, processNode);
+            //Utils.print2DArr(searchOrder);
             
             Key.reset();
             

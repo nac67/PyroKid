@@ -151,6 +151,10 @@ package pyrokid.tools {
             return array;
         }
         
+        public static function newArrayOfSize(array:Array):Array {
+            return newArray(getWidth(array), getHeight(array));
+        }
+        
         public static function getWidth(array:Array):int {
             return array[0].length;
         }

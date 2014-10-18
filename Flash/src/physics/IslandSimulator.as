@@ -18,15 +18,11 @@ package physics {
         public static function ConstructIslands(tiles:Array):Array {
             var queue = [];
             var ids:Array = BuildIDs(tiles, queue);
-            //trace("printing ids");
-            //for each (var row:Array in ids) {
-                //trace(row);
-            //}
-            //MergeIDs(tiles, ids, queue);
-            //trace("printing merged ids");
-            //for each (var row:Array in ids) {
-                //trace(row);
-            //}
+            MergeIDs(tiles, ids, queue);
+            return ConstructIslandsFromIds(ids, tiles);
+        }
+        
+        public static function ConstructIslandsFromIds(ids:Array, tiles:Array):Array {
             var islandPositions:Array = GetIslandPositions(ids);
             
             var islands = new Array(islandPositions.length);
@@ -36,6 +32,7 @@ package physics {
             
             return islands;
         }
+        
         /**
          * Construct A Grid Of Unique IDs On Which Merging Will Take Place
          * @param tiles IPhysTile[y][x] Ordering Grid
