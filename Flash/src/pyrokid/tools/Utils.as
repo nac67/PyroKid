@@ -59,7 +59,12 @@ package pyrokid.tools {
             }
         }
         
-        /* Performs BFS on array, starting at start. */
+        /** Performs BFS on array, starting at start. It considers an element in the array a
+         *  neighbor if it is adjacent in one of the four cardinal directions and isNeighbor
+         *  returns true on that coordinate. processNode is called on each coordinate exactly
+         *  once, and it returns true iff the BFS should terminate after that node.
+         *  @param isNeighbor function(coor:Vector2i):Boolean
+         *  @param processNode function(coor:Vector2i):Boolean */
         public static function BFS(array:Array, start:Vector2i, isNeighbor:Function, processNode:Function):void {
             var queue:Array = [];
             var visited:Dictionary = new Dictionary();
@@ -74,7 +79,7 @@ package pyrokid.tools {
                 
                 var neighbors:Array = getNeighborCoors(coor.x, coor.y);
                 neighbors = neighbors.filter(function(nei) {
-                    return isNeighbor(coor, nei) && inBounds(array, nei.x, nei.y);
+                    return inBounds(array, nei.x, nei.y) && isNeighbor(nei);
                 });
                 for each (var neighbor:Vector2i in neighbors) {
                     if (!visited[neighbor.toString()]) {
@@ -85,11 +90,14 @@ package pyrokid.tools {
             }
         }
         
+        /* Prints a 2D array in a viewer-friendly way, making sure each element in a row
+         * is spaced apart by at least spacing.*/
         public static function print2DArr(array:Array, spacing:int = 3):void {
+            trace("printing array");
             for each (var row:Array in array) {
                 var rowStr:String = "";
                 for (var j:int = 0; j < row.length; j++) {
-                    var str:String = row[j] ? row[j].toString() : "NA";
+                    var str:String = row[j] != undefined ? row[j].toString() : "NA";
                     var padding = Math.max(spacing - str.length, 0);
                     rowStr += str;
                     for (var i:int = 0; i < padding; i++) {
