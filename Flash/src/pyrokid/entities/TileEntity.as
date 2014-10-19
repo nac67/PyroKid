@@ -11,19 +11,14 @@ package pyrokid.entities {
 		
 		public var cells:Array;
         
-        // in tile coordinates, not pixel space
-		public var globalAnchor:Vector2;
+        // position, in tile coordinates, relative to the corner of the island.
+        public var islandAnchor:Vector2;
+        
+        public var parentIsland:Island;
         
         public var cellSprites:Array;
         
         protected var objectCode:int;
-		
-		private static var directNeighbors:Array = [
-			new Vector2i(0, -1),
-			new Vector2i(0, 1),
-			new Vector2i(-1, 0),
-			new Vector2i(1, 0)
-		];
 		
 		public function TileEntity(x:int, y:int, objCode:int) {
             objectCode = objCode;
@@ -32,6 +27,10 @@ package pyrokid.entities {
 			cells = [];
             cellSprites = [];
 		}
+        
+        public function getGlobalAnchor():Vector2 {
+            return parentIsland.globalAnchor.copy().AddV(islandAnchor);
+        }
 		
 		protected function getSpriteForCell(cell:Vector2i):DisplayObject {
             trace("This is an \"Abstract Method\" and you should never see this printed out");
@@ -50,7 +49,6 @@ package pyrokid.entities {
 				addChild(child);
                 cellSprites.push(child);
 			}
-            
 		}
 		
 		// TODO optimize this. It should be calculated once, and it should not
@@ -59,9 +57,8 @@ package pyrokid.entities {
 		public function getNeighborCoordinates(grid:Array):Array {
 			var coors:Array = [];
 			for each (var cell:Vector2i in cells) {
-                var x:int = cell.x + Math.round(globalAnchor.x);
-                var y:int = cell.y + Math.round(globalAnchor.y);
-                Utils.getNeighborCoors(x, y, coors);
+                var globalAnchor:Vector2i = getGlobalAnchor().copyAsVec2i();
+                Utils.getNeighborCoors(cell.x + globalAnchor.x, cell.y + globalAnchor.y, coors);
 			}
 			return coors;
 		}

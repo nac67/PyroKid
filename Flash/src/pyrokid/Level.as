@@ -50,142 +50,109 @@ package pyrokid {
 		public function numCellsTall():int {
 			return walls.length;
 		}
-		
-		private function getObjectCode(island:PhysIsland, cornerCellX:int, cornerCellY:int):int {
-			for (var iy:int = 0; iy < island.tileGrid.length; iy++) {
-				for (var ix:int = 0; ix < island.tileGrid[0].length; ix++) {
-					var partOfIsland:Boolean = island.tileGrid[iy][ix] != null;
-					if (partOfIsland) {
-						return walls[cornerCellY + iy][cornerCellX + ix];
-					}
-				}
-			}
-			return 0;
-		}
-        
-        private function initializeFreeEntity(freeEntity:FreeEntity, startCellX:int, startCellY:int):void {
-            freeEntity.x = startCellX * Constants.CELL;
-            freeEntity.y = startCellY * Constants.CELL;
-            addChild(freeEntity);
-            rectViews.push(new ViewPRect(freeEntity, freeEntity.genPhysRect()));
-        }
 
         public function reset(recipe:Object):void {
             LevelRecipe.complete(recipe);
-            
-            var searchOrder:Array = Utils.newArray(recipe.walls[0].length, recipe.walls.length);
-            var count:int = 0;
-            var isNeighbor:Function = function(coor:Vector2i):Boolean {
-                var code:int = recipe.walls[coor.y][coor.x];
-                //return code == 0;
-                return code != 0 && code != 1;
-            }
-            var processNode:Function = function(coor:Vector2i):Boolean {
-                searchOrder[coor.y][coor.x] = count;
-                count++;
-                return false;
-            }
-            //Utils.BFS(Utils.getWidth(recipe.walls), Utils.getHeight(recipe.walls), new Vector2i(7, 5), isNeighbor, processNode);
-            //Utils.print2DArr(searchOrder);
-            
             Key.reset();
-            
             frameCount = 0;
-            
-            var x:int, y:int, w:int, h:int, self:Level = this;
-            
             Utils.removeAllChildren(this);
-			
-			//recipe.walls[0][3] = 2;
-			//recipe.walls[0][6] = 2;
-			//recipe.walls[0][7] = 2;
-			//recipe.multiTileObjects.push([new Vector2i(7, 0), new Vector2i(6, 0)]);
-
-            background = new CaveBackground(recipe.walls[0].length, recipe.walls.length);
-            this.addChild(background);
             
 			this.recipe = recipe;
             walls = recipe.walls;
-			/*trace("tracing walls");
-			for (var i:int = 0; i < walls.length; i++) {
-				trace(walls[i]);
-			}*/
 			onFire = [];
 			islandViews = [];
 			rectViews = [];
-			
 			movingTiles = [];
-            
             enemies = [];
-			
-			var width:int = walls[0].length;
-            var physBoxGrid:Array = Utils.newArray(width, walls.length);
-            tileEntityGrid = Utils.newArray(width, walls.length);
+            tileEntityGrid = Utils.newArrayOfSize(walls);
             
-			var objId:int = 2;
-            Utils.foreach(walls, function(x:int, y:int, objCode:int):void {
-                var falling:Boolean = false;
-                if (objCode < 0) {
-                    falling = true;
-                    objCode = -objCode;
+            background = new CaveBackground(Utils.getW(walls), Utils.getH(walls));
+            this.addChild(background);
+			
+            setupTiles();
+            setupFreeEntities();
+            setupMiscellaneous();
+        }
+        
+        private function setupTiles():void {
+            //islands = IslandSimulator.ConstructIslandsFromIds(recipe.islands, walls);
+            
+            var islandCellMap:Dictionary = Utils.getCellMap(recipe.islands);
+            var entityCellMap:Dictionary = Utils.getCellMap(recipe.tileEntities);
+            
+            // Create physics islands and game islands
+            islands = [];
+            var gameIslands:Dictionary = new Dictionary();
+            for (var strId:String in islandCellMap) {
+                var id:int = int(strId);
+                var physIsland:PhysIsland = IslandSimulator.ConstructIsland(islandCellMap[id], walls);
+                islands.push(physIsland);
+                
+                var gameIsland:Island = new Island();
+                gameIsland.entityList = [];
+                gameIsland.tileEntityGrid = Utils.newArrayOfSize(physIsland.tileGrid);
+                gameIsland.globalAnchor = physIsland.globalAnchor.copy();
+                gameIslands[id] = gameIsland;
+                
+				islandViews.push(new ViewPIsland(gameIsland, physIsland));
+            }
+            columns = IslandSimulator.ConstructCollisionColumns(islands);
+            
+            // Create tile entities and populate entity grids
+            for (var strId:String in entityCellMap) {
+                var id:int = int(strId);
+                var coors:Array = entityCellMap[id];
+                
+                // all ids should be the same, so just use the first
+                var tileCode:int = walls[coors[0].y][coors[0].x];
+                var islandId:int = recipe.islands[coors[0].y][coors[0].x];
+                
+                var parentIsland:Island = gameIslands[islandId];
+                var entity:TileEntity = getEntityFromTileCode(tileCode);
+                addChild(entity);
+                
+                var globalAnchor:Vector2 = Utils.getAnchor(coors);
+                entity.islandAnchor = globalAnchor.copy().SubV(parentIsland.globalAnchor);
+                
+                entity.parentIsland = parentIsland;
+                entity.cells = coors.map(function(coor) {
+                    return coor.copy().SubV(globalAnchor.copyAsVec2i());
+                });
+                entity.x = globalAnchor.x * Constants.CELL;
+                entity.y = globalAnchor.y * Constants.CELL;
+                
+                for each (var coor:Vector2i in coors) { // relative to global space
+                    tileEntityGrid[coor.y][coor.x] = entity;
+                }
+                for each (var cell:Vector2i in entity.cells) { // relative to entity's anchor
+                    parentIsland.tileEntityGrid[cell.y + entity.islandAnchor.y][cell.x + entity.islandAnchor.x] = entity;
                 }
                 
-                if (objCode == Constants.WALL_TILE_CODE) {
-                    physBoxGrid[y][x] = new PhysBox(1);
-                } else if (objCode != Constants.EMPTY_TILE_CODE) {
-                    physBoxGrid[y][x] = new PhysBox(objId, falling);
-                    objId += 1;
-                }
-            });
-
-			for (var i:int = 0; i < recipe.multiTileObjects.length; i++) {
-				var multiTileObj:Array = recipe.multiTileObjects[i];
-				for (var j:int = 0; j < multiTileObj.length; j++) {
-					var cell:Vector2i = multiTileObj[j];
-					physBoxGrid[cell.y][cell.x].id = objId;
-				}
-				objId += 1;
-			}
-			
-            islands = IslandSimulator.ConstructIslands(physBoxGrid);
-            columns = IslandSimulator.ConstructCollisionColumns(islands);
-			for (var i:int = 0; i < islands.length; i++) {
-				var isle:PhysIsland = islands[i];
-				var cornerCellX:int = Math.floor(isle.globalAnchor.x);
-				var cornerCellY:int = Math.floor(isle.globalAnchor.y);
-				var objCode = getObjectCode(isle, cornerCellX, cornerCellY);
-				var spriteX:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.x));
-				var spriteY:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.y));
-				var tileEntity:TileEntity;
-                var realObjCode:int = Math.abs(objCode);
-				if (realObjCode == Constants.OIL_TILE_CODE) {
-					tileEntity = new BurnForever(spriteX, spriteY, realObjCode);
-				} else if (realObjCode == Constants.WOOD_TILE_CODE) {
-					tileEntity = new BurnQuickly(spriteX, spriteY, realObjCode);
-				} else {
-					tileEntity = new NonFlammableTile(spriteX, spriteY, realObjCode);
-				}
-				tileEntity.globalAnchor = isle.globalAnchor;
-				addChild(tileEntity);
-				for (var iy:int = 0; iy < isle.tileGrid.length; iy++) {
-					for (var ix:int = 0; ix < isle.tileGrid[0].length; ix++) {
-						var tile:IPhysTile = isle.tileGrid[iy][ix];
-						if (tile != null && tile is PhysBox) {
-							tileEntity.cells.push(new Vector2i(ix, iy));
-							tileEntityGrid[iy + cornerCellY][ix + cornerCellX] = tileEntity;
-						}
-					}
-				}
-				tileEntity.finalizeCells();
-				islandViews.push(new ViewPIsland(tileEntity, isle));
-			}
-			
+                parentIsland.entityList.push(entity);
+                
+                entity.finalizeCells();
+            }
+        }
+        
+        private function getEntityFromTileCode(tileCode:int):TileEntity {
+            var tileEntity:TileEntity;
+            var realObjCode:int = Math.abs(tileCode); // TODO get rid of -- Aaron
+            if (realObjCode == Constants.OIL_TILE_CODE) {
+                return new BurnForever(0, 0, realObjCode);
+            }
+            if (realObjCode == Constants.WOOD_TILE_CODE) {
+                return new BurnQuickly(0, 0, realObjCode);
+            }
+            return new NonFlammableTile(0, 0, realObjCode);
+        }
+        
+        private function setupFreeEntities():void {
 			player = new Player(this);
 			initializeFreeEntity(player, recipe.playerStart[0], recipe.playerStart[1]);
             
             for (var i:int = 0; i < recipe.freeEntities.length; i++) {
                 var enemy:BackAndForthEnemy;
-                if (recipe.freeEntities[i][2] == 0) {
+                if (recipe.freeEntities[i][2] == Constants.SPIDER_CODE) {
                     enemy = new Spider(this);
                 } else {
                     enemy = new BurnForeverEnemy(this);
@@ -193,7 +160,17 @@ package pyrokid {
                 initializeFreeEntity(enemy, recipe.freeEntities[i][0], recipe.freeEntities[i][1]);
                 enemies.push(enemy);
 			}
-						            
+        }
+        
+        private function initializeFreeEntity(freeEntity:FreeEntity, startCellX:int, startCellY:int):void {
+            freeEntity.x = startCellX * Constants.CELL;
+            freeEntity.y = startCellY * Constants.CELL;
+            addChild(freeEntity);
+            rectViews.push(new ViewPRect(freeEntity, freeEntity.genPhysRect()));
+        }
+        
+        private function setupMiscellaneous():void {
+            var self:Level = this;
             fireballs = new RingBuffer(5, function(o:Object) {
                 var dispObj:Fireball = o as Fireball;
                 

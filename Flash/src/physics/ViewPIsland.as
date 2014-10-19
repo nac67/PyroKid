@@ -1,17 +1,17 @@
 package physics {
 	import flash.display.Sprite;
     import pyrokid.Constants;
-    import pyrokid.entities.TileEntity;
+    import pyrokid.Island;
 	import pyrokid.tools.Utils;
 	/**
      * ...
      * @author Cristian Zaloj
      */
     public class ViewPIsland {
-        public var sprite:TileEntity;
+        public var sprite:Island;
         public var phys:PhysIsland;
         
-        public function ViewPIsland(s:TileEntity, p:PhysIsland) {
+        public function ViewPIsland(s:Island, p:PhysIsland) {
             sprite = s;
             phys = p;
         }
@@ -30,11 +30,8 @@ package physics {
          * Update Sprite Position To Match Physics
          */
         public function onUpdate():void {
-            sprite.x = phys.globalAnchor.x * Constants.CELL;
-			sprite.y = phys.globalAnchor.y * Constants.CELL;
-            sprite.globalAnchor = phys.globalAnchor;
-            sprite.velocity.x = phys.velocity.x * Constants.CELL;
-            sprite.velocity.y = phys.velocity.y * Constants.CELL;
+            sprite.velocity = phys.velocity.copy().MulD(Constants.CELL);
+            sprite.globalAnchor = phys.globalAnchor.copy();
         }
     }
 }

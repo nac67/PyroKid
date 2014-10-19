@@ -91,20 +91,52 @@ package pyrokid.tools {
             }
         }
         
+        /* Returns a Dictionary mapping ids in the given 2D array to
+         * coordinates as Vector2is of cells with that id. Excludes 0 from the mappings. */
+        public static function getCellMap(ids:Array):Dictionary {
+            var dict:Dictionary = new Dictionary();
+            foreach (ids, function(x:int, y:int, id:int):void {
+                if (id == 0) {
+                    return;
+                }
+                
+                if (dict[id] == undefined) {
+                    dict[id] = [];
+                }
+                dict[id].push(new Vector2i(x, y));
+            });
+            return dict;
+        }
+        
+        /* Returns the top left corner of the bounding box around
+         * the provided set of coordinates. */
+        public static function getAnchor(coors:Array):Vector2 {
+            var xMin:int = int.MAX_VALUE;
+            var yMin:int = int.MAX_VALUE;
+            for each (var coor:Vector2i in coors) {
+                xMin = Math.min(xMin, coor.x);
+                yMin = Math.min(yMin, coor.y);
+            }
+            return new Vector2(xMin, yMin);
+        }
+        
         /* Prints a 2D array in a viewer-friendly way, making sure each element in a row
          * is spaced apart by at least spacing.*/
-        public static function print2DArr(array:Array, spacing:int = 3):void {
+        public static function print2DArr(array:Array, spacing:int = 3, cutoff:Boolean = false):void {
             trace("printing array");
             for each (var row:Array in array) {
                 var rowStr:String = "";
                 for (var j:int = 0; j < row.length; j++) {
-                    var str:String = row[j] != undefined ? row[j].toString() : "NA";
-                    var padding = Math.max(spacing - str.length, 0);
-                    rowStr += str;
+                    var item:String = row[j] != undefined ? row[j].toString() : "NA";
+                    var padding = Math.max(spacing - item.length, 0);
                     for (var i:int = 0; i < padding; i++) {
-                        rowStr += " ";
+                        item += " ";
                     }
-                    rowStr += ",";
+                    if (cutoff && row) {
+                        item = item.substring(0, spacing);
+                    }
+                    item += ",";
+                    rowStr += item;
                 }
                 trace(rowStr);
             }
@@ -113,8 +145,8 @@ package pyrokid.tools {
         /* Applies func to each element in the 2D array. func should have
          * the following signature: function(x:int, y:int, element):void */
         public static function foreach(array:Array, func:Function):void {
-            for (var y:int = 0; y < getHeight(array); y++) {
-                for (var x:int = 0; x < getWidth(array); x++) {
+            for (var y:int = 0; y < getH(array); y++) {
+                for (var x:int = 0; x < getW(array); x++) {
                     func(x, y, array[y][x]);
                 }
             }
@@ -152,20 +184,20 @@ package pyrokid.tools {
         }
         
         public static function newArrayOfSize(array:Array):Array {
-            return newArray(getWidth(array), getHeight(array));
+            return newArray(getW(array), getH(array));
         }
         
-        public static function getWidth(array:Array):int {
+        public static function getW(array:Array):int {
             return array[0].length;
         }
         
-        public static function getHeight(array:Array):int {
+        public static function getH(array:Array):int {
             return array.length;
         }
         
         /* Returns true iff (x, y) is a valid index in the 2D array. */
 		public static function inBounds(array:Array, x:int, y:int):Boolean {
-            return inBoundsWH(getWidth(array), getHeight(array), x, y);
+            return inBoundsWH(getW(array), getH(array), x, y);
 		}
         
         /* Returns true iff (x, y) is a valid index in a 2D array of width by height. */

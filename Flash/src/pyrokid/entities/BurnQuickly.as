@@ -33,8 +33,8 @@ package pyrokid.entities {
                 // TODO remove from onfire -- Aaron
                 for (var i:int = 0; i < cells.length; i++) {
                     var w = new Embedded.WoodExplodeSWF();
-                    w.x = (cells[i].x + globalAnchor.x) * Constants.CELL;
-                    w.y = (cells[i].y + globalAnchor.y) * Constants.CELL;
+                    w.x = (cells[i].x + getGlobalAnchor().x) * Constants.CELL;
+                    w.y = (cells[i].y + getGlobalAnchor().y) * Constants.CELL;
                     level.briefClips.push(w);
                     level.addChild(w);
                     kill(level);

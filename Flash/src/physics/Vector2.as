@@ -11,6 +11,15 @@ package physics {
             x = _x;
             y = _y;
         }
+        
+        public function copy():Vector2 {
+            return new Vector2(x, y);
+        }
+        
+        /* Returns a Vector2i resulting from rounding each coordinate. */
+        public function copyAsVec2i():Vector2i {
+            return new Vector2i(Math.round(x), Math.round(y));
+        }
 
         public function Set(_x:Number, _y:Number):Vector2 {
             x = _x;

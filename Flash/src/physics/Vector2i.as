@@ -11,6 +11,10 @@ package physics {
             x = _x;
             y = _y;
         }
+        
+        public function copy():Vector2i {
+            return new Vector2i(x, y);
+        }
 
         public function Set(_x:int, _y:int):Vector2i {
             x = _x;

@@ -57,7 +57,7 @@ package pyrokid {
                 recipe.freeEntities = [];
             }
             if (recipe.playerStart == null) {
-                recipe.playerStart = [1, Utils.getHeight(recipe.walls) - 2];
+                recipe.playerStart = [1, Utils.getH(recipe.walls) - 2];
             }
             if (recipe.islands == null) {
                 recipe.islands = Utils.newArrayOfSize(recipe.walls);

@@ -58,9 +58,9 @@ package pyrokid {
 			options[Constants.OIL_TILE_CODE] = "Eternal Flame";
 			options[Constants.WOOD_TILE_CODE] = "Quick Burn";
             options[Constants.METAL_TILE_CODE] = "Metal";
-			options["spider"] = "Spider";
+			options[Constants.SPIDER_CODE] = "Spider";
+            options[Constants.IMMUNE_CODE] = "Immune Enemy";
 			options["player"] = "Player";
-            options["immune"] = "Immune Enemy";
             allObjectTypesButton = new SelectorButton(options, changeSelectedObject);
 			UI_Elements.push(allObjectTypesButton);
             draggingRect = new Sprite();
@@ -295,12 +295,12 @@ package pyrokid {
                 mergeRectangleTiles(level.recipe.tileEntities, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
                     return level.recipe.walls[coor.y][coor.x] == objCode;
                 });
-                trace("walls:");
-                Utils.print2DArr(level.recipe.walls);
-                trace("island (connected) ids:");
-                Utils.print2DArr(level.recipe.islands);
-                trace("tile entities:");
-                Utils.print2DArr(level.recipe.tileEntities);
+                //trace("walls:");
+                //Utils.print2DArr(level.recipe.walls);
+                //trace("island (connected) ids:");
+                //Utils.print2DArr(level.recipe.islands);
+                //trace("tile entities:");
+                //Utils.print2DArr(level.recipe.tileEntities);
             }
         }
         
@@ -327,7 +327,7 @@ package pyrokid {
                         grid[coor.y][coor.x] = nextId;
                         return false;
                     }
-                    Utils.BFS(Utils.getWidth(grid), Utils.getHeight(grid), new Vector2i(cx, cy), isNeighbor, processNode);
+                    Utils.BFS(Utils.getW(grid), Utils.getH(grid), new Vector2i(cx, cy), isNeighbor, processNode);
                     nextId += 1;
                 }   
             }
@@ -358,19 +358,30 @@ package pyrokid {
         
         private function placeObject(cellX:int, cellY:int):void {
             //TODO: This doesn't work -- Aaron
-            if (typeSelected == "spider") {
-                level.recipe.freeEntities.push([cellX, cellY, 0]);
-            } else if (typeSelected == "player") {
-                level.recipe.playerStart = [cellX, cellY];
-            } else if (typeSelected == "immune") {
-                level.recipe.freeEntities.push([cellX, cellY, 1]);
-            } else {
-                level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
-                    return ent[0] != cellX || ent[1] != cellY;
-                });
+            var ps:Array = level.recipe.playerStart;
+            if (cellX == ps[0] && cellY == ps[1]) {
+                trace("can't delete player. place player on a new cell first");
+                return;
+            }
+            
+            // clear location that is about to be placed on
+            level.recipe.walls[cellY][cellX] = Constants.EMPTY_TILE_CODE;
+            level.recipe.islands[cellY][cellX] = Constants.EMPTY_TILE_CODE;
+            level.recipe.tileEntities[cellY][cellX] = Constants.EMPTY_TILE_CODE;
+            level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
+                return ent[0] != cellX || ent[1] != cellY;
+            });
+            
+            // place new object
+            var tileEntityPlaced:Boolean = typeSelected is int;
+            if (tileEntityPlaced) {
                 level.recipe.walls[cellY][cellX] = int(typeSelected);
                 level.recipe.islands[cellY][cellX] = getMaxId(level.recipe.islands) + 1;
                 level.recipe.tileEntities[cellY][cellX] = getMaxId(level.recipe.tileEntities) + 1;
+            } else if (typeSelected == "player") {
+                level.recipe.playerStart = [cellX, cellY];
+            } else {
+                level.recipe.freeEntities.push([cellX, cellY, typeSelected]);
             }
         }
 		

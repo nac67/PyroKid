@@ -4,6 +4,7 @@ package physics {
     import flash.display.GraphicsPathWinding;
     import flash.geom.Point;
     import physics.Vector2i;
+    import pyrokid.Constants;
     
     /**
      * Controller That Builds And Simulates A List Of Islands
@@ -22,6 +23,7 @@ package physics {
             return ConstructIslandsFromIds(ids, tiles);
         }
         
+        /* tiles can be an array of IPhysTiles or an array of TileEntity codes (ints). */
         public static function ConstructIslandsFromIds(ids:Array, tiles:Array):Array {
             var islandPositions:Array = GetIslandPositions(ids);
             
@@ -174,7 +176,7 @@ package physics {
          * @param tiles IPhysTile[y][x] Ordering Grid
          * @return A Fully Constructed Island
          */
-        private static function ConstructIsland(pos:Array, tiles:Array):PhysIsland {
+        public static function ConstructIsland(pos:Array, tiles:Array):PhysIsland {
             var xBounds:Vector2i = new Vector2i(int.MAX_VALUE, int.MIN_VALUE);
             var yBounds:Vector2i = new Vector2i(int.MAX_VALUE, int.MIN_VALUE);
             
@@ -195,7 +197,10 @@ package physics {
             
             // Add All The Tiles
             for each (var p:Vector2i in pos) {
-                var tile:IPhysTile = tiles[p.y][p.x];
+                var tile = tiles[p.y][p.x];
+                if (tile is int) {
+                    tile = new PhysBox(0, Constants.GROUNDED_TYPES.indexOf(tile) == -1);
+                }
                 p.Sub(xBounds.x, yBounds.x);
                 island.AddTile(p.x, p.y, tile);
             }

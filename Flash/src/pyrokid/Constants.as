@@ -49,11 +49,18 @@ package pyrokid {
         public static var PLAYER_XSPEED:int = 2 * CELL;
         public static var PLAYER_JUMP_SPEED:int = 6 * CELL;
 		
+        // TileEntity codes. Must be ints.
 		public static var EMPTY_TILE_CODE:int = 0;
 		public static var WALL_TILE_CODE:int = 1;
         public static var OIL_TILE_CODE:int = 2;
         public static var WOOD_TILE_CODE:int = 3;
         public static var METAL_TILE_CODE:int = 4;
+        
+        // FreeEntity codes. Must be Strings.
+        public static var SPIDER_CODE:String = "spider";
+        public static var IMMUNE_CODE:String = "immune";
+        
+        public static var GROUNDED_TYPES:Array = [WALL_TILE_CODE];
         
         public static function switchControlScheme(scheme:int) {
             if (scheme == 0) {
