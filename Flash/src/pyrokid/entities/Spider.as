@@ -1,5 +1,6 @@
 package pyrokid.entities {
     import flash.display.MovieClip;
+    import flash.display.Sprite;
     import physics.PhysBox;
     import physics.PhysRectangle;
     import pyrokid.*;
@@ -15,7 +16,7 @@ package pyrokid.entities {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
                 kill(level);
-                var die = new Embedded.SpiderDieSWF();
+                var die:Sprite = new Embedded.SpiderDieSWF();
                 die.x = swf.x + x;
                 die.y = swf.y + y;
                 die.scaleX = swf.scaleX;

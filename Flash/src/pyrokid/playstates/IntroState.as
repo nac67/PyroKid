@@ -7,7 +7,7 @@ package pyrokid.playstates {
      * @author Cristian Zaloj
      */
     public class IntroState extends ACPlayState {
-        private static var COUNTDOWN_TIMER = 120;
+        private static const COUNTDOWN_TIMER:int = 120;
         
         private var countDown:int;
         

@@ -12,7 +12,7 @@ package pyrokid {
 			for (var i:int = 0; i < neiCoors.length; i++) {
 				var x:int = neiCoors[i].x;
 				var y:int = neiCoors[i].y;
-			    neighbors.push(Utils.index(fireGrid, x, y));
+			    neighbors.push(fireGrid[y][x]);
 			}
 			return Utils.filterNull(neighbors);
 		}

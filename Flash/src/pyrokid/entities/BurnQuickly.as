@@ -32,7 +32,7 @@ package pyrokid.entities {
             if (currentFrame - ignitionTime == Constants.QUICK_BURN_TIME) {
                 // TODO remove from onfire -- Aaron
                 for (var i:int = 0; i < cells.length; i++) {
-                    var w = new Embedded.WoodExplodeSWF();
+                    var w:Sprite = new Embedded.WoodExplodeSWF();
                     w.x = (cells[i].x + globalAnchor.x) * Constants.CELL;
                     w.y = (cells[i].y + globalAnchor.y) * Constants.CELL;
                     level.briefClips.push(w);

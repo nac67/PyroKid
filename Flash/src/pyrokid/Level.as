@@ -75,7 +75,7 @@ package pyrokid {
             
             frameCount = 0;
             
-            var x:int, y:int, w:int, h:int, self:Level = this;
+            var x:int, y:int, w:int, h:int, i:int, self:Level = this;
             
             Utils.removeAllChildren(this);
 			
@@ -114,7 +114,7 @@ package pyrokid {
                 var row:Array = walls[y];
                 for (x = 0; x < row.length; x++) {
 					var objCode:int = row[x];
-					var falling = false;
+					var falling:Boolean = false;
 					if (objCode < 0) {
 						falling = true;
 						objCode = -objCode;
@@ -129,7 +129,7 @@ package pyrokid {
                 }
             }
 
-			for (var i:int = 0; i < recipe.multiTileObjects.length; i++) {
+			for (i = 0; i < recipe.multiTileObjects.length; i++) {
 				var multiTileObj:Array = recipe.multiTileObjects[i];
 				for (var j:int = 0; j < multiTileObj.length; j++) {
 					var cell:Vector2i = multiTileObj[j];
@@ -140,11 +140,11 @@ package pyrokid {
 			
             islands = IslandSimulator.ConstructIslands(physBoxGrid);
             columns = IslandSimulator.ConstructCollisionColumns(islands);
-			for (var i:int = 0; i < islands.length; i++) {
+			for (i = 0; i < islands.length; i++) {
 				var isle:PhysIsland = islands[i];
 				var cornerCellX:int = Math.floor(isle.globalAnchor.x);
 				var cornerCellY:int = Math.floor(isle.globalAnchor.y);
-				var objCode = getObjectCode(isle, cornerCellX, cornerCellY);
+				objCode = getObjectCode(isle, cornerCellX, cornerCellY);
 				var spriteX:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.x));
 				var spriteY:int = Utils.cellToPixel(Math.floor(isle.globalAnchor.y));
 				var tileEntity:TileEntity;
@@ -174,7 +174,7 @@ package pyrokid {
 			player = new Player(this);
 			initializeFreeEntity(player, recipe.playerStart[0], recipe.playerStart[1]);
             
-            for (var i:int = 0; i < recipe.freeEntities.length; i++) {
+            for (i = 0; i < recipe.freeEntities.length; i++) {
                 var enemy:BackAndForthEnemy;
                 if (recipe.freeEntities[i][2] == 0) {
                     enemy = new Spider(this);
@@ -185,7 +185,7 @@ package pyrokid {
                 enemies.push(enemy);
 			}
 						            
-            fireballs = new RingBuffer(5, function(o:Object) {
+            fireballs = new RingBuffer(5, function(o:Object):void {
                 var dispObj:Fireball = o as Fireball;
                 
                 if (dispObj.fizzOut) {
@@ -206,9 +206,9 @@ package pyrokid {
                 self.removeChild(dispObj);
             });
             
-            briefClips = new RingBuffer(50, function(o:Object) {
+            briefClips = new RingBuffer(50, function(o:Object):void {
                 if (o is DisplayObject) {
-                    var dispObj = o as DisplayObject;
+                    var dispObj:DisplayObject = o as DisplayObject;
                     self.removeChild(dispObj);
                 }
             });
@@ -229,9 +229,9 @@ package pyrokid {
                 fireball.y += fireball.speedY;
                 
                 // ignite TileEntities
-				var cellX = Utils.realToCell(fireball.x);
-				var cellY = Utils.realToCell(fireball.y);
-				var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
+				var cellX:int = Utils.realToCell(fireball.x);
+				var cellY:int = Utils.realToCell(fireball.y);
+				var entity:TileEntity = tileEntityGrid[cellY][cellX];
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
 					fireballs.markForDeletion(fireball);
@@ -279,10 +279,10 @@ package pyrokid {
                 return;
             }
             
-            rectViews = rectViews.filter(function(view) {
+            rectViews = rectViews.filter(function(view:ViewPRect, i:int, a:Array):Boolean {
                 return !view.sprite.isDead;
             });
-            enemies = enemies.filter(function(enemy) {
+            enemies = enemies.filter(function(enemy:FreeEntity, i:int, a:Array):Boolean {
                 if (enemy.isDead) {
                     removeChild(enemy);
                 }
@@ -291,7 +291,7 @@ package pyrokid {
             
             islands = [];
             var islandRemoved:Boolean = false;
-            islandViews = islandViews.filter(function(view) {
+            islandViews = islandViews.filter(function(view:ViewPIsland, i:int, a:Array):Boolean {
                 var alive:Boolean = !view.sprite.isDead;
                 if (alive) {
                     islands.push(view.phys);
@@ -313,10 +313,10 @@ package pyrokid {
                     }
                 }
             }
-            movingTiles = movingTiles.filter(function(tile) {
+            movingTiles = movingTiles.filter(function(tile:ViewPIsland, i:int, a:Array):Boolean {
                 return !tile.sprite.isDead;
             });
-            onFire = onFire.filter(function(tile) {
+            onFire = onFire.filter(function(tile:TileEntity, i:int, a:Array):Boolean {
                 return !tile.isDead;
             });
         }

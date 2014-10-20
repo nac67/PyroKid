@@ -5,7 +5,6 @@ package pyrokid.entities {
     import pyrokid.*;
     import flash.display.MovieClip;
     import physics.Vector2;
-    import pyrokid.tools.Box;
     
     /* This is an "abstract" class. Do not instantiate. Use a subclass that
      * is a specific type of enemy. */

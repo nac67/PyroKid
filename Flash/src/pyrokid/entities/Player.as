@@ -100,7 +100,7 @@ package pyrokid.entities {
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
             
             // Firing
-            var shootButton = Key.isDown(Constants.AIM_LEFT_BTN) || Key.isDown(Constants.AIM_RIGHT_BTN) ||
+            var shootButton:Boolean = Key.isDown(Constants.AIM_LEFT_BTN) || Key.isDown(Constants.AIM_RIGHT_BTN) ||
                     Key.isDown(Constants.AIM_UP_BTN) || Key.isDown(Constants.AIM_DOWN_BTN);
   
             if (Key.isDown(Constants.AIM_LEFT_BTN)) {
@@ -136,7 +136,7 @@ package pyrokid.entities {
                     if (fireballCharge > Constants.FIREBALL_CHARGE) {
                         level.launchFireball(Constants.MAX_BALL_RANGE, shootDirection);
                     } else {
-                        var range = Fireball.calculateRangeInCells(fireballCharge);
+                        var range:Number = Fireball.calculateRangeInCells(fireballCharge);
                         level.launchFireball(range, shootDirection);
                     }
 
@@ -153,7 +153,7 @@ package pyrokid.entities {
         
         public function updateAnimation():void {
             // Direction of movie clips
-            var faceDirection = direction;
+            var faceDirection:int = direction;
             if ((isCharging || isShooting) && (shootDirection == Constants.DIR_LEFT ||
                     shootDirection == Constants.DIR_RIGHT)) {
                 faceDirection = shootDirection;
@@ -184,7 +184,7 @@ package pyrokid.entities {
             
             // Torso
             if (isShooting) {
-                var onShootingFrame = torsoSWF.currentFrame == 7 || 
+                var onShootingFrame:Boolean = torsoSWF.currentFrame == 7 || 
                         torsoSWF.currentFrame == 10 || torsoSWF.currentFrame == 13;
                 if (onShootingFrame){
                     if(torsoSWF.playershoot.currentFrame == torsoSWF.playershoot.totalFrames) {

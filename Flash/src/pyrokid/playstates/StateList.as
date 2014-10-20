@@ -2,6 +2,7 @@ package pyrokid.playstates {
     import adobe.utils.CustomActions;
     import flash.display.Sprite;
     import flash.events.Event;
+    import net.hires.debug.Stats;
 	/**
      * Contains And Controls A List Of Runnabl States
      * @author Cristian Zaloj
@@ -22,6 +23,7 @@ package pyrokid.playstates {
          */
         public function StateList(main:Sprite) {
             main.addChild(this);
+            main.addChild(new Stats());
             main.addEventListener(Event.ENTER_FRAME, update);
         }
         
@@ -78,11 +80,6 @@ package pyrokid.playstates {
                     var newState:String = currentState.getNextState();
                     if (newState == null) newState == "";
                     start(newState);
-                }
-                
-                if (width != 0 && height != 0) {
-                    trace("SL: " + x + "," + y);
-                    trace("CS: " + currentState.x + "," + currentState.y);
                 }
             }
         }

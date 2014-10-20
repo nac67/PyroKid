@@ -16,12 +16,12 @@ package physics {
          * @return A List Of Islands
          */
         public static function ConstructIslands(tiles:Array):Array {
-            var queue = [];
+            var queue:Array = [];
             var ids:Array = BuildIDs(tiles, queue);
             MergeIDs(tiles, ids, queue);
             var islandPositions:Array = GetIslandPositions(ids);
             
-            var islands = new Array(islandPositions.length);
+            var islands:Array = new Array(islandPositions.length);
             for (var i:int = 0; i < islandPositions.length; i++) {
                 islands[i] = ConstructIsland(islandPositions[i], tiles);
             }
@@ -58,7 +58,7 @@ package physics {
          * @param ids ID Grid That Maps To Tiles
          * @param queue A Queue Of Locations
          */
-        private static function MergeIDs(tiles:Array, ids:Array, queue:Array) {
+        private static function MergeIDs(tiles:Array, ids:Array, queue:Array):void {
             var h:int = tiles.length;
             var otherPos:Vector2i = new Vector2i(0, 0);
             while (queue.length > 0) {
@@ -84,7 +84,7 @@ package physics {
          * @param p2 Position Of The Second Tile
          * @param dir12 Direction Of Tile 2 From Tile 1 On Which Swapping Occurs
          */
-        private static function MergeTiles(tiles:Array, ids:Array, p1:Vector2i, p2:Vector2i, dir12:int) {
+        private static function MergeTiles(tiles:Array, ids:Array, p1:Vector2i, p2:Vector2i, dir12:int):void {
             var t1:IPhysTile = tiles[p1.y][p1.x];
             var id1:int = ids[p1.y][p1.x];
             var t2:IPhysTile = tiles[p2.y][p2.x];
@@ -114,7 +114,7 @@ package physics {
          * @param idRef Which Island ID To Overwrite
          * @param idSwap Dominant ID
          */
-        private static function SwapIDs(ids:Array, x:int, y:int, idRef:int, idSwap:int) {
+        private static function SwapIDs(ids:Array, x:int, y:int, idRef:int, idSwap:int):void {
             if (ids[y][x] == idRef) {
                 ids[y][x] = idSwap;
                 
@@ -138,7 +138,7 @@ package physics {
          */
         private static function GetIslandPositions(ids:Array):Array {
             var map:Object = new Object();
-            var islandPositions = [];
+            var islandPositions:Array = [];
             
             for (var y:int = 0; y < ids.length; y++) {
                 for (var x:int = 0; x < ids[y].length; x++) {
@@ -170,10 +170,11 @@ package physics {
          * @return A Fully Constructed Island
          */
         private static function ConstructIsland(pos:Array, tiles:Array):PhysIsland {
+            var p:Vector2i;
             var xBounds:Vector2i = new Vector2i(int.MAX_VALUE, int.MIN_VALUE);
             var yBounds:Vector2i = new Vector2i(int.MAX_VALUE, int.MIN_VALUE);
             
-            for each (var p:Vector2i in pos) {
+            for each (p in pos) {
                 if (p.x < xBounds.x)
                     xBounds.x = p.x;
                 if (p.x > xBounds.y)
@@ -189,7 +190,7 @@ package physics {
             island.globalAnchor.Set(xBounds.x, yBounds.x);
             
             // Add All The Tiles
-            for each (var p:Vector2i in pos) {
+            for each (p in pos) {
                 var tile:IPhysTile = tiles[p.y][p.x];
                 p.Sub(xBounds.x, yBounds.x);
                 island.AddTile(p.x, p.y, tile);
@@ -208,25 +209,26 @@ package physics {
          */
         public static function ConstructCollisionColumns(islands:Array):Array {
             // Create A List Of All The Columns
+            var island:PhysIsland;
             var minX:int = int.MAX_VALUE;
             var maxX:int = int.MIN_VALUE;
-            for each(var island:PhysIsland in islands) {
+            for each(island in islands) {
                 var iMinX:int = int(island.globalAnchor.x + 0.5);
                 var iMaxX:int = iMinX + island.tilesWidth - 1;
                 if (iMinX < minX) minX = iMinX;
                 if (iMaxX > maxX) maxX = iMaxX;
             }
             var totalWidth:int = maxX - minX + 1
-            var hashSet = new Array(totalWidth);
+            var hashSet:Array = new Array(totalWidth);
             for (var i:int = 0; i < totalWidth; i++) {
                 hashSet[i] = [];
             }
             
             // Hash All Columns
-            for each(var island:PhysIsland in islands) {
+            for each(island in islands) {
                 var igX:int = int(island.globalAnchor.x + 0.5);
                 igX -= minX;
-                var columns = BuildIslandCollisionColumns(island);
+                var columns:Array = BuildIslandCollisionColumns(island);
                 for each(var cc:CollisionColumn in columns) {
                     var cx:int = int(cc.pyEdge.center.x);
                     hashSet[igX + cx].push(cc);
@@ -303,8 +305,10 @@ package physics {
          * @param gravAcceleration Acceleration Vector In Physics Engine Units
          * @param dt Time Step Of The Simulation
          */
-        public static function Simulate(islands:Array, columns:Array, gravAcceleration:Vector2, dt:Number) {
-            for each(var island:PhysIsland in islands) {
+        public static function Simulate(islands:Array, columns:Array, gravAcceleration:Vector2, dt:Number):void {
+            var island:PhysIsland;
+            
+            for each(island in islands) {
                 if (!island.isGrounded) {
                     island.velocity.Add(gravAcceleration.x * dt, gravAcceleration.y * dt);
                     island.motion.SetV(island.velocity).MulD(dt);
@@ -325,7 +329,7 @@ package physics {
             }
             
             // Resolve Collisions Between Islands
-            for each(var island:PhysIsland in islands) {
+            for each(island in islands) {
                 var dy:Number = island.columnAccumulator.y - island.columnAccumulator.x;
                 if (dy != 0.0) {
                     island.velocity.y = 0.0;
@@ -343,7 +347,7 @@ package physics {
          * @param c1 Column 1
          * @param c2 Column 2
          */
-        private static function CollideColumns(c1:CollisionColumn, c2:CollisionColumn) {
+        private static function CollideColumns(c1:CollisionColumn, c2:CollisionColumn):void {
             if ((c1 == c2) || (c1.island == c2.island) || (c1.island.isGrounded && c2.island.isGrounded)) return;
             
             var c1y:Number = (c1.pyEdge.center.y + c1.nyEdge.center.y) * 0.5 + c1.island.globalAnchor.y;
@@ -372,7 +376,7 @@ package physics {
          * @param cNY The Column Located Towards The Negative Y
          * @param off The Penetration Distance Of The Columns
          */
-        private static function DisplaceIsland(cPY:CollisionColumn, cNY:CollisionColumn, off:Number) {
+        private static function DisplaceIsland(cPY:CollisionColumn, cNY:CollisionColumn, off:Number):void {
             if (!cNY.island.isGrounded) {
                 // Displace Lower One
                 cNY.island.columnAccumulator.x = Math.max(cNY.island.columnAccumulator.x, off);

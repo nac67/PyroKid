@@ -36,7 +36,7 @@ package pyrokid.playstates {
         override public function updateVisuals(parent:StateList):void {
         }
         
-        private function onKeyUp(e:KeyboardEvent = null) {
+        private function onKeyUp(e:KeyboardEvent = null):void {
             // TODO: When Done Go To The Gaming State
             switch(e.keyCode) {
                 case Key.ENTER:
@@ -56,7 +56,7 @@ package pyrokid.playstates {
             }
         }
         
-        public function reloadLevel(levelRecipe):void {
+        public function reloadLevel(levelRecipe:Object):void {
             var level:Level = new Level(levelRecipe);
             editor.loadLevel(level);
         }

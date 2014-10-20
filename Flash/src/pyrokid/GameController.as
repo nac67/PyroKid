@@ -26,7 +26,7 @@ package pyrokid {
         
         /* levelRecipe is not specified if you want to load from browser
          * Otherwise give it a byte array from an embedded level file */
-        public function init(levelBytes:ByteArray = null) {
+        public function init(levelBytes:ByteArray = null):void {
             if (levelBytes == null) {
                 // Load level with browser
                 LevelIO.loadLevel(initializeLevelAndEditor);
@@ -52,7 +52,7 @@ package pyrokid {
             begin();
         }
         
-        public function reloadLevel(levelRecipe):void {
+        public function reloadLevel(levelRecipe:Object):void {
             if (level != null) {
                 removeChild(camera);
             }
@@ -138,7 +138,7 @@ package pyrokid {
                     }
                 }
             }
-            level.movingTiles = level.movingTiles.filter(function(islandView) {
+            level.movingTiles = level.movingTiles.filter(function(islandView:ViewPIsland, i:int, a:Array):Boolean {
                 if (!islandView.sprite.isMoving()) {
                     for each (var cell:Vector2i in islandView.sprite.cells) {
                         var cellY:int = cell.y + Math.round(islandView.sprite.globalAnchor.y);
@@ -183,7 +183,7 @@ package pyrokid {
             
             // ------------------------- Game logic ------------------------ //
             level.player.update(level);
-            for each (var spider in level.enemies) {
+            for each (var spider:Spider in level.enemies) {
                 spider.update();
             }
             level.fireballUpdate();

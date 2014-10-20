@@ -38,7 +38,7 @@ package pyrokid.playstates {
         override public function updateVisuals(parent:StateList):void {
         }
         
-        private function onKeyUp(e:KeyboardEvent = null) {
+        private function onKeyUp(e:KeyboardEvent = null):void {
             if (e.keyCode == Key.ENTER) {
                 moveToState("Editor");
             }

@@ -4,12 +4,12 @@ package pyrokid {
     import pyrokid.tools.*;
     
     public class Constants {
-        public static var DEBUG:Boolean = false;
-        public static var GOD_MODE:Boolean = true;
+        public static const DEBUG:Boolean = false;
+        public static const GOD_MODE:Boolean = true;
         
-		public static var WIDTH:int = 800;
-		public static var HEIGHT:int = 600;
-        public static var CELL:int = 50;
+		public static const WIDTH:int = 800;
+		public static const HEIGHT:int = 600;
+        public static const CELL:int = 50;
         
         // fire constants
         public static var SPREAD_RATE:int = 30;
@@ -38,7 +38,7 @@ package pyrokid {
 		
 		public static var CAMERA_LAG:Number = 0.08;
         public static var GRAVITY:Number = 9;
-        public static var GRAVITY_VECTOR = new Vector2(0, GRAVITY);
+        public static var GRAVITY_VECTOR:Vector2 = new Vector2(0, GRAVITY);
         public static var SPIDER_SPEED:Number = 1.5*CELL;
         public static var DT:Number = 1 / 30.0;
         public static var PLAYER_XSPEED:int = 2 * CELL;
@@ -50,7 +50,7 @@ package pyrokid {
         public static var WOOD_TILE_CODE:int = 3;
         public static var METAL_TILE_CODE:int = 4;
         
-        public static function switchControlScheme(scheme:int) {
+        public static function switchControlScheme(scheme:int):void {
             if (scheme == 0) {
                 LEFT_BTN = 65;
                 RIGHT_BTN = 68;

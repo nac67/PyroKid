@@ -24,7 +24,7 @@ package pyrokid.playstates {
          * Inactive And Move To A Different State
          * @param state State's Identifier In StateList
          */
-        protected function moveToState(state:String) {
+        protected function moveToState(state:String):void {
             isRunning = false
             desiredNextState = state;
         }

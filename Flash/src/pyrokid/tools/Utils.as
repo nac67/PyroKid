@@ -50,25 +50,15 @@ package pyrokid.tools {
                obj.removeChildAt(i);
             }
         }
-        
-		public static function inBounds(array:Array, x:int, y:int):Boolean {
-			return y >= 0 && x >= 0 && y < array.length && x < array[0].length;
-		}
-		
-        public static function index(array:Array, x:int, y:int) {
-            if (inBounds(array, x, y)) {
-                return array[y][x];
-            }
-            return null;
-        }
-        
+
         public static function filterNull(array:Array):Array {
-            return array.filter(function(o) { return o != null; });
+            return array.filter(function(o:Object, i:int, a:Array):Boolean { return o != null; } );
         }
+        
         
         /* Moves obj by distance in the direction that obj is facing. You can offset the direction
          * rotation by offset degrees */
-        public static function moveInDirFacing(obj:DisplayObject, distance:int, offset:Number = 0) {
+        public static function moveInDirFacing(obj:DisplayObject, distance:int, offset:Number = 0):void {
             obj.x += distance * Math.cos((obj.rotation + offset) * (Math.PI / 180));
             obj.y += distance * Math.sin((obj.rotation + offset) * (Math.PI / 180));
         }

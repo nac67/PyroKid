@@ -53,48 +53,51 @@ package physics {
             return edges;
         }
         
-        public static function BuildTrimmedEdgeSet(islands:Array, clipDist:Number) {            
+        public static function BuildTrimmedEdgeSet(islands:Array, clipDist:Number):void {
+            var i:PhysIsland;
+            var e:PhysEdge;
+            var ce:PhysEdge;
+            var se:PhysEdge;
             
             // Separate Island Types
             var clipIslands:Array = [];
             var staticIslands:Array = [];
-            for each(var i:PhysIsland in islands) {
+            for each(i in islands) {
                 if (i.isGrounded) staticIslands.push(i);
                 else clipIslands.push(i);
             }
             
-            
             var cedges:Array = [[], [], [], []];
-            for each(var i:PhysIsland in islands) {
+            for each(i in islands) {
                 i.clippedEdges = new Array(i.edges.length);
                 var ei:int = 0;
-                for each(var e:PhysEdge in i.edges) {
-                    var ce:PhysEdge = e.Clone(i.globalAnchor);
+                for each(e in i.edges) {
+                    ce = e.Clone(i.globalAnchor);
                     cedges[ce.direction].push(ce);
                     i.clippedEdges[ei++] = ce;
                 }
             }
-            for each(var ce:PhysEdge in cedges[Cardinal.NX]) {
-                for each(var se:PhysEdge in cedges[Cardinal.PX]) {
+            for each(ce in cedges[Cardinal.NX]) {
+                for each(se in cedges[Cardinal.PX]) {
                     if (ce.direction == -1 || se.direction == -1) continue;
                     ClipX(ce, se, clipDist);
                 }
             }
-            for each(var ce:PhysEdge in cedges[Cardinal.NY]) {
-                for each(var se:PhysEdge in cedges[Cardinal.PY]) {
+            for each(ce in cedges[Cardinal.NY]) {
+                for each(se in cedges[Cardinal.PY]) {
                     if (ce.direction == -1 || se.direction == -1) continue;
                     ClipY(ce, se, clipDist);
                 }
             }
             
             // Position Back To Island Frame
-            for each(var i:PhysIsland in islands) {
-                for each(var e:PhysEdge in i.clippedEdges) {
+            for each(i in islands) {
+                for each(e in i.clippedEdges) {
                     e.center.SubV(i.globalAnchor);
                 }
             }
         }
-        private static function ClipX(ce:PhysEdge, se:PhysEdge, clipDist:Number) {
+        private static function ClipX(ce:PhysEdge, se:PhysEdge, clipDist:Number):void {
             if (ce.halfSize > se.halfSize) ClipX(se, ce, clipDist);
             
             // Check For Neighboring
@@ -102,7 +105,7 @@ package physics {
             if (Math.abs(d) > clipDist) return;
 
             // Check If They Clip
-            var off = ce.center.y - se.center.y;
+            var off:Number = ce.center.y - se.center.y;
             if (Math.abs(off) >= (ce.halfSize + se.halfSize)) return;
             
             ce.halfSize = Math.abs(off) - se.halfSize;
@@ -117,7 +120,7 @@ package physics {
             else
                 ce.center.y = se.center.y - se.halfSize - ce.halfSize;
         }
-        private static function ClipY(ce:PhysEdge, se:PhysEdge, clipDist:Number) {
+        private static function ClipY(ce:PhysEdge, se:PhysEdge, clipDist:Number):void {
             if (ce.halfSize > se.halfSize) ClipY(se, ce, clipDist);
             
             // Check For Neighboring
@@ -125,7 +128,7 @@ package physics {
             if (Math.abs(d) > clipDist) return;
 
             // Check If They Clip
-            var off = ce.center.x - se.center.x;
+            var off:Number = ce.center.x - se.center.x;
             if (Math.abs(off) >= (ce.halfSize + se.halfSize)) return;
             
             ce.halfSize = Math.abs(off) - se.halfSize;
@@ -184,8 +187,8 @@ package physics {
             
             // Resolve The Collision
             if (doResolve) {
-                var dx = a.accumPX - a.accumNX;
-                var dy = a.accumPY - a.accumNY;
+                var dx:Number = a.accumPX - a.accumNX;
+                var dy:Number = a.accumPY - a.accumNY;
                 
                 if (dx != 0 && opt.breakXVelocity)
                     r.velocity.x = 0;

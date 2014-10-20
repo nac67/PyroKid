@@ -49,7 +49,7 @@ package physics {
             // Add Grounding To The Island
             isGrounded = isGrounded || tile.IsGrounded;
         }
-        public function AddFullBlock(x:int, y:int) {
+        public function AddFullBlock(x:int, y:int):void {
             AddTile(x, y, new PhysBox());
         }
         

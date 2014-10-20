@@ -32,7 +32,7 @@ package pyrokid {
 		
         // Edit mode 1: Object properties
         private var selectedCell:Vector2i;
-        private var typeSelected = 0;
+        private var typeSelected:String = "";
 		private var objectEditor:Sprite;
 		private var selectedHighlighter:Sprite;
 		private var selectedButton:LevelEditorButton;
@@ -113,7 +113,7 @@ package pyrokid {
         
         // ----------------------UI Callback Functions---------------------
         
-		private function changeSelectedObject(selected):void {
+		private function changeSelectedObject(selected:String):void {
 			typeSelected = selected;
 		}
 		
@@ -131,7 +131,7 @@ package pyrokid {
 		}
         
         private function newLevel(event:MouseEvent):void {
-            reloadLevel(LevelRecipe.generateTemplate(15,10));
+            //loadLevel(LevelRecipe.generateTemplate(15,10));
         }
         
         private function updateHeight(newHeight:int):void {
@@ -144,9 +144,9 @@ package pyrokid {
 			var width:int = walls[0].length;
 			var height:int = walls.length;
 			if (newHeight >= height) {
-				for (var y = height; y < newHeight; y++) {
+				for (var y:int = height; y < newHeight; y++) {
 					var newRow:Array = [];
-					for (var x = 0; x < width; x++) {
+					for (var x:int = 0; x < width; x++) {
 						newRow.push(1);
 					}
 					walls.push(newRow);
@@ -159,6 +159,9 @@ package pyrokid {
 		}
 		
 		private function updateWidth(newWidth:int):void {
+            var x:int;
+            var y:int;
+            
 			if (newWidth < 1) {
 				trace("cannot set size to less than 1");
 				return;
@@ -167,13 +170,13 @@ package pyrokid {
 			var width:int = walls[0].length;
 			var height:int = walls.length;
 			if (newWidth >= width) {
-				for (var y = 0; y < height; y++) {
-					for (var x = width; x < newWidth; x++) {
+				for (y = 0; y < height; y++) {
+					for (x = width; x < newWidth; x++) {
 						walls[y].push(1);
 					}
 				}
 			} else {
-				for (var y = 0; y < height; y++) {
+				for (y = 0; y < height; y++) {
 					walls[y].splice(newWidth);
 				}
 			}
@@ -224,13 +227,13 @@ package pyrokid {
                 var cellX:int = event.stageX / (Constants.CELL * levelScale);
                 var cellY:int = event.stageY / (Constants.CELL * levelScale);
                 
-                var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
-                var highX = (cellX < holdStart.x ? holdStart.x : cellX);
-                var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
-                var highY = (cellY < holdStart.y ? holdStart.y : cellY);
+                var lowX:int = (cellX < holdStart.x ? cellX : holdStart.x);
+                var highX:int = (cellX < holdStart.x ? holdStart.x : cellX);
+                var lowY:int = (cellY < holdStart.y ? cellY : holdStart.y);
+                var highY:int = (cellY < holdStart.y ? holdStart.y : cellY);
                 
-                var w = highX - lowX + 1;
-                var h = highY - lowY + 1;
+                var w:int = highX - lowX + 1;
+                var h:int = highY - lowY + 1;
                 
                 draggingRect.x = lowX * Constants.CELL * levelScale;
                 draggingRect.y = lowY * Constants.CELL * levelScale;
@@ -253,10 +256,10 @@ package pyrokid {
             // Object addition and removal
 			if (editMode == 0) {
                 if (holdStart != null) {
-                    var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
-                    var highX = (cellX < holdStart.x ? holdStart.x : cellX);
-                    var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
-                    var highY = (cellY < holdStart.y ? holdStart.y : cellY);
+                    var lowX:int = (cellX < holdStart.x ? cellX : holdStart.x);
+                    var highX:int = (cellX < holdStart.x ? holdStart.x : cellX);
+                    var lowY:int = (cellY < holdStart.y ? cellY : holdStart.y);
+                    var highY:int = (cellY < holdStart.y ? holdStart.y : cellY);
                     
                     for (var cx:int = lowX; cx <= highX; cx++) {
                         for (var cy:int = lowY; cy <= highY; cy++) {
@@ -293,7 +296,7 @@ package pyrokid {
             } else if (typeSelected == "immune") {
                 level.recipe.freeEntities.push([cellX, cellY, 1]);
             } else {
-                level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
+                level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent:Array):Boolean {
                     return ent[0] != cellX || ent[1] != cellY;
                 });
                 level.recipe.walls[cellY][cellX] = int(typeSelected);

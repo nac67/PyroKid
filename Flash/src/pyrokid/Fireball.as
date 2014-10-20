@@ -26,7 +26,7 @@ package pyrokid {
             setRange(Constants.MAX_BALL_RANGE);
         }
         
-        public function setDirection(dir:int) {
+        public function setDirection(dir:int):void {
             if (dir == Constants.DIR_LEFT) {
                 speedX = -Constants.FBALL_SPEED;
                 rotation = 180;
@@ -43,7 +43,7 @@ package pyrokid {
         }
         
         /* set range in number of cells, converts to time till expiration */
-        public function setRange(numCells:Number) {
+        public function setRange(numCells:Number):void {
             range = numCells * Constants.CELL / Constants.FBALL_SPEED
         }
         

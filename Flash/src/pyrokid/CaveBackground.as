@@ -6,11 +6,11 @@ package pyrokid {
         private static var SIZE:int = 500;
         
         public function CaveBackground(cellsWide:int, cellsTall:int) {
-            var neededWidth = cellsWide * Constants.CELL + 640;
-            var neededHeight = cellsTall * Constants.CELL + 480;
+            var neededWidth:int = cellsWide * Constants.CELL + 640;
+            var neededHeight:int = cellsTall * Constants.CELL + 480;
             
-            for (var i = -SIZE; i < neededWidth; i += SIZE) {
-                for (var j = -SIZE; j < neededHeight; j += SIZE) {    
+            for (var i:int = -SIZE; i < neededWidth; i += SIZE) {
+                for (var j:int = -SIZE; j < neededHeight; j += SIZE) {    
                     var bg:Bitmap = new Embedded.BGBMP() as Bitmap;
                     bg.x = i;
                     bg.y = j;
