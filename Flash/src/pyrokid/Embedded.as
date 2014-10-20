@@ -31,6 +31,9 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/dirt.png")]
         public static var DirtBMP:Class;
         
+        [Embed(source="../../assets/tile_art/dirt_merge.png")]
+        public static var DirtMergeBMP:Class;
+        
         [Embed(source="../../assets/tile_art/big_background.png")]
         public static var BGBMP:Class; //cast as Bitmap on instantiation
         

@@ -6,6 +6,7 @@ package pyrokid.entities {
 	import physics.*;
 	import pyrokid.*;
     import pyrokid.tools.Utils;
+    import pyrokid.graphics.ConnectedSpriteBuilder;
 	
 	public class TileEntity extends GameEntity {
 		
@@ -61,6 +62,11 @@ package pyrokid.entities {
         }
 		
 		public function finalizeCells():void {
+            if (objectCode == Constants.WALL_TILE_CODE) {
+                var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, new Embedded.DirtMergeBMP as Bitmap);
+                addChild(tileSet);
+                return;
+            }
 			for (var i:int = 0; i < cells.length; i++) {
 				var child:DisplayObject = getSpriteForCell(cells[i]);
 				child.x = cells[i].x * Constants.CELL;
