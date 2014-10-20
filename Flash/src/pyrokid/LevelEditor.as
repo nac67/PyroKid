@@ -131,19 +131,28 @@ package pyrokid {
 				return;
 			}
 			var walls:Array = level.recipe.walls;
-            var id = getMaxId(walls); // TODO use this for entity and islands
+            var islandId = getMaxId(level.recipe.islands) + 1;
+            var entityId = getMaxId(level.recipe.tileEntities) + 1;
 			var width:int = walls[0].length;
 			var height:int = walls.length;
 			if (newHeight >= height) {
 				for (var y = height; y < newHeight; y++) {
 					var newRow:Array = [];
+                    var newIslandRow:Array = [];
+                    var newTileEntitiesRow:Array = [];
 					for (var x = 0; x < width; x++) {
 						newRow.push(1);
+                        newIslandRow.push(islandId);
+                        newTileEntitiesRow.push(entityId);
 					}
 					walls.push(newRow);
+                    level.recipe.islands.push(newIslandRow);
+                    level.recipe.tileEntities.push(newTileEntitiesRow);
 				}
 			} else {
 				walls.splice(newHeight);
+                level.recipe.islands.splice(newHeight);
+                level.recipe.tileEntities.splice(newHeight);
 			}
 			level.recipe.walls = walls;
 			scaleAndResetLevel(width, newHeight);
@@ -155,17 +164,23 @@ package pyrokid {
 				return;
 			}
 			var walls:Array = level.recipe.walls;
+            var islandId = getMaxId(level.recipe.islands) + 1;
+            var entityId = getMaxId(level.recipe.tileEntities) + 1;
 			var width:int = walls[0].length;
 			var height:int = walls.length;
 			if (newWidth >= width) {
 				for (var y = 0; y < height; y++) {
 					for (var x = width; x < newWidth; x++) {
 						walls[y].push(1);
+                        level.recipe.islands[y].push(islandId);
+                        level.recipe.tileEntities[y].push(entityId);
 					}
 				}
 			} else {
 				for (var y = 0; y < height; y++) {
 					walls[y].splice(newWidth);
+                    level.recipe.islands.splice(newWidth);
+                    level.recipe.tileEntities.splice(newWidth);
 				}
 			}
 			level.recipe.walls = walls;
@@ -287,6 +302,7 @@ package pyrokid {
                 for (var cx:int = lowX; cx <= highX; cx++) {
                     for (var cy:int = lowY; cy <= highY; cy++) {
                         placeObject(cx, cy);
+                        // TODO clumping bug when placing new objects -- Aaron
                     }   
                 }
             } else if (editMode == Constants.EDITOR_ISLAND_MODE) {
@@ -296,12 +312,12 @@ package pyrokid {
                 mergeRectangleTiles(level.recipe.tileEntities, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
                     return level.recipe.walls[coor.y][coor.x] == objCode;
                 });
-                //trace("walls:");
-                //Utils.print2DArr(level.recipe.walls);
-                //trace("island (connected) ids:");
-                //Utils.print2DArr(level.recipe.islands);
-                //trace("tile entities:");
-                //Utils.print2DArr(level.recipe.tileEntities);
+                trace("walls:");
+                Utils.print2DArr(level.recipe.walls);
+                trace("island (connected) ids:");
+                Utils.print2DArr(level.recipe.islands);
+                trace("tile entities:");
+                Utils.print2DArr(level.recipe.tileEntities);
             }
         }
         
@@ -358,7 +374,6 @@ package pyrokid {
         }
         
         private function placeObject(cellX:int, cellY:int):void {
-            //TODO: This doesn't work -- Aaron
             var ps:Array = level.recipe.playerStart;
             if (cellX == ps[0] && cellY == ps[1]) {
                 trace("can't delete player. place player on a new cell first");

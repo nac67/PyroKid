@@ -111,7 +111,7 @@ package pyrokid {
             }
             
             if (level.player.x > stage.stageWidth) {
-                doGameWon();
+                //doGameWon(); TODO wtf this breaks when the level gets wider... -- Evan
             }
         }
         
