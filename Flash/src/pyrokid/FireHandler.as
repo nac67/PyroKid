@@ -17,8 +17,8 @@ package pyrokid {
 			return Utils.filterNull(neighbors);
 		}
         
-        private static function spreadToNeighbors(level:Level, entity:TileEntity):void {
-            var neighbors:Array = getNeighbors(entity, level.tileEntityGrid);
+        private static function spreadToNeighbors(level:Level, entity:TileEntity, fireGrid:Array):void {
+            var neighbors:Array = getNeighbors(entity, fireGrid);
             for each (var neighbor:TileEntity in neighbors) {
                 neighbor.ignite(level, level.frameCount);
             }
@@ -30,8 +30,9 @@ package pyrokid {
                 entity.updateFire(level, level.frameCount);
                 
                 var timeToSpread:Boolean = level.frameCount % Constants.SPREAD_RATE == (entity.ignitionTime - 1) % Constants.SPREAD_RATE;
-                if ((entity.isMoving() && Constants.SPREAD_WHILE_FALLING) || (!entity.isMoving() && timeToSpread)) {
-                    spreadToNeighbors(level, entity);
+                if (timeToSpread) {
+                    var fireGrid = entity.isMoving() ? entity.parentIsland.tileEntityGrid : level.tileEntityGrid;
+                    spreadToNeighbors(level, entity, fireGrid);
                 }
 			}
 		}

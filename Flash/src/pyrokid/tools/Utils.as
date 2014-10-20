@@ -67,10 +67,9 @@ package pyrokid.tools {
          *  @param isNeighbor function(coor:Vector2i):Boolean
          *  @param processNode function(coor:Vector2i):Boolean */
         public static function BFS(width:int, height:int, start:Vector2i, isNeighbor:Function, processNode:Function):void {
-            var queue:Array = [];
-            var visited:Dictionary = new Dictionary();
-            visited[start.toString()] = true;
-            queue.push(start);
+            var queue:Array = [start];
+            var visited:HashSet = new HashSet();
+            visited.add(start);
             while (queue.length > 0) {
                 var coor:Vector2i = queue.shift();
                 var finishedSearch:Boolean = processNode(coor);
@@ -83,9 +82,9 @@ package pyrokid.tools {
                     return inBoundsWH(width, height, nei.x, nei.y) && isNeighbor(nei);
                 });
                 for each (var neighbor:Vector2i in neighbors) {
-                    if (!visited[neighbor.toString()]) {
+                    if (!visited.contains(neighbor)) {
                         queue.push(neighbor);
-                        visited[neighbor.toString()] = true;
+                        visited.add(neighbor);
                     }
                 }
             }
@@ -123,7 +122,6 @@ package pyrokid.tools {
         /* Prints a 2D array in a viewer-friendly way, making sure each element in a row
          * is spaced apart by at least spacing.*/
         public static function print2DArr(array:Array, spacing:int = 3, cutoff:Boolean = false):void {
-            trace("printing array");
             for each (var row:Array in array) {
                 var rowStr:String = "";
                 for (var j:int = 0; j < row.length; j++) {

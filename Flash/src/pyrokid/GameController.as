@@ -149,32 +149,34 @@ package pyrokid {
         }
         
         // TODO TODO TODO
-        //private function processMovingTilesInGrid():void {
-            //for each (var islandView:ViewPIsland in level.islandViews) {
-                //if (islandView.sprite.isMoving()) {
-                    //if (level.movingTiles.indexOf(islandView) == -1) {
-                        //for each (var cell:Vector2i in islandView.sprite.cells) {
-                            //var cellY:int = cell.y + Math.floor(islandView.sprite.globalAnchor.y);
-                            //var cellX:int = cell.x + Math.floor(islandView.sprite.globalAnchor.x);
-                            //level.tileEntityGrid[cellY][cellX] = null;
-                        //}
-                        //level.movingTiles.push(islandView);
-                    //}
-                //}
-            //}
-            //level.movingTiles = level.movingTiles.filter(function(islandView) {
-                //if (!islandView.sprite.isMoving()) {
-                    //for each (var cell:Vector2i in islandView.sprite.cells) {
-                        //var cellY:int = cell.y + Math.round(islandView.sprite.globalAnchor.y);
-                        //var cellX:int = cell.x + Math.round(islandView.sprite.globalAnchor.x);
-                        //level.tileEntityGrid[cellY][cellX] = islandView.sprite;
-                    //}
-                    //return false;
-                //} else {
-                    //return true;
-                //}
-            //});
-        //}
+        private function processMovingTilesInGrid():void {
+            for each (var islandView:ViewPIsland in level.islandViews) {
+                if (islandView.sprite.isMoving() && level.movingTiles.indexOf(islandView) == -1) {
+                    for each (var entity:TileEntity in islandView.sprite.entityList) {
+                        for each (var cell:Vector2i in entity.cells) {
+                            var cellY:int = cell.y + Math.round(entity.getGlobalAnchor().y);
+                            var cellX:int = cell.x + Math.round(entity.getGlobalAnchor().x);
+                            level.tileEntityGrid[cellY][cellX] = null;
+                        }
+                    }
+                    level.movingTiles.push(islandView);
+                }
+            }
+            level.movingTiles = level.movingTiles.filter(function(islandView) {
+                if (!islandView.sprite.isMoving()) {
+                    for each (var entity:TileEntity in islandView.sprite.entityList) {
+                        for each (var cell:Vector2i in entity.cells) {
+                            var cellY:int = cell.y + Math.round(entity.getGlobalAnchor().y);
+                            var cellX:int = cell.x + Math.round(entity.getGlobalAnchor().x);
+                            level.tileEntityGrid[cellY][cellX] = entity;
+                        }
+                    }
+                    return false;
+                } else {
+                    return true;
+                }
+            });
+        }
         
         /* Returns true if the player died. */
         private function resolveFreeEntityCollisions():Boolean {
@@ -212,13 +214,13 @@ package pyrokid {
             }
             level.fireballUpdate();
             FireHandler.spreadFire(level);
-            //processMovingTilesInGrid();
             
             // -------------------------- Physics --------------------------- //
             handlePhysics();
             var playerDied:Boolean = resolveFreeEntityCollisions();
             
             // ------------------------ After physics game logic ------------ //
+            processMovingTilesInGrid();
             level.removeDead();
             
             // --------------------------- Visuals -------------------------- //

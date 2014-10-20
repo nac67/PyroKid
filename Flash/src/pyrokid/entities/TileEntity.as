@@ -12,7 +12,7 @@ package pyrokid.entities {
 		public var cells:Array;
         
         // position, in tile coordinates, relative to the corner of the island.
-        public var islandAnchor:Vector2;
+        public var islandAnchor:Vector2i;
         
         public var parentIsland:Island;
         
@@ -28,8 +28,27 @@ package pyrokid.entities {
             cellSprites = [];
 		}
         
+        /* Returns an array of tile coordinates this TileEntity occupies
+         * with respect to the global map. Coordinates are Vector2, which
+         * means they can be between tiles (if the island is falling, for example). */
+        public function coorsInGlobal():Array {
+            var globalA:Vector2 = getGlobalAnchor();
+            return cells.map(function(cell) {
+                globalA.AddV(cell.copyAsVec2());
+            });
+        }
+        
+        /* Returns an array of tile coordinates this TileEntity occupies
+         * with respect to the island it is in. Coordinates are Vector2i
+         * because a TileEntity never moves out of sync with its parent island. */
+        public function coorsInIsland():Array {
+            return cells.map(function(cell) {
+                return islandAnchor.copy().AddV(cell);
+            });
+        }
+        
         public function getGlobalAnchor():Vector2 {
-            return parentIsland.globalAnchor.copy().AddV(islandAnchor);
+            return parentIsland.globalAnchor.copy().AddV(islandAnchor.copyAsVec2());
         }
 		
 		protected function getSpriteForCell(cell:Vector2i):DisplayObject {

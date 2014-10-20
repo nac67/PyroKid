@@ -15,6 +15,11 @@ package physics {
         public function copy():Vector2i {
             return new Vector2i(x, y);
         }
+        
+        /* Returns an equivalent Vector2. */
+        public function copyAsVec2():Vector2 {
+            return new Vector2(x, y);
+        }
 
         public function Set(_x:int, _y:int):Vector2i {
             x = _x;

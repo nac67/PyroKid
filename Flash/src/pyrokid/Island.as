@@ -1,4 +1,5 @@
 package pyrokid {
+    import physics.PhysIsland;
     import physics.Vector2;
     import physics.Vector2i;
     import pyrokid.entities.TileEntity;
@@ -6,10 +7,28 @@ package pyrokid {
     
     public class Island {
         
-        private var _velocity:Vector2 = new Vector2();
-        private var _globalAnchor:Vector2 = new Vector2();
+        private var _velocity:Vector2;
+        private var _globalAnchor:Vector2;
         public var tileEntityGrid:Array;
         public var entityList:Array;
+        
+        public function Island(physIsland:PhysIsland) {
+            entityList = [];
+            tileEntityGrid = Utils.newArrayOfSize(physIsland.tileGrid);
+            _velocity = physIsland.velocity.copy().MulD(Constants.CELL);
+            _globalAnchor = physIsland.globalAnchor.copy();
+        }
+        
+        /* Adds entity to this island, given that entity's top left corner is
+         * located at globalAnchor with respect to the entire map. */
+        public function addEntity(entity:TileEntity, entityGlobalAnchor:Vector2):void {
+            entity.parentIsland = this;
+            entity.islandAnchor = entityGlobalAnchor.copy().SubV(globalAnchor).copyAsVec2i();
+            for each (var cell:Vector2i in entity.coorsInIsland()) { // relative to entity's anchor
+                tileEntityGrid[cell.y][cell.x] = entity;
+            }
+            entityList.push(entity);
+        }
         
         public function get velocity():Vector2 {
             return _velocity;
@@ -35,11 +54,10 @@ package pyrokid {
         }
         
         public function set globalAnchor(value:Vector2):void {
-            var movement:Vector2 = value.copy().SubV(_globalAnchor);
             _globalAnchor = value;
             for each (var entity:TileEntity in entityList) {
-                entity.x += (movement.x * Constants.CELL);
-                entity.y += (movement.y * Constants.CELL);
+                entity.x = (value.x + entity.islandAnchor.x) * Constants.CELL;
+                entity.y = (value.y + entity.islandAnchor.y) * Constants.CELL;
             }
         }
         

@@ -131,6 +131,7 @@ package pyrokid {
 				return;
 			}
 			var walls:Array = level.recipe.walls;
+            var id = getMaxId(walls); // TODO use this for entity and islands
 			var width:int = walls[0].length;
 			var height:int = walls.length;
 			if (newHeight >= height) {
@@ -321,12 +322,12 @@ package pyrokid {
                         var inRectangle:Boolean = coor.x >= lowX && coor.x <= highX && coor.y >= lowY && coor.y <= highY;
                         var alreadyConnected:Boolean = idsBeingConnected[grid[coor.y][coor.x]];
                         return canMergeWith(coor, objCode) && (alreadyConnected || inRectangle);
-                    }
+                    };
                     var processNode:Function = function(coor:Vector2i):Boolean {
                         idsBeingConnected[grid[coor.y][coor.x]] = true;
                         grid[coor.y][coor.x] = nextId;
                         return false;
-                    }
+                    };
                     Utils.BFS(Utils.getW(grid), Utils.getH(grid), new Vector2i(cx, cy), isNeighbor, processNode);
                     nextId += 1;
                 }   
@@ -375,9 +376,11 @@ package pyrokid {
             // place new object
             var tileEntityPlaced:Boolean = typeSelected is int;
             if (tileEntityPlaced) {
-                level.recipe.walls[cellY][cellX] = int(typeSelected);
-                level.recipe.islands[cellY][cellX] = getMaxId(level.recipe.islands) + 1;
-                level.recipe.tileEntities[cellY][cellX] = getMaxId(level.recipe.tileEntities) + 1;
+                var type:int = int(typeSelected);
+                level.recipe.walls[cellY][cellX] = type;
+                var empty:Boolean = type == Constants.EMPTY_TILE_CODE;
+                level.recipe.islands[cellY][cellX] = empty ? 0 : getMaxId(level.recipe.islands) + 1;
+                level.recipe.tileEntities[cellY][cellX] = empty ? 0 : getMaxId(level.recipe.tileEntities) + 1;
             } else if (typeSelected == "player") {
                 level.recipe.playerStart = [cellX, cellY];
             } else {

@@ -60,38 +60,34 @@ package pyrokid {
 			this.recipe = recipe;
             walls = recipe.walls;
 			onFire = [];
-			islandViews = [];
 			rectViews = [];
 			movingTiles = [];
             enemies = [];
-            tileEntityGrid = Utils.newArrayOfSize(walls);
             
             background = new CaveBackground(Utils.getW(walls), Utils.getH(walls));
             this.addChild(background);
 			
-            setupTiles();
+            islands = [];
+			islandViews = [];
+            tileEntityGrid = Utils.newArrayOfSize(walls);
+            setupTiles(islands, islandViews, tileEntityGrid, walls);
             setupFreeEntities();
             setupMiscellaneous();
         }
         
-        private function setupTiles():void {
+        private function setupTiles(islands:Array, islandViews:Array, tileEntityGrid:Array, tileIdGrid:Array):void {
             //islands = IslandSimulator.ConstructIslandsFromIds(recipe.islands, walls);
-            
             var islandCellMap:Dictionary = Utils.getCellMap(recipe.islands);
             var entityCellMap:Dictionary = Utils.getCellMap(recipe.tileEntities);
             
             // Create physics islands and game islands
-            islands = [];
             var gameIslands:Dictionary = new Dictionary();
             for (var strId:String in islandCellMap) {
                 var id:int = int(strId);
-                var physIsland:PhysIsland = IslandSimulator.ConstructIsland(islandCellMap[id], walls);
+                var physIsland:PhysIsland = IslandSimulator.ConstructIsland(islandCellMap[id], tileIdGrid);
                 islands.push(physIsland);
                 
-                var gameIsland:Island = new Island();
-                gameIsland.entityList = [];
-                gameIsland.tileEntityGrid = Utils.newArrayOfSize(physIsland.tileGrid);
-                gameIsland.globalAnchor = physIsland.globalAnchor.copy();
+                var gameIsland:Island = new Island(physIsland);
                 gameIslands[id] = gameIsland;
                 
 				islandViews.push(new ViewPIsland(gameIsland, physIsland));
@@ -104,33 +100,27 @@ package pyrokid {
                 var coors:Array = entityCellMap[id];
                 
                 // all ids should be the same, so just use the first
-                var tileCode:int = walls[coors[0].y][coors[0].x];
+                var tileCode:int = tileIdGrid[coors[0].y][coors[0].x];
                 var islandId:int = recipe.islands[coors[0].y][coors[0].x];
                 
                 var parentIsland:Island = gameIslands[islandId];
                 var entity:TileEntity = getEntityFromTileCode(tileCode);
                 addChild(entity);
                 
+                // construct entity and setup sprite
                 var globalAnchor:Vector2 = Utils.getAnchor(coors);
-                entity.islandAnchor = globalAnchor.copy().SubV(parentIsland.globalAnchor);
-                
-                entity.parentIsland = parentIsland;
                 entity.cells = coors.map(function(coor) {
                     return coor.copy().SubV(globalAnchor.copyAsVec2i());
                 });
                 entity.x = globalAnchor.x * Constants.CELL;
                 entity.y = globalAnchor.y * Constants.CELL;
+                entity.finalizeCells();
+                
+                parentIsland.addEntity(entity, globalAnchor);
                 
                 for each (var coor:Vector2i in coors) { // relative to global space
                     tileEntityGrid[coor.y][coor.x] = entity;
                 }
-                for each (var cell:Vector2i in entity.cells) { // relative to entity's anchor
-                    parentIsland.tileEntityGrid[cell.y + entity.islandAnchor.y][cell.x + entity.islandAnchor.x] = entity;
-                }
-                
-                parentIsland.entityList.push(entity);
-                
-                entity.finalizeCells();
             }
         }
         
@@ -215,6 +205,7 @@ package pyrokid {
                 fireball.y += fireball.speedY;
                 
                 // ignite TileEntities
+                // TODO hit falling objects with fireball -- Aaron
 				var cellX = Utils.realToCell(fireball.x);
 				var cellY = Utils.realToCell(fireball.y);
 				var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
@@ -227,7 +218,8 @@ package pyrokid {
                 // ignite FreeEntities
                 for (var j:int = 0; j < enemies.length; j++) {
                     var spider:BackAndForthEnemy = enemies[j] as BackAndForthEnemy;
-                    if(spider != null) {
+                    if (spider != null) {
+                        // TODO use hitTestObject on spider's hitbox
                         if (fireball.hitTestObject(spider)) {
                             fireballs.markForDeletion(fireball);
                             spider.ignite(this, frameCount);
@@ -275,19 +267,84 @@ package pyrokid {
                 return !enemy.isDead;
             });
             
+            var brokenIslandViews:Array = [];
+            var oldIslandViews = islandViews;
+            islandViews = [];
             islands = [];
-            var islandRemoved:Boolean = false;
-            islandViews = islandViews.filter(function(view) {
-                var alive:Boolean = !view.sprite.isDead;
-                if (alive) {
-                    islands.push(view.phys);
+            for each (var islandView:ViewPIsland in oldIslandViews) {
+                var gameIsland:Island = islandView.sprite;
+                var physIsland:PhysIsland = islandView.phys;
+                
+                var entityRemoved:Boolean = false;
+                gameIsland.entityList = gameIsland.entityList.filter(function(entity) {
+                    if (entity.isDead) {
+                        removeChild(entity);
+                        for each (var coor:Vector2i in entity.coorsInIsland()) {
+                            gameIsland.tileEntityGrid[coor.y][coor.x] = null;
+                        }
+                        entityRemoved = true;
+                    }
+                    return !entity.isDead;
+                });
+                
+                if (entityRemoved) {
+                    brokenIslandViews.push(islandView);
                 } else {
-                    removeChild(view.sprite);
-                    islandRemoved = true;
+                    islands.push(physIsland);
+                    islandViews.push(islandView);
                 }
-                return alive;
-            });
-            if (islandRemoved) {
+            }
+            
+            for each (var brokenIslandView:ViewPIsland in brokenIslandViews) {
+                if (brokenIslandView.sprite.entityList.length == 0) {
+                    continue;
+                }
+                
+                var brokenPhysIsland:PhysIsland = brokenIslandView.phys;
+                var grid:Array = brokenIslandView.sprite.tileEntityGrid;
+                var physBoxGrid:Array = brokenPhysIsland.tileGrid;
+                
+                var visitedCoors:HashSet = new HashSet();
+                Utils.foreach(grid, function(x:int, y:int, tileEntity:TileEntity):void {
+                    var coor:Vector2i = new Vector2i(x, y);
+                    if (tileEntity == null || visitedCoors.contains(coor)) {
+                        return;
+                    }
+                    
+                    // Construct island by doing BFS on this coordinate.
+                    var entities:HashSet = new HashSet(true);
+                    var coorsInNewIsland:Array = [];
+                    var isNeighbor:Function = function(coor:Vector2i):Boolean {
+                        return grid[coor.y][coor.x] != null;
+                    };
+                    var processNode:Function = function(coor:Vector2i):Boolean {
+                        entities.add(grid[coor.y][coor.x]);
+                        coorsInNewIsland.push(coor);
+                        visitedCoors.add(coor);
+                        return false;
+                    };
+                    Utils.BFS(Utils.getW(grid), Utils.getH(grid), coor, isNeighbor, processNode);
+                    
+                    var physIsland:PhysIsland = IslandSimulator.ConstructIsland(coorsInNewIsland, physBoxGrid);
+                    physIsland.globalAnchor.AddV(brokenPhysIsland.globalAnchor);
+                    physIsland.velocity = brokenPhysIsland.velocity.copy();
+                    var gameIsland:Island = new Island(physIsland);
+                    for each (var entity:TileEntity in entities) {
+                        gameIsland.addEntity(entity, entity.getGlobalAnchor());
+                    }
+                    islands.push(physIsland);
+                    islandViews.push(new ViewPIsland(gameIsland, physIsland));
+                });
+            }
+            
+            movingTiles = [];
+            for each (var islandView:ViewPIsland in islandViews) {
+                if (islandView.sprite.isMoving()) {
+                    movingTiles.push(islandView);
+                }
+            }
+            
+            if (brokenIslandViews.length > 0) {
                 columns = IslandSimulator.ConstructCollisionColumns(islands);
             }
             
@@ -299,9 +356,6 @@ package pyrokid {
                     }
                 }
             }
-            movingTiles = movingTiles.filter(function(tile) {
-                return !tile.sprite.isDead;
-            });
             onFire = onFire.filter(function(tile) {
                 return !tile.isDead;
             });
