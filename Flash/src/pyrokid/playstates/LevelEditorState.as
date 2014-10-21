@@ -8,7 +8,7 @@ package pyrokid.playstates {
     import pyrokid.LevelIO;
     import pyrokid.LevelRecipe;
     import pyrokid.tools.Key;
-    import pyrokid.tools.Utils;
+    import Utils;
 	/**
      * ...
      * @author Cristian Zaloj

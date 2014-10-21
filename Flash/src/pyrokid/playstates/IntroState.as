@@ -1,7 +1,7 @@
 package pyrokid.playstates {
     import flash.display.Sprite;
     import pyrokid.tools.Key;
-    import pyrokid.tools.Utils;
+    import Utils;
 	/**
      * ...
      * @author Cristian Zaloj

@@ -3,7 +3,7 @@ package pyrokid.playstates {
     import flash.display.Sprite;
     import pyrokid.LevelRecipe;
     import pyrokid.MenuScreen;
-    import pyrokid.tools.Utils;
+    import Utils;
     import pyrokid.GameController;
 	/**
      * ...

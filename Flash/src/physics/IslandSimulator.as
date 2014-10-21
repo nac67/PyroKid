@@ -187,6 +187,7 @@ package physics {
             
             // Create Island At Its Starting Min Location
             var island:PhysIsland = new PhysIsland(xBounds.y - xBounds.x + 1, yBounds.y - yBounds.x + 1);
+            island.tileOriginalLocation.Set(xBounds.x, yBounds.x);
             island.globalAnchor.Set(xBounds.x, yBounds.x);
             
             // Add All The Tiles
@@ -390,6 +391,31 @@ package physics {
                 cPY.island.columnAccumulator.y = Math.max(cPY.island.columnAccumulator.y, off / 2);
                 cNY.island.columnAccumulator.x = Math.max(cNY.island.columnAccumulator.x, off / 2);
             }
+        }
+    
+        public static function DestroyTile(island:PhysIsland, x:int, y:int):Array {
+            // Perform Checks To See If Anything Is Changed
+            if (x < 0 || x >= island.tilesWidth) return [island];
+            if (y < 0 || y >= island.tilesHeight) return [island];
+            if (island.tileGrid[y][x] == null) return [island];
+            
+            // Check If This Will Destroy The Entire Island
+            if (island.tilesWidth == 1 && island.tilesHeight == 1) return null;
+            
+            // Destroy The Tile
+            island.tileGrid[y][x] = null;
+            
+            // Rebuild New Islands
+            var newIslands:Array = IslandSimulator.ConstructIslands(island.tileGrid);
+            if (newIslands == null || newIslands.length < 1) return null;
+            
+            // Add Back The Original Island Offsets To The New Islands
+            for each(var newIsland:PhysIsland in newIslands) {
+                newIsland.globalAnchor.AddV(island.globalAnchor);
+                newIsland.tileOriginalLocation.AddV(island.tileOriginalLocation);
+            }
+            
+            return newIslands;
         }
     }
 }
