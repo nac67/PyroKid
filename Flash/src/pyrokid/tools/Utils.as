@@ -59,6 +59,22 @@ package pyrokid.tools {
             }
         }
         
+        public static function getIntFromBooleans(bools:Array):int {
+            var integer:int = 0;
+            for (var i:int = 0; i < bools.length; i++) {
+                integer += int(bools[i]) << i;
+            }
+            return integer;
+        }
+        
+        public static function getBooleansFromInt(integer:int):Array {
+            var bools:Array = [];
+            for (var i:int = 0; i < 4; i++) {
+                bools.push(Boolean((integer >> i) & 1));
+            }
+            return bools;
+        }
+        
         /** Performs BFS on an array of size height by width, starting at start.
          *  It considers an element in the array a neighbor if it is
          *  adjacent in one of the four cardinal directions and isNeighbor

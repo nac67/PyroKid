@@ -63,36 +63,38 @@ package pyrokid {
 			rectViews = [];
 			movingTiles = [];
             enemies = [];
+            islands = [];
+			islandViews = [];
+            tileEntityGrid = Utils.newArrayOfSize(walls);
             
             background = new CaveBackground(Utils.getW(walls), Utils.getH(walls));
             this.addChild(background);
 			
-            islands = [];
-			islandViews = [];
-            tileEntityGrid = Utils.newArrayOfSize(walls);
-            setupTiles(islands, islandViews, tileEntityGrid, walls);
+            setupTiles();
             setupFreeEntities();
             setupMiscellaneous();
         }
         
-        private function setupTiles(islands:Array, islandViews:Array, tileEntityGrid:Array, tileIdGrid:Array):void {
-            //islands = IslandSimulator.ConstructIslandsFromIds(recipe.islands, walls);
-            var islandCellMap:Dictionary = Utils.getCellMap(recipe.islands);
+        private function setupTiles():void {
             var entityCellMap:Dictionary = Utils.getCellMap(recipe.tileEntities);
             
+            // build physTiles grid
+            var physTiles:Array = Utils.newArrayOfSize(recipe.walls);
+            Utils.foreach(physTiles, function(x:int, y:int, element:TileEntity):void {
+                if (recipe.walls[y][x] != Constants.EMPTY_TILE_CODE) {
+                    var connectorBools:Array = Utils.getBooleansFromInt(recipe.islands[y][x]);
+                    var isFalling:Boolean = Constants.GROUNDED_TYPES.indexOf(recipe.walls[y][x]) == -1;
+                    physTiles[y][x] = new PhysBox(connectorBools, isFalling);
+                }
+            });
+            
             // Create physics islands and game islands
-            var gameIslands:Dictionary = new Dictionary();
-            for (var strId:String in islandCellMap) {
-                var id:int = int(strId);
-                var physIsland:PhysIsland = IslandSimulator.ConstructIsland(islandCellMap[id], tileIdGrid);
-                islands.push(physIsland);
-                
-                var gameIsland:Island = new Island(physIsland);
-                gameIslands[id] = gameIsland;
-                
-				islandViews.push(new ViewPIsland(gameIsland, physIsland));
-            }
+            islands = IslandSimulator.ConstructIslands(physTiles);
             columns = IslandSimulator.ConstructCollisionColumns(islands);
+            for each (var physIsland:PhysIsland in islands) {
+                var gameIsland:Island = new Island(physIsland);
+                islandViews.push(new ViewPIsland(gameIsland, physIsland));
+            }
             
             // Create tile entities and populate entity grids
             for (var strId:String in entityCellMap) {
@@ -100,10 +102,9 @@ package pyrokid {
                 var coors:Array = entityCellMap[id];
                 
                 // all ids should be the same, so just use the first
-                var tileCode:int = tileIdGrid[coors[0].y][coors[0].x];
-                var islandId:int = recipe.islands[coors[0].y][coors[0].x];
+                var tileCode:int = recipe.walls[coors[0].y][coors[0].x];
                 
-                var parentIsland:Island = gameIslands[islandId];
+                var parentIsland:Island = findParentIsland(coors, islandViews);
                 var entity:TileEntity = getEntityFromTileCode(tileCode);
                 addChild(entity);
                 
@@ -122,6 +123,22 @@ package pyrokid {
                     tileEntityGrid[coor.y][coor.x] = entity;
                 }
             }
+            
+            for each (var islandView:ViewPIsland in islandViews) {
+                islandView.sprite.connectors = Connector.getConnectorSprites(recipe.islands, islandView.sprite);
+                for each (var sprite:Connector in islandView.sprite.connectors) {
+                    addChild(sprite);
+                }
+                islandView.sprite.setConnectorPositions();
+            }
+        }
+        
+        private static function findParentIsland(coors:Array, islandViews:Array):Island {
+            return islandViews.filter(function(element) {
+                var physIsland:PhysIsland = element.phys;
+                var coor:Vector2i = coors[0].copy().SubV(physIsland.globalAnchor.copyAsVec2i());
+                return Utils.index(physIsland.tileGrid, coor.x, coor.y) != null;
+            })[0].sprite;
         }
         
         private function getEntityFromTileCode(tileCode:int):TileEntity {
@@ -281,6 +298,7 @@ package pyrokid {
                         removeChild(entity);
                         for each (var coor:Vector2i in entity.coorsInIsland()) {
                             gameIsland.tileEntityGrid[coor.y][coor.x] = null;
+                            physIsland.tileGrid[coor.y][coor.x] = null;
                         }
                         entityRemoved = true;
                     }
@@ -301,40 +319,42 @@ package pyrokid {
                 }
                 
                 var brokenPhysIsland:PhysIsland = brokenIslandView.phys;
-                var grid:Array = brokenIslandView.sprite.tileEntityGrid;
-                var physBoxGrid:Array = brokenPhysIsland.tileGrid;
-                
-                var visitedCoors:HashSet = new HashSet();
-                Utils.foreach(grid, function(x:int, y:int, tileEntity:TileEntity):void {
-                    var coor:Vector2i = new Vector2i(x, y);
-                    if (tileEntity == null || visitedCoors.contains(coor)) {
-                        return;
-                    }
+                var entities:Array = brokenIslandView.sprite.entityList;
                     
-                    // Construct island by doing BFS on this coordinate.
-                    var entities:HashSet = new HashSet(true);
-                    var coorsInNewIsland:Array = [];
-                    var isNeighbor:Function = function(coor:Vector2i):Boolean {
-                        return grid[coor.y][coor.x] != null;
-                    };
-                    var processNode:Function = function(coor:Vector2i):Boolean {
-                        entities.add(grid[coor.y][coor.x]);
-                        coorsInNewIsland.push(coor);
-                        visitedCoors.add(coor);
-                        return false;
-                    };
-                    Utils.BFS(Utils.getW(grid), Utils.getH(grid), coor, isNeighbor, processNode);
-                    
-                    var physIsland:PhysIsland = IslandSimulator.ConstructIsland(coorsInNewIsland, physBoxGrid);
-                    physIsland.globalAnchor.AddV(brokenPhysIsland.globalAnchor);
-                    physIsland.velocity = brokenPhysIsland.velocity.copy();
-                    var gameIsland:Island = new Island(physIsland);
-                    for each (var entity:TileEntity in entities) {
-                        gameIsland.addEntity(entity, entity.getGlobalAnchor());
+                var newIslandViews:Array = [];
+                var newIslands:Array = IslandSimulator.ConstructIslands(brokenPhysIsland.tileGrid);
+                for each (var newPhysIsland:PhysIsland in newIslands) {
+                    newPhysIsland.velocity = brokenPhysIsland.velocity.copy();
+                    var newGameIsland:Island = new Island(newPhysIsland);
+                    islands.push(newPhysIsland);
+                    var newIslandView:ViewPIsland = new ViewPIsland(newGameIsland, newPhysIsland);
+                    newIslandViews.push(newIslandView);
+                    islandViews.push(newIslandView);
+                }
+                for each (var entity:TileEntity in entities) {
+                    var gameIsland:Island = findParentIsland(entity.coorsInIsland(), newIslandViews);
+                    gameIsland.addEntity(entity, entity.islandAnchor.copyAsVec2());
+                }
+                for each (var newPhysIsland:PhysIsland in newIslands) {
+                    newPhysIsland.globalAnchor.AddV(brokenPhysIsland.globalAnchor);
+                }
+                for each (var sprite:Connector in brokenIslandView.sprite.connectors) {
+                    var coor1:Vector2i = sprite.coorInIsland;
+                    var coor2:Vector2i = Cardinal.getVector2i(sprite.direction).AddV(sprite.coorInIsland);
+                    var islandFound:Boolean = false;
+                    for each (var islandView:ViewPIsland in newIslandViews) {
+                        if (Utils.index(islandView.sprite.tileEntityGrid, coor1.x, coor1.y)
+                                && Utils.index(islandView.sprite.tileEntityGrid, coor2.x, coor2.y)) {
+                            islandView.sprite.connectors[Connector.getDictKey(coor1, sprite.direction)] = sprite;
+                            sprite.setSpriteLocationFromIslandAnchor(islandView.sprite.globalAnchor);
+                            islandFound = true;
+                            break;
+                        }
                     }
-                    islands.push(physIsland);
-                    islandViews.push(new ViewPIsland(gameIsland, physIsland));
-                });
+                    if (!islandFound) {
+                        removeChild(sprite);
+                    }
+                }
             }
             
             movingTiles = [];

@@ -20,6 +20,29 @@ package physics {
          * Positive Y Direction = 3
          */
         public static var PY:int = 3;
+        
+        public static var DIRECTIONS:Array = [NX, PX, NY, PY];
+        
+        public static function getOpposite(dir:int):int {
+            switch (dir) {
+                case NX: return PX;
+                case PX: return NX;
+                case NY: return PY;
+                case PY: return NY;
+            }
+            throw new Error("not a real direction");
+        }
+        
+        public static function getVector2i(dir:int):Vector2i {
+            switch (dir) {
+                case NX: return new Vector2i(-1, 0);
+                case PX: return new Vector2i(1, 0);
+                case NY: return new Vector2i(0, -1);
+                case PY: return new Vector2i(0, 1);
+            }
+            throw new Error("not a real direction");
+        }
+        
     }
 
 }

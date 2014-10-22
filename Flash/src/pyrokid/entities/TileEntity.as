@@ -35,7 +35,7 @@ package pyrokid.entities {
         public function coorsInGlobal():Array {
             var globalA:Vector2 = getGlobalAnchor();
             return cells.map(function(cell) {
-                globalA.AddV(cell.copyAsVec2());
+                return cell.copyAsVec2().AddV(globalA);
             });
         }
         
@@ -62,8 +62,9 @@ package pyrokid.entities {
         }
 		
 		public function finalizeCells():void {
-            if (objectCode == Constants.WALL_TILE_CODE) {
-                var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, new Embedded.DirtMergeBMP as Bitmap);
+            var tileSetMap:Bitmap = Constants.GET_TILE_SET(objectCode);
+            if (tileSetMap != null) {
+                var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, tileSetMap);
                 addChild(tileSet);
                 return;
             }

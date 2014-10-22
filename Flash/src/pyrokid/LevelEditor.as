@@ -19,7 +19,7 @@ package pyrokid {
         public var reloadLevel:Function;
         
         private var editMode:int;
-		private var numEditModes:int = 3;
+		private var numEditModes:int = 4;
         private var UI_Elements:Array; // All level editor UI elements
         private var cellsWidthInput:LevelEditorInput;
         private var cellsHeightInput:LevelEditorInput;
@@ -45,7 +45,7 @@ package pyrokid {
             
             // Universal
             UI_Elements = [];
-			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Object Properties", "Clumping Objects"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF]));
+			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Clumping Objects", "Connector Mode", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF, 0x555555]));
 			cellsWidthInput = new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth);
 			cellsHeightInput = new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight);
             UI_Elements.push(cellsWidthInput, cellsHeightInput);
@@ -131,7 +131,6 @@ package pyrokid {
 				return;
 			}
 			var walls:Array = level.recipe.walls;
-            var islandId = getMaxId(level.recipe.islands) + 1;
             var entityId = getMaxId(level.recipe.tileEntities) + 1;
 			var width:int = walls[0].length;
 			var height:int = walls.length;
@@ -142,8 +141,9 @@ package pyrokid {
                     var newTileEntitiesRow:Array = [];
 					for (var x = 0; x < width; x++) {
 						newRow.push(1);
-                        newIslandRow.push(islandId);
+                        newIslandRow.push(0);
                         newTileEntitiesRow.push(entityId);
+                        entityId += 1;
 					}
 					walls.push(newRow);
                     level.recipe.islands.push(newIslandRow);
@@ -164,7 +164,6 @@ package pyrokid {
 				return;
 			}
 			var walls:Array = level.recipe.walls;
-            var islandId = getMaxId(level.recipe.islands) + 1;
             var entityId = getMaxId(level.recipe.tileEntities) + 1;
 			var width:int = walls[0].length;
 			var height:int = walls.length;
@@ -172,8 +171,9 @@ package pyrokid {
 				for (var y = 0; y < height; y++) {
 					for (var x = width; x < newWidth; x++) {
 						walls[y].push(1);
-                        level.recipe.islands[y].push(islandId);
+                        level.recipe.islands[y].push(0);
                         level.recipe.tileEntities[y].push(entityId);
+                        entityId += 1;
 					}
 				}
 			} else {
@@ -305,20 +305,76 @@ package pyrokid {
                         // TODO clumping bug when placing new objects -- Aaron
                     }   
                 }
-            } else if (editMode == Constants.EDITOR_ISLAND_MODE) {
-                mergeRectangleTiles(level.recipe.islands, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
-                    return level.recipe.walls[coor.y][coor.x] != Constants.EMPTY_TILE_CODE;
-                });
+            } else if (editMode == Constants.EDITOR_CLUMP_MODE) {
+                //mergeRectangleTiles(level.recipe.islands, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
+                    //return level.recipe.walls[coor.y][coor.x] != Constants.EMPTY_TILE_CODE;
+                //});
                 mergeRectangleTiles(level.recipe.tileEntities, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
                     return level.recipe.walls[coor.y][coor.x] == objCode;
                 });
-                trace("walls:");
-                Utils.print2DArr(level.recipe.walls);
-                trace("island (connected) ids:");
-                Utils.print2DArr(level.recipe.islands);
-                trace("tile entities:");
-                Utils.print2DArr(level.recipe.tileEntities);
+            } else if (editMode == Constants.EDITOR_CONNECTOR_MODE) {
+                // X direction connectors
+                for (var cx:int = lowX; cx <= highX - 1; cx++) {
+                    for (var cy:int = lowY; cy <= highY; cy++) {
+                        var leftTileCode:int = level.recipe.walls[cy][cx];
+                        var rightTileCode:int = level.recipe.walls[cy][cx + 1];
+                        var leftEntityId:int = level.recipe.tileEntities[cy][cx];
+                        var rightEntityId:int = level.recipe.tileEntities[cy][cx + 1];
+                        if (canConnect(leftTileCode, rightTileCode, leftEntityId, rightEntityId)) {
+                            connect(new Vector2i(cx, cy), Cardinal.PX);
+                        }
+                    }
+                }
+                // Y direction connectors
+                for (var cx:int = lowX; cx <= highX; cx++) {
+                    for (var cy:int = lowY; cy <= highY - 1; cy++) {
+                        var upTileCode:int = level.recipe.walls[cy][cx];
+                        var downTileCode:int = level.recipe.walls[cy + 1][cx];
+                        var upEntityId:int = level.recipe.tileEntities[cy][cx];
+                        var downEntityId:int = level.recipe.tileEntities[cy + 1][cx];
+                        if (canConnect(upTileCode, downTileCode, upEntityId, downEntityId)) {
+                            connect(new Vector2i(cx, cy), Cardinal.PY);
+                        }
+                    }
+                }
             }
+            //trace("walls:");
+            //Utils.print2DArr(level.recipe.walls);
+            //trace("island (connected) ids:");
+            //Utils.print2DArr(level.recipe.islands);
+            //trace("tile entities:");
+            //Utils.print2DArr(level.recipe.tileEntities);
+        }
+        
+        private function connect(coor:Vector2i, dir:int):void {
+            var otherCoor:Vector2i = Cardinal.getVector2i(dir).AddV(coor);
+            var connectors:Array = Utils.getBooleansFromInt(level.recipe.islands[coor.y][coor.x]);
+            var otherConnectors:Array = Utils.getBooleansFromInt(level.recipe.islands[otherCoor.y][otherCoor.x]);
+            connectors[dir] = true;
+            otherConnectors[Cardinal.getOpposite(dir)] = true;
+            level.recipe.islands[coor.y][coor.x] = Utils.getIntFromBooleans(connectors);
+            level.recipe.islands[otherCoor.y][otherCoor.x] = Utils.getIntFromBooleans(otherConnectors);
+        }
+        
+        private function canConnect(tileCode1:int, tileCode2:int, entityId1:int, entityId2:int):Boolean {
+            return tileCode1 != Constants.EMPTY_TILE_CODE
+                && tileCode2 != Constants.EMPTY_TILE_CODE
+                && Constants.SINGLE_TILE_TYPES.indexOf(tileCode1) == -1
+                && Constants.SINGLE_TILE_TYPES.indexOf(tileCode2) == -1
+                && entityId1 != entityId2;
+        }
+        
+        private function connectAllEntities():void {
+            Utils.foreach(level.recipe.tileEntities, function(x:int, y:int, entId:int):void {
+                for each (var dir:int in Cardinal.DIRECTIONS) {
+                    var coor:Vector2i = new Vector2i(x, y);
+                    var otherCoor:Vector2i = Cardinal.getVector2i(dir).AddV(coor);
+                    var otherEntId:int = Utils.index(level.recipe.tileEntities, otherCoor.x, otherCoor.y);
+                    if (otherEntId != 0 && entId == otherEntId) {
+                        connect(coor, dir);
+                    }
+                }
+            });
         }
         
         private function mergeRectangleTiles(grid:Array, lowX:int, highX:int, lowY:int, highY:int, canMergeWith:Function):void {
@@ -349,6 +405,7 @@ package pyrokid {
                 }   
             }
             
+            connectAllEntities();
             normalizeIds(grid);
         }
         
@@ -373,6 +430,18 @@ package pyrokid {
             return maxId;
         }
         
+        private function clearConnectors(cellX:int, cellY:int):void {
+            for each (var dir:int in Cardinal.DIRECTIONS) {
+                level.recipe.islands[cellY][cellX] = 0;
+                var otherCell:Vector2i = Cardinal.getVector2i(dir).Add(cellX, cellY);
+                if (Utils.inBounds(level.recipe.islands, otherCell.x, otherCell.y)) {
+                    var connectedBools:Array = Utils.getBooleansFromInt(level.recipe.islands[otherCell.y][otherCell.x]);
+                    connectedBools[Cardinal.getOpposite(dir)] = false;
+                    level.recipe.islands[otherCell.y][otherCell.x] = Utils.getIntFromBooleans(connectedBools);
+                }
+            }
+        }
+        
         private function placeObject(cellX:int, cellY:int):void {
             var ps:Array = level.recipe.playerStart;
             if (cellX == ps[0] && cellY == ps[1]) {
@@ -382,7 +451,7 @@ package pyrokid {
             
             // clear location that is about to be placed on
             level.recipe.walls[cellY][cellX] = Constants.EMPTY_TILE_CODE;
-            level.recipe.islands[cellY][cellX] = Constants.EMPTY_TILE_CODE;
+            clearConnectors(cellX, cellY);
             level.recipe.tileEntities[cellY][cellX] = Constants.EMPTY_TILE_CODE;
             level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
                 return ent[0] != cellX || ent[1] != cellY;
@@ -393,9 +462,7 @@ package pyrokid {
             if (tileEntityPlaced) {
                 var type:int = int(typeSelected);
                 level.recipe.walls[cellY][cellX] = type;
-                var empty:Boolean = type == Constants.EMPTY_TILE_CODE;
-                level.recipe.islands[cellY][cellX] = empty ? 0 : getMaxId(level.recipe.islands) + 1;
-                level.recipe.tileEntities[cellY][cellX] = empty ? 0 : getMaxId(level.recipe.tileEntities) + 1;
+                level.recipe.tileEntities[cellY][cellX] = type == Constants.EMPTY_TILE_CODE ? 0 : getMaxId(level.recipe.tileEntities) + 1;
             } else if (typeSelected == "player") {
                 level.recipe.playerStart = [cellX, cellY];
             } else {

@@ -1,4 +1,6 @@
 package pyrokid {
+    import flash.display.Bitmap;
+    import flash.utils.Dictionary;
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.*;
@@ -13,8 +15,9 @@ package pyrokid {
         
         // level editor constants
         public static var EDITOR_OBJECT_MODE:int = 0;
-        public static var EDITOR_PROPERTIES_MODE:int = 1;
-        public static var EDITOR_ISLAND_MODE:int = 2;
+        public static var EDITOR_CLUMP_MODE:int = 1;
+        public static var EDITOR_CONNECTOR_MODE:int = 2;
+        public static var EDITOR_PROPERTIES_MODE:int = 3;
         
         // fire constants
         public static var SPREAD_RATE:int = 30;
@@ -61,6 +64,15 @@ package pyrokid {
         public static var IMMUNE_CODE:String = "immune";
         
         public static var GROUNDED_TYPES:Array = [WALL_TILE_CODE];
+        public static var SINGLE_TILE_TYPES:Array = [];
+        
+        public static function GET_TILE_SET(tileCode:int):Bitmap {
+            switch (tileCode) {
+                case WALL_TILE_CODE: return new Embedded.DirtMergeBMP as Bitmap;
+                case WOOD_TILE_CODE: return new Embedded.WoodMergeBMP as Bitmap;
+            }
+            return null;
+        }
         
         public static function switchControlScheme(scheme:int) {
             if (scheme == 0) {

@@ -1,4 +1,6 @@
 package pyrokid {
+    import flash.display.Sprite;
+    import flash.utils.Dictionary;
     import physics.PhysIsland;
     import physics.Vector2;
     import physics.Vector2i;
@@ -11,9 +13,11 @@ package pyrokid {
         private var _globalAnchor:Vector2;
         public var tileEntityGrid:Array;
         public var entityList:Array;
+        public var connectors:Dictionary;
         
         public function Island(physIsland:PhysIsland) {
             entityList = [];
+            connectors = new Dictionary();
             tileEntityGrid = Utils.newArrayOfSize(physIsland.tileGrid);
             _velocity = physIsland.velocity.copy().MulD(Constants.CELL);
             _globalAnchor = physIsland.globalAnchor.copy();
@@ -25,6 +29,9 @@ package pyrokid {
             entity.parentIsland = this;
             entity.islandAnchor = entityGlobalAnchor.copy().SubV(globalAnchor).copyAsVec2i();
             for each (var cell:Vector2i in entity.coorsInIsland()) { // relative to entity's anchor
+                if (!Utils.inBounds(tileEntityGrid, cell.x, cell.y)) {
+                    trace("cell " + cell + " is not in bounds");
+                }
                 tileEntityGrid[cell.y][cell.x] = entity;
             }
             entityList.push(entity);
@@ -53,12 +60,19 @@ package pyrokid {
             return new Vector2i(Math.round(globalAnchor.x), Math.round(globalAnchor.y));
         }
         
+        public function setConnectorPositions():void {
+            for each (var connector:Connector in connectors) {
+                connector.setSpriteLocationFromIslandAnchor(globalAnchor);
+            }
+        }
+        
         public function set globalAnchor(value:Vector2):void {
             _globalAnchor = value;
             for each (var entity:TileEntity in entityList) {
                 entity.x = (value.x + entity.islandAnchor.x) * Constants.CELL;
                 entity.y = (value.y + entity.islandAnchor.y) * Constants.CELL;
             }
+            setConnectorPositions();
         }
         
     }

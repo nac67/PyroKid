@@ -31,7 +31,7 @@ package pyrokid {
                 
                 var timeToSpread:Boolean = level.frameCount % Constants.SPREAD_RATE == (entity.ignitionTime - 1) % Constants.SPREAD_RATE;
                 if (timeToSpread) {
-                    var fireGrid = entity.isMoving() ? entity.parentIsland.tileEntityGrid : level.tileEntityGrid;
+                    var fireGrid:Array = entity.isMoving() ? entity.parentIsland.tileEntityGrid : level.tileEntityGrid;
                     spreadToNeighbors(level, entity, fireGrid);
                 }
 			}

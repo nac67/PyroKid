@@ -1,5 +1,6 @@
 package pyrokid {
     import pyrokid.tools.Utils;
+    import physics.Cardinal;
     
     public class LevelRecipe {
         
@@ -33,11 +34,21 @@ package pyrokid {
             rec.islands = Utils.newArray(cellsWide, cellsTall);
             rec.tileEntities = Utils.newArray(cellsWide, cellsTall);
             rec.walls = Utils.newArray(cellsWide, cellsTall);
+            var id:int = 1;
             Utils.foreach(rec.walls, function(x:int, y:int, element:int):void {
                 var wall:Boolean = y == 0 || x == 0 || y == cellsTall - 1 || x == cellsWide - 1;
                 var objCode:int = wall ? 1 : 0;
                 rec.walls[y][x] = objCode;
-                rec.islands[y][x] = objCode;
+                if (wall) {
+                    var connectedBools:Array = new Array(4);
+                    connectedBools[Cardinal.PX] = (y == 0 || y == cellsTall - 1) && x != cellsWide - 1;
+                    connectedBools[Cardinal.NX] = (y == 0 || y == cellsTall - 1) && x != 0;
+                    connectedBools[Cardinal.PY] = (x == 0 || x == cellsWide - 1) && y != cellsTall - 1;
+                    connectedBools[Cardinal.NY] = (x == 0 || x == cellsWide - 1) && y != 0;
+                    rec.islands[y][x] = Utils.getIntFromBooleans(connectedBools);
+                } else {
+                    rec.islands[y][x] = 0;
+                }
                 rec.tileEntities[y][x] = objCode;
             });
                          

@@ -14,9 +14,11 @@ package physics {
 		public var id:int;
         
         public var fallingType:Boolean;
-        public function PhysBox(id:int = -1, isFalling:Boolean = false) {
+        private var connectorBools:Array;
+        
+        public function PhysBox(connectorBools:Array, isFalling:Boolean = false) {
             fallingType = isFalling;
-			this.id = id;
+			this.connectorBools = connectorBools;
         }
 
         public function ProvideEdgesSpecial(edges:Array, offset:Vector2):void {
@@ -40,8 +42,7 @@ package physics {
         }
         public function CanBind(side:int, neighbor:IPhysTile):Boolean {
 			if (neighbor is PhysBox) {
-				var neighborBox:PhysBox = neighbor as PhysBox;
-				return id > 0 && id == neighborBox.id;
+                return connectorBools[side];
 			} else {
 				return false;
 			}

@@ -4,7 +4,6 @@ package physics {
     import flash.display.GraphicsPathWinding;
     import flash.geom.Point;
     import physics.Vector2i;
-    import pyrokid.Constants;
     
     /**
      * Controller That Builds And Simulates A List Of Islands
@@ -20,11 +19,6 @@ package physics {
             var queue = [];
             var ids:Array = BuildIDs(tiles, queue);
             MergeIDs(tiles, ids, queue);
-            return ConstructIslandsFromIds(ids, tiles);
-        }
-        
-        /* tiles can be an array of IPhysTiles or an array of TileEntity codes (ints). */
-        public static function ConstructIslandsFromIds(ids:Array, tiles:Array):Array {
             var islandPositions:Array = GetIslandPositions(ids);
             
             var islands = new Array(islandPositions.length);
@@ -34,7 +28,6 @@ package physics {
             
             return islands;
         }
-        
         /**
          * Construct A Grid Of Unique IDs On Which Merging Will Take Place
          * @param tiles IPhysTile[y][x] Ordering Grid
@@ -176,7 +169,7 @@ package physics {
          * @param tiles IPhysTile[y][x] Ordering Grid
          * @return A Fully Constructed Island
          */
-        public static function ConstructIsland(pos:Array, tiles:Array):PhysIsland {
+        private static function ConstructIsland(pos:Array, tiles:Array):PhysIsland {
             var xBounds:Vector2i = new Vector2i(int.MAX_VALUE, int.MIN_VALUE);
             var yBounds:Vector2i = new Vector2i(int.MAX_VALUE, int.MIN_VALUE);
             
@@ -197,10 +190,7 @@ package physics {
             
             // Add All The Tiles
             for each (var p:Vector2i in pos) {
-                var tile = tiles[p.y][p.x];
-                if (tile is int) {
-                    tile = new PhysBox(0, Constants.GROUNDED_TYPES.indexOf(tile) == -1);
-                }
+                var tile:IPhysTile = tiles[p.y][p.x];
                 p.Sub(xBounds.x, yBounds.x);
                 island.AddTile(p.x, p.y, tile);
             }

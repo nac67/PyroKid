@@ -12,19 +12,19 @@ package pyrokid {
      */
     public class Embedded {
         
-        [Embed(source="../../assets/easylevel.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/template.txt", mimeType="application/octet-stream")]
         private static var Level1:Class;
         public static var level1b:ByteArray = new Level1();
         
-        [Embed(source="../../assets/nlevel6.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/template.txt", mimeType="application/octet-stream")]
         private static var LevelAaron:Class;
         public static var levelAaronTest:ByteArray = new LevelAaron();
         
-        [Embed(source="../../assets/nlevel4.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/template.txt", mimeType="application/octet-stream")]
         private static var Level2:Class;
         public static var level2b:ByteArray = new Level2();
         
-        [Embed(source="../../assets/levelfuck.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/template.txt", mimeType="application/octet-stream")]
         private static var Level3:Class;
         public static var level3b:ByteArray = new Level3();
         
@@ -34,8 +34,14 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/dirt_merge.png")]
         public static var DirtMergeBMP:Class;
         
+        [Embed(source="../../assets/tile_art/wood_merge.png")]
+        public static var WoodMergeBMP:Class;
+        
         [Embed(source="../../assets/tile_art/big_background.png")]
         public static var BGBMP:Class; //cast as Bitmap on instantiation
+        
+        [Embed(source='../../assets/swf/Connector.swf', symbol='Connector')]
+        public static var ConnectorSWF:Class; //cast as Sprite on instantiation
         
         [Embed(source='../../assets/swf/player.swf', symbol='playerLegs')]
         public static var PlayerLegsSWF:Class; //cast as MovieClip on instantiation
