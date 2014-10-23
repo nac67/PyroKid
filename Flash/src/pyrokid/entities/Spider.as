@@ -2,6 +2,7 @@ package pyrokid.entities {
     import flash.display.MovieClip;
     import physics.PhysBox;
     import physics.PhysRectangle;
+    import physics.Vector2;
     import pyrokid.*;
     
     public class Spider extends BackAndForthEnemy {
@@ -15,13 +16,12 @@ package pyrokid.entities {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
                 kill(level);
-                var die = new Embedded.SpiderDieSWF();
-                die.x = swf.x + x;
-                die.y = swf.y + y;
+                var die:MovieClip = new Embedded.SpiderDieSWF() as MovieClip;
                 die.scaleX = swf.scaleX;
                 die.scaleY = swf.scaleY;
-                level.addChild(die);
-                level.briefClips.push(die);
+                var briefClip:BriefClip = new BriefClip(new Vector2(swf.x + x, swf.y + y), die);
+                level.addChild(briefClip);
+                level.briefClips.push(briefClip);
             }
 		}
         

@@ -3,6 +3,7 @@ package pyrokid.entities {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
     import flash.display.MovieClip;
+    import physics.Vector2;
 	import physics.Vector2i;
     import pyrokid.*;
 	
@@ -22,21 +23,18 @@ package pyrokid.entities {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
                 for each (var cellSprite:DisplayObject in cellSprites) {
-                    var mc:MovieClip = cellSprite as MovieClip;
-                    mc.gotoAndStop(2);
+                    addChild(cellSprite);
                 }
             }
 		}
         
         public override function updateFire(level:Level, currentFrame:int):void {
             if (currentFrame - ignitionTime == Constants.QUICK_BURN_TIME) {
-                // TODO remove from onfire -- Aaron
-                for (var i:int = 0; i < cells.length; i++) {
-                    var w = new Embedded.WoodExplodeSWF();
-                    w.x = (cells[i].x + getGlobalAnchor().x) * Constants.CELL;
-                    w.y = (cells[i].y + getGlobalAnchor().y) * Constants.CELL;
-                    level.briefClips.push(w);
-                    level.addChild(w);
+                for each (var coor:Vector2 in coorsInGlobal()) {
+                    var w:MovieClip = new Embedded.WoodExplodeSWF() as MovieClip;
+                    var fireClip:BriefClip = new BriefClip(coor.MulD(Constants.CELL), w, velocity.copy().MulD(0.1));
+                    level.briefClips.push(fireClip);
+                    level.addChild(fireClip);
                     kill(level);
                 }
             }

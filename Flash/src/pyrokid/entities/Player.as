@@ -73,10 +73,16 @@ package pyrokid.entities {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
                 onFireSprite.visible = true;
+                kill(level);
             }
         }
         
-        public function update(level:Level):void {
+        public function damageFromEnemyContact(level:Level):void {
+            kill(level);
+        }
+        
+        public override function update(level:Level):void {
+            super.update(level);
             
             // Moving left right
 			velocity.x = 0;

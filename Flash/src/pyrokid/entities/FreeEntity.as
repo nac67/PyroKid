@@ -96,6 +96,18 @@ package pyrokid.entities {
                 super.ignite(level, ignitionFrame);
             }
 		}
+        
+        public function update(level:Level):void {
+            if (isGrounded && touchTop) {
+                var xVelocity:int = (Math.random() * 75 + 25) * (Math.random() > 0.5 ? -1 : 1);
+                var constr:Class = Object(this).constructor;
+                var newClip:Sprite = new constr(level);
+                var clip:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), 90, true, true);
+                level.briefClips.push(clip);
+                level.addChild(clip);
+                kill(level);
+            }
+        }
 		
         private function genCollisionCallback(level:Level):Function {
             var self:FreeEntity = this;
@@ -118,8 +130,12 @@ package pyrokid.entities {
                     return;
                 }
                 var entity:TileEntity = level.tileEntityGrid[cell.y][cell.x];
+                // TODO what if the thing is falling? Do we care? -- Aaron
                 if (entity != null) {
                     entity.mutualIgnite(level, self);
+                }
+                if (self is Player && entity is Exit && entity.canExit()) {
+                    trace("player exited level");
                 }
             };
         }
