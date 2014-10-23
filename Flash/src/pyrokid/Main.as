@@ -4,6 +4,7 @@ package pyrokid {
     import flash.events.Event;
 	import flash.events.MouseEvent;
     import flash.utils.ByteArray;
+	import ui.playstates.StateController;
 	import ui.*;
     import physics.*;
     import pyrokid.entities.*;
@@ -23,6 +24,7 @@ package pyrokid {
 		private var mainGame:GameController;
 		private var overMenu:MenuScreen;
         
+		
         public function Main():void {
             if (stage)
                 init();
@@ -36,10 +38,11 @@ package pyrokid {
             Key.init(stage);
             Constants.switchControlScheme(0);
 			
-			createStartMenu();
+			addChild(StateController.display);
+			StateController.goToMainMenu();
         }
 		
-    public function startGameFunc(levelRecipe:ByteArray = null):void {//change this to level select maybe? or use parameter			
+		public function startGameFunc(levelRecipe:ByteArray = null):void {//change this to level select maybe? or use parameter			
 			if (levelRecipe == null) { //default, start normal game controller
 				trace("starting null level");
 				Utils.removeAllChildren(this);
@@ -60,7 +63,7 @@ package pyrokid {
 		
 		public function createStartMenu(e:MouseEvent = null):void {
 			Utils.removeAllChildren(this);
-			startMenu = new MenuScreen(MenuScreen.STATE_START, this);
+			startMenu = new MenuScreen(MenuScreen.STATE_START);
 			startMenu.startGameFunc = startGameFunc;
 			addChild(startMenu);
 			curr_state = STATE_START;
@@ -68,7 +71,7 @@ package pyrokid {
 		
 		public function createGameOverMenu(didPlayerWin:Boolean = false):void {
 			Utils.removeAllChildren(this);
-			overMenu = new MenuScreen(MenuScreen.STATE_GAME_OVER, this, didPlayerWin);
+			overMenu = new MenuScreen(MenuScreen.STATE_GAME_OVER, didPlayerWin);
 			overMenu.showStartMenuFunc = createStartMenu;
 			addChild(overMenu);
 			curr_state = STATE_GAME_OVER;

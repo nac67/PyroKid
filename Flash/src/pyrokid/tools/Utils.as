@@ -7,6 +7,7 @@ package pyrokid.tools {
 	import physics.Vector2i;
 	import pyrokid.entities.*;
     import pyrokid.*;
+	import ui.playstates.BasePlayState;
     
     public class Utils {
         
@@ -55,6 +56,9 @@ package pyrokid.tools {
         
         public static function removeAllChildren(obj:Sprite):void {
             while (obj.numChildren > 0) {
+				if (obj is BasePlayState) {
+					BasePlayState(obj).removeAllEventListeners();
+				}
                 obj.removeChildAt(0);
             }
         }

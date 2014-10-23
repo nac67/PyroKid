@@ -1,4 +1,5 @@
 package pyrokid {
+	import flash.display.Shape;
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.events.KeyboardEvent;
@@ -21,9 +22,10 @@ package pyrokid {
         public static const STATE_START:int = 0;
         public static const STATE_GAME_OVER:int = 1;
         public static const STATE_PAUSE:int = 2;
+		public static const STATE_LEVEL_SELECT:int = 3;
+
         
         private var curr_state:int;
-        private var main:Main;
         private var didPlayerWin:Boolean;
         
         public var showStartMenuFunc:Function;
@@ -32,10 +34,9 @@ package pyrokid {
         
         public var go_to_next_screen:Boolean = false;
         
-        public function MenuScreen(game_state:int, mainObj:Main, didPlayerWin:Boolean = false):void {
+        public function MenuScreen(game_state:int, didPlayerWin:Boolean = false):void {
             
             curr_state = game_state;
-            main = mainObj;
             this.didPlayerWin = didPlayerWin;
             
             displayMenu();
@@ -89,6 +90,15 @@ package pyrokid {
                     addChild(new LevelEditorButton(showStartMenuFunc, 160, 40, Main.MainStage.stageWidth / 2, Main.MainStage.stageHeight / 2, ["Go Back to Main Menu"], [LevelEditorButton.upColor]));
                     
                     break;
+					
+				case STATE_PAUSE:
+					var rectangle:Shape = new Shape(); // initializing the variable named rectangle
+					rectangle.graphics.beginFill(0x888888, 0.5); // choosing the colour for the fill, here it is red
+					rectangle.graphics.drawRect(0, 0, Main.MainStage.stageWidth,Main.MainStage.stageHeight); // (x spacing, y spacing, width, height)
+					rectangle.graphics.endFill(); // not always needed but I like to put it in to end the fill
+					addChild(rectangle); // adds the rectangle to the stage
+					
+					break;
             }
         }
     }

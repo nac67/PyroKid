@@ -1,16 +1,19 @@
 package pyrokid {
 	import flash.display.FrameLabel;
     import flash.display.Sprite;
+	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.display.SimpleButton;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
+	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.*;
 	import ui.*;
+	import ui.playstates.StateController;
     
     public class LevelEditor extends Sprite {
 		
@@ -202,6 +205,7 @@ package pyrokid {
             Main.MainStage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
             Main.MainStage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
 			Main.MainStage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
+			//Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			for (var i:int = 0; i < UI_Elements.length; i++) {
 				addChild(UI_Elements[i]);
 			}
@@ -212,7 +216,21 @@ package pyrokid {
             Main.MainStage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
             Main.MainStage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
 			Main.MainStage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
+			//Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			Utils.removeAllChildren(this);
+		}
+		
+		private function onKeyUp(e:KeyboardEvent):void 
+		{
+			if (e.keyCode == Keyboard.O) { //o
+				trace("loading level");
+				LevelIO.loadLevel(reloadLevel);
+			} else if (e.keyCode == Keyboard.P) { //p
+				trace("saving level");
+				LevelIO.saveLevel(level.recipe);
+			} else if (e.keyCode == Keyboard.ENTER) {
+				StateController.goToGame(level.recipe, this);
+			}
 		}
 		
 		public function loadLevel(level:Level):void {
