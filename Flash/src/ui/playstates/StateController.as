@@ -46,24 +46,6 @@ package ui.playstates {
 			display.addChild(new LevelSelect());
 		}
 		
-		
-		//public static function goToLevelEditor(level:Level=null,reloadLevel:Function=null):Function {
-			//return function() {
-				//Utils.removeAllChildren(StateController.display);
-				//var editor:LevelEditor;
-				//if (level == null) { //empty level editor
-					//editor = new LevelEditor(new Level(LevelRecipe.generateTemplate(16, 10)));
-				//} else {
-					//trace("making editor");
-					//editor = new LevelEditor(level);
-					//editor.reloadLevel = reloadLevel;
-				//}
-				//StateController.display.addChild(editor);
-				//StateController.display.addChild(new LevelEditorButton(StateController.goToMainMenu, 80, 40, 0,0, ["Main"], [LevelEditorButton.upColor]));
-//
-			//}
-		//}
-		
 		public static function goToGame(level:Object, editor:LevelEditor = null):Function {
 			if (!(level is ByteArray || level is LevelRecipe)) {
 				throw new Error("tried to start gamecontroller with bad level input (says StateController)");

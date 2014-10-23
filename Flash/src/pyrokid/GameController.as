@@ -25,13 +25,10 @@ package pyrokid {
         
         // Camera for the level
         private var camera:Camera;
-        
         public var level:Level;
         
 		private var isPaused:Boolean = false;
 		private var pauseMenu:BasePlayState;
-        public var isGameOver:Boolean = false;
-        public var createGameOverScreenFunc:Function;
 		
         /* levelRecipe is not specified if you want to load from browser
          * Otherwise give it a byte array from an embedded level file */
@@ -119,13 +116,6 @@ package pyrokid {
 				}
 				isPaused = !isPaused;
 			}
-			//if (e.keyCode == Keyboard.ENTER) { //go to level editor
-				//trace("hey");
-				//if (StateController.allowLevelEditor) {
-					//trace("allowed");
-					//StateController.goToLevelEditor(level,reloadLevel)();
-				//}
-			//}
         }
         
         private function killPlayerIfOffMap(level:Level):void {
@@ -134,15 +124,10 @@ package pyrokid {
             }
         }
         
-        private function doGameOver():void {
-            destroy();
-            isGameOver = true;
-            createGameOverScreenFunc(false);
-        }
-        private function doGameWon():void {
-            destroy();
-            isGameOver = true;
-            createGameOverScreenFunc(true);
+        private function fadeAndRestart():void {
+            playerDied = false;
+            editorMode = false;
+            reloadLevel(level.recipe);
         }
         
         private function centerOnPlayer():void {
@@ -150,9 +135,7 @@ package pyrokid {
             var minY:int = Constants.HEIGHT / 2;
             var maxX:int = level.walls[0].length*Constants.CELL - Constants.WIDTH / 2;
             var maxY:int = level.walls.length*Constants.CELL - Constants.HEIGHT / 2;
-            
-            
-            
+                        
             camera.xCamera = Utils.lerp(camera.xCamera, level.player.x, Constants.CAMERA_LAG);
             camera.yCamera = Utils.lerp(camera.yCamera, level.player.y, Constants.CAMERA_LAG);
             camera.x = Constants.WIDTH / 2;
@@ -209,7 +192,6 @@ package pyrokid {
             });
         }
         
-        /* Returns true if the player died. */
         private function resolveFreeEntityCollisions():void {
             var playerDead:Boolean = false;
             for (var i:int = 0; i < level.enemies.length; i++) {
@@ -231,20 +213,13 @@ package pyrokid {
             }
         }
         
+        // --------------------MAIN UPDATE LOOP-------------------- //
         private function update(event:Event):void {
-            if (playerDied) {
-                playerDied = false;
-                editorMode = true;
-                levelEditor.turnEditorOn();
-                reloadLevel(level.recipe);
-            }
             if (editorMode || isPaused) {
                 return;
             }
             level.frameCount += 1;
             level.dirty = false;
-            //camera.rotationCamera += 0.1;
-            //camera.scaleCamera(1.001);
             
             // ------------------------- Game logic ------------------------ //
             level.player.update(level);
@@ -275,9 +250,9 @@ package pyrokid {
             playerDied = level.removeDead();
             if (playerDied) {
                 if (Constants.GOD_MODE) {
-                    trace("you died!!!");
+                    trace("you would have died!!!");
                 } else {
-                    doGameOver();
+                    fadeAndRestart();
                 }
             }
             if (playerWon) {
