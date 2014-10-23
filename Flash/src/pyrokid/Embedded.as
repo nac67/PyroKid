@@ -12,21 +12,61 @@ package pyrokid {
      */
     public class Embedded {
         
-        [Embed(source="../../assets/levels/template.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/tut1.txt", mimeType="application/octet-stream")]
         private static var Level1:Class;
-        public static var level1b:ByteArray = new Level1();
+        public static var level1:ByteArray = new Level1();
         
-        [Embed(source="../../assets/levels/template.txt", mimeType="application/octet-stream")]
-        private static var LevelAaron:Class;
-        public static var levelAaronTest:ByteArray = new LevelAaron();
-        
-        [Embed(source="../../assets/levels/template.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/tut2.txt", mimeType="application/octet-stream")]
         private static var Level2:Class;
-        public static var level2b:ByteArray = new Level2();
+        public static var level2:ByteArray = new Level2();
         
-        [Embed(source="../../assets/levels/template.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/tut3.txt", mimeType="application/octet-stream")]
         private static var Level3:Class;
-        public static var level3b:ByteArray = new Level3();
+        public static var level3:ByteArray = new Level3();
+        
+        [Embed(source="../../assets/levels/tut4.txt", mimeType="application/octet-stream")]
+        private static var Level4:Class;
+        public static var level4:ByteArray = new Level4();
+        
+        [Embed(source="../../assets/levels/tut5.txt", mimeType="application/octet-stream")]
+        private static var Level5:Class;
+        public static var level5:ByteArray = new Level5();
+        
+        [Embed(source="../../assets/levels/tut6.txt", mimeType="application/octet-stream")]
+        private static var Level6:Class;
+        public static var level6:ByteArray = new Level6();
+        
+        [Embed(source="../../assets/levels/tut7.txt", mimeType="application/octet-stream")]
+        private static var Level7:Class;
+        public static var level7:ByteArray = new Level7();
+        
+        [Embed(source="../../assets/levels/shootdowneasy.txt", mimeType="application/octet-stream")]
+        private static var Level8:Class;
+        public static var level8:ByteArray = new Level8();
+        
+        [Embed(source="../../assets/levels/fallylevel.txt", mimeType="application/octet-stream")]
+        private static var Level9:Class;
+        public static var level9:ByteArray = new Level9();
+        
+        [Embed(source="../../assets/levels/shoot_while_fall.txt", mimeType="application/octet-stream")]
+        private static var Level10:Class;
+        public static var level10:ByteArray = new Level10();
+        
+        [Embed(source="../../assets/levels/fallylevel_hard.txt", mimeType="application/octet-stream")]
+        private static var Level11:Class;
+        public static var level11:ByteArray = new Level11();
+        
+        [Embed(source="../../assets/levels/AaronLevel3.txt", mimeType="application/octet-stream")]
+        private static var Level12:Class;
+        public static var level12:ByteArray = new Level12();
+        
+        [Embed(source="../../assets/levels/AaronLevel2.txt", mimeType="application/octet-stream")]
+        private static var Level13:Class;
+        public static var level13:ByteArray = new Level13();
+        
+        [Embed(source="../../assets/levels/AaronLevel1.txt", mimeType="application/octet-stream")]
+        private static var Level14:Class;
+        public static var level14:ByteArray = new Level14();
         
         [Embed(source="../../assets/tile_art/dirt.png")]
         public static var DirtBMP:Class;

@@ -9,6 +9,11 @@ package pyrokid {
     import pyrokid.entities.*;
     import pyrokid.tools.*;
     import flash.ui.Keyboard;
+	import flash.utils.getTimer;
+	import ui.playstates.BasePlayState;
+	import ui.playstates.PauseMenu;
+	import ui.playstates.StateController;
+    import ui.playstates.LevelSelect;
     
     public class GameController extends Sprite {
         
@@ -16,34 +21,38 @@ package pyrokid {
         private var levelEditor:LevelEditor;
         
         private var playerDied:Boolean = false;
+        private var playerWon:Boolean = false;
         
         // Camera for the level
         private var camera:Camera;
         
         public var level:Level;
         
+		private var isPaused:Boolean = false;
+		private var pauseMenu:BasePlayState;
         public var isGameOver:Boolean = false;
         public var createGameOverScreenFunc:Function;
-        
+		
         /* levelRecipe is not specified if you want to load from browser
          * Otherwise give it a byte array from an embedded level file */
-        public function GameController(levelBytes:ByteArray = null) {
+        public function GameController(level:Object = null) {
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
-            if (levelBytes == null) {
+            if (level == null) {
                 // Load level with browser
                 LevelIO.loadLevel(initializeLevelAndEditor);
-            } else {
+            } else if (level is ByteArray) {
                 // Load embedded level
-                levelBytes.position = 0;
-                initializeLevelAndEditor(levelBytes.readObject());
-            }
+                level.position = 0;
+                initializeLevelAndEditor(level.readObject());
+			} else if (level is LevelRecipe) {
+				initializeLevelAndEditor(level);
+			}
         }
         
         public function destroy():void {
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
-            Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             removeEventListener(Event.ENTER_FRAME, update);
         }
@@ -72,6 +81,7 @@ package pyrokid {
         
         private function levelEditorListener(e:KeyboardEvent):void {
             if (e.keyCode == 13) { //enter
+				
                 editorMode = !editorMode;
                 if (editorMode) {
                     levelEditor.turnEditorOn();
@@ -97,8 +107,25 @@ package pyrokid {
         
         private function keyboardActionListener(e:KeyboardEvent):void {
             if (e.keyCode == Keyboard.ESCAPE) {
-                doGameOver();
+                StateController.goToMainMenu();
             }
+			if (e.keyCode == Keyboard.SHIFT) {
+				if (isPaused) { //unpause game
+					pauseMenu.removeAllEventListeners();
+					removeChild(pauseMenu);
+				} else { //pause the game
+					pauseMenu = new PauseMenu();
+					addChild(pauseMenu);
+				}
+				isPaused = !isPaused;
+			}
+			//if (e.keyCode == Keyboard.ENTER) { //go to level editor
+				//trace("hey");
+				//if (StateController.allowLevelEditor) {
+					//trace("allowed");
+					//StateController.goToLevelEditor(level,reloadLevel)();
+				//}
+			//}
         }
         
         private function killPlayerIfOffMap(level:Level):void {
@@ -195,7 +222,7 @@ package pyrokid {
                     level.player.mutualIgnite(level, level.enemies[i]);
                     if (level.enemies[i] is Exit) {
                         if (level.enemies[i].canExit()) {
-                            trace("player exited level");
+                            playerWon = true;
                         }
                     } else {
                         level.player.damageFromEnemyContact(level);
@@ -211,8 +238,7 @@ package pyrokid {
                 levelEditor.turnEditorOn();
                 reloadLevel(level.recipe);
             }
-            
-            if (editorMode) {
+            if (editorMode || isPaused) {
                 return;
             }
             level.frameCount += 1;
@@ -227,7 +253,6 @@ package pyrokid {
             }
             level.fireballUpdate();
             FireHandler.spreadFire(level);
-            
             // -------------------------- Physics --------------------------- //
             handlePhysics();
             resolveFreeEntityCollisions();
@@ -254,6 +279,9 @@ package pyrokid {
                 } else {
                     doGameOver();
                 }
+            }
+            if (playerWon) {
+                LevelSelect.startAndSetLevel(LevelSelect.currLevel + 1)();
             }
         }
     
