@@ -154,24 +154,27 @@ package physics {
          */
         public static function Resolve(r:PhysRectangle, iList:Array, fCallback:Function = null, fCollisionCallback:Function = null):void {
             r.motion.MulD(1.1);
+            var newVelocity:Vector2 = new Vector2(r.velocity.x, r.velocity.y);
             
             for each (var i:PhysIsland in iList) {
-                
                 // Move From Global To Island Reference Point
                 r.center.SubV(i.globalAnchor);
                 r.velocity.SubV(i.velocity);
+                newVelocity.SubV(i.velocity);
                 r.motion.SubV(i.motion);
                 
                 // Perform Collision Detection
-                ResolveIsland(r, i.clippedEdges, fCallback, fCollisionCallback, i.globalAnchor);
+                ResolveIsland(r, i.clippedEdges, fCallback, fCollisionCallback, i.globalAnchor, newVelocity);
                     
                 // Move Back In Global Frame Of Reference
                 r.center.AddV(i.globalAnchor);
                 r.velocity.AddV(i.velocity);
+                newVelocity.AddV(i.velocity);
                 r.motion.AddV(i.motion);
             }
+            r.velocity.SetV(newVelocity);
         }
-        private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function, fCollisionCallback:Function, islandAnchor:Vector2):void {
+        private static function ResolveIsland(r:PhysRectangle, eList:Array, fCallback:Function, fCollisionCallback:Function, islandAnchor:Vector2, nv:Vector2):void {
             // Accumulate All Collisions
             var a:CollisionAccumulator = new CollisionAccumulator();
             for each (var e:PhysEdge in eList) {
@@ -188,9 +191,9 @@ package physics {
                 var dy = a.accumPY - a.accumNY;
                 
                 if (dx != 0 && opt.breakXVelocity)
-                    r.velocity.x = 0;
+                    nv.x = 0;
                 if (dy != 0 && opt.breakXVelocity)
-                    r.velocity.y = 0;
+                    nv.y = 0;
                 if (opt.resolveXDisplacement)
                     r.center.x += dx;
                 if (opt.resolveYDisplacement)
@@ -201,7 +204,7 @@ package physics {
             var disp:Number;
             switch (e.direction) {
                 case Cardinal.NX: 
-                    if (r.motion.x < 0 || (r.PX - e.center.x) > r.motion.x)
+                    if (r.motion.x < 0 || (r.PX - e.center.x) > r.halfSize.x * 0.5)
                         return;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
                         if (r.PX > e.center.x) {
@@ -211,7 +214,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.PX:
-                    if (r.motion.x > 0 || (e.center.x - r.NX) > -r.motion.x)
+                    if (r.motion.x > 0 || (e.center.x - r.NX) > r.halfSize.x * 0.5)
                         return;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
                         if (r.NX < e.center.x) {
@@ -221,7 +224,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.NY:
-                    if (r.motion.y < 0 || (r.PY - e.center.y) > r.motion.y)
+                    if (r.motion.y < 0 || (r.PY - e.center.y) > r.halfSize.y * 0.5)
                         return;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.PY > e.center.y) {
@@ -231,7 +234,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.PY:
-                    if (r.motion.y > 0 || (e.center.y - r.NY) > -r.motion.y)
+                    if (r.motion.y > 0 || (e.center.y - r.NY) > r.halfSize.y * 0.5)
                         return;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.NY < e.center.y) {
