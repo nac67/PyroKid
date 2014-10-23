@@ -5,20 +5,18 @@ package pyrokid.entities {
     import flash.display.MovieClip;
 	import physics.*;
 	import pyrokid.*;
+    import pyrokid.tools.HashSet;
     import pyrokid.tools.Utils;
     import pyrokid.graphics.ConnectedSpriteBuilder;
 	
 	public class TileEntity extends GameEntity {
 		
 		public var cells:Array;
-        
+        private var neighborCells:Array;
         // position, in tile coordinates, relative to the corner of the island.
         public var islandAnchor:Vector2i;
-        
         public var parentIsland:Island;
-        
         public var cellSprites:Array;
-        
         protected var objectCode:int;
 		
 		public function TileEntity(x:int, y:int, objCode:int) {
@@ -33,18 +31,34 @@ package pyrokid.entities {
          * with respect to the global map. Coordinates are Vector2, which
          * means they can be between tiles (if the island is falling, for example). */
         public function coorsInGlobal():Array {
-            var globalA:Vector2 = getGlobalAnchor();
-            return cells.map(function(cell) {
-                return cell.copyAsVec2().AddV(globalA);
-            });
+            return getCoorsInGlobal(cells);
         }
         
         /* Returns an array of tile coordinates this TileEntity occupies
          * with respect to the island it is in. Coordinates are Vector2i
          * because a TileEntity never moves out of sync with its parent island. */
         public function coorsInIsland():Array {
-            return cells.map(function(cell) {
-                return islandAnchor.copy().AddV(cell);
+            return getCoorsInIsland(cells);
+        }
+        
+        public function neighborsInGlobal():Array {
+            return getCoorsInGlobal(neighborCells);
+        }
+        
+        public function neighborsInIsland():Array {
+            return getCoorsInIsland(neighborCells);
+        }
+        
+        public function getCoorsInGlobal(coors:Array):Array {
+            var globalA:Vector2 = getGlobalAnchor();
+            return coors.map(function(coor) {
+                return coor.copyAsVec2().AddV(globalA);
+            });
+        }
+        
+        public function getCoorsInIsland(coors:Array):Array {
+            return coors.map(function(coor) {
+                return islandAnchor.copy().AddV(coor);
             });
         }
         
@@ -66,27 +80,31 @@ package pyrokid.entities {
             if (tileSetMap != null) {
                 var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, tileSetMap);
                 addChild(tileSet);
-                return;
+                for each (var cell:Vector2i in cells) {
+                    var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;
+                    fire.x = cell.x * Constants.CELL;
+                    fire.y = cell.y * Constants.CELL;
+                    cellSprites.push(fire);
+                }
+            } else {
+                for (var i:int = 0; i < cells.length; i++) {
+                    var child:DisplayObject = getSpriteForCell(cells[i]);
+                    child.x = cells[i].x * Constants.CELL;
+                    child.y = cells[i].y * Constants.CELL;
+                    addChild(child);
+                    cellSprites.push(child);
+                }
             }
-			for (var i:int = 0; i < cells.length; i++) {
-				var child:DisplayObject = getSpriteForCell(cells[i]);
-				child.x = cells[i].x * Constants.CELL;
-				child.y = cells[i].y * Constants.CELL;
-				addChild(child);
-                cellSprites.push(child);
-			}
-		}
-		
-		// TODO optimize this. It should be calculated once, and it should not
-		// do the same neighbor multiple times -- Aaron
-        // TODO this should throw something if called when the tile entity is moving -- Aaron
-		public function getNeighborCoordinates(grid:Array):Array {
-			var coors:Array = [];
-			for each (var cell:Vector2i in cells) {
-                var globalAnchor:Vector2i = getGlobalAnchor().copyAsVec2i();
-                Utils.getNeighborCoors(cell.x + globalAnchor.x, cell.y + globalAnchor.y, coors);
-			}
-			return coors;
+            var neighbors:HashSet = new HashSet();
+            for each (var cell:Vector2i in cells) {
+                for each (var neighborCoor:Vector2i in Utils.getNeighborCoors(cell.x, cell.y)) {
+                    neighbors.add(neighborCoor);
+                }
+            }
+            for each (var cell:Vector2i in cells) {
+                neighbors.remove(cell);
+            }
+            neighborCells = neighbors.toArray();
 		}
 		
 		public override function ignite(level:Level, ignitionFrame:int):void {

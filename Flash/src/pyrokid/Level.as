@@ -150,6 +150,9 @@ package pyrokid {
             if (realObjCode == Constants.WOOD_TILE_CODE) {
                 return new BurnQuickly(0, 0, realObjCode);
             }
+            if (realObjCode == Constants.EXIT_TILE_CODE) {
+                return new Exit(0, 0);
+            }
             return new NonFlammableTile(0, 0, realObjCode);
         }
         
@@ -183,21 +186,21 @@ package pyrokid {
             fireballs = new RingBuffer(5, function(o:Object) {
                 var dispObj:Fireball = o as Fireball;
                 
+                var position:Vector2 = new Vector2(dispObj.x, dispObj.y);
+                var briefClip:BriefClip;
+                var clip:MovieClip;
+                var velocity:Vector2 = new Vector2();
                 if (dispObj.fizzOut) {
-                    var fizz:MovieClip = new Embedded.FireballFizzSWF() as MovieClip;
-                    fizz.x = dispObj.x;
-                    fizz.y = dispObj.y;
-                    fizz.rotation = dispObj.rotation;
-                    self.addChild(fizz);
-                    self.briefClips.push(fizz);
+                    clip = new Embedded.FireballFizzSWF() as MovieClip;
                 } else {
-                    var sploosh:MovieClip = new Embedded.FiresplooshSWF() as MovieClip;
-                    sploosh.x = dispObj.x;
-                    sploosh.y = dispObj.y;
-                    self.addChild(sploosh);
-                    self.briefClips.push(sploosh);
+                    clip = new Embedded.FiresplooshSWF() as MovieClip;
                 }
-                
+                briefClip = new BriefClip(position, clip, velocity);
+                if (dispObj.fizzOut) {
+                    briefClip.rotation = dispObj.rotation;
+                }
+                self.addChild(briefClip);
+                self.briefClips.push(briefClip);
                 self.removeChild(dispObj);
             });
             
@@ -271,10 +274,12 @@ package pyrokid {
 			Embedded.fireballSound.play();
         }
         
-        public function removeDead():void {
+        /* Removes dead items in the level and returns true iff the player died. */
+        public function removeDead():Boolean {
             if (!dirty) {
-                return;
+                return false;
             }
+            var self:Level = this;
             
             rectViews = rectViews.filter(function(view) {
                 return !view.sprite.isDead;
@@ -381,6 +386,12 @@ package pyrokid {
             onFire = onFire.filter(function(tile) {
                 return !tile.isDead;
             });
+            
+            if (player.isDead) {
+                removeChild(player);
+                return true;
+            }
+            return false;
         }
     }
 

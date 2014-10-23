@@ -58,6 +58,7 @@ package pyrokid {
         public static var OIL_TILE_CODE:int = 2;
         public static var WOOD_TILE_CODE:int = 3;
         public static var METAL_TILE_CODE:int = 4;
+        public static var EXIT_TILE_CODE:int = 5;
         
         // FreeEntity codes. Must be Strings.
         public static var SPIDER_CODE:String = "spider";
@@ -65,7 +66,7 @@ package pyrokid {
         public static var BAT_CODE:String = "bat";
         
         public static var GROUNDED_TYPES:Array = [WALL_TILE_CODE];
-        public static var SINGLE_TILE_TYPES:Array = [];
+        public static var SINGLE_TILE_TYPES:Array = [EXIT_TILE_CODE];
         
         public static function GET_TILE_SET(tileCode:int):Bitmap {
             switch (tileCode) {

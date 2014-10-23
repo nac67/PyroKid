@@ -15,6 +15,8 @@ package pyrokid {
         public var editorMode:Boolean = false;
         private var levelEditor:LevelEditor;
         
+        private var playerDied:Boolean = false;
+        
         // Camera for the level
         private var camera:Camera;
         
@@ -99,19 +101,9 @@ package pyrokid {
             }
         }
         
-        private function checkGameOver(over:Boolean):void {
-            if (over) {
-                doGameOver();
-                return;
-            }
+        private function killPlayerIfOffMap(level:Level):void {
             if (level.player.y > stage.stageHeight + 500) {
-                trace("fell to your doom, bitch");
-                doGameOver();
-                return;
-            }
-            
-            if (level.player.x > stage.stageWidth) {
-                //doGameWon(); TODO wtf this breaks when the level gets wider... -- Evan
+                level.player.kill(level);
             }
         }
         
@@ -191,7 +183,7 @@ package pyrokid {
         }
         
         /* Returns true if the player died. */
-        private function resolveFreeEntityCollisions():Boolean {
+        private function resolveFreeEntityCollisions():void {
             var playerDead:Boolean = false;
             for (var i:int = 0; i < level.enemies.length; i++) {
                 for (var j:int = i + 1; j < level.enemies.length; j++) {
@@ -200,17 +192,20 @@ package pyrokid {
                     }
                 }
                 if (level.player.isTouching(level.enemies[i])) {
-                    if (Constants.GOD_MODE) {
-                        level.player.mutualIgnite(level, level.enemies[i]);
-                    } else {
-                        playerDead = true;
-                    }
+                    level.player.mutualIgnite(level, level.enemies[i]);
+                    level.player.damageFromEnemyContact(level);
                 }
             }
-            return playerDead;
         }
         
         private function update(event:Event):void {
+            if (playerDied) {
+                playerDied = false;
+                editorMode = true;
+                levelEditor.turnEditorOn();
+                reloadLevel(level.recipe);
+            }
+            
             if (editorMode) {
                 return;
             }
@@ -221,32 +216,39 @@ package pyrokid {
             
             // ------------------------- Game logic ------------------------ //
             level.player.update(level);
-            for each (var spider in level.enemies) {
-                spider.update();
+            for each (var enemy:FreeEntity in level.enemies) {
+                enemy.update(level);
             }
             level.fireballUpdate();
             FireHandler.spreadFire(level);
             
             // -------------------------- Physics --------------------------- //
             handlePhysics();
-            var playerDied:Boolean = resolveFreeEntityCollisions();
+            resolveFreeEntityCollisions();
             
             // ------------------------ After physics game logic ------------ //
             processMovingTilesInGrid();
-            level.removeDead();
+            killPlayerIfOffMap(level);
             
             // --------------------------- Visuals -------------------------- //
             centerOnPlayer();
             level.briefClips.filter(function(o:Object):Boolean {
-               var mc:MovieClip = o as MovieClip;
-               if (mc is Embedded.FireballFizzSWF) {
+               var mc:BriefClip = o as BriefClip;
+               if (mc.clip is Embedded.FireballFizzSWF) {
                    Utils.moveInDirFacing(mc, Constants.FBALL_SPEED / 2);
                }
-               return mc.currentFrame != mc.totalFrames;
+               return !mc.update();
             });
 
             // ---------------------- End Game Conditions -------------------- //
-            checkGameOver(playerDied);
+            playerDied = level.removeDead();
+            if (playerDied) {
+                if (Constants.GOD_MODE) {
+                    trace("you died!!!");
+                } else {
+                    doGameOver();
+                }
+            }
         }
     
     }

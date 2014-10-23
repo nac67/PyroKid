@@ -45,7 +45,8 @@ package pyrokid.entities {
             }
         }
         
-        public function update():void {
+        public override function update(level:Level):void {
+            super.update(level);
             if (touchRight) {
                 direction = Constants.DIR_LEFT;
             } else if (touchLeft) {
