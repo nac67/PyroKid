@@ -68,8 +68,9 @@ package pyrokid {
         
         public static function GET_TILE_SET(tileCode:int):Bitmap {
             switch (tileCode) {
-                case WALL_TILE_CODE: return new Embedded.DirtMergeBMP as Bitmap;
-                case WOOD_TILE_CODE: return new Embedded.WoodMergeBMP as Bitmap;
+                case WALL_TILE_CODE: return new Embedded.DirtMergeBMP() as Bitmap;
+                case WOOD_TILE_CODE: return new Embedded.WoodMergeBMP() as Bitmap;
+                case METAL_TILE_CODE: return new Embedded.MetalMergeBMP() as Bitmap;
             }
             return null;
         }
