@@ -37,6 +37,9 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/wood_merge.png")]
         public static var WoodMergeBMP:Class;
         
+        [Embed(source="../../assets/tile_art/metal_merge.png")]
+        public static var MetalMergeBMP:Class;
+        
         [Embed(source="../../assets/tile_art/big_background.png")]
         public static var BGBMP:Class; //cast as Bitmap on instantiation
         
