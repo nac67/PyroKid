@@ -179,8 +179,8 @@ package pyrokid {
 			} else {
 				for (var y = 0; y < height; y++) {
 					walls[y].splice(newWidth);
-                    level.recipe.islands.splice(newWidth);
-                    level.recipe.tileEntities.splice(newWidth);
+                    level.recipe.islands[y].splice(newWidth);
+                    level.recipe.tileEntities[y].splice(newWidth);
 				}
 			}
 			level.recipe.walls = walls;

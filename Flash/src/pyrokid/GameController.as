@@ -127,10 +127,22 @@ package pyrokid {
         }
         
         private function centerOnPlayer():void {
+            var minX:int = Constants.WIDTH / 2;
+            var minY:int = Constants.HEIGHT / 2;
+            var maxX:int = level.walls[0].length*Constants.CELL - Constants.WIDTH / 2;
+            var maxY:int = level.walls.length*Constants.CELL - Constants.HEIGHT / 2;
+            
+            
+            
             camera.xCamera = Utils.lerp(camera.xCamera, level.player.x, Constants.CAMERA_LAG);
             camera.yCamera = Utils.lerp(camera.yCamera, level.player.y, Constants.CAMERA_LAG);
             camera.x = Constants.WIDTH / 2;
             camera.y = Constants.HEIGHT / 2;
+            
+            camera.xCamera = Math.min(maxX, camera.xCamera);
+            camera.yCamera = Math.min(maxY, camera.yCamera);
+            camera.xCamera = Math.max(minX, camera.xCamera);
+            camera.yCamera = Math.max(minY, camera.yCamera);
         }
         
         private function handlePhysics():void {
