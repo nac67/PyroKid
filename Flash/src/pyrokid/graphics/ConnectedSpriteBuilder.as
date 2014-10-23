@@ -15,10 +15,10 @@ package pyrokid.graphics {
             var h:int = texIDGrid.length;
             var w:int = texIDGrid[0].length;
             
-            var texIDGridPadded = new Array(h + 2);
-            for (var y = 0; y < texIDGridPadded.length; y++) {
+            var texIDGridPadded:Array = new Array(h + 2);
+            for (var y:int = 0; y < texIDGridPadded.length; y++) {
                 texIDGridPadded[y] = new Array(w + 2);
-                for (var x = 0; x < texIDGridPadded[y].length; x++) {
+                for (var x:int = 0; x < texIDGridPadded[y].length; x++) {
                     if (x == 0 || x == (w + 1) || y == 0 || y == (h + 1))
                         texIDGridPadded[y][x] = 0;
                     else
@@ -31,8 +31,8 @@ package pyrokid.graphics {
             var bmpData:BitmapData = new BitmapData(w * opt.imageTileSize, h * opt.imageTileSize);
             var sprite:Bitmap = new Bitmap(bmpData, PixelSnapping.ALWAYS, true);
             var cropArea:Rectangle = new Rectangle(0, 0, opt.imageTileSize, opt.imageTileSize);
-            for (var y = 0; y < h; y++) {
-                for (var x = 0; x < w; x++) {
+            for (y = 0; y < h; y++) {
+                for (x = 0; x < w; x++) {
                     trace(texIDGrid[y][x]);
                     if (texIDGrid[y][x] != 0) {
                         // Find Correct Cropping Position

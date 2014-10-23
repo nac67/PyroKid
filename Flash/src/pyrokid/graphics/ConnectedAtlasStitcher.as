@@ -70,7 +70,7 @@ package pyrokid.graphics {
             var h:int = texIDGrid.length - 2;
             var w:int = texIDGrid[0].length - 2;
             
-            var texOffsetGrid = new Array(h);
+            var texOffsetGrid:Array = new Array(h);
             
             for (var y:int = 1; y <= h; y++) {
                 texOffsetGrid[y - 1] = new Array(w);
