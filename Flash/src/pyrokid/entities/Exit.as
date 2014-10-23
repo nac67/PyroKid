@@ -14,9 +14,9 @@ package pyrokid.entities {
         
 		public function Exit(level:Level) {
             super(level, 1, 50, 50, 10, 10, 30, 30);
-            sprite = new Embedded.SpiderSWF() as MovieClip;
+            sprite = new Embedded.BombSWF() as MovieClip;
             //sprite.gotoAndStop(2); // TODO schwat is going on here -- Aaron, Nick
-            //sprite.stop();
+            sprite.stop();
             addChild(sprite);
 		}
         
@@ -27,6 +27,7 @@ package pyrokid.entities {
         public override function ignite(level:Level, ignitionFrame:int):void {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
+                sprite.gotoAndStop(57);
                 trace("exit ignited");
             }
 		}
