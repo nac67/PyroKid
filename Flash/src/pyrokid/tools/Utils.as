@@ -1,5 +1,6 @@
 package pyrokid.tools {
     import flash.display.DisplayObject;
+    import flash.display.MovieClip;
     import flash.display.Sprite;
     import flash.utils.Dictionary;
 	import physics.PhysBox;
@@ -253,6 +254,10 @@ package pyrokid.tools {
             } else {
                 return new Vector2i(0, 0);
             }
+        }
+        
+        public static function toMC(obj:Object):MovieClip {
+            return obj as MovieClip;
         }
 		
 		// -------------------- Coordinate Conversion Functions --------------------- //

@@ -161,6 +161,8 @@ package pyrokid {
                 var enemy:BackAndForthEnemy;
                 if (recipe.freeEntities[i][2] == Constants.SPIDER_CODE) {
                     enemy = new Spider(this);
+                } else if (recipe.freeEntities[i][2] == Constants.BAT_CODE) {
+                    enemy = new WaterBat(this);
                 } else {
                     enemy = new BurnForeverEnemy(this);
                 }

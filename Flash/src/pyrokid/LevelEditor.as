@@ -60,6 +60,7 @@ package pyrokid {
             options[Constants.METAL_TILE_CODE] = "Metal";
 			options[Constants.SPIDER_CODE] = "Spider";
             options[Constants.IMMUNE_CODE] = "Immune Enemy";
+            options[Constants.BAT_CODE] = "Water Bat";
 			options["player"] = "Player";
             allObjectTypesButton = new SelectorButton(options, changeSelectedObject);
 			UI_Elements.push(allObjectTypesButton);

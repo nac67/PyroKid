@@ -62,6 +62,7 @@ package pyrokid {
         // FreeEntity codes. Must be Strings.
         public static var SPIDER_CODE:String = "spider";
         public static var IMMUNE_CODE:String = "immune";
+        public static var BAT_CODE:String = "bat";
         
         public static var GROUNDED_TYPES:Array = [WALL_TILE_CODE];
         public static var SINGLE_TILE_TYPES:Array = [];

@@ -11,15 +11,18 @@ package pyrokid.entities {
      * is a specific type of enemy. */
     public class BackAndForthEnemy extends FreeEntity {
         
-        protected var swf:MovieClip;
+        protected var swf:Sprite;
+        protected var gravity:Boolean;
         
-        public function BackAndForthEnemy(level:Level, swf:MovieClip, scale:Number, wArt:int, hArt:int,
-                xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1) {
+        public function BackAndForthEnemy(level:Level, swf:Sprite, scale:Number, wArt:int, hArt:int,
+                xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1, gravity:Boolean = true) {
             super(level, scale, wArt, hArt, xHit, yHit, wHit, hHit);
 
             this.swf = swf;
             addChild(swf);
             swf.scaleX = swf.scaleY = scale;
+            
+            this.gravity = gravity;
             direction = Constants.DIR_RIGHT;
             
             if (Constants.DEBUG) {
@@ -49,7 +52,9 @@ package pyrokid.entities {
                 direction = Constants.DIR_RIGHT;
             }
             
-            velocity.Add(0, Constants.GRAVITY * Constants.CELL * Constants.DT);
+            if (gravity) {
+                velocity.Add(0, Constants.GRAVITY * Constants.CELL * Constants.DT);
+            }
             velocity.Set((direction == Constants.DIR_RIGHT ? 
                     Constants.SPIDER_SPEED : -Constants.SPIDER_SPEED), velocity.y);
         }

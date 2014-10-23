@@ -13,9 +13,10 @@ package pyrokid.entities {
         }
         
 		public override function ignite(level:Level, ignitionFrame:int):void {
+            var swfAsMC:MovieClip = swf as MovieClip;
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
-                swf.gotoAndStop(2);
+                swfAsMC.gotoAndStop(2);
             }
 		}
     }
