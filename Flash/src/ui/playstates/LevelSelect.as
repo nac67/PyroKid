@@ -32,11 +32,17 @@ package ui.playstates {
 
 		}
 		
-		public function startAndSetLevel(levelNum:int):Function {
+		public static function startAndSetLevel(levelNum:int):Function {
 			return function():void {
-				currLevel = levelNum;
 				
-				StateController.goToGame(levelDict[levelNum])();
+				if (levelDict[levelNum] == undefined) {
+					StateController.goToCredits();
+				} else {
+					currLevel = levelNum;
+				
+					StateController.goToGame(levelDict[levelNum])();
+				}
+				
 			}
 		}
 		
