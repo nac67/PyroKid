@@ -55,7 +55,17 @@ package pyrokid.entities {
             }
         }
         
-        public function set direction (val:int):void {
+        public function getLeadingCoorInGlobal():Vector2i {
+            // TODO -- I'm not 100% sure why this works... -- Aaron, Nick
+            var xDiff:int = direction == Constants.DIR_RIGHT ? wArt : 0;
+            return new Vector2(x + xDiff, y + hArt / 2).DivD(Constants.CELL).floor();
+        }
+        
+        //protected function constructHitBox(scale:Number, xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1):void {
+            //hitBox = new Box(xHit * scale, yHit * scale, this.wHit * scale, this.hHit * scale);
+        //}
+        
+        public function set direction(val:int):void {
             _direction = val;
         }
         
@@ -98,6 +108,12 @@ package pyrokid.entities {
 		}
         
         public function update(level:Level):void {
+            //if (!(this is Player) && isGrounded) {
+                //trace("grounded on frame: " + level.frameCount);
+            //}
+            //if (!(this is Player) && touchTop) {
+                //trace("touch top on frame: " + level.frameCount);
+            //}
             if (isGrounded && touchTop) {
                 var xVelocity:int = (Math.random() * 75 + 25) * (Math.random() > 0.5 ? -1 : 1);
                 var constr:Class = Object(this).constructor;
@@ -134,14 +150,16 @@ package pyrokid.entities {
                 if (entity != null) {
                     entity.mutualIgnite(level, self);
                 }
-                if (self is Player && entity is Exit && entity.canExit()) {
-                    trace("player exited level");
-                }
             };
         }
         
-        public function isTouching(freeEntity:FreeEntity):Boolean {
-            return this.hitBox.hitTestObject(freeEntity.hitBox);
+        public function isTouching(sprite:Sprite):Boolean {
+            if (sprite is FreeEntity) {
+                var freeEntity:FreeEntity = sprite as FreeEntity;
+                return hitBox.hitTestObject(freeEntity.hitBox);
+            } else {
+                return hitBox.hitTestObject(sprite);
+            }
         }
 	}
 	

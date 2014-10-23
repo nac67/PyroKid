@@ -39,6 +39,10 @@ package pyrokid.entities {
             }
 		}
         
+        public function updateFire(level:Level, currentFrame:int):void {
+            
+        }
+        
         /* If entity is on fire, it will light this object on fire, and vice versa. */
         public function mutualIgnite(level:Level, entity:GameEntity):void {
             var thisOnFire:Boolean = isOnFire();

@@ -29,6 +29,9 @@ package pyrokid.entities {
 		}
         
         public override function updateFire(level:Level, currentFrame:int):void {
+            if (!isOnFire()) {
+                return;
+            }
             if (currentFrame - ignitionTime == Constants.QUICK_BURN_TIME) {
                 for each (var coor:Vector2 in coorsInGlobal()) {
                     var w:MovieClip = new Embedded.WoodExplodeSWF() as MovieClip;

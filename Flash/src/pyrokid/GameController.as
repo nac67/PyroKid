@@ -193,7 +193,13 @@ package pyrokid {
                 }
                 if (level.player.isTouching(level.enemies[i])) {
                     level.player.mutualIgnite(level, level.enemies[i]);
-                    level.player.damageFromEnemyContact(level);
+                    if (level.enemies[i] is Exit) {
+                        if (level.enemies[i].canExit()) {
+                            trace("player exited level");
+                        }
+                    } else {
+                        level.player.damageFromEnemyContact(level);
+                    }
                 }
             }
         }

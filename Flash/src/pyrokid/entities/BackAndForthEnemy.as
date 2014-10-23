@@ -2,10 +2,12 @@ package pyrokid.entities {
     import flash.display.DisplayObject;
     import flash.display.Sprite;
     import physics.PhysRectangle;
+    import physics.Vector2i;
     import pyrokid.*;
     import flash.display.MovieClip;
     import physics.Vector2;
     import pyrokid.tools.Box;
+    import pyrokid.tools.Utils;
     
     /* This is an "abstract" class. Do not instantiate. Use a subclass that
      * is a specific type of enemy. */
@@ -47,6 +49,17 @@ package pyrokid.entities {
         
         public override function update(level:Level):void {
             super.update(level);
+            var leadingCoor:Vector2i = getLeadingCoorInGlobal();
+            var leadingEntity:TileEntity = Utils.index(level.tileEntityGrid, leadingCoor.x, leadingCoor.y);
+            var belowLeadingEntity:TileEntity = Utils.index(level.tileEntityGrid, leadingCoor.x, leadingCoor.y + 1);
+            if (gravity && velocity.y == 0 && leadingEntity == null && belowLeadingEntity == null) {
+                if (direction == Constants.DIR_RIGHT) {
+                    direction = Constants.DIR_LEFT;
+                } else {
+                    direction = Constants.DIR_RIGHT;
+                }
+            }
+            
             if (touchRight) {
                 direction = Constants.DIR_LEFT;
             } else if (touchLeft) {

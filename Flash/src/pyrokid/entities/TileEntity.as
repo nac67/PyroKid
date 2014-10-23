@@ -114,7 +114,7 @@ package pyrokid.entities {
             }
 		}
         
-        public function updateFire(level:Level, currentFrame:int):void {
+        public override function updateFire(level:Level, currentFrame:int):void {
             
         }
 		

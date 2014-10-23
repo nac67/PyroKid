@@ -21,6 +21,10 @@ package physics {
             y = Math.round(y);
         }
         
+        public function floor():Vector2i {
+            return new Vector2i(Math.floor(x), Math.floor(y));
+        }
+        
         /* Returns a Vector2i resulting from rounding each coordinate. */
         public function copyAsVec2i():Vector2i {
             return new Vector2i(Math.round(x), Math.round(y));

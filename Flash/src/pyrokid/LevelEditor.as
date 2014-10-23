@@ -58,10 +58,10 @@ package pyrokid {
 			options[Constants.OIL_TILE_CODE] = "Eternal Flame";
 			options[Constants.WOOD_TILE_CODE] = "Quick Burn";
             options[Constants.METAL_TILE_CODE] = "Metal";
-            options[Constants.EXIT_TILE_CODE] = "Exit";
 			options[Constants.SPIDER_CODE] = "Spider";
             options[Constants.IMMUNE_CODE] = "Immune Enemy";
             options[Constants.BAT_CODE] = "Water Bat";
+            options[Constants.EXIT_CODE] = "Exit";
 			options["player"] = "Player";
             allObjectTypesButton = new SelectorButton(options, changeSelectedObject);
 			UI_Elements.push(allObjectTypesButton);

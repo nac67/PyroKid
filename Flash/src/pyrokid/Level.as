@@ -150,9 +150,6 @@ package pyrokid {
             if (realObjCode == Constants.WOOD_TILE_CODE) {
                 return new BurnQuickly(0, 0, realObjCode);
             }
-            if (realObjCode == Constants.EXIT_TILE_CODE) {
-                return new Exit(0, 0);
-            }
             return new NonFlammableTile(0, 0, realObjCode);
         }
         
@@ -161,11 +158,13 @@ package pyrokid {
 			initializeFreeEntity(player, recipe.playerStart[0], recipe.playerStart[1]);
             
             for (var i:int = 0; i < recipe.freeEntities.length; i++) {
-                var enemy:BackAndForthEnemy;
+                var enemy:FreeEntity;
                 if (recipe.freeEntities[i][2] == Constants.SPIDER_CODE) {
                     enemy = new Spider(this);
                 } else if (recipe.freeEntities[i][2] == Constants.BAT_CODE) {
                     enemy = new WaterBat(this);
+                } else if (recipe.freeEntities[i][2] == Constants.EXIT_CODE) {
+                    enemy = new Exit(this);
                 } else {
                     enemy = new BurnForeverEnemy(this);
                 }
@@ -238,18 +237,11 @@ package pyrokid {
 				}
                 
                 // ignite FreeEntities
-                for (var j:int = 0; j < enemies.length; j++) {
-                    var spider:BackAndForthEnemy = enemies[j] as BackAndForthEnemy;
-                    if (spider != null) {
-                        // TODO use hitTestObject on spider's hitbox
-                        if (fireball.hitTestObject(spider)) {
-                            fireballs.markForDeletion(fireball);
-                            spider.ignite(this, frameCount);
-                            
-                            //XXX
-                            //level.harmfulObjects.splice(level.harmfulObjects.indexOf(spider),1);
-                            break;
-                        }
+                for each (var freeEntity:FreeEntity in enemies) {
+                    if (freeEntity.isTouching(fireball)) {
+                        fireballs.markForDeletion(fireball);
+                        freeEntity.ignite(this, frameCount);
+                        break;
                     }
                 }
                 
