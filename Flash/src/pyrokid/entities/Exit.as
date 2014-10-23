@@ -15,6 +15,7 @@ package pyrokid.entities {
 		public function Exit(level:Level) {
             super(level, 1, 50, 50, 10, 10, 30, 30);
             sprite = new Embedded.BombSWF() as MovieClip;
+            sprite.gotoAndStop(1); // TODO schwat is going on here -- Aaron, Nick
             addChild(sprite);
 		}
         
