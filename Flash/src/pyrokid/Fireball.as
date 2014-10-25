@@ -16,8 +16,8 @@ package pyrokid {
             //origin at center of ball
             fball = new Embedded.FireballSWF() as MovieClip;
             addChild(fball);
-            
-            setRange(Constants.MAX_BALL_RANGE);
+            speed = Constants.FBALL_SPEED;
+            //range set externally
         }
         
         /* Takes in a charge time and figures out how far it will travel */

@@ -239,12 +239,17 @@ package pyrokid {
 				}
                 
                 // ignite FreeEntities
-                for each (var freeEntity:FreeEntity in enemies) {
-                    if (freeEntity.isTouching(projectile)) {
-                        projectiles.markForDeletion(projectile);
-                        freeEntity.ignite(this, frameCount);
-                        break;
+                if (projectile is Fireball) {
+                    for each (var freeEntity:FreeEntity in enemies) {
+                        if (freeEntity.isTouching(projectile)) {
+                            projectiles.markForDeletion(projectile);
+                            freeEntity.ignite(this, frameCount);
+                            break;
+                        }
                     }
+                }
+                if (projectile is Waterball) {
+                    
                 }
                 
                 // fireball expiration
@@ -268,6 +273,15 @@ package pyrokid {
             projectiles.push(fball);
             addChild(fball);
 			Embedded.fireballSound.play();
+        }
+        
+        public function launchWaterball(x:int, y:int, range:Number, direction:int):void {
+            var wball:Waterball = new Waterball();
+            wball.x = x;
+            wball.y = y;
+            wball.setDirection(direction);
+            projectiles.push(wball);
+            addChild(wball);
         }
         
         /* Removes dead items in the level and returns true iff the player died. */

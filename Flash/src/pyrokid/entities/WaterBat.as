@@ -9,8 +9,11 @@ package pyrokid.entities {
     
     public class WaterBat extends BackAndForthEnemy {
         public var batHead:MovieClip;
-        private var HEAD_ROT_OFFSET = 225; //not sure what happened here
+        private var HEAD_ROT_OFFSET:int = 225; //not sure what happened here
+        private var X_CENTER_TO_HEAD:int = 7;
+        private var LENGTH_OF_HEAD:int = 10;
         private var dirToShoot:int;
+        private var timeToWaterball:int = 0;
         
         
         public function WaterBat(level:Level) {
@@ -55,6 +58,26 @@ package pyrokid.entities {
                 this.batHead.rotation = 180;
             } else {
                 this.batHead.rotation =  - HEAD_ROT_OFFSET;
+            }
+            
+            if (timeToWaterball < Constants.WATERBALL_COOLDOWN) {
+                timeToWaterball ++;
+            } else {
+                timeToWaterball = 0;
+                if (shouldShoot) {
+                    
+                    // Find center of water bat
+                    var shootSpot:Vector2i = this.getCenter();
+                    
+                    // Offset to head depending on direction
+                    shootSpot.AddV(new Vector2i((direction == Constants.DIR_RIGHT ? X_CENTER_TO_HEAD : -X_CENTER_TO_HEAD), 0));
+                    
+                    // Offset to end of head depending on rotation of head
+                    var headShift:Vector2i = Utils.getXYMultipliers(dirToShoot).MulD(LENGTH_OF_HEAD);
+                    shootSpot.AddV(headShift);
+                    
+                    level.launchWaterball(shootSpot.x, shootSpot.y, 5, dirToShoot);
+                }
             }
             
         }
