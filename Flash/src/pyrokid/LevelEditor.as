@@ -325,24 +325,24 @@ package pyrokid {
                         // TODO clumping bug when placing new objects -- Aaron
                     }   
                 }
+                
+                // If you're holding space, merge rectangle together
                 if (Key.isDown(Key.SPACE)) {
                     mergeRectangleTiles(level.recipe.tileEntities, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
                         return level.recipe.walls[coor.y][coor.x] == objCode;
                     });
                 }
                 
-                // TODO this is bugging out for some reason, nick made this change -- Aaron
+                // Dirt should automerge with other dirt ALWAYS
                 if (typeSelected == Constants.WALL_TILE_CODE) {
-                    mergeRectangleTiles(level.recipe.tileEntities, 0, level.numCellsWide()-1, 0, level.numCellsTall()-1, function(coor:Vector2i, objCode:int):Boolean {
+                    mergeRectangleTiles(level.recipe.tileEntities, 0, level.numCellsWide() - 1, 0, level.numCellsTall() - 1, function(coor:Vector2i, objCode:int):Boolean {
+                        // only merge if both cells are dirt
                         return objCode == Constants.WALL_TILE_CODE &&
                             level.recipe.walls[coor.y][coor.x] == Constants.WALL_TILE_CODE;
                     });
                 }
                 
             } else if (editMode == Constants.EDITOR_CLUMP_MODE) {
-                //mergeRectangleTiles(level.recipe.islands, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
-                    //return level.recipe.walls[coor.y][coor.x] != Constants.EMPTY_TILE_CODE;
-                //});
                 mergeRectangleTiles(level.recipe.tileEntities, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
                     return level.recipe.walls[coor.y][coor.x] == objCode;
                 });
