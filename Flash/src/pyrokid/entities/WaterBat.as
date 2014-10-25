@@ -8,6 +8,7 @@ package pyrokid.entities {
     
     public class WaterBat extends BackAndForthEnemy {
         public var batHead:MovieClip;
+        private var HEAD_ROT_OFFSET = 45;
         
         public function WaterBat(level:Level) {
             
@@ -36,7 +37,25 @@ package pyrokid.entities {
         public override function update(level:Level):void {
             super.update(level);
             
+            var xdis:int = Sprite(parent).mouseX - this.x;
+            var ydis:int = Sprite(parent).mouseY - this.y;
+            var dirToShoot:int = Utils.getQuadrant(xdis, ydis);
+            var shouldShoot:Boolean = true;
+            
+            if (dirToShoot == Constants.DIR_UP) {
+                this.batHead.rotation = 90 - HEAD_ROT_OFFSET;
+            } else if (dirToShoot == Constants.DIR_DOWN) {
+                this.batHead.rotation = -90 - HEAD_ROT_OFFSET;
+            } else {
+                this.batHead.rotation = 180 - HEAD_ROT_OFFSET;
+                if (dirToShoot != this.direction) {
+                    shouldShoot = false;
+                }
+            }
+            
         }
+        
+        
     
     }
 

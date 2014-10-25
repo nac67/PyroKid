@@ -260,6 +260,23 @@ package pyrokid.tools {
             }
         }
         
+        /** given a vector of x,y this returns which
+         * cardinal direction it is closest to. */
+        public static function getQuadrant(dx:int, dy:int) {
+            var a:Boolean = dx > dy;
+            var b:Boolean = dx > -dy;
+            
+            if (a && b) {
+                return Constants.DIR_RIGHT;
+            } else if (a) {
+                return Constants.DIR_UP;
+            } else if (b) {
+                return Constants.DIR_DOWN;
+            } else {
+                return Constants.DIR_LEFT;
+            }
+        }
+        
         public static function toMC(obj:Object):MovieClip {
             return obj as MovieClip;
         }
