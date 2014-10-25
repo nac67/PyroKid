@@ -325,6 +325,12 @@ package pyrokid {
                         // TODO clumping bug when placing new objects -- Aaron
                     }   
                 }
+                if (typeSelected == Constants.WALL_TILE_CODE) {
+                    mergeRectangleTiles(level.recipe.tileEntities, 0, level.numCellsWide()-1, 0, level.numCellsTall()-1, function(coor:Vector2i, objCode:int):Boolean {
+                        return level.recipe.walls[coor.y][coor.x] == Constants.WALL_TILE_CODE;
+                    });
+                }
+                
             } else if (editMode == Constants.EDITOR_CLUMP_MODE) {
                 //mergeRectangleTiles(level.recipe.islands, lowX, highX, lowY, highY, function(coor:Vector2i, objCode:int):Boolean {
                     //return level.recipe.walls[coor.y][coor.x] != Constants.EMPTY_TILE_CODE;
