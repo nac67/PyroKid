@@ -334,7 +334,8 @@ package pyrokid {
                 // TODO this is bugging out for some reason, nick made this change -- Aaron
                 if (typeSelected == Constants.WALL_TILE_CODE) {
                     mergeRectangleTiles(level.recipe.tileEntities, 0, level.numCellsWide()-1, 0, level.numCellsTall()-1, function(coor:Vector2i, objCode:int):Boolean {
-                        return level.recipe.walls[coor.y][coor.x] == Constants.WALL_TILE_CODE;
+                        return objCode == Constants.WALL_TILE_CODE &&
+                            level.recipe.walls[coor.y][coor.x] == Constants.WALL_TILE_CODE;
                     });
                 }
                 
