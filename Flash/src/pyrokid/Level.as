@@ -182,7 +182,7 @@ package pyrokid {
         
         private function setupMiscellaneous():void {
             var self:Level = this;
-            projectiles = new RingBuffer(5, function(o:Object) {
+            projectiles = new RingBuffer(50, function(o:Object) {
                 var dispObj:ProjectileBall = o as ProjectileBall;
                 
                 var position:Vector2 = new Vector2(dispObj.x, dispObj.y);
