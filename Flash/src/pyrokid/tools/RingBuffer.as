@@ -27,7 +27,7 @@ package pyrokid.tools {
         //can't delete things while in iterator,
         //so we prepare them for purge, then purge
         //them after the iteration is complete
-        private var markedForDel:Array;
+        private var markedForDel:HashSet;
         
         /**
          * Ring buffer!
@@ -42,7 +42,7 @@ package pyrokid.tools {
             for (var i:int = 0; i < maxItems; i++) {
                 buffer[i] = null;
             }
-            markedForDel = [];
+            markedForDel = new HashSet(true);
             this.evictFcn = evictFcn;
         }
         
@@ -53,7 +53,7 @@ package pyrokid.tools {
         public function push(o:Object):void {
             var oldHead:Object = buffer[head];
             if (oldHead != null) {
-                removeVisual(oldHead);                
+                evict(oldHead);                
             }
             
             buffer[head] = o;
@@ -64,7 +64,7 @@ package pyrokid.tools {
         public function pop():Object {
             if(_size>0){
                 var output:Object = buffer[tail()];
-                removeVisual(buffer[tail()]);
+                evict(buffer[tail()]);
                 buffer[tail()] = null;
                 _size--;
                 return output;
@@ -93,13 +93,11 @@ package pyrokid.tools {
         /**
          * While iterating through the list, you can prepare objects
          * to be removed. Since you can't remove things while iterating,
-         * you do this. Objects must be prepared for deletion in order that they
-         * appear in the list. I.e. if you iterate through the list, and mark things
-         * for deletion in the order you encounter them it will be fine.
+         * you do this.
          * @param o
          */
         public function markForDeletion(o:Object):void {
-            markedForDel.push(o);
+            markedForDel.add(o);
         }
         
         /**
@@ -120,22 +118,18 @@ package pyrokid.tools {
             _size = 0;
             
             //look through old objects, if they are not purged,
-            //add them to the new buffer, if they are marked,
-            //increment the markIndex, to look for the next item
-            //to be purged.
-            var markIndex:int = 0;
+            //add them to the new buffer, if they are marked, purge them
             for (i = 0; i < oldSize; i++) {
                 var realIndex:int = clamp(oldHead - oldSize+i);
                 var oldObj:Object = oldBuffer[realIndex];
-                if(markedForDel[markIndex] == oldObj){
-                    markIndex++;
-                    removeVisual(oldObj);
+                if (markedForDel.contains(oldObj)) {
+                    evict(oldObj);
                 }else {
                     push(oldBuffer[realIndex]);
                 }
             }
             
-            markedForDel = [];
+            markedForDel = new HashSet(true);
         }
         
         public function remove(o:Object):void {
@@ -169,7 +163,7 @@ package pyrokid.tools {
             return (v+maxItems) % maxItems;
         }
         
-        private function removeVisual(o:Object):void {
+        private function evict(o:Object):void {
             if (evictFcn != null) {
                 evictFcn(o);
             }

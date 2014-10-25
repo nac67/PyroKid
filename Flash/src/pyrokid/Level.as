@@ -263,13 +263,13 @@ package pyrokid {
                     }
                 }
                 
+                // If waterball and fireball collide, remove both
                 for (var j:int = 0; j < projectiles.size(); j++) {
                     var otherProj:ProjectileBall = projectiles.get(j) as ProjectileBall;
                     if (projectile is Fireball && otherProj is Waterball) {
                         if (Utils.distance(projectile, otherProj) < 20) {
-                            //TODO RingBuffer doesn't allow for randomly ordered marks
-                            //projectiles.markForDeletion(projectile);
-                            //projectiles.markForDeletion(otherProj);
+                            projectiles.markForDeletion(projectile);
+                            projectiles.markForDeletion(otherProj);
                         }
                     }
                 }
