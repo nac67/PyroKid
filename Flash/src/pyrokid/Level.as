@@ -18,7 +18,7 @@ package pyrokid {
 		public var columns:Array;
 
         /* Items that don't have a physics representation. */
-        public var fireballs:RingBuffer;
+        public var projectiles:RingBuffer;
         public var briefClips:RingBuffer;
 		public var background:CaveBackground;
         
@@ -182,24 +182,26 @@ package pyrokid {
         
         private function setupMiscellaneous():void {
             var self:Level = this;
-            fireballs = new RingBuffer(5, function(o:Object) {
-                var dispObj:Fireball = o as Fireball;
+            projectiles = new RingBuffer(5, function(o:Object) {
+                var dispObj:ProjectileBall = o as ProjectileBall;
                 
                 var position:Vector2 = new Vector2(dispObj.x, dispObj.y);
                 var briefClip:BriefClip;
                 var clip:MovieClip;
                 var velocity:Vector2 = new Vector2();
-                if (dispObj.fizzOut) {
-                    clip = new Embedded.FireballFizzSWF() as MovieClip;
-                } else {
-                    clip = new Embedded.FiresplooshSWF() as MovieClip;
-                }
-                briefClip = new BriefClip(position, clip, velocity);
-                if (dispObj.fizzOut) {
+                if (dispObj is Fireball) {
+                    if (dispObj.fizzOut) {
+                        clip = new Embedded.FireballFizzSWF() as MovieClip;
+                    } else {
+                        clip = new Embedded.FiresplooshSWF() as MovieClip;
+                    }
+                    briefClip = new BriefClip(position, clip, velocity);
                     briefClip.rotation = dispObj.rotation;
+                    self.addChild(briefClip);
+                    self.briefClips.push(briefClip);
                 }
-                self.addChild(briefClip);
-                self.briefClips.push(briefClip);
+                
+                
                 self.removeChild(dispObj);
             });
             
@@ -217,42 +219,44 @@ package pyrokid {
         //////////////////////////////////
         //////////////////////////////////
         
-        public function fireballUpdate():void {
+        public function projectileUpdate():void {
 				
             
-            for (var i:int = 0; i < fireballs.size(); i++) {
-                var fireball:Fireball = fireballs.get(i) as Fireball;
-				fireball.x += fireball.speedX;
-                fireball.y += fireball.speedY;
+            for (var i:int = 0; i < projectiles.size(); i++) {
+                var projectile:ProjectileBall = projectiles.get(i) as ProjectileBall;
+				projectile.x += projectile.speedX;
+                projectile.y += projectile.speedY;
                 
                 // ignite TileEntities
                 // TODO hit falling objects with fireball -- Aaron
-				var cellX = Utils.realToCell(fireball.x);
-				var cellY = Utils.realToCell(fireball.y);
+				var cellX = Utils.realToCell(projectile.x);
+				var cellY = Utils.realToCell(projectile.y);
 				var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
 				if (entity != null) {
 					// remove fireball from list, also delete from stage
-					fireballs.markForDeletion(fireball);
+					projectiles.markForDeletion(projectile);
 				    entity.ignite(this, frameCount);
 				}
                 
                 // ignite FreeEntities
                 for each (var freeEntity:FreeEntity in enemies) {
-                    if (freeEntity.isTouching(fireball)) {
-                        fireballs.markForDeletion(fireball);
+                    if (freeEntity.isTouching(projectile)) {
+                        projectiles.markForDeletion(projectile);
                         freeEntity.ignite(this, frameCount);
                         break;
                     }
                 }
                 
                 // fireball expiration
-                if (fireball.isDead()) {
-                    fireball.fizzOut = true;
-                    fireballs.markForDeletion(fireball);
+                if (projectile.isDead()) {
+                    if(projectile is Fireball) {
+                        Fireball(projectile).fizzOut = true;
+                    }
+                    projectiles.markForDeletion(projectile);
                 }
             }
             
-			fireballs.deleteAllMarked();			
+			projectiles.deleteAllMarked();			
 		}
         
         public function launchFireball(range:Number, direction:int):void {
@@ -261,7 +265,7 @@ package pyrokid {
             fball.x = player.getCenter().x;
             fball.y = player.getCenter().y;
             fball.setDirection(direction);
-            fireballs.push(fball);
+            projectiles.push(fball);
             addChild(fball);
 			Embedded.fireballSound.play();
         }

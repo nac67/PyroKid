@@ -226,7 +226,7 @@ package pyrokid {
             for each (var enemy:FreeEntity in level.enemies) {
                 enemy.update(level);
             }
-            level.fireballUpdate();
+            level.projectileUpdate();
             FireHandler.spreadFire(level);
             // -------------------------- Physics --------------------------- //
             handlePhysics();
