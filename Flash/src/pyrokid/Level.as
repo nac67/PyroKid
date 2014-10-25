@@ -229,14 +229,20 @@ package pyrokid {
                 
                 // ignite TileEntities
                 // TODO hit falling objects with fireball -- Aaron
-				var cellX = Utils.realToCell(projectile.x);
-				var cellY = Utils.realToCell(projectile.y);
-				var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
-				if (entity != null) {
-					// remove fireball from list, also delete from stage
-					projectiles.markForDeletion(projectile);
-				    entity.ignite(this, frameCount);
-				}
+                
+                var cellX = Utils.realToCell(projectile.x);
+                var cellY = Utils.realToCell(projectile.y);
+                var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
+                if (entity != null) {
+                    // remove fireball from list, also delete from stage
+                    projectiles.markForDeletion(projectile);
+                    if (projectile is Fireball) {
+                        entity.ignite(this, frameCount);
+                    } else if (projectile is Waterball) {
+                        // TODO extinguish fire -- Aaron
+                        trace("sploosh!");
+                    }
+                }
                 
                 // ignite FreeEntities
                 if (projectile is Fireball) {
@@ -248,11 +254,27 @@ package pyrokid {
                         }
                     }
                 }
+                
+                
                 if (projectile is Waterball) {
-                    
+                    if (player.isTouching(projectile)) {
+                        projectiles.markForDeletion(projectile);
+                        player.velocity.AddV(new Vector2(projectile.speedX, projectile.speedY));
+                    }
                 }
                 
-                // fireball expiration
+                for (var j:int = 0; j < projectiles.size(); j++) {
+                    var otherProj:ProjectileBall = projectiles.get(j) as ProjectileBall;
+                    if (projectile is Fireball && otherProj is Waterball) {
+                        if (Utils.distance(projectile, otherProj) < 20) {
+                            //TODO RingBuffer doesn't allow for randomly ordered marks
+                            //projectiles.markForDeletion(projectile);
+                            //projectiles.markForDeletion(otherProj);
+                        }
+                    }
+                }
+                
+                // projectile expiration
                 if (projectile.isDead()) {
                     if(projectile is Fireball) {
                         Fireball(projectile).fizzOut = true;

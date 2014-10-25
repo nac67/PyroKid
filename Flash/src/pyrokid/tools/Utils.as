@@ -277,6 +277,12 @@ package pyrokid.tools {
             }
         }
         
+        public static function distance(obj1:DisplayObject, obj2:DisplayObject) {
+            var xdis:int = obj2.x - obj1.x;
+            var ydis:int = obj2.y - obj1.y;
+            return Math.sqrt(xdis * xdis + ydis * ydis);
+        }
+        
         public static function toMC(obj:Object):MovieClip {
             return obj as MovieClip;
         }

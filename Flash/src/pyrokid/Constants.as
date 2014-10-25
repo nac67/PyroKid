@@ -44,7 +44,7 @@ package pyrokid {
         public static var MAX_BALL_RANGE:Number = 5.5; //tiles travelled with max charge
         public static var FIREBALL_COOLDOWN:int = 30; //frames to wait between shots
         
-        public static var WATERBALL_COOLDOWN:int = 30;
+        public static var WATERBALL_COOLDOWN:int = 60;
         public static var WATERBALL_SPEED:int = 4;
         public static var WATERBALL_RANGE:int = 7.5;
 		
