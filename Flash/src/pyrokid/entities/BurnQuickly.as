@@ -3,8 +3,8 @@ package pyrokid.entities {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
     import flash.display.MovieClip;
-    import physics.Vector2;
-	import physics.Vector2i;
+    import Vector2;
+	import Vector2i;
     import pyrokid.*;
 	
 	public class BurnQuickly extends TileEntity {

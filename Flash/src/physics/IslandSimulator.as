@@ -3,7 +3,7 @@ package physics {
     import flash.accessibility.AccessibilityProperties;
     import flash.display.GraphicsPathWinding;
     import flash.geom.Point;
-    import physics.Vector2i;
+    import Vector2i;
     
     /**
      * Controller That Builds And Simulates A List Of Islands

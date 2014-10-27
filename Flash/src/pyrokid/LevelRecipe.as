@@ -1,5 +1,5 @@
 package pyrokid {
-    import pyrokid.tools.Utils;
+    import Utils;
     import physics.Cardinal;
     
     public class LevelRecipe {

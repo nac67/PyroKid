@@ -1,6 +1,6 @@
 package pyrokid.tools {
     import flash.display.Sprite;
-    import physics.Vector2i;
+    import Vector2i;
     import pyrokid.Constants;
     
     public class Box extends Sprite {

@@ -1,9 +1,8 @@
-package physics {
+import Cardinal;
+package  {
 	/**
-     * Cardinal Directions (0,1,2,3)
-     * @author Cristian Zaloj
-     */
-    public class Cardinal {
+     * CardinCardinal,1,2,3)
+     * @author Cristian ZaCardinal  public class Cardinal {
         /**
          * Negative X Direction = 0
          */

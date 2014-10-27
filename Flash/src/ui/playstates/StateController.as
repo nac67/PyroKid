@@ -4,7 +4,7 @@ package ui.playstates {
 	import flash.utils.ByteArray;
 	import pyrokid.*;
 	import flash.display.Sprite;
-	import pyrokid.tools.Utils;
+	import Utils;
 	import ui.LevelEditorButton;
 	/**
 	 * ...

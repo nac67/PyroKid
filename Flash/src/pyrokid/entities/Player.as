@@ -3,7 +3,7 @@ package pyrokid.entities {
     import flash.display.Sprite;
     import flash.utils.ByteArray;
 	import physics.PhysRectangle;
-    import physics.Vector2i;
+    import Vector2i;
 	import pyrokid.*;
     import pyrokid.tools.*;
     

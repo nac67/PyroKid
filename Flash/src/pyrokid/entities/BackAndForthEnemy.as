@@ -2,12 +2,12 @@ package pyrokid.entities {
     import flash.display.DisplayObject;
     import flash.display.Sprite;
     import physics.PhysRectangle;
-    import physics.Vector2i;
+    import Vector2i;
     import pyrokid.*;
     import flash.display.MovieClip;
-    import physics.Vector2;
+    import Vector2;
     import pyrokid.tools.Box;
-    import pyrokid.tools.Utils;
+    import Utils;
     
     /* This is an "abstract" class. Do not instantiate. Use a subclass that
      * is a specific type of enemy. */

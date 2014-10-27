@@ -1,11 +1,11 @@
-package pyrokid.tools {
+package  {
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.display.Sprite;
     import flash.utils.Dictionary;
 	import physics.PhysBox;
-	import physics.Vector2;
-	import physics.Vector2i;
+	import Vector2;
+	import Vector2i;
 	import pyrokid.entities.*;
     import pyrokid.*;
 	import ui.playstates.BasePlayState;
