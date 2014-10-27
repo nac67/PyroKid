@@ -1,6 +1,6 @@
 package pyrokid {
     import Utils;
-    import physics.Cardinal;
+    import Cardinal;
     
     public class LevelRecipe {
         

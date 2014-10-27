@@ -77,7 +77,7 @@ package pyrokid {
             return null;
         }
         
-        public static function switchControlScheme(scheme:int) {
+        public static function switchControlScheme(scheme:int):void {
             if (scheme == 0) {
                 LEFT_BTN = 65;
                 RIGHT_BTN = 68;

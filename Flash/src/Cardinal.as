@@ -1,8 +1,9 @@
-import Cardinal;
-package  {
+package {
 	/**
-     * CardinCardinal,1,2,3)
-     * @author Cristian ZaCardinal  public class Cardinal {
+     * 
+     * @author Cristian Zaloj
+     */
+    public class Cardinal {
         /**
          * Negative X Direction = 0
          */

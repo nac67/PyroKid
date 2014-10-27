@@ -1,7 +1,7 @@
 package pyrokid {
     import flash.display.Sprite;
     import flash.utils.Dictionary;
-    import physics.Cardinal;
+    import Cardinal;
     import Vector2i;
     import Vector2;
     import pyrokid.entities.TileEntity;

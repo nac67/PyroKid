@@ -7,6 +7,7 @@ package pyrokid {
     import flash.events.KeyboardEvent;
     import physics.*;
     import pyrokid.entities.*;
+    import pyrokid.graphics.Camera.CameraController;
     import pyrokid.tools.*;
     import flash.ui.Keyboard;
 	import flash.utils.getTimer;
@@ -25,6 +26,7 @@ package pyrokid {
         
         // Camera for the level
         private var camera:Camera;
+        private var cameraController:CameraController;
         public var level:Level;
         
 		private var isPaused:Boolean = false;
@@ -74,6 +76,7 @@ package pyrokid {
                 levelEditor.loadLevel(level);
             }
             Main.MainStage.focus = camera;
+            cameraController = new CameraController(camera, null);
         }
         
         private function levelEditorListener(e:KeyboardEvent):void {
@@ -130,21 +133,17 @@ package pyrokid {
             reloadLevel(level.recipe);
         }
         
-        private function centerOnPlayer():void {
+        private function centerOnPlayer(dt:Number):void {
             var minX:int = Constants.WIDTH / 2;
             var minY:int = Constants.HEIGHT / 2;
-            var maxX:int = level.walls[0].length*Constants.CELL - Constants.WIDTH / 2;
-            var maxY:int = level.walls.length*Constants.CELL - Constants.HEIGHT / 2;
+            var maxX:int = level.numCellsWide * Constants.CELL - Constants.WIDTH / 2;
+            var maxY:int = level.numCellsTall * Constants.CELL - Constants.HEIGHT / 2;
                         
-            camera.xCamera = Utils.lerp(camera.xCamera, level.player.x, Constants.CAMERA_LAG);
-            camera.yCamera = Utils.lerp(camera.yCamera, level.player.y, Constants.CAMERA_LAG);
-            camera.x = Constants.WIDTH / 2;
-            camera.y = Constants.HEIGHT / 2;
+            var focus:Vector2 = new Vector2(level.player.x, level.player.y);
+            focus.x = Math.max(minX, Math.min(maxX, focus.x));
+            focus.y = Math.max(minY, Math.min(maxY, focus.y));
             
-            camera.xCamera = Math.min(maxX, camera.xCamera);
-            camera.yCamera = Math.min(maxY, camera.yCamera);
-            camera.xCamera = Math.max(minX, camera.xCamera);
-            camera.yCamera = Math.max(minY, camera.yCamera);
+            cameraController.update(focus, dt);
         }
         
         private function handlePhysics():void {
@@ -237,7 +236,7 @@ package pyrokid {
             killPlayerIfOffMap(level);
             
             // --------------------------- Visuals -------------------------- //
-            centerOnPlayer();
+            centerOnPlayer(Constants.DT);
             level.briefClips.filter(function(o:Object):Boolean {
                var mc:BriefClip = o as BriefClip;
                if (mc.clip is Embedded.FireballFizzSWF) {

@@ -49,8 +49,8 @@ package pyrokid {
             // Universal
             UI_Elements = [];
 			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Clumping Objects", "Connector Mode", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF, 0x555555]));
-			cellsWidthInput = new LevelEditorInput("Map Width", level.numCellsWide(), 650, 100, updateWidth);
-			cellsHeightInput = new LevelEditorInput("Map Height", level.numCellsTall(), 650, 150, updateHeight);
+			cellsWidthInput = new LevelEditorInput("Map Width", level.numCellsWide, 650, 100, updateWidth);
+			cellsHeightInput = new LevelEditorInput("Map Height", level.numCellsTall, 650, 150, updateHeight);
             UI_Elements.push(cellsWidthInput, cellsHeightInput);
             UI_Elements.push(new LevelEditorButton(newLevel, 120, 25, 650, 460, ["New Level"], [LevelEditorButton.upColor, LevelEditorButton.overColor, LevelEditorButton.downColor]));
 			
@@ -211,7 +211,7 @@ package pyrokid {
 			for (var i:int = 0; i < UI_Elements.length; i++) {
 				addChild(UI_Elements[i]);
 			}
-			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+			scaleAndResetLevel(level.numCellsWide, level.numCellsTall);
 		}
 		
 		public function turnEditorOff():void {
@@ -237,7 +237,7 @@ package pyrokid {
 		
 		public function loadLevel(level:Level):void {
 			this.level = level;
-			scaleAndResetLevel(level.numCellsWide(), level.numCellsTall());
+			scaleAndResetLevel(level.numCellsWide, level.numCellsTall);
             renderVisibleObjects();
 		}
 		
@@ -284,7 +284,7 @@ package pyrokid {
             
 			var cellX:int = event.stageX / (Constants.CELL * levelScale);
 			var cellY:int = event.stageY / (Constants.CELL * levelScale);
-			if (cellX >= level.numCellsWide() || cellY >= level.numCellsTall()) {
+			if (cellX >= level.numCellsWide || cellY >= level.numCellsTall) {
 				return;
 			}
             

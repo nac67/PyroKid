@@ -9,6 +9,7 @@ package  {
 	import pyrokid.entities.*;
     import pyrokid.*;
 	import ui.playstates.BasePlayState;
+    import pyrokid.tools.HashSet;
     
     public class Utils {
         
@@ -56,11 +57,8 @@ package  {
         }
         
         public static function removeAllChildren(obj:Sprite):void {
-            while (obj.numChildren > 0) {
-				if (obj is BasePlayState) {
-					BasePlayState(obj).removeAllEventListeners();
-				}
-                obj.removeChildAt(0);
+            for (var i:int = obj.numChildren - 1; i >= 0; i--) {
+                obj.removeChildAt(i);
             }
         }
         
