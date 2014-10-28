@@ -87,13 +87,6 @@ package  {
             return Div(v.x, v.y);
         }
         
-        public function get lengthSq():Number {
-            return x * x + y * y;
-        }
-        public function get length():Number {
-            return Math.sqrt(lengthSq);
-        }
-        
         public function toString():String {
             return x.toString() + " " + y.toString();
         }

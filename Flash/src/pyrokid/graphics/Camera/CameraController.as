@@ -1,7 +1,5 @@
 package pyrokid.graphics.Camera {
     import adobe.utils.CustomActions;
-    import flash.display.Sprite;
-    import flash.geom.Point;
     import pyrokid.Connector;
     import pyrokid.Constants;
     import pyrokid.tools.Camera;
@@ -34,14 +32,14 @@ package pyrokid.graphics.Camera {
             zoneBinds.push(bind);
         }
         
-        public function update(p:Vector2, s:Sprite, minCoords:Point, maxCoords:Point, dt:Number, ds:Number = 1.0):void {
+        public function update(p:Vector2, dt:Number):void {
             // Update Internal Time
             time += dt;
             
             // We Desire To Look At The Player's Center
             var desiredTarget:CameraTarget = new CameraTarget();
             desiredTarget.position.SetV(p);
-            desiredTarget.scaling = ds;
+            desiredTarget.scaling = 1.0;
             desiredTarget.rotation = 0.0;
             
             // If In A Zone, Look At That Instead
@@ -56,27 +54,10 @@ package pyrokid.graphics.Camera {
             // Modify The Camera
             camera.xCamera = curTarget.position.x;
             camera.yCamera = curTarget.position.y;
+            camera.rotationCamera = curTarget.rotation;
             camera.scaleCamera = curTarget.scaling;
             camera.x = Constants.WIDTH / 2;
             camera.y = Constants.HEIGHT / 2;
-            
-            // Contain The Camera
-            var disp:Point = new Point(0, 0);
-            minCoords = s.localToGlobal(minCoords);
-            maxCoords = s.localToGlobal(maxCoords);
-            if (maxCoords.x < Constants.WIDTH) disp.x = maxCoords.x - Constants.WIDTH;
-            if (maxCoords.y < Constants.HEIGHT) disp.y = maxCoords.y - Constants.HEIGHT;
-            if (minCoords.x > 0) disp.x = minCoords.x;
-            if (minCoords.y > 0) disp.y = minCoords.y;
-            if (disp.x != 0 || disp.y != 0) {
-                disp.x += Constants.WIDTH / 2;
-                disp.y += Constants.HEIGHT / 2;
-                disp = camera.globalToLocal(disp);
-                camera.xCamera += disp.x;
-                camera.yCamera += disp.y;
-            }
-            
-            camera.rotationCamera = curTarget.rotation;
         }
         
         private function updateZones(p:Vector2):void {

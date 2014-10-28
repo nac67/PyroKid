@@ -2,7 +2,6 @@ package pyrokid {
     import flash.display.MovieClip;
     import flash.display.Sprite;
     import flash.events.Event;
-    import flash.geom.Point;
     import flash.utils.ByteArray;
     import flash.net.FileReference;
     import flash.events.KeyboardEvent;
@@ -135,15 +134,16 @@ package pyrokid {
         }
         
         private function centerOnPlayer(dt:Number):void {
-            // Focus On The Player
+            var minX:int = Constants.WIDTH / 2;
+            var minY:int = Constants.HEIGHT / 2;
+            var maxX:int = level.numCellsWide * Constants.CELL - Constants.WIDTH / 2;
+            var maxY:int = level.numCellsTall * Constants.CELL - Constants.HEIGHT / 2;
+                        
             var focus:Vector2 = new Vector2(level.player.x, level.player.y);
-
-            // Zoom Out Based On Velocity
-            var cZoom:Number = level.player.velocity.length / 100.0;
-            cZoom = 1.0 / Math.max(0.8, Math.min(1.0, cZoom));
+            focus.x = Math.max(minX, Math.min(maxX, focus.x));
+            focus.y = Math.max(minY, Math.min(maxY, focus.y));
             
-            // Update Camera
-            cameraController.update(focus, level, new Point(0, 0), new Point(level.numCellsWide * Constants.CELL, level.numCellsTall * Constants.CELL), dt, cZoom);
+            cameraController.update(focus, dt);
         }
         
         private function handlePhysics():void {
