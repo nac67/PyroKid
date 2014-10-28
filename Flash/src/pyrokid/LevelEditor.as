@@ -394,7 +394,7 @@ package pyrokid {
                         // only merge if both cells are dirt
                         return objCode == Constants.WALL_TILE_CODE &&
                             level.recipe.walls[coor.y][coor.x] == Constants.WALL_TILE_CODE;
-                    });
+                    }, [Constants.WALL_TILE_CODE]);
                 }
                 
             } else if (editMode == Constants.EDITOR_CLUMP_MODE) {
@@ -427,12 +427,12 @@ package pyrokid {
                     }
                 }
             }
-            //trace("walls:");
-            //Utils.print2DArr(level.recipe.walls);
-            //trace("island (connected) ids:");
-            //Utils.print2DArr(level.recipe.islands);
-            //trace("tile entities:");
-            //Utils.print2DArr(level.recipe.tileEntities);
+            trace("walls:");
+            Utils.print2DArr(level.recipe.walls);
+            trace("island (connected) ids:");
+            Utils.print2DArr(level.recipe.islands);
+            trace("tile entities:");
+            Utils.print2DArr(level.recipe.tileEntities);
         }
         
         private function connect(coor:Vector2i, dir:int):void {
@@ -466,14 +466,15 @@ package pyrokid {
             });
         }
         
-        private function mergeRectangleTiles(grid:Array, lowX:int, highX:int, lowY:int, highY:int, canMergeWith:Function):void {
+        private function mergeRectangleTiles(grid:Array, lowX:int, highX:int, lowY:int, highY:int, canMergeWith:Function, onlyMergeTypes:Array = null):void {
             var nextId:int = getMaxId(grid) + 1;
             var minValOfNewIds:int = nextId;
             
             for (var cx:int = lowX; cx <= highX; cx++) {
                 for (var cy:int = lowY; cy <= highY; cy++) {
                     var objCode:int = level.recipe.walls[cy][cx];
-                    if (objCode == Constants.EMPTY_TILE_CODE || grid[cy][cx] >= minValOfNewIds) {
+                    var cantMergeCoor:Boolean = onlyMergeTypes != null && onlyMergeTypes.indexOf(objCode) == -1;
+                    if (objCode == Constants.EMPTY_TILE_CODE || grid[cy][cx] >= minValOfNewIds || cantMergeCoor) {
                         continue;
                     }
                     
