@@ -139,8 +139,11 @@ package pyrokid {
             var focus:Vector2 = new Vector2(level.player.x, level.player.y);
 
             // Zoom Out Based On Velocity
-            var cZoom:Number = level.player.velocity.length / 100.0;
-            cZoom = 1.0 / Math.max(0.8, Math.min(1.0, cZoom));
+            var cZoom:Number = 1.0;
+            if (Constants.PLAYER_MOVE_ZOOM) {
+                cZoom = level.player.velocity.length / 100.0;
+                cZoom = 1.0 / Math.max(0.8, Math.min(1.0, cZoom));
+            }
             
             // Update Camera
             cameraController.update(focus, level, new Point(0, 0), new Point(level.numCellsWide * Constants.CELL, level.numCellsTall * Constants.CELL), dt, cZoom);

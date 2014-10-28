@@ -31,7 +31,10 @@ package pyrokid {
         public static var AIM_DOWN_BTN:int;
         public static var AIM_LEFT_BTN:int;
         public static var AIM_RIGHT_BTN:int;
+        
         public static var ALLOW_JUMP_HOLD:Boolean = false;
+        public static var PLAYER_MOVE_ZOOM:Boolean = false;
+        
         
         // fake enums
         public static var DIR_UP:int = 101;
