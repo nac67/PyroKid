@@ -2,7 +2,7 @@ package pyrokid.entities {
     import flash.display.MovieClip;
     import physics.PhysBox;
     import physics.PhysRectangle;
-    import physics.Vector2;
+    import Vector2;
     import pyrokid.*;
     
     public class Spider extends BackAndForthEnemy {

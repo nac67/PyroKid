@@ -26,7 +26,7 @@ package ui {
 			}
 		}
 		
-		private function getSelectorFunction(id, button:LevelEditorButton):Function {
+		private function getSelectorFunction(id:Object, button:LevelEditorButton):Function {
 			return function():void {
 				selectedButton.toggle();
 				selectedButton = button;

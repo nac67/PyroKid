@@ -6,8 +6,8 @@ package pyrokid.graphics {
     import flash.geom.Matrix;
     import flash.geom.Rectangle;
     import flash.utils.Dictionary;
-    import physics.Vector2i;
-    import pyrokid.tools.Utils;
+    import Vector2i;
+    import Utils;
 	/**
      * ...
      * @author Cristian Zaloj

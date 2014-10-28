@@ -1,6 +1,6 @@
-package physics {
+package {
 	/**
-     * Cardinal Directions (0,1,2,3)
+     * 
      * @author Cristian Zaloj
      */
     public class Cardinal {

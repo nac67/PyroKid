@@ -2,7 +2,7 @@ package pyrokid.entities {
     import flash.display.MovieClip;
     import flash.display.Sprite;
     import pyrokid.Constants;
-    import physics.Vector2i;
+    import Vector2i;
     import flash.display.DisplayObject;
     import pyrokid.Embedded;
     import pyrokid.Level;

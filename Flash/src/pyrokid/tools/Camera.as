@@ -7,6 +7,8 @@ package pyrokid.tools {
      */
     public class Camera extends Sprite {
         private var world:Sprite;
+        private var scale:Number = 1.0;
+        private var baseScale:Number = 1.0;
         
         public function Camera(_world:Sprite) {
             world = _world;
@@ -34,10 +36,19 @@ package pyrokid.tools {
             return rotation;
         }
 
-        public function scaleCamera(s:Number):void {
-            scaleX *= s;
-            scaleY *= s;
+        public function set scaleCamera(s:Number):void {
+            scale = s;
+            scaleX = baseScale * scale;
+            scaleY = baseScale * scale;
         }
-    
+        public function get scaleCamera():Number {
+           return scale;
+        }
+        public function tareScale(s:Number):void {
+            scale = 1.0;
+            baseScale = s;
+            scaleX = baseScale;
+            scaleY = baseScale;
+        }
     }
 }

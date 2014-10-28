@@ -43,11 +43,11 @@ package pyrokid {
 			reset(recipe);
         }
 		
-		public function numCellsWide():int {
+		public function get numCellsWide():int {
 			return walls[0].length;
 		}
 		
-		public function numCellsTall():int {
+		public function get numCellsTall():int {
 			return walls.length;
 		}
 

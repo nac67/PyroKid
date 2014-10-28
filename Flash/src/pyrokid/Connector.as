@@ -1,11 +1,11 @@
 package pyrokid {
     import flash.display.Sprite;
     import flash.utils.Dictionary;
-    import physics.Cardinal;
-    import physics.Vector2i;
-    import physics.Vector2;
+    import Cardinal;
+    import Vector2i;
+    import Vector2;
     import pyrokid.entities.TileEntity;
-    import pyrokid.tools.Utils;
+    import Utils;
     
     public class Connector extends Sprite {
         

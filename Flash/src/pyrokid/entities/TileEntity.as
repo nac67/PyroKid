@@ -6,7 +6,7 @@ package pyrokid.entities {
 	import physics.*;
 	import pyrokid.*;
     import pyrokid.tools.HashSet;
-    import pyrokid.tools.Utils;
+    import Utils;
     import pyrokid.graphics.ConnectedSpriteBuilder;
 	
 	public class TileEntity extends GameEntity {

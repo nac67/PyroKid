@@ -1,7 +1,7 @@
 package pyrokid {
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
-    import physics.Vector2;
+    import Vector2;
     
     public class BriefClip extends MovieClip {
         

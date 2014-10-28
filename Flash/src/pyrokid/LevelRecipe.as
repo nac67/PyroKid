@@ -1,6 +1,6 @@
 package pyrokid {
-    import pyrokid.tools.Utils;
-    import physics.Cardinal;
+    import Utils;
+    import Cardinal;
     
     public class LevelRecipe {
         
@@ -27,6 +27,11 @@ package pyrokid {
 		/* All FreeEntities in the game. Each object is an array of
 		 * [cellX, cellY, objectType, . . . optional properties . . .] */
 		public var freeEntities:Array;
+        
+        /**
+         * CameraZone[]
+         */
+        public var cameraZones:Array;
         
         public static function generateTemplate(cellsWide:int, cellsTall:int):LevelRecipe {
             var rec:LevelRecipe = new LevelRecipe();

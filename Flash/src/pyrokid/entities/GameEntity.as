@@ -1,7 +1,7 @@
 package pyrokid.entities {
 	import flash.display.Sprite;
-    import physics.Vector2;
-    import physics.Vector2i;
+    import Vector2;
+    import Vector2i;
 	import pyrokid.Constants;
 	import pyrokid.Level;
 	
