@@ -306,37 +306,42 @@ package pyrokid {
             dragging = false;
             draggingRect.visible = false;
             
-			var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
-            var cellX:int = hitPoint.x / Constants.CELL;
-            var cellY:int = hitPoint.y / Constants.CELL;
-			if (cellX >= level.numCellsWide || cellY >= level.numCellsTall) {
-				return;
-			}
+            var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
             
-            // Object addition and removal
-			if (editMode != Constants.EDITOR_PROPERTIES_MODE) {
-                if (holdStart != null) {
-                    var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
-                    var highX = (cellX < holdStart.x ? holdStart.x : cellX);
-                    var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
-                    var highY = (cellY < holdStart.y ? holdStart.y : cellY);
-                    
-                    handleRectangle(lowX, highX, lowY, highY);
+            //If not clicking on buttons
+            if (hitPoint.x < 650) {
+                var cellX:int = hitPoint.x / Constants.CELL;
+                var cellY:int = hitPoint.y / Constants.CELL;
+                if (cellX >= level.numCellsWide || cellY >= level.numCellsTall) {
+                    return;
                 }
-			} 
+                
+                // Object addition and removal
+                if (editMode != Constants.EDITOR_PROPERTIES_MODE) {
+                    if (holdStart != null) {
+                        var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
+                        var highX = (cellX < holdStart.x ? holdStart.x : cellX);
+                        var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
+                        var highY = (cellY < holdStart.y ? holdStart.y : cellY);
+                        
+                        handleRectangle(lowX, highX, lowY, highY);
+                    }
+                } 
+                
+                // Object properties
+                else if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
+                    selectedCell = new Vector2i(cellX, cellY);
+                    selectedButton.reset();
+                    if (level.recipe.walls[cellY][cellX] < -1) {
+                        selectedButton.toggle();
+                    }
+                    selectedHighlighter.x = cellX * Constants.CELL * levelScale;
+                    selectedHighlighter.y = cellY * Constants.CELL * levelScale;
+                    selectedHighlighter.scaleX = levelScale;
+                    selectedHighlighter.scaleY = levelScale;
+                }
             
-            // Object properties
-            else if (level.recipe.walls[cellY][cellX] < -1 || level.recipe.walls[cellY][cellX] > 1) {
-                selectedCell = new Vector2i(cellX, cellY);
-                selectedButton.reset();
-                if (level.recipe.walls[cellY][cellX] < -1) {
-                    selectedButton.toggle();
-                }
-                selectedHighlighter.x = cellX * Constants.CELL * levelScale;
-                selectedHighlighter.y = cellY * Constants.CELL * levelScale;
-                selectedHighlighter.scaleX = levelScale;
-                selectedHighlighter.scaleY = levelScale;
-			}
+            }
             
             renderVisibleObjects();
 			level.reset(level.recipe);
@@ -385,7 +390,7 @@ package pyrokid {
                 
                 // Dirt should automerge with other dirt ALWAYS
                 if (typeSelected == Constants.WALL_TILE_CODE) {
-                    mergeRectangleTiles(level.recipe.tileEntities, 0, level.numCellsWide() - 1, 0, level.numCellsTall() - 1, function(coor:Vector2i, objCode:int):Boolean {
+                    mergeRectangleTiles(level.recipe.tileEntities, 0, level.numCellsWide - 1, 0, level.numCellsTall - 1, function(coor:Vector2i, objCode:int):Boolean {
                         // only merge if both cells are dirt
                         return objCode == Constants.WALL_TILE_CODE &&
                             level.recipe.walls[coor.y][coor.x] == Constants.WALL_TILE_CODE;
