@@ -28,6 +28,11 @@ package pyrokid {
 		 * [cellX, cellY, objectType, . . . optional properties . . .] */
 		public var freeEntities:Array;
         
+        /**
+         * CameraZone[]
+         */
+        public var cameraZones:Array;
+        
         public static function generateTemplate(cellsWide:int, cellsTall:int):LevelRecipe {
             var rec:LevelRecipe = new LevelRecipe();
             

@@ -1,9 +1,11 @@
 package pyrokid {
 	import flash.display.FrameLabel;
     import flash.display.Sprite;
+    import flash.events.Event;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.display.SimpleButton;
+    import flash.geom.Point;
 	import flash.text.TextField;
 	import flash.text.TextFieldType;
 	import flash.text.TextFormat;
@@ -22,7 +24,7 @@ package pyrokid {
         public var reloadLevel:Function;
         
         private var editMode:int;
-		private var numEditModes:int = 4;
+		private var numEditModes:int = 5;
         private var UI_Elements:Array; // All level editor UI elements
         private var cellsWidthInput:LevelEditorInput;
         private var cellsHeightInput:LevelEditorInput;
@@ -40,7 +42,8 @@ package pyrokid {
 		private var selectedHighlighter:Sprite;
 		private var selectedButton:LevelEditorButton;
 		private var noObjectSelectedSprite:Sprite;
-		
+        
+        
         
         public function LevelEditor(level:Level):void {
 			this.level = level;
@@ -48,7 +51,7 @@ package pyrokid {
             
             // Universal
             UI_Elements = [];
-			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Clumping Objects", "Connector Mode", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF, 0x555555]));
+			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Clumping Objects", "Connector Mode", "Object Properties", "Camera Zones"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF, 0x555555]));
 			cellsWidthInput = new LevelEditorInput("Map Width", level.numCellsWide, 650, 100, updateWidth);
 			cellsHeightInput = new LevelEditorInput("Map Height", level.numCellsTall, 650, 150, updateHeight);
             UI_Elements.push(cellsWidthInput, cellsHeightInput);
@@ -160,7 +163,6 @@ package pyrokid {
                 level.recipe.tileEntities.splice(newHeight);
 			}
 			level.recipe.walls = walls;
-			scaleAndResetLevel(width, newHeight);
 		}
 		
 		private function updateWidth(newWidth:int):void {
@@ -189,17 +191,16 @@ package pyrokid {
 				}
 			}
 			level.recipe.walls = walls;
-			scaleAndResetLevel(newWidth, height);
 		}
         
-        private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
-            levelScale = Math.min(1, 450 / (Constants.CELL * numCellsTall), 600 / (Constants.CELL * numCellsWide));
-			level.scaleX = level.scaleY = levelScale;
-            levelScale = levelScale;
-			selectedHighlighter.scaleX = levelScale;
-			selectedHighlighter.scaleY = levelScale;
-			level.reset(level.recipe);
-		}
+        //private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
+            //levelScale = Math.min(1, 450 / (Constants.CELL * numCellsTall), 600 / (Constants.CELL * numCellsWide));
+			//level.scaleX = level.scaleY = levelScale;
+            //levelScale = levelScale;
+			//selectedHighlighter.scaleX = levelScale;
+			//selectedHighlighter.scaleY = levelScale;
+			//level.reset(level.recipe);
+		//}
         
         // ----------------------Editor on off---------------------
 		
@@ -207,23 +208,25 @@ package pyrokid {
             Main.MainStage.addEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
             Main.MainStage.addEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
 			Main.MainStage.addEventListener(MouseEvent.MOUSE_UP, mouseUp);
+			Main.MainStage.addEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+            Main.MainStage.addEventListener(Event.ENTER_FRAME, update);
 			//Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			for (var i:int = 0; i < UI_Elements.length; i++) {
 				addChild(UI_Elements[i]);
 			}
-			scaleAndResetLevel(level.numCellsWide, level.numCellsTall);
 		}
 		
 		public function turnEditorOff():void {
             Main.MainStage.removeEventListener(MouseEvent.MOUSE_DOWN, mouseDown);
             Main.MainStage.removeEventListener(MouseEvent.MOUSE_MOVE, mouseMove);
 			Main.MainStage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
+            Main.MainStage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
+            Main.MainStage.removeEventListener(Event.ENTER_FRAME, update);
 			//Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			Utils.removeAllChildren(this);
 		}
 		
-		private function onKeyUp(e:KeyboardEvent):void 
-		{
+		private function onKeyUp(e:KeyboardEvent):void {
 			if (e.keyCode == Keyboard.O) { //o
 				trace("loading level");
 				LevelIO.loadLevel(reloadLevel);
@@ -237,22 +240,30 @@ package pyrokid {
 		
 		public function loadLevel(level:Level):void {
 			this.level = level;
-			scaleAndResetLevel(level.numCellsWide, level.numCellsTall);
             renderVisibleObjects();
 		}
 		
 		
+        public function update(e:Event = null):void {
+            if (editMode == 4) {
+                
+            }
+        }
 		// ----------------------Mouse Listeners---------------------
         
         private function mouseDown(event:MouseEvent):void {
             if (editMode != Constants.EDITOR_PROPERTIES_MODE){
+                var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
+                var cellX:int = hitPoint.x / Constants.CELL;
+                var cellY:int = hitPoint.y / Constants.CELL;
+                if (cellX < 0 || cellY < 0) {
+                    return;
+                }
                 dragging = true;
-                var cellX:int = event.stageX / (Constants.CELL * levelScale);
-                var cellY:int = event.stageY / (Constants.CELL * levelScale);
                 holdStart = new Vector2i(cellX, cellY);
                 draggingRect.scaleX = draggingRect.scaleY = levelScale;
-                draggingRect.x = cellX * (Constants.CELL * levelScale)
-                draggingRect.y = cellY * (Constants.CELL * levelScale)
+                draggingRect.x = cellX * (Constants.CELL * levelScale);
+                draggingRect.y = cellY * (Constants.CELL * levelScale);
             }
         }
         
@@ -282,8 +293,9 @@ package pyrokid {
             dragging = false;
             draggingRect.visible = false;
             
-			var cellX:int = event.stageX / (Constants.CELL * levelScale);
-			var cellY:int = event.stageY / (Constants.CELL * levelScale);
+			var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
+            var cellX:int = hitPoint.x / Constants.CELL;
+            var cellY:int = hitPoint.y / Constants.CELL;
 			if (cellX >= level.numCellsWide || cellY >= level.numCellsTall) {
 				return;
 			}
@@ -317,6 +329,30 @@ package pyrokid {
 			level.reset(level.recipe);
 		}
         
+        private function onKeyDown(e:KeyboardEvent):void {
+            switch(e.keyCode) {
+                case Keyboard.LEFT:
+                    level.x += Constants.CELL;
+                    break;
+                case Keyboard.RIGHT:
+                    level.x -= Constants.CELL;
+                    break;
+                case Keyboard.UP:
+                    level.y += Constants.CELL;
+                    break;
+                case Keyboard.DOWN:
+                    level.y -= Constants.CELL;
+                    break;
+                case Keyboard.Z:
+                    level.scaleX *= 1.2;
+                    level.scaleY *= 1.2;
+                    break;
+                case Keyboard.X:
+                    level.scaleX /= 1.2;
+                    level.scaleY /= 1.2;
+                    break;
+            }
+        }
         private function handleRectangle(lowX:int, highX:int, lowY:int, highY:int):void {
             if (editMode == Constants.EDITOR_OBJECT_MODE) {
                 for (var cx:int = lowX; cx <= highX; cx++) {
