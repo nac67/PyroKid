@@ -5,6 +5,9 @@ package physics {
      * @author Cristian Zaloj
      */
     public class PhysIsland {
+        // The Original Location Of The Island In The Tile Grid
+        public var tileOriginalLocation:Vector2i = new Vector2i();
+
         // The Location Of The Island In World For Relative Calculations
         public var globalAnchor:Vector2 = new Vector2();
         public var velocity:Vector2 = new Vector2();
