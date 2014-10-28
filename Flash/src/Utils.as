@@ -52,6 +52,26 @@ package  {
             return (cell+1) * Constants.CELL;
         }
         
+        /**
+         * Create A Multidimensional Array
+         * @param dimension Integer Array Specifying Size Of Each Dimension
+         */
+        public static function createMultiArray(dimensions:Array):Array {
+            // This Is A Bad Argument
+            if (dimensions == null || dimensions.length < 1) return null;
+            return createMultiArrayRec(0, dimensions);
+        }
+        private static function createMultiArrayRec(i:int, dimensions:Array):Array {
+            var a:Array = new Array(dimensions[i]);
+            if (i + 1 < dimensions.length) {
+                i++;
+                for (var j:int = 0; j < a.length; j++) {
+                    a[j] = createMultiArrayRec(i, dimensions);
+                }
+            }
+            return a;
+        }
+        
         public static function lerp(a:Number, b:Number, r:Number):Number {
             return a + r * (b - a);
         }
