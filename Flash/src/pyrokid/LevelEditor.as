@@ -73,8 +73,10 @@ package pyrokid {
 			UI_Elements.push(allObjectTypesButton);
             draggingRect = new Sprite();
             draggingRect.graphics.lineStyle(0, 0xFF00FF);
+            draggingRect.graphics.beginFill(0xffffff, 0.1);
             draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
-            UI_Elements.push(draggingRect);
+            draggingRect.graphics.endFill();
+            this.level.addChild(draggingRect);
 			
             // Edit mode 1: object properties
 			objectEditor = new Sprite();
@@ -99,6 +101,7 @@ package pyrokid {
             
             // Edit mode 0
             draggingRect.visible = false;
+            level.setChildIndex(draggingRect, level.numChildren - 1);
             allObjectTypesButton.visible = editMode == Constants.EDITOR_OBJECT_MODE;
             
             // Edit mode 1
@@ -129,7 +132,8 @@ package pyrokid {
 		}
         
         private function newLevel(event:MouseEvent):void {
-            reloadLevel(LevelRecipe.generateTemplate(16,12));
+            reloadLevel(LevelRecipe.generateTemplate(16, 12));
+            level.addChild(draggingRect);
         }
         
         private function updateHeight(newHeight:int):void {
@@ -222,6 +226,11 @@ package pyrokid {
 			Main.MainStage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
             Main.MainStage.removeEventListener(Event.ENTER_FRAME, update);
+            level.removeChild(draggingRect);
+            level.x = 0;
+            level.y = 0;
+            level.scaleX = 1;
+            level.scaleY = 1;
 			//Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			Utils.removeAllChildren(this);
 		}
@@ -240,6 +249,7 @@ package pyrokid {
 		
 		public function loadLevel(level:Level):void {
 			this.level = level;
+            this.level.addChild(draggingRect);
             renderVisibleObjects();
 		}
 		
@@ -261,16 +271,19 @@ package pyrokid {
                 }
                 dragging = true;
                 holdStart = new Vector2i(cellX, cellY);
-                draggingRect.scaleX = draggingRect.scaleY = levelScale;
-                draggingRect.x = cellX * (Constants.CELL * levelScale);
-                draggingRect.y = cellY * (Constants.CELL * levelScale);
+                draggingRect.x = cellX * (Constants.CELL);
+                draggingRect.y = cellY * (Constants.CELL);
+                draggingRect.width = Constants.CELL;
+                draggingRect.height = Constants.CELL;
+                draggingRect.visible = true;
             }
         }
         
         private function mouseMove(event:MouseEvent):void {
             if (editMode != Constants.EDITOR_PROPERTIES_MODE && dragging){
-                var cellX:int = event.stageX / (Constants.CELL * levelScale);
-                var cellY:int = event.stageY / (Constants.CELL * levelScale);
+                var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
+                var cellX:int = hitPoint.x / Constants.CELL;
+                var cellY:int = hitPoint.y / Constants.CELL;
                 
                 var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
                 var highX = (cellX < holdStart.x ? holdStart.x : cellX);
@@ -280,12 +293,12 @@ package pyrokid {
                 var w = highX - lowX + 1;
                 var h = highY - lowY + 1;
                 
-                draggingRect.x = lowX * Constants.CELL * levelScale;
-                draggingRect.y = lowY * Constants.CELL * levelScale;
-                draggingRect.width = w * (Constants.CELL * levelScale);
-                draggingRect.height = h * (Constants.CELL * levelScale);
+                draggingRect.x = lowX * Constants.CELL;
+                draggingRect.y = lowY * Constants.CELL;
+                draggingRect.width = w * (Constants.CELL);
+                draggingRect.height = h * (Constants.CELL);
                 
-                draggingRect.visible = w > 1 || h > 1;
+                draggingRect.visible = w >= 1 || h >= 1;
             }
         }
 		
@@ -327,20 +340,21 @@ package pyrokid {
             
             renderVisibleObjects();
 			level.reset(level.recipe);
+            level.addChild(draggingRect);
 		}
         
         private function onKeyDown(e:KeyboardEvent):void {
             switch(e.keyCode) {
-                case Keyboard.LEFT:
+                case Keyboard.A:
                     level.x += Constants.CELL;
                     break;
-                case Keyboard.RIGHT:
+                case Keyboard.D:
                     level.x -= Constants.CELL;
                     break;
-                case Keyboard.UP:
+                case Keyboard.W:
                     level.y += Constants.CELL;
                     break;
-                case Keyboard.DOWN:
+                case Keyboard.S:
                     level.y -= Constants.CELL;
                     break;
                 case Keyboard.Z:
