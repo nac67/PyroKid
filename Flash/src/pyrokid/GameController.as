@@ -198,7 +198,6 @@ package pyrokid {
         }
         
         private function resolveFreeEntityCollisions():void {
-            var playerDead:Boolean = false;
             for (var i:int = 0; i < level.enemies.length; i++) {
                 for (var j:int = i + 1; j < level.enemies.length; j++) {
                     if (level.enemies[i].isTouching(level.enemies[j])) {
@@ -210,6 +209,7 @@ package pyrokid {
                     if (level.enemies[i] is Exit) {
                         if (level.enemies[i].canExit()) {
                             playerWon = true;
+                            // TODO -- Aaron, exit can be bomb or hole
                         }
                     } else {
                         level.player.damageFromEnemyContact(level);
@@ -252,13 +252,9 @@ package pyrokid {
             });
 
             // ---------------------- End Game Conditions -------------------- //
-            playerDied = level.removeDead();
-            if (playerDied) {
-                if (Constants.GOD_MODE) {
-                    trace("you would have died!!!");
-                } else {
-                    fadeAndRestart();
-                }
+            level.removeDead();
+            if (level.playerLost) {
+                fadeAndRestart();
             }
             if (playerWon) {
                 LevelSelect.startAndSetLevel(LevelSelect.currLevel + 1)();

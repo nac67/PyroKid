@@ -118,7 +118,7 @@ package pyrokid.entities {
                 var xVelocity:int = (Math.random() * 75 + 25) * (Math.random() > 0.5 ? -1 : 1);
                 var constr:Class = Object(this).constructor;
                 var newClip:Sprite = new constr(level);
-                var clip:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), 90, true, true);
+                var clip:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), Constants.FADE_TIME, true, true);
                 level.briefClips.push(clip);
                 level.addChild(clip);
                 kill(level);

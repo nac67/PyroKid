@@ -38,6 +38,7 @@ package pyrokid {
         /* Variables for use throughout the playing of a level. */
 		public var frameCount:int = 0;
         public var dirty:Boolean = false; // whether dead items need to be cleared this frame
+        public var playerLost:Boolean = false;
         
         public function Level(recipe:Object):void {
 			reset(recipe);
@@ -215,6 +216,10 @@ package pyrokid {
                 if (o is DisplayObject) {
                     var dispObj = o as DisplayObject;
                     self.removeChild(dispObj);
+                    
+                    if (o.clip is Player) {
+                        playerLost = true;
+                    }
                 }
             });
         }
@@ -313,9 +318,9 @@ package pyrokid {
         }
         
         /* Removes dead items in the level and returns true iff the player died. */
-        public function removeDead():Boolean {
+        public function removeDead():void {
             if (!dirty) {
-                return false;
+                return;
             }
             var self:Level = this;
             
@@ -427,9 +432,7 @@ package pyrokid {
             
             if (player.isDead) {
                 removeChild(player);
-                return true;
             }
-            return false;
         }
     }
 
