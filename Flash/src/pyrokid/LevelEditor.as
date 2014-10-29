@@ -309,7 +309,7 @@ package pyrokid {
             var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
             
             //If not clicking on buttons
-            if (hitPoint.x < 650) {
+            if (event.stageX < 650) {
                 var cellX:int = hitPoint.x / Constants.CELL;
                 var cellY:int = hitPoint.y / Constants.CELL;
                 if (cellX >= level.numCellsWide || cellY >= level.numCellsTall) {
