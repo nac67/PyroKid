@@ -52,7 +52,7 @@ package pyrokid {
             if (smoosh) {
                 rotation += (velocity.x < 0 ? -5 : 5) + (velocity.x / 15);
             }    
-                
+            
             if (timeToEnd == -1) {
                 var mc:MovieClip = clip as MovieClip;
                 return mc.currentFrame == mc.totalFrames;

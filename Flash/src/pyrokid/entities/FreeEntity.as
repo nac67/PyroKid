@@ -108,6 +108,8 @@ package pyrokid.entities {
 		}
         
         public function update(level:Level):void {
+            // TODO try this with water bats or anything that is slightly in the air. Doesn't work
+            // because they're on different frames. -- Aaron, Nick, Cristian
             //if (!(this is Player) && isGrounded) {
                 //trace("grounded on frame: " + level.frameCount);
             //}
@@ -118,10 +120,8 @@ package pyrokid.entities {
                 var xVelocity:int = (Math.random() * 75 + 25) * (Math.random() > 0.5 ? -1 : 1);
                 var constr:Class = Object(this).constructor;
                 var newClip:Sprite = new constr(level);
-                var clip:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), Constants.FADE_TIME, true, true);
-                level.briefClips.push(clip);
-                level.addChild(clip);
-                kill(level);
+                var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), Constants.FADE_TIME, true, true);
+                kill(level, deathAnimation);
             }
         }
 		

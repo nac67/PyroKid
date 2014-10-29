@@ -85,6 +85,7 @@ package pyrokid.tools {
             return clamp(head - _size);
         }
         
+        // TODO isn't get a keyword? This doesn't seem valid -- Nick
         public function get(i:int):Object {
             var index:int = clamp(tail() + i);
             return buffer[index];

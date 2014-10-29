@@ -1,5 +1,6 @@
 package pyrokid.entities {
 	import flash.display.Sprite;
+    import pyrokid.BriefClip;
     import Vector2;
     import Vector2i;
 	import pyrokid.Constants;
@@ -12,9 +13,13 @@ package pyrokid.entities {
         private var _isDead:Boolean = false;
         public var velocity:Vector2 = new Vector2();
         
-        public function kill(level:Level):void {
+        public function kill(level:Level, deathAnimation:BriefClip = null):void {
             _isDead = true;
             level.dirty = true;
+            if (deathAnimation != null) {
+                level.briefClips.push(deathAnimation);
+                level.addChild(deathAnimation);
+            }
         }
         
         public function get ignitionTime():int {

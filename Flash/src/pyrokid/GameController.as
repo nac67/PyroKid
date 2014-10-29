@@ -6,6 +6,7 @@ package pyrokid {
     import flash.utils.ByteArray;
     import flash.net.FileReference;
     import flash.events.KeyboardEvent;
+    import flash.utils.Dictionary;
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.graphics.Camera.CameraController;
@@ -24,7 +25,6 @@ package pyrokid {
         public var editorMode:Boolean = false;
         private var levelEditor:pyrokid.LevelEditor;
         
-        private var playerDied:Boolean = false;
         private var playerWon:Boolean = false;
         
         // Camera for the level
@@ -132,7 +132,6 @@ package pyrokid {
         }
         
         private function fadeAndRestart():void {
-            playerDied = false;
             editorMode = false;
             reloadLevel(level.recipe);
         }
@@ -218,11 +217,41 @@ package pyrokid {
             }
         }
         
+        private function executeClipsAndDelayedFunctions():void {
+            level.briefClips.filter(function(o:Object):Boolean {
+               var mc:BriefClip = o as BriefClip;
+               if (mc.clip is Embedded.FireballFizzSWF) {
+                   Utils.moveInDirFacing(mc, Constants.FBALL_SPEED / 2);
+               }
+               return !mc.update();
+            });
+            var newDelayedFunctions:Dictionary = new Dictionary();
+            for (var o:Object in level.delayedFunctions) {
+                var func:Function = o as Function;
+                var framesLeft:int = level.delayedFunctions[func];
+                if (framesLeft <= 0) {
+                    func();
+                } else {
+                    newDelayedFunctions[func] = framesLeft - 1;
+                }
+            }
+            level.delayedFunctions = newDelayedFunctions;
+        }
+        
         // --------------------MAIN UPDATE LOOP-------------------- //
         private function update(event:Event):void {
             if (editorMode || isPaused) {
                 return;
             }
+            // ---------------------- Game Lose Conditions -------------------- //
+            if (level.gameOverState == Constants.GAME_OVER_FADING) {
+                executeClipsAndDelayedFunctions();
+                if (level.gameOverState == Constants.GAME_OVER_COMPLETE) {
+                    fadeAndRestart();
+                }
+                return;
+            }
+            
             level.frameCount += 1;
             level.dirty = false;
             
@@ -243,19 +272,10 @@ package pyrokid {
             
             // --------------------------- Visuals -------------------------- //
             centerOnPlayer(Constants.DT);
-            level.briefClips.filter(function(o:Object):Boolean {
-               var mc:BriefClip = o as BriefClip;
-               if (mc.clip is Embedded.FireballFizzSWF) {
-                   Utils.moveInDirFacing(mc, Constants.FBALL_SPEED / 2);
-               }
-               return !mc.update();
-            });
+            executeClipsAndDelayedFunctions();
 
-            // ---------------------- End Game Conditions -------------------- //
             level.removeDead();
-            if (level.playerLost) {
-                fadeAndRestart();
-            }
+            // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
                 LevelSelect.startAndSetLevel(LevelSelect.currLevel + 1)();
             }

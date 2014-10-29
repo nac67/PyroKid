@@ -46,7 +46,7 @@ package ui.playstates {
 			addChild(new LevelEditorButton(startAndSetLevel(11), 80, 40, 280, Main.MainStage.stageHeight/2, ["11"], [LevelEditorButton.upColor]));
 			addChild(new LevelEditorButton(startAndSetLevel(12), 80, 40, 380, Main.MainStage.stageHeight/2, ["12"], [LevelEditorButton.upColor]));
 			addChild(new LevelEditorButton(startAndSetLevel(13), 80, 40, 80, Main.MainStage.stageHeight*3/4, ["13"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(14), 80, 40, 80, Main.MainStage.stageHeight*3/4, ["14"], [LevelEditorButton.upColor]));
+			addChild(new LevelEditorButton(startAndSetLevel(14), 80, 40, 180, Main.MainStage.stageHeight*3/4, ["14"], [LevelEditorButton.upColor]));
 
 
 		}

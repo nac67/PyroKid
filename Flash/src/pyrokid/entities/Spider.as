@@ -15,13 +15,11 @@ package pyrokid.entities {
 		public override function ignite(level:Level, ignitionFrame:int):void {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
-                kill(level);
                 var die:MovieClip = new Embedded.SpiderDieSWF() as MovieClip;
                 die.scaleX = swf.scaleX;
                 die.scaleY = swf.scaleY;
-                var briefClip:BriefClip = new BriefClip(new Vector2(swf.x + x, swf.y + y), die);
-                level.addChild(briefClip);
-                level.briefClips.push(briefClip);
+                var deathAnimation:BriefClip = new BriefClip(new Vector2(swf.x + x, swf.y + y), die);
+                kill(level, deathAnimation);
             }
 		}
         

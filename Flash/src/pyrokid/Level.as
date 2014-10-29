@@ -20,6 +20,7 @@ package pyrokid {
         /* Items that don't have a physics representation. */
         public var projectiles:RingBuffer;
         public var briefClips:RingBuffer;
+        public var delayedFunctions:Dictionary;
 		public var background:CaveBackground;
         
         /* View objects that translate information between entities and physics objects. */
@@ -36,9 +37,9 @@ package pyrokid {
 		public var onFire:Array;
 		
         /* Variables for use throughout the playing of a level. */
-		public var frameCount:int = 0;
-        public var dirty:Boolean = false; // whether dead items need to be cleared this frame
-        public var playerLost:Boolean = false;
+		public var frameCount:int;
+        public var dirty:Boolean; // whether dead items need to be cleared this frame
+        public var gameOverState:int;
         
         public function Level(recipe:Object):void {
 			reset(recipe);
@@ -73,6 +74,10 @@ package pyrokid {
             islands = [];
 			islandViews = [];
             tileEntityGrid = Utils.newArrayOfSize(walls);
+            
+		    frameCount = 0;
+            dirty = false;
+            gameOverState = Constants.GAME_NOT_OVER;
             
             background = new CaveBackground(Utils.getW(walls), Utils.getH(walls));
             this.addChild(background);
@@ -218,10 +223,12 @@ package pyrokid {
                     self.removeChild(dispObj);
                     
                     if (o.clip is Player) {
-                        playerLost = true;
+                        gameOverState = Constants.GAME_OVER_COMPLETE;
                     }
                 }
             });
+            
+            delayedFunctions = new Dictionary();
         }
 		
         
@@ -430,8 +437,10 @@ package pyrokid {
                 return !tile.isDead;
             });
             
-            if (player.isDead) {
-                removeChild(player);
+            if (gameOverState == Constants.GAME_OVER_FADING) {
+                if (player.parent == this) {
+                    removeChild(player);
+                }
             }
         }
     }

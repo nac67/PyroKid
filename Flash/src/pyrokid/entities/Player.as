@@ -77,6 +77,17 @@ package pyrokid.entities {
             }
         }
         
+        public override function kill(level:Level, deathAnimation:BriefClip = null):void {
+            level.gameOverState = Constants.GAME_OVER_FADING;
+            if (deathAnimation == null) {
+                var delayedFunc:Function = function():void {
+                    level.gameOverState = Constants.GAME_OVER_COMPLETE;
+                }
+                level.delayedFunctions[delayedFunc] = Constants.FADE_TIME;
+            }
+            super.kill(level, deathAnimation);
+        }
+        
         public function damageFromEnemyContact(level:Level):void {
             kill(level);
         }

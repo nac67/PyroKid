@@ -427,12 +427,12 @@ package pyrokid {
                     }
                 }
             }
-            trace("walls:");
-            Utils.print2DArr(level.recipe.walls);
-            trace("island (connected) ids:");
-            Utils.print2DArr(level.recipe.islands);
-            trace("tile entities:");
-            Utils.print2DArr(level.recipe.tileEntities);
+            //trace("walls:");
+            //Utils.print2DArr(level.recipe.walls);
+            //trace("island (connected) ids:");
+            //Utils.print2DArr(level.recipe.islands);
+            //trace("tile entities:");
+            //Utils.print2DArr(level.recipe.tileEntities);
         }
         
         private function connect(coor:Vector2i, dir:int):void {

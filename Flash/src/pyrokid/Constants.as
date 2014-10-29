@@ -14,6 +14,9 @@ package pyrokid {
         public static var CELL:int = 50;
         
         public static var FADE_TIME:int = 60;
+        public static var GAME_NOT_OVER:int = 0;
+        public static var GAME_OVER_FADING:int = 1;
+        public static var GAME_OVER_COMPLETE:int = 2;
         
         // level editor constants
         public static var EDITOR_OBJECT_MODE:int = 0;
