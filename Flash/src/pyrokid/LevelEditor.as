@@ -52,8 +52,8 @@ package pyrokid {
             // Universal
             UI_Elements = [];
 			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Clumping Objects", "Connector Mode", "Object Properties", "Camera Zones"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF, 0x555555]));
-			cellsWidthInput = new LevelEditorInput("Map Width", level.numCellsWide, 650, 100, updateWidth);
-			cellsHeightInput = new LevelEditorInput("Map Height", level.numCellsTall, 650, 150, updateHeight);
+			cellsWidthInput = new LevelEditorInput("Map Width", level.cellWidth, 650, 100, updateWidth);
+			cellsHeightInput = new LevelEditorInput("Map Height", level.cellHeight, 650, 150, updateHeight);
             UI_Elements.push(cellsWidthInput, cellsHeightInput);
             UI_Elements.push(new LevelEditorButton(newLevel, 120, 25, 650, 460, ["New Level"], [LevelEditorButton.upColor, LevelEditorButton.overColor, LevelEditorButton.downColor]));
 			
@@ -312,7 +312,7 @@ package pyrokid {
             if (hitPoint.x < 650) {
                 var cellX:int = hitPoint.x / Constants.CELL;
                 var cellY:int = hitPoint.y / Constants.CELL;
-                if (cellX >= level.numCellsWide || cellY >= level.numCellsTall) {
+                if (cellX >= level.cellWidth || cellY >= level.cellHeight) {
                     return;
                 }
                 
@@ -390,7 +390,7 @@ package pyrokid {
                 
                 // Dirt should automerge with other dirt ALWAYS
                 if (typeSelected == Constants.WALL_TILE_CODE) {
-                    mergeRectangleTiles(level.recipe.tileEntities, 0, level.numCellsWide - 1, 0, level.numCellsTall - 1, function(coor:Vector2i, objCode:int):Boolean {
+                    mergeRectangleTiles(level.recipe.tileEntities, 0, level.cellWidth - 1, 0, level.cellHeight - 1, function(coor:Vector2i, objCode:int):Boolean {
                         // only merge if both cells are dirt
                         return objCode == Constants.WALL_TILE_CODE &&
                             level.recipe.walls[coor.y][coor.x] == Constants.WALL_TILE_CODE;

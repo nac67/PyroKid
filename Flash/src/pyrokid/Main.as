@@ -8,7 +8,8 @@ package pyrokid {
 	import ui.*;
     import physics.*;
     import pyrokid.entities.*;
-    import pyrokid.tools.*;
+    import pyrokid.tools.Key;
+    import pyrokid.dev.LevelEditor;
     
     public class Main extends Sprite {
 		
