@@ -35,12 +35,14 @@ package pyrokid.dev {
             var tMap:Object = new Object();
             tMap["1"] = (new Embedded.DirtMergeBMP() as Bitmap).bitmapData;
             tMap["2"] = (new Embedded.WoodMergeBMP() as Bitmap).bitmapData;
+            tMap["3"] = (new Embedded.MetalMergeBMP() as Bitmap).bitmapData;
             var cOpt:ConnectedSpriteOptions = new ConnectedSpriteOptions();
             cOpt.imageTileSize = 50;
             cOpt.spriteTileSize = 50;
             
             addToList(ConnectedSpriteBuilder.buildSprite([[1]], tMap, cOpt));
             addToList(ConnectedSpriteBuilder.buildSprite([[2]], tMap, cOpt));
+            addToList(ConnectedSpriteBuilder.buildSprite([[3]], tMap, cOpt));
             
             var mc:MovieClip;
             mc = new Embedded.OilSWF() as MovieClip;
