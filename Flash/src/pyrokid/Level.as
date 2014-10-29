@@ -43,14 +43,20 @@ package pyrokid {
 			reset(recipe);
         }
 		
-		public function get numCellsWide():int {
+		public function get cellWidth():int {
 			return walls[0].length;
 		}
-		
-		public function get numCellsTall():int {
+		public function get cellHeight():int {
 			return walls.length;
 		}
 
+        public function get worldWidth():int {
+            return cellWidth * Constants.CELL;
+        }
+        public function get worldHeight():int {
+            return cellHeight * Constants.CELL;
+        }
+        
         public function reset(recipe:Object):void {
             LevelRecipe.complete(recipe);
             Key.reset();

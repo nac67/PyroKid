@@ -10,6 +10,8 @@ package pyrokid {
     import pyrokid.entities.*;
     import pyrokid.graphics.Camera.CameraController;
     import pyrokid.tools.*;
+    import pyrokid.LevelEditor;
+    import pyrokid.dev.LevelEditor;
     import flash.ui.Keyboard;
 	import flash.utils.getTimer;
 	import ui.playstates.BasePlayState;
@@ -20,7 +22,7 @@ package pyrokid {
     public class GameController extends Sprite {
         
         public var editorMode:Boolean = false;
-        private var levelEditor:LevelEditor;
+        private var levelEditor:pyrokid.LevelEditor;
         
         private var playerDied:Boolean = false;
         private var playerWon:Boolean = false;
@@ -59,7 +61,8 @@ package pyrokid {
         
         private function initializeLevelAndEditor(levelRecipe:Object):void {
             reloadLevel(levelRecipe);
-            levelEditor = new LevelEditor(level);
+            levelEditor = new pyrokid.LevelEditor(level);
+            addChild(new pyrokid.dev.LevelEditor(level));
             levelEditor.reloadLevel = reloadLevel;
             addChild(levelEditor);
             addEventListener(Event.ENTER_FRAME, update);
@@ -146,7 +149,7 @@ package pyrokid {
             }
             
             // Update Camera
-            cameraController.update(focus, level, new Point(0, 0), new Point(level.numCellsWide * Constants.CELL, level.numCellsTall * Constants.CELL), dt, cZoom);
+            cameraController.update(focus, level, new Point(0, 0), new Point(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL), dt, cZoom);
         }
         
         private function handlePhysics():void {

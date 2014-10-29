@@ -19,7 +19,7 @@ package  {
 			new Vector2i(-1, 0),
 			new Vector2i(1, 0)
 		];
-        
+
         /**
          * Converts a coordinate from pixel-space to cell space,
          * truncating as necessary
@@ -310,6 +310,16 @@ package  {
 			return cellCoor * Constants.CELL;
 		}
     
+        public static function clampI(v:int, min:int, max:int):int { 
+            if (v < min) return min;
+            else if (v > max) return max;
+            else return v;
+        }
+        public static function clampF(v:Number, min:Number, max:Number):Number { 
+            if (v < min) return min;
+            else if (v > max) return max;
+            else return v;
+        }
     }
 
 }
