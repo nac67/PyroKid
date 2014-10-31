@@ -76,7 +76,7 @@ package pyrokid {
             draggingRect.graphics.beginFill(0xffffff, 0.1);
             draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
             draggingRect.graphics.endFill();
-            this.level.addChild(draggingRect);
+            UI_Elements.push(draggingRect);
 			
             // Edit mode 1: object properties
 			objectEditor = new Sprite();
@@ -96,12 +96,11 @@ package pyrokid {
 		}
         
         private function renderVisibleObjects():void {
-            cellsWidthInput.changeText(String(level.walls[0].length));
-            cellsHeightInput.changeText(String(level.walls.length));
+            //cellsWidthInput.changeText(String(level.walls[0].length));
+            //cellsHeightInput.changeText(String(level.walls.length));
             
             // Edit mode 0
             draggingRect.visible = false;
-            level.setChildIndex(draggingRect, level.numChildren - 1);
             allObjectTypesButton.visible = editMode == Constants.EDITOR_OBJECT_MODE;
             
             // Edit mode 1
@@ -167,9 +166,11 @@ package pyrokid {
                 level.recipe.tileEntities.splice(newHeight);
 			}
 			level.recipe.walls = walls;
+            level.reset(level.recipe);
 		}
 		
 		private function updateWidth(newWidth:int):void {
+            trace(newWidth);
 			if (newWidth < 1) {
 				trace("cannot set size to less than 1");
 				return;
@@ -195,16 +196,8 @@ package pyrokid {
 				}
 			}
 			level.recipe.walls = walls;
+            level.reset(level.recipe);
 		}
-        
-        //private function scaleAndResetLevel(numCellsWide:int, numCellsTall:int):void {
-            //levelScale = Math.min(1, 450 / (Constants.CELL * numCellsTall), 600 / (Constants.CELL * numCellsWide));
-			//level.scaleX = level.scaleY = levelScale;
-            //levelScale = levelScale;
-			//selectedHighlighter.scaleX = levelScale;
-			//selectedHighlighter.scaleY = levelScale;
-			//level.reset(level.recipe);
-		//}
         
         // ----------------------Editor on off---------------------
 		
