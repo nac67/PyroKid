@@ -255,7 +255,7 @@ package pyrokid {
                     // remove fireball from list, also delete from stage
                     projectiles.markForDeletion(projectile);
                     if (projectile is Fireball) {
-                        entity.ignite(this, frameCount);
+                        entity.ignite(this);
                     } else if (projectile is Waterball) {
                         // TODO extinguish fire -- Aaron
                         trace("sploosh!");
@@ -267,7 +267,7 @@ package pyrokid {
                     for each (var freeEntity:FreeEntity in enemies) {
                         if (freeEntity.isTouching(projectile)) {
                             projectiles.markForDeletion(projectile);
-                            freeEntity.ignite(this, frameCount);
+                            freeEntity.ignite(this);
                             break;
                         }
                     }

@@ -38,9 +38,9 @@ package pyrokid.entities {
             return velocity.x + velocity.y != 0;
         }
 		
-		public function ignite(level:Level, ignitionFrame:int):void {
+		public function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             if (!isOnFire()) {
-                _ignitionTime = ignitionFrame;
+                _ignitionTime = level.frameCount;
             }
 		}
         
@@ -53,10 +53,10 @@ package pyrokid.entities {
             var thisOnFire:Boolean = isOnFire();
             var entityOnFire:Boolean = entity.isOnFire();
             if (entityOnFire) {
-                ignite(level, level.frameCount);
+                ignite(level);
             }
             if (thisOnFire) {
-                entity.ignite(level, level.frameCount);
+                entity.ignite(level);
             }
         }
 	}

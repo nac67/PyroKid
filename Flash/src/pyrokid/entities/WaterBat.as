@@ -26,9 +26,9 @@ package pyrokid.entities {
             batHead.gotoAndStop(1);
         }
         
-        public override function ignite(level:Level, ignitionFrame:int):void {
+        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             if (!isOnFire()) {
-                super.ignite(level, ignitionFrame);
+                super.ignite(level);
                 kill(level);
                 //var die:MovieClip = new Embedded.SpiderDieSWF() as MovieClip;
                 //die.x = swf.x + x;

@@ -101,9 +101,9 @@ package pyrokid.entities {
             return _collisionCallback;
         }
         
-		public override function ignite(level:Level, ignitionFrame:int):void {
+		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             if (!isOnFire()) {
-                super.ignite(level, ignitionFrame);
+                super.ignite(level);
             }
 		}
         

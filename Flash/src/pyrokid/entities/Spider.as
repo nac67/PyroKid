@@ -12,9 +12,9 @@ package pyrokid.entities {
             super(level, swf, 0.8, 50, 50, 6, 17, 43, 32);
         }
         
-		public override function ignite(level:Level, ignitionFrame:int):void {
+		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             if (!isOnFire()) {
-                super.ignite(level, ignitionFrame);
+                super.ignite(level);
                 var die:MovieClip = new Embedded.SpiderDieSWF() as MovieClip;
                 die.scaleX = swf.scaleX;
                 die.scaleY = swf.scaleY;

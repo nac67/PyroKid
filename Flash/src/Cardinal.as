@@ -22,6 +22,13 @@ package {
         public static var PY:int = 3;
         
         public static var DIRECTIONS:Array = [NX, PX, NY, PY];
+        public static var DIRECTION_VECTORS:Array = [
+            new Vector2i(-1, 0), new Vector2i(1, 0), new Vector2i(0, -1), new Vector2i(0, 1)
+        ];
+        
+        public static function isValidDir(dir:int):Boolean {
+            return DIRECTIONS.indexOf(dir) != -1;
+        }
         
         public static function getOpposite(dir:int):int {
             switch (dir) {
@@ -34,13 +41,20 @@ package {
         }
         
         public static function getVector2i(dir:int):Vector2i {
-            switch (dir) {
-                case NX: return new Vector2i(-1, 0);
-                case PX: return new Vector2i(1, 0);
-                case NY: return new Vector2i(0, -1);
-                case PY: return new Vector2i(0, 1);
+            var vector:Vector2i = DIRECTION_VECTORS[dir];
+            if (vector == undefined) {
+                throw new Error("not a real direction");
             }
-            throw new Error("not a real direction");
+            return vector.copy();
+        }
+        
+        public static function getDir(vector:Vector2i):int {
+            for (var i:int = 0; i < DIRECTION_VECTORS.length; i++) {
+                if (vector.x == DIRECTION_VECTORS[i].x && vector.y == DIRECTION_VECTORS[i].y) {
+                    return i;
+                }
+            }
+            throw new Error("not a real direction vector");
         }
         
     }

@@ -19,9 +19,9 @@ package pyrokid.entities {
 			return mc;
 		}
         
-        public override function ignite(level:Level, ignitionFrame:int):void {
+        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             if (!isOnFire()) {
-                super.ignite(level, ignitionFrame);
+                super.ignite(level, coor, dir);
                 for each (var cellSprite:DisplayObject in cellSprites) {
                     addChild(cellSprite);
                 }

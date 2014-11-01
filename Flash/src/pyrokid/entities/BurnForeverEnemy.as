@@ -12,10 +12,10 @@ package pyrokid.entities {
             super(level, swf, 1, 60, 25, 25, 5, 35, 22);
         }
         
-		public override function ignite(level:Level, ignitionFrame:int):void {
+		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             var swfAsMC:MovieClip = swf as MovieClip;
             if (!isOnFire()) {
-                super.ignite(level, ignitionFrame);
+                super.ignite(level);
                 swfAsMC.gotoAndStop(2);
             }
 		}

@@ -9,7 +9,7 @@ package pyrokid.entities {
 			super(x, y, objCode);
 		}
         
-        public override function ignite(level:Level, ignitionFrame:int):void {
+        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             return;
 		}
         
