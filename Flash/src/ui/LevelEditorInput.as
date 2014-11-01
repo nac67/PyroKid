@@ -39,8 +39,8 @@ package ui {
 			addChild(input);
 			addChild(confirm);
 
-			input.addEventListener(FocusEvent.FOCUS_IN, enterFocus);
-			input.addEventListener(FocusEvent.FOCUS_OUT, exitFocus);
+			//input.addEventListener(FocusEvent.FOCUS_IN, enterFocus);
+			//input.addEventListener(FocusEvent.FOCUS_OUT, exitFocus);
 		}
 		
         public function changeText(txt:String):void {
