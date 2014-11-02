@@ -105,7 +105,13 @@ package pyrokid {
         public static var FiresplooshSWF:Class; //cast as MovieClip on instantiation
         
         [Embed(source='../../assets/swf/bombdoor.swf', symbol='BombAnim')]
-        public static var BombSWF:Class; //cast as MovieClip on instantiation
+        public static var Bomb2SWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/bombdoor.swf', symbol='BombRegular')]
+        public static var Bomb1SWF:Class; //cast as Sprite on instantiation
+        
+        [Embed(source='../../assets/swf/bombdoor.swf', symbol='BombHoleInWall')]
+        public static var Bomb3SWF:Class; //cast as Sprite on instantiation
         
         [Embed(source='../../assets/swf/spider.swf', symbol='Spider')]
         public static var SpiderSWF:Class; //cast as MovieClip on instantiation

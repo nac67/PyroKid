@@ -27,7 +27,7 @@ package pyrokid.dev {
         public static var Button4:Class;
         
         private var tabs:RadioButtons = new RadioButtons(64, 64, onButtonPress);
-        private var editors:Array = [];
+        //private var editors:Array = [];
         private var currentEditor:ACLevelEditorController = null;
         
         public function LevelEditor(l:Level) {
