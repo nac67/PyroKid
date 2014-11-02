@@ -62,7 +62,7 @@ package pyrokid {
         private function initializeLevelAndEditor(levelRecipe:Object):void {
             reloadLevel(levelRecipe);
             levelEditor = new pyrokid.LevelEditor(level);
-            //addChild(new pyrokid.dev.LevelEditor(level));
+            addChild(new pyrokid.dev.LevelEditor(level));
             levelEditor.reloadLevel = reloadLevel;
             addChild(levelEditor);
             addEventListener(Event.ENTER_FRAME, update);
