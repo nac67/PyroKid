@@ -7,9 +7,9 @@ package pyrokid.entities {
     public class BurnForeverEnemy extends BackAndForthEnemy {
         
         public function BurnForeverEnemy(level:Level) {
-            var swf:MovieClip = new Embedded.BurningManSWF() as MovieClip;
+            var swf:MovieClip = new Embedded.LizardSWF() as MovieClip;
             swf.gotoAndStop(1);
-            super(level, swf, 1, 60, 25, 25, 5, 35, 22);
+            super(level, swf, 1, 50, 40, 12, 8, 32, 29);
         }
         
 		public override function ignite(level:Level, ignitionFrame:int):void {

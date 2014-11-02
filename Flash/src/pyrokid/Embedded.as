@@ -122,6 +122,9 @@ package pyrokid {
         [Embed(source='../../assets/swf/BurningMan.swf', symbol='BurningMan')]
         public static var BurningManSWF:Class; //cast as MovieClip on instantiation
         
+        [Embed(source='../../assets/swf/Lizard.swf', symbol='Lizard')]
+        public static var LizardSWF:Class; //cast as MovieClip on instantiation
+        
         [Embed(source='../../assets/swf/oil.swf', symbol='Oil')]
         public static var OilSWF:Class; //cast as MovieClip on instantiation
         
