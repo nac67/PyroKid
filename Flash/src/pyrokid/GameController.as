@@ -15,6 +15,7 @@ package pyrokid {
     import pyrokid.dev.LevelEditor;
     import flash.ui.Keyboard;
 	import flash.utils.getTimer;
+	import ui.LevelsInfo;
 	import ui.playstates.BasePlayState;
 	import ui.playstates.PauseMenu;
 	import ui.playstates.StateController;
@@ -277,7 +278,7 @@ package pyrokid {
             level.removeDead();
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
-                LevelSelect.startAndSetLevel(LevelSelect.currLevel + 1)();
+                LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1)();
             }
         }
     
