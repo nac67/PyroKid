@@ -278,6 +278,7 @@ package pyrokid {
             level.removeDead();
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
+				LevelsInfo.checkAndUnlockNextLevel();
                 LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1)();
             }
         }

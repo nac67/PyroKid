@@ -7,8 +7,6 @@ package ui {
 	 */
 	public class LevelsInfo 
 	{
-		public static const totalNumberOfLevels = 14; //UPDATE THIS WHENEVER ADDING NEW LEVEL, USED FOR PAGES IN LEVEL SELECT
-		//TODO: just use the function below that returns number of levels?
 		public static var levelDict:Dictionary = new Dictionary();
 		levelDict[1] = Embedded.level1;
 		levelDict[2] = Embedded.level2;
@@ -36,7 +34,8 @@ package ui {
 		levelDict[24] = Embedded.level14;
 		
 		public static var currLevel:int = 1;
-		public static var maxCompletedLevel:int = 0; //TODO: LOAD THIS FROM SHAREDOBJECT
+		public static var maxUnlockedLevel:int = 1; //TODO: LOAD THIS FROM SHAREDOBJECT
+		public static var totalNumberOfLevels:int = -1;
 			
 		public function LevelsInfo() 
 		{
@@ -44,11 +43,26 @@ package ui {
 		}
 		
 		public static function getTotalNumberOfLevels():int {
-			var n:int = 0;
-			for (var key:* in levelDict) {
-				n++;
+			if (totalNumberOfLevels == -1) {
+				totalNumberOfLevels = 0;
+				for (var key:* in levelDict) {
+					totalNumberOfLevels++;
+				}
 			}
-			return n;
+			return totalNumberOfLevels;
+		}
+		
+		//Give this function the # of the level that was just won and it will unlock the next level if needed
+		public static function checkAndUnlockNextLevel():void {
+			if (currLevel == maxUnlockedLevel) maxUnlockedLevel++;
+		}
+		
+		//Give function a level # to determine if it is locked
+		//Returns true only if the level number EXISTS and it is not yet unlocked
+		// (The "exists" check is to make the game over screen come up after all levels are won
+		public static function isLevelLocked(levelNum:int):Boolean {
+			//return (levelNum <= getTotalNumberOfLevels) && (levelNum > maxUnlockedLevel);
+			return (levelDict[levelNum] != undefined) && (levelNum > maxUnlockedLevel);
 		}
 		
 	}
