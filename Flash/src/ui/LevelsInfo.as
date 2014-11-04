@@ -28,6 +28,17 @@ package ui {
 		public static var currLevel:int = 1;
 		public static var maxUnlockedLevel:int = 1; //TODO: LOAD THIS FROM SHAREDOBJECT
 		public static var totalNumberOfLevels:int = -1;
+        
+        public static var tutorialMessages = {
+            1: "Use the WASD keys to move. A and D walk and W jumps. Use ESC to pause.",
+            3: "Use an arrow key to charge up a fireball, then release the arrow key to launch it.",
+            4: "Certain blocks will behave differently to fire.",
+            5: "Remember, you can shoot up if you hold the up arrow key.\nLatches will hold objects together.",
+            8: "Sometimes you'll need to jump and shoot down at the same time",
+            9: "Persistence is key, press R to restart.",
+            10: "Remember, at any time, press R to restart.",
+            11: "Sometimes you have to make your own exit. Look for a bomb in the cave."
+        }
 			
 		public function LevelsInfo() {
 		}
