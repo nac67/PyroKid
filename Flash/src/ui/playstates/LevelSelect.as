@@ -3,6 +3,7 @@ package ui.playstates {
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import pyrokid.Constants;
+    import pyrokid.Constants;
 	import pyrokid.Embedded;
 	import pyrokid.Main;
 	import ui.buttons.LockedButton;
@@ -75,7 +76,7 @@ package ui.playstates {
 		}
 
         public static function startAndSetLevel(levelNum:int, levelWon:Boolean = false):Function {
-			if (LevelsInfo.isLevelLocked(levelNum)) { //if the level is locked, return empty function
+			if (LevelsInfo.isLevelLocked(levelNum) && !Constants.ALL_LEVELS_UNLOCKED) { //if the level is locked, return empty function
 				return function():void {
 					
 				}
