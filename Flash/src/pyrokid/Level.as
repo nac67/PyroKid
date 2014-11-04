@@ -222,7 +222,7 @@ package pyrokid {
                     var dispObj = o as DisplayObject;
                     self.removeChild(dispObj);
                     
-                    if (o.clip is Player) {
+                    if (o.clip is Player || o.clip is Embedded.PlayerDieFireSWF || o.clip is Embedded.PlayerDiePainSWF) {
                         gameOverState = Constants.GAME_OVER_COMPLETE;
                     }
                 }

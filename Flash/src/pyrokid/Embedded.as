@@ -104,6 +104,12 @@ package pyrokid {
         [Embed(source='../../assets/swf/player.swf', symbol='playerTorso')]
         public static var PlayerTorsoSWF:Class; //cast as MovieClip on instantiation
         
+        [Embed(source='../../assets/swf/player.swf', symbol='dieFire')]
+        public static var PlayerDieFireSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/player.swf', symbol='diePain')]
+        public static var PlayerDiePainSWF:Class; //cast as MovieClip on instantiation
+        
         [Embed(source='../../assets/swf/fireball.swf', symbol='fireball')]
         public static var FireballSWF:Class; //cast as MovieClip on instantiation
         
