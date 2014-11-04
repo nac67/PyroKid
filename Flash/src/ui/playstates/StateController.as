@@ -96,9 +96,9 @@ package ui.playstates {
 			display.addChild(new HowToPlayMenu());
 		}
 		
-		public static function displayPause(e:Event=null) {
-			display.addChild(new PauseMenu());
-		}
+		//public static function displayPause(e:Event=null) {
+			//display.addChild(new PauseMenu());
+		//}
 		
 		public static function displayOptions(e:Event=null) {
 			display.addChild(new OptionsMenu());

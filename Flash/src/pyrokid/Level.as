@@ -2,10 +2,15 @@ package pyrokid {
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
+    import flash.text.TextField;
+    import flash.text.TextFormat;
+    import flash.text.TextFormatAlign;
     import flash.utils.Dictionary;
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.*;
+    import ui.LevelsInfo;
+
     
     public class Level extends Sprite {
         
@@ -238,9 +243,37 @@ package pyrokid {
                 }
             });
             
+            addTutorialMessage();
+            
             delayedFunctions = new Dictionary();
         }
 		
+        private function addTutorialMessage():void {
+            if (LevelsInfo.tutorialMessages[LevelsInfo.currLevel] != undefined) {
+                var message:String = LevelsInfo.tutorialMessages[LevelsInfo.currLevel];
+                
+                //TODO: put this in a function, preferably in utils -- Evan, Nick
+                var textToAdd:TextField = new TextField();
+                textToAdd.width = 800;
+                textToAdd.height = 600;
+                textToAdd.text = message
+                textToAdd.y = 10;
+                textToAdd.x = 0
+                
+                if (format == null) {
+                    var format:TextFormat = new TextFormat();
+                    format.align = TextFormatAlign.CENTER;
+                    format.font = "Arial";
+                    format.size = 20;
+                    format.color = 0xFFFFFF;
+                }
+                textToAdd.selectable = false;
+                textToAdd.setTextFormat(format);
+                
+                addChild(textToAdd);
+                
+            }
+        }
         
         //////////////////////////////////
         //////////////////////////////////
