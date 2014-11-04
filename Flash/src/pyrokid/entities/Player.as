@@ -37,9 +37,9 @@ package pyrokid.entities {
         public function Player(level:Level) {
             super(level, 1, 28, 44);
             
-            this.glowVisible = true;
-            this.glowRadius = 30;
-            this.glow = 0;
+            //this.glowVisible = true;
+            //this.glowRadius = 30;
+            //this.glow = 0;
             
             
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
