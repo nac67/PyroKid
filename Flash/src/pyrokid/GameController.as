@@ -31,6 +31,7 @@ package pyrokid {
         // Camera for the level
         private var camera:Camera;
         private var cameraController:CameraController;
+        private var largeZoom:Number = 1.0;
         public var level:Level;
         
 		public var isPaused:Boolean = false;
@@ -157,6 +158,25 @@ package pyrokid {
                 cZoom = level.player.velocity.length / 100.0;
                 cZoom = 1.0 / Math.max(0.8, Math.min(1.0, cZoom));
             }
+            
+            if (Key.isDown(Keyboard.SPACE)) {
+                var min:Point = level.localToGlobal(new Point(0, 0));
+                var max:Point = level.localToGlobal(new Point(level.worldWidth, level.worldHeight));
+                
+                if (max.x <= (Constants.WIDTH + 5) &&
+                    max.y <= (Constants.HEIGHT + 5) &&
+                    min.x >= -5 &&
+                    min.y >= -5
+                    ) {
+                }
+                else {
+                    largeZoom *= 0.99;
+                }
+            }
+            else {
+                largeZoom = Utils.lerp(largeZoom, 1.0, 0.9);
+            }
+            cZoom *= largeZoom;
             
             // Update Camera
             cameraController.update(focus, level, new Point(0, 0), new Point(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL), dt, cZoom);
