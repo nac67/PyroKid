@@ -2,8 +2,10 @@ package  {
     import flash.display.DisplayObject;
     import flash.display.MovieClip;
     import flash.display.Sprite;
+	import flash.net.SharedObject;
     import flash.utils.Dictionary;
 	import physics.PhysBox;
+	import ui.LevelsInfo;
 	import Vector2;
 	import Vector2i;
 	import pyrokid.entities.*;
@@ -323,6 +325,21 @@ package  {
             else if (v > max) return max;
             else return v;
         }
+		
+		// ------------------- Shared Object Functions -------------------------------//
+		
+		public static function loadSavedData():void {
+			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
+			if (levelSO != undefined) {
+				if (levelSO.data.hasOwnProperty("maxUnlockedLevel")) LevelsInfo.maxUnlockedLevel = levelSO.data.maxUnlockedLevel;
+			}
+		}
+		public static function saveLevelData():void {
+			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
+			levelSO.data.maxUnlockedLevel = LevelsInfo.maxUnlockedLevel;
+			levelSO.flush();
+		}
+		
     }
 
 }

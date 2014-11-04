@@ -16,6 +16,7 @@ package pyrokid {
         public static var DEBUG:Boolean = false;
         public static var LEVEL_EDITOR_ENABLED:Boolean = true;
         public static var GOD_MODE:Boolean = false;
+		public static var ALL_LEVELS_UNLOCKED:Boolean = false;
         
 		public static var WIDTH:int = 800;
 		public static var HEIGHT:int = 600;

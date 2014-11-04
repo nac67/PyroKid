@@ -54,7 +54,10 @@ package ui {
 		
 		//Give this function the # of the level that was just won and it will unlock the next level if needed
 		public static function checkAndUnlockNextLevel():void {
-			if (currLevel == maxUnlockedLevel) maxUnlockedLevel++;
+			if (currLevel == maxUnlockedLevel) {
+				maxUnlockedLevel++;
+				Utils.saveLevelData();
+			}
 		}
 		
 		//Give function a level # to determine if it is locked
