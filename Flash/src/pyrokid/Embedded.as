@@ -83,6 +83,9 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/big_background.png")]
         public static var BGBMP:Class; //cast as Bitmap on instantiation
         
+        [Embed(source="../../assets/tile_art/rock.jpg")]
+        public static var RockBMP:Class;
+        
         [Embed(source='../../assets/swf/FireTile.swf', symbol='FireTile')]
         public static var FireTileSWF:Class; //cast as Sprite on instantiation
         
