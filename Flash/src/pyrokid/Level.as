@@ -130,6 +130,7 @@ package pyrokid {
                 entity.finalizeCells();
                 
                 parentIsland.addEntity(entity, globalAnchor);
+                entity.addEdges(recipe.edges);
                 
                 for each (var coor:Vector2i in coors) { // relative to global space
                     tileEntityGrid[coor.y][coor.x] = entity;

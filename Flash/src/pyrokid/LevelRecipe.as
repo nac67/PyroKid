@@ -12,26 +12,15 @@ package pyrokid {
         
         public var islands:Array;
         public var tileEntities:Array;
+        
+        public var edges:Array;
 		
 		/* Tile the player starts on. [cellX, cellY]. */
         public var playerStart:Array;
 		
-		/* All objects that consist of multiple cells. Each object is
-		 * an array of Vector2i. Example of two multiTiled objects:
-		 * [
-		 *     [(0, 4), (0, 5)],
-		 *     [(3, 2), (3, 3), (2, 3)]
-		 * ] */
-		public var multiTileObjects:Array;
-		
 		/* All FreeEntities in the game. Each object is an array of
 		 * [cellX, cellY, objectType, . . . optional properties . . .] */
 		public var freeEntities:Array;
-        
-        /**
-         * CameraZone[]
-         */
-        public var cameraZones:Array;
         
         public static function generateTemplate(cellsWide:int, cellsTall:int):LevelRecipe {
             var rec:LevelRecipe = new LevelRecipe();
@@ -39,6 +28,7 @@ package pyrokid {
             rec.islands = Utils.newArray(cellsWide, cellsTall);
             rec.tileEntities = Utils.newArray(cellsWide, cellsTall);
             rec.walls = Utils.newArray(cellsWide, cellsTall);
+            rec.edges = Utils.newArray(cellsWide, cellsTall);
             var id:int = 1;
             Utils.foreach(rec.walls, function(x:int, y:int, element:int):void {
                 var wall:Boolean = y == 0 || x == 0 || y == cellsTall - 1 || x == cellsWide - 1;
@@ -55,10 +45,10 @@ package pyrokid {
                     rec.islands[y][x] = 0;
                 }
                 rec.tileEntities[y][x] = objCode;
+                rec.edges[y][x] = 0;
             });
                          
             rec.playerStart = [1, cellsTall-2];
-            rec.multiTileObjects = [];
             rec.freeEntities = [];
                          
             return rec;
@@ -66,9 +56,6 @@ package pyrokid {
         
         // assumes walls is there, but checks everything else
         public static function complete(recipe:Object):void {
-            if (recipe.multiTileObjects == null) {
-                recipe.multiTileObjects = [];
-            }
             if (recipe.freeEntities == null) {
                 recipe.freeEntities = [];
             }
@@ -80,6 +67,12 @@ package pyrokid {
             }
             if (recipe.tileEntities == null) {
                 recipe.tileEntities = Utils.newArrayOfSize(recipe.walls);
+            }
+            if (recipe.edges == null) {
+                recipe.edges = Utils.newArrayOfSize(recipe.walls);
+                Utils.foreach(recipe.edges, function(x:int, y:int, element:int):void {
+                    recipe.edges[y][x] = 0;
+                });
             }
         }
     

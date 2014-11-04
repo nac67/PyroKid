@@ -138,6 +138,9 @@ package pyrokid {
         [Embed(source='../../assets/tile_art/Metal.png')]
         public static var MetalBMP:Class; //cast as Bitmap on instantiation
         
+        [Embed(source='../../assets/tile_art/metal_edge.png')]
+        public static var MetalEdgeBMP:Class; //cast as Bitmap on instantiation
+        
         [Embed(source='../../assets/swf/crosshair.swf', symbol='crosshair')]
         public static var CrosshairSWF:Class; //cast as MovieClip on instantiation
         

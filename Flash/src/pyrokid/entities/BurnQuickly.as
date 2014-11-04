@@ -21,6 +21,8 @@ package pyrokid.entities {
         
         public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             if (!isOnFire()) {
+                // TODO ignite should return boolean saying whether it was ignited. Only add
+                // sprites if ignited -- Aaron
                 super.ignite(level, coor, dir);
                 for each (var cellSprite:DisplayObject in cellSprites) {
                     addChild(cellSprite);

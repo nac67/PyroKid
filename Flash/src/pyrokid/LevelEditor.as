@@ -43,7 +43,10 @@ package pyrokid {
 		private var selectedButton:LevelEditorButton;
 		private var noObjectSelectedSprite:Sprite;
         
-        
+        private var rectLowX:int;
+        private var rectHighX:int;
+        private var rectLowY:int;
+        private var rectHighY:int;
         
         public function LevelEditor(level:Level):void {
 			this.level = level;
@@ -76,7 +79,8 @@ package pyrokid {
             draggingRect.graphics.beginFill(0xffffff, 0.1);
             draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
             draggingRect.graphics.endFill();
-            UI_Elements.push(draggingRect);
+            // TODO draggingRect should be in levelEditor, not in level!!!! But it crashes right now when I do this.
+            //UI_Elements.push(draggingRect);
 			
             // Edit mode 1: object properties
 			objectEditor = new Sprite();
@@ -100,11 +104,11 @@ package pyrokid {
             //cellsHeightInput.changeText(String(level.walls.length));
             
             // Edit mode 0
-            draggingRect.visible = false;
+            draggingRect.visible = editMode == Constants.EDITOR_PROPERTIES_MODE;
             allObjectTypesButton.visible = editMode == Constants.EDITOR_OBJECT_MODE;
             
             // Edit mode 1
-            objectEditor.visible = editMode == Constants.EDITOR_PROPERTIES_MODE;
+            objectEditor.visible = false;//editMode == Constants.EDITOR_PROPERTIES_MODE;
             var visible:Boolean = editMode == Constants.EDITOR_PROPERTIES_MODE && selectedCell == null;
             noObjectSelectedSprite.visible = visible;
             selectedHighlighter.visible = visible;
@@ -255,69 +259,68 @@ package pyrokid {
 		// ----------------------Mouse Listeners---------------------
         
         private function mouseDown(event:MouseEvent):void {
-            if (editMode != Constants.EDITOR_PROPERTIES_MODE){
-                var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
-                var cellX:int = hitPoint.x / Constants.CELL;
-                var cellY:int = hitPoint.y / Constants.CELL;
-                if (cellX < 0 || cellY < 0) {
-                    return;
-                }
-                dragging = true;
-                holdStart = new Vector2i(cellX, cellY);
-                draggingRect.x = cellX * (Constants.CELL);
-                draggingRect.y = cellY * (Constants.CELL);
-                draggingRect.width = Constants.CELL;
-                draggingRect.height = Constants.CELL;
-                draggingRect.visible = true;
+            var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
+            var cellX:int = hitPoint.x / Constants.CELL;
+            var cellY:int = hitPoint.y / Constants.CELL;
+            if (cellX < 0 || cellY < 0) {
+                return;
             }
+            dragging = true;
+            holdStart = new Vector2i(cellX, cellY);
+            draggingRect.x = cellX * (Constants.CELL);
+            draggingRect.y = cellY * (Constants.CELL);
+            draggingRect.width = Constants.CELL;
+            draggingRect.height = Constants.CELL;
+            draggingRect.visible = true;
         }
         
         private function mouseMove(event:MouseEvent):void {
-            if (editMode != Constants.EDITOR_PROPERTIES_MODE && dragging){
+            if (dragging){
                 var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
                 var cellX:int = hitPoint.x / Constants.CELL;
                 var cellY:int = hitPoint.y / Constants.CELL;
                 
-                var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
-                var highX = (cellX < holdStart.x ? holdStart.x : cellX);
-                var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
-                var highY = (cellY < holdStart.y ? holdStart.y : cellY);
+                rectLowX = (cellX < holdStart.x ? cellX : holdStart.x);
+                rectHighX = (cellX < holdStart.x ? holdStart.x : cellX);
+                rectLowY = (cellY < holdStart.y ? cellY : holdStart.y);
+                rectHighY = (cellY < holdStart.y ? holdStart.y : cellY);
                 
-                var w = highX - lowX + 1;
-                var h = highY - lowY + 1;
+                var w:int = rectHighX - rectLowX + 1;
+                var h:int = rectHighY - rectLowY + 1;
                 
-                draggingRect.x = lowX * Constants.CELL;
-                draggingRect.y = lowY * Constants.CELL;
+                draggingRect.x = rectLowX * Constants.CELL;
+                draggingRect.y = rectLowY * Constants.CELL;
                 draggingRect.width = w * (Constants.CELL);
                 draggingRect.height = h * (Constants.CELL);
                 
-                draggingRect.visible = w >= 1 || h >= 1;
+                //draggingRect.visible = w >= 1 || h >= 1;
+                draggingRect.visible = true;
             }
         }
 		
 		private function mouseUp(event:MouseEvent):void {
             dragging = false;
-            draggingRect.visible = false;
+            draggingRect.visible = editMode == Constants.EDITOR_PROPERTIES_MODE;
             
             var hitPoint:Point = level.globalToLocal(new Point(event.stageX, event.stageY));
+            var cellX:int = hitPoint.x / Constants.CELL;
+            var cellY:int = hitPoint.y / Constants.CELL;
+            if (cellX >= level.cellWidth || cellY >= level.cellHeight) {
+                return;
+            }
+            
+            rectLowX = (cellX < holdStart.x ? cellX : holdStart.x);
+            rectHighX = (cellX < holdStart.x ? holdStart.x : cellX);
+            rectLowY = (cellY < holdStart.y ? cellY : holdStart.y);
+            rectHighY = (cellY < holdStart.y ? holdStart.y : cellY);
             
             //If not clicking on buttons
             if (event.stageX < 650) {
-                var cellX:int = hitPoint.x / Constants.CELL;
-                var cellY:int = hitPoint.y / Constants.CELL;
-                if (cellX >= level.cellWidth || cellY >= level.cellHeight) {
-                    return;
-                }
                 
                 // Object addition and removal
                 if (editMode != Constants.EDITOR_PROPERTIES_MODE) {
                     if (holdStart != null) {
-                        var lowX = (cellX < holdStart.x ? cellX : holdStart.x);
-                        var highX = (cellX < holdStart.x ? holdStart.x : cellX);
-                        var lowY = (cellY < holdStart.y ? cellY : holdStart.y);
-                        var highY = (cellY < holdStart.y ? holdStart.y : cellY);
-                        
-                        handleRectangle(lowX, highX, lowY, highY);
+                        handleRectangle(rectLowX, rectHighX, rectLowY, rectHighY);
                     }
                 } 
                 
@@ -363,8 +366,36 @@ package pyrokid {
                     level.scaleX /= 1.2;
                     level.scaleY /= 1.2;
                     break;
+                case Keyboard.UP:
+                    addEdgeToTilesInRect(Cardinal.NY);
+                    break;
+                case Keyboard.DOWN:
+                    addEdgeToTilesInRect(Cardinal.PY);
+                    break;
+                case Keyboard.LEFT:
+                    addEdgeToTilesInRect(Cardinal.NX);
+                    break;
+                case Keyboard.RIGHT:
+                    addEdgeToTilesInRect(Cardinal.PX);
+                    break;
             }
         }
+        
+        private function addEdgeToTilesInRect(dir:int):void {
+            for (var cx:int = rectLowX; cx <= rectHighX; cx++) {
+                for (var cy:int = rectLowY; cy <= rectHighY; cy++) {
+                    if (Utils.inBounds(level.recipe.edges, cx, cy)) {
+                        var edgeBools:Array = Utils.getBooleansFromInt(level.recipe.edges[cy][cx]);
+                        edgeBools[dir] = !edgeBools[dir];
+                        level.recipe.edges[cy][cx] = Utils.getIntFromBooleans(edgeBools);
+                    }
+                }
+            }
+            // TODO don't add edge if empty thing there!!!
+            // TODO dragging rect isn't child of caller when this happens . . .
+            level.reset(level.recipe);
+        }
+        
         private function handleRectangle(lowX:int, highX:int, lowY:int, highY:int):void {
             if (editMode == Constants.EDITOR_OBJECT_MODE) {
                 for (var cx:int = lowX; cx <= highX; cx++) {

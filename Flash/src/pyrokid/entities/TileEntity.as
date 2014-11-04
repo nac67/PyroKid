@@ -110,7 +110,6 @@ package pyrokid.entities {
             
             var neighbors:HashSet = new HashSet();
             for each (var cell:Vector2i in cells) {
-                edges[cell.toString()] = [false, false, false, false];
                 for each (var neighborCoor:Vector2i in Utils.getNeighborCoors(cell.x, cell.y)) {
                     neighbors.add(neighborCoor);
                 }
@@ -120,6 +119,36 @@ package pyrokid.entities {
             }
             neighborCells = neighbors.toArray();
 		}
+        
+        // TODO TODO TODO change when island breaks apart
+        public function addEdges(levelRecipeEdges:Array):void {
+            for each (var cell:Vector2i in cells) {
+                var cellInGlobal:Vector2i = getGlobalAnchorAsVec2i().AddV(cell);
+                var edgeBools:Array = Utils.getBooleansFromInt(levelRecipeEdges[cellInGlobal.y][cellInGlobal.x]);
+                edges[cell.toString()] = edgeBools;
+                
+                if (edgeBools[Cardinal.NX]) {
+                    addEdge(cell.x * Constants.CELL, (cell.y + 1) * Constants.CELL, 270);
+                }
+                if (edgeBools[Cardinal.PX]) {
+                    addEdge((cell.x + 1) * Constants.CELL, cell.y * Constants.CELL, 90);
+                }
+                if (edgeBools[Cardinal.NY]) {
+                    addEdge(cell.x * Constants.CELL, cell.y * Constants.CELL, 0);
+                }
+                if (edgeBools[Cardinal.PY]) {
+                    addEdge((cell.x + 1) * Constants.CELL, (cell.y + 1) * Constants.CELL, 180);
+                }
+            }
+        }
+        
+        private function addEdge(x:int, y:int, rotation:int):void {
+            var edgeChild:Bitmap = new Embedded.MetalEdgeBMP() as Bitmap;
+            edgeChild.x = x;
+            edgeChild.y = y;
+            edgeChild.rotation = rotation;
+            addChild(edgeChild);
+        }
         
         public function spreadToNeighbors(level:Level):void {
             var fireGrid:Array = isMoving() ? parentIsland.tileEntityGrid : level.tileEntityGrid;
@@ -154,9 +183,19 @@ package pyrokid.entities {
          * ignited (coor param). */
 		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
             if (!isOnFire()) {
-                trace("ignited from direction " + dir + " at coor " + coor);
-                super.ignite(level);
-                level.onFire.push(this);
+                if (coor != null) {
+                    var coorEdges:Array = edges[coor.toString()];
+                    if (this is BurnQuickly) {
+                        //trace("coor: " + coor + ", dir: " + dir + ", edge: " + coorEdges[Cardinal.getOpposite(dir)]);
+                    }
+                    if (!coorEdges[Cardinal.getOpposite(dir)]) {
+                        super.ignite(level, coor, dir);
+                        level.onFire.push(this);
+                    }
+                } else {
+                    super.ignite(level);
+                    level.onFire.push(this);
+                }
             }
 		}
         
