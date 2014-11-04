@@ -4,6 +4,7 @@ package ui.playstates {
 	import flash.utils.ByteArray;
 	import pyrokid.*;
 	import flash.display.Sprite;
+	import ui.LevelsInfo;
 	import Utils;
 	import ui.LevelEditorButton;
 	/**
@@ -46,7 +47,9 @@ package ui.playstates {
 			display.addChild(new LevelSelect());
 		}
 		
-		public static function goToGame(level:Object, levelNum:int, levelWon:Boolean = false, editor:LevelEditor = null):Function {
+		public static function goToGame(level:Object, levelWon:Boolean = false, editor:LevelEditor = null):Function {
+			Utils.removeAllChildren(display);
+			
 			if (!(level is ByteArray || level is LevelRecipe)) {
 				throw new Error("tried to start gamecontroller with bad level input (says StateController)");
 			}
@@ -62,10 +65,14 @@ package ui.playstates {
 			return function():void {
 				Utils.removeAllChildren(display);
 				
-				currGameController = new GameController(level, levelNum);
+				currGameController = new GameController(level, LevelsInfo.currLevel);
 				display.addChild(currGameController);
 			}
 			
+		}
+		
+		public static function restartCurrLevel(e:Event = null):void {
+			StateController.goToGame(LevelsInfo.levelDict[LevelsInfo.currLevel])();
 		}
 		
 		public static function goToCompletedLevel(e:Event=null) {

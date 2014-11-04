@@ -15,6 +15,7 @@ package pyrokid {
     import pyrokid.dev.LevelEditor;
     import flash.ui.Keyboard;
 	import flash.utils.getTimer;
+	import ui.LevelsInfo;
 	import ui.playstates.BasePlayState;
 	import ui.playstates.PauseMenu;
 	import ui.playstates.StateController;
@@ -122,12 +123,10 @@ package pyrokid {
         }
         
         private function keyboardActionListener(e:KeyboardEvent):void {
-            if (e.keyCode == Keyboard.ESCAPE) {
-                StateController.goToMainMenu();
-            }
-			if (e.keyCode == Keyboard.SHIFT) {
+			if (e.keyCode == Keyboard.ESCAPE) {
 				if (isPaused) { //unpause game
 					pauseMenu.removeAllEventListeners();
+					Utils.removeAllChildren(pauseMenu);
 					removeChild(pauseMenu);
 				} else { //pause the game
 					pauseMenu = new PauseMenu();
@@ -295,7 +294,8 @@ package pyrokid {
             level.removeDead();
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
-                LevelSelect.startAndSetLevel(LevelSelect.currLevel + 1, true)();
+				LevelsInfo.checkAndUnlockNextLevel();
+                LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1, true)();
             }
         }
     

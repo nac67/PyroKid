@@ -171,6 +171,10 @@ package pyrokid {
 		[Embed(source="../../assets/sound/fireball-sound.mp3")]
 		private static var fireballSoundClass:Class;
 		public static var fireballSound:Sound = new fireballSoundClass();
+		
+		[Embed(source = "../../assets/swf/mainmenu.swf")]
+		public static var MainMenuSWF:Class;
+		
     }
 
 }

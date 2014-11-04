@@ -1,73 +1,98 @@
 package ui.playstates {
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import pyrokid.Embedded;
 	import pyrokid.Main;
+	import ui.buttons.LockedButton;
+	import ui.buttons.UnlockedButton;
 	import ui.LevelEditorButton;
+	import ui.LevelsInfo;
 	/**
 	 * ...
 	 * @author Evan Niederhoffer
 	 */
 	public class LevelSelect extends BasePlayState
 	{
+		//which page of levels are we currently displaying
+		private var curr_page:int = 0;
 		
-		private static var levelDict:Dictionary = new Dictionary();
-		levelDict[1] = Embedded.level1;
-		levelDict[2] = Embedded.level2;
-		levelDict[3] = Embedded.level3;
-		levelDict[4] = Embedded.level4;
-		levelDict[5] = Embedded.level5;
-		levelDict[6] = Embedded.level6;
-		levelDict[7] = Embedded.level7;
-		levelDict[8] = Embedded.level8;
-		levelDict[9] = Embedded.level9;
-		levelDict[10] = Embedded.level10;
-		levelDict[11] = Embedded.level11;
-		levelDict[12] = Embedded.level12;
-		levelDict[13] = Embedded.level13;
-		levelDict[14] = Embedded.level14;
-			
-		public static var currLevel:int;
-		
-		
-		public function LevelSelect() 
-		{
+		public function LevelSelect() {
 			super();
-			addChild(new LevelEditorButton(startAndSetLevel(1), 80, 40, 80, 10, ["1"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(2), 80, 40, 180, 10, ["2"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(3), 80, 40, 280, 10, ["3"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(4), 80, 40, 380, 10, ["4"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(5), 80, 40, 80, Main.MainStage.stageHeight/4, ["5"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(6), 80, 40, 180, Main.MainStage.stageHeight/4, ["6"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(7), 80, 40, 280, Main.MainStage.stageHeight/4, ["7"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(8), 80, 40, 380, Main.MainStage.stageHeight/4, ["8"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(9), 80, 40, 80, Main.MainStage.stageHeight/2, ["9"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(10), 80, 40, 180, Main.MainStage.stageHeight/2, ["10"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(11), 80, 40, 280, Main.MainStage.stageHeight/2, ["11"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(12), 80, 40, 380, Main.MainStage.stageHeight/2, ["12"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(13), 80, 40, 80, Main.MainStage.stageHeight*3/4, ["13"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(startAndSetLevel(14), 80, 40, 180, Main.MainStage.stageHeight*3/4, ["14"], [LevelEditorButton.upColor]));
-
-
+			displayLevelButtons();
 		}
 		
-		public static function startAndSetLevel(levelNum:int, levelWon:Boolean = false):Function {
-			return function():void {
-				
-				if (levelDict[levelNum] == undefined) {
-					StateController.goToCredits();
-				} else {
-					currLevel = levelNum;
-				
-					StateController.goToGame(levelDict[levelNum], levelNum, levelWon)();
+		private function displayLevelButtons():void {
+			addChild(defaultBackground);
+			
+			//offset for grid of buttons from the top left corner of the screen
+			var x_offset:int = 300;
+			var y_offset:int = 200;
+			
+			//how much space to leave between each button
+			var x_spacing:int = 100;
+			var y_spacing:int = 100;
+			
+			//how many buttons to have in a row and column per screen
+			var x_tiles:int = 3;
+			var y_tiles:int = 3;
+			
+			for (var x:int = 0; x < x_tiles; x++) {
+				for (var y:int = 0; y < y_tiles; y++) {
+					var curr_level_num:int = (curr_page * (x_tiles * y_tiles)) + (y * x_tiles + (x + 1));
+					if (LevelsInfo.levelDict[curr_level_num] != undefined) { //If this level exits, make the button
+						//var buttonString:String = LevelsInfo.isLevelLocked(curr_level_num) ? "" + curr_level_num + " (LOCKED)" : "" + curr_level_num;
+						//addChild(new LevelEditorButton(startAndSetLevel(curr_level_num), 80, 40, x_offset+(x_spacing*x), y_offset+(y_spacing*y), [buttonString], [LevelEditorButton.upColor]));
+						if (LevelsInfo.isLevelLocked(curr_level_num)) {
+							addButton(new LockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), function() {});
+						} else {
+							addButton(new UnlockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
+						}
+					}
 				}
-				
 			}
+			
+			
+			//display paging buttons
+			
+			if (curr_page > 0) addButton(new UnlockedButton("<", 100, 300), goToPreviousPage);
+			var max_level_displayed = (curr_page+1) * (x_tiles * y_tiles);
+			if (max_level_displayed < LevelsInfo.getTotalNumberOfLevels()) addButton(new UnlockedButton(">", 700, 300), goToNextPage);;
 		}
 		
-		public static function restartCurrLevel(e:Event = null):void {
-			StateController.goToGame(levelDict[currLevel], currLevel)();
+		private function goToPreviousPage(e:Event):void {
+			Utils.removeAllChildren(this);
+			curr_page--;
+			if (curr_page < 0) curr_page = 0;
+			displayLevelButtons();
 		}
+		private function goToNextPage(e:Event):void {
+			Utils.removeAllChildren(this);
+			curr_page++;
+			//if (curr_page < 0) curr_page = 0; //TODO: put in max_page logic
+			displayLevelButtons();
+		}
+
+        public static function startAndSetLevel(levelNum:int, levelWon:Boolean = false):Function {
+			if (LevelsInfo.isLevelLocked(levelNum)) { //if the level is locked, return empty function
+				return function():void {
+					
+				}
+			} else { //otherwise, function will either activate the level or go to GAME COMPLETE screen
+				return function():void { 
+					var levelDict:Dictionary = LevelsInfo.levelDict;
+					
+					if (levelDict[levelNum] == undefined) {
+						StateController.goToCredits();
+					} else {
+						LevelsInfo.currLevel = levelNum;
+						StateController.goToGame(levelDict[levelNum], levelWon)();
+					}
+					
+				}
+			}			
+		}
+		
 		
 	}
 
