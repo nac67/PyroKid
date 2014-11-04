@@ -13,7 +13,7 @@ package ui.playstates {
 			super();
 			
 			
-			addCenteredTextToScreen("Options stuff goes here!");
+			//addTextToScreen("Options stuff goes here!");
 			addChild(new LevelEditorButton(goToPreviousScreen(), 80, 40, 0,0, ["Return"], [LevelEditorButton.upColor]));
 
 		}

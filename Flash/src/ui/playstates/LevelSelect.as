@@ -29,7 +29,7 @@ package ui.playstates {
 			addChild(defaultBackground);
 			
 			//offset for grid of buttons from the top left corner of the screen
-			var x_offset:int = 270;
+			var x_offset:int = 300;
 			var y_offset:int = 200;
 			
 			//how much space to leave between each button
@@ -58,9 +58,9 @@ package ui.playstates {
 			
 			//display paging buttons
 			
-			if (curr_page > 0) addButton(new UnlockedButton("<", 20, 300), goToPreviousPage);
+			if (curr_page > 0) addButton(new UnlockedButton("<", 100, 300), goToPreviousPage);
 			var max_level_displayed = (curr_page+1) * (x_tiles * y_tiles);
-			if (max_level_displayed < LevelsInfo.getTotalNumberOfLevels()) addButton(new UnlockedButton(">", 780, 300), goToNextPage);;
+			if (max_level_displayed < LevelsInfo.getTotalNumberOfLevels()) addButton(new UnlockedButton(">", 700, 300), goToNextPage);;
 		}
 		
 		private function goToPreviousPage(e:Event):void {

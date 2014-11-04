@@ -16,7 +16,7 @@ package ui.playstates {
 		{
 			super();
 			
-			addCenteredTextToScreen("Use WASD to walk and jump.\nUse arrow keys to aim and shoot fire.");
+			//addTextToScreen("Use WASD to walk and jump.\nUse arrow keys to aim and shoot fire.");
 			
 			addChild(new LevelEditorButton(goToPreviousScreen(), 80, 40, 0,0, ["Return"], [LevelEditorButton.upColor]));
 		}

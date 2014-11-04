@@ -1,5 +1,6 @@
 package ui.playstates {
 	import pyrokid.Main;
+	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
 	/**
 	 * ...
@@ -13,9 +14,10 @@ package ui.playstates {
 			super();
 			
 			
-			addCenteredTextToScreen("Created by:\n\nNick Cheng\nMichelle Liu\nAaron Nelson\nEvan Niederhoffer\nCristian Zaloj");
+			addTextToScreen("Created by:\n\nNick Cheng\nMichelle Liu\nAaron Nelson\nEvan Niederhoffer\nCristian Zaloj",200,200,400,300);
 			
-			addChild(new LevelEditorButton(StateController.goToMainMenu, 80, 40, Main.MainStage.stageWidth/2,Main.MainStage.stageHeight-100, ["Main Menu"], [LevelEditorButton.upColor]));
+			addButton(new MenuButton("Back", 400, 500), StateController.goToMainMenu);
+			//addChild(new LevelEditorButton(StateController.goToMainMenu, 80, 40, Main.MainStage.stageWidth/2,Main.MainStage.stageHeight-100, ["Main Menu"], [LevelEditorButton.upColor]));
 		}
 		
 	}

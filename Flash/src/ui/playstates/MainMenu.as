@@ -25,8 +25,8 @@ package ui.playstates {
 			
 			addChild(new Embedded.MainMenuSWF());
 			addButton(new MenuButton("Start Game", 600, 350), StateController.goToLevelSelect);
-			addButton(new MenuButton("Instructions", 600, 400), StateController.displayHowToPlay);
-			addButton(new MenuButton("Options", 600, 450), StateController.displayOptions);
+			//addButton(new MenuButton("Instructions", 600, 400), StateController.displayHowToPlay);
+			//addButton(new MenuButton("Options", 600, 450), StateController.displayOptions);
 			addButton(new MenuButton("Credits", 600, 500), StateController.goToCredits);
 			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 260, ["Level Select"], [LevelEditorButton.upColor]));
 			//addChild(new LevelEditorButton(StateController.displayHowToPlay, 80, 40, Main.MainStage.stageWidth / 2, 320, ["How to Play"], [LevelEditorButton.upColor]));

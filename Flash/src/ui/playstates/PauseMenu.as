@@ -1,6 +1,8 @@
 package ui.playstates {
 	import flash.display.Shape;
 	import flash.events.Event;
+	import flash.text.TextFormat;
+	import flash.text.TextFormatAlign;
 	import pyrokid.Main;
 	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
@@ -21,10 +23,17 @@ package ui.playstates {
 			defaultBackground.graphics.endFill(); // not always needed but I like to put it in to end the fill
 			addChild(defaultBackground); // adds the rectangle to the stage
 			
+			var pauseTextFormat:TextFormat = new TextFormat();
+			pauseTextFormat.size = 60;
+			pauseTextFormat.align = TextFormatAlign.CENTER;
+			pauseTextFormat.font = "Arial";
+			pauseTextFormat.color = 0xFFFFFF;
+			addTextToScreen("PAUSED", 800, 100, 400, 70, pauseTextFormat);
+			
 			addButton(new MenuButton("Restart Level", 400, 200), StateController.restartCurrLevel);
-			addButton(new MenuButton("Level Select", 400,250), StateController.goToLevelSelect);
-			addButton(new MenuButton("Options", 400,300), StateController.displayOptions);
-			addButton(new MenuButton("Main Menu", 400,350), StateController.goToMainMenu);
+			addButton(new MenuButton("Levels", 400,250), StateController.goToLevelSelect);
+			//addButton(new MenuButton("Options", 400,300), StateController.displayOptions);
+			addButton(new MenuButton("Main Menu", 400,300), StateController.goToMainMenu);
 			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 200, ["Resume"], [LevelEditorButton.upColor]));
 			//addChild(new LevelEditorButton(StateController.restartCurrLevel, 80, 40, Main.MainStage.stageWidth / 2, 260, ["Restart Level"], [LevelEditorButton.upColor]));
 			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 320, ["Level Select"], [LevelEditorButton.upColor]));

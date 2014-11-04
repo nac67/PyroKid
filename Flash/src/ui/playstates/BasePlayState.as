@@ -51,17 +51,21 @@ package ui.playstates {
 		   listenersArray = null
 		}
 		
-		public function addCenteredTextToScreen(text:String):void {
+		public function addTextToScreen(text:String,w:int,h:int,x:int,y:int,format:TextFormat=null):void {
 			var textToAdd:TextField = new TextField();
-			textToAdd.width = Main.MainStage.stageWidth;
-			textToAdd.height = Main.MainStage.stageHeight;
+			textToAdd.width = w;
+			textToAdd.height = h;
 			textToAdd.text = String(text);
-			textToAdd.y = Main.MainStage.stageHeight / 4;
+			textToAdd.y = y - h/2;
+			textToAdd.x = x - w/2;
 			
-			var format:TextFormat = new TextFormat();
-			format.align = TextFormatAlign.CENTER;
-			format.font = "Arial";
-			format.size = 15;
+			if (format == null) {
+				var format:TextFormat = new TextFormat();
+				format.align = TextFormatAlign.CENTER;
+				format.font = "Arial";
+				format.size = 15;
+				format.color = 0xFFFFFF;
+			}
 			textToAdd.setTextFormat(format);
 			
 			addChild(textToAdd);
