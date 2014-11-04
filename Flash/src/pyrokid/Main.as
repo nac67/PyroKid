@@ -14,6 +14,7 @@ package pyrokid {
     public class Main extends Sprite {
 		
 		public static var MainStage:Stage;
+        public static var logging:Logging;
 		
 		private var curr_state:int;        
 		
@@ -26,6 +27,10 @@ package pyrokid {
         
         private function init(e:Event = null):void {
             // entry point
+            logging = new Logging(100, 1, true);
+            addChild(logging);
+            logging.recordPageLoad("xyz");
+            
 			MainStage = stage;
             Key.init(stage);
             Constants.switchControlScheme(0);

@@ -43,6 +43,9 @@ package pyrokid {
         
         public function Level(recipe:Object):void {
 			reset(recipe);
+            Main.logging.recordLevelStart(1, "herp derp");
+            Main.logging.recordEvent(1, 2, "this is an event");
+            Main.logging.recordLevelEnd();
         }
 		
 		public function get cellWidth():int {

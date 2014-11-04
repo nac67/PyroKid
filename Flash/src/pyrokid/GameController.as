@@ -62,7 +62,7 @@ package pyrokid {
         private function initializeLevelAndEditor(levelRecipe:Object):void {
             reloadLevel(levelRecipe);
             levelEditor = new pyrokid.LevelEditor(level);
-            addChild(new pyrokid.dev.LevelEditor(level));
+            //addChild(new pyrokid.dev.LevelEditor(level));
             levelEditor.reloadLevel = reloadLevel;
             addChild(levelEditor);
             addEventListener(Event.ENTER_FRAME, update);
@@ -105,7 +105,9 @@ package pyrokid {
                     LevelIO.saveLevel(level.recipe);
                 }
             } else {
-                
+                if (e.keyCode == Keyboard.R) {
+                    restartLevel();
+                }
             }
         }
         
@@ -131,7 +133,7 @@ package pyrokid {
             }
         }
         
-        private function fadeAndRestart():void {
+        private function restartLevel():void {
             editorMode = false;
             reloadLevel(level.recipe);
         }
@@ -247,7 +249,7 @@ package pyrokid {
             if (level.gameOverState == Constants.GAME_OVER_FADING) {
                 executeClipsAndDelayedFunctions();
                 if (level.gameOverState == Constants.GAME_OVER_COMPLETE) {
-                    fadeAndRestart();
+                    restartLevel();
                 }
                 return;
             }
