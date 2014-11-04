@@ -36,9 +36,7 @@ package pyrokid.entities {
                 var explode:MovieClip = new Embedded.Bomb2SWF() as MovieClip;
                 var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), explode);
                 level.briefClips.push(deathAnimation);
-                level.addChild(deathAnimation);
-                
-                trace("exit ignited");
+                level.addChild(deathAnimation);                
             }
 		}
         
@@ -49,7 +47,6 @@ package pyrokid.entities {
             if (currentFrame - ignitionTime == Constants.SPREAD_RATE) {
                 _canExit = true;
                 _ignitionTime = -1;
-                trace("exit here");
             }
         }
         

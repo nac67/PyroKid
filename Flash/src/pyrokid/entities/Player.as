@@ -78,11 +78,11 @@ package pyrokid.entities {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
                 onFireSprite.visible = true;
-                kill(level);
+                kill(level, null, Constants.DEATH_BY_FIRE);
             }
         }
         
-        public override function kill(level:Level, deathAnimation:BriefClip = null):void {
+        public override function kill(level:Level, deathAnimation:BriefClip = null, method:String = ""):void {
             level.gameOverState = Constants.GAME_OVER_FADING;
             if (deathAnimation == null) {
                 var delayedFunc:Function = function():void {
@@ -90,11 +90,14 @@ package pyrokid.entities {
                 }
                 level.delayedFunctions[delayedFunc] = Constants.FADE_TIME;
             }
+            var center:Vector2i = getCenter();
+            Main.log.logDeath(Utils.realToCell(center.x), Utils.realToCell(center.y), method, level.frameCount);
+            Main.log.logEndLevel();
             super.kill(level, deathAnimation);
         }
         
         public function damageFromEnemyContact(level:Level):void {
-            kill(level);
+            kill(level, null, Constants.DEATH_BY_ENEMY);
         }
         
         public override function update(level:Level):void {

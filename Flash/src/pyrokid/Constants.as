@@ -6,7 +6,15 @@ package pyrokid {
     import pyrokid.tools.*;
     
     public class Constants {
+        // LOGGING
+        public static var TEAM_ID:int = 100;
+        public static var VERSION_ID:int = 1;
+        public static var DO_LOGGING:Boolean = true;
+        
+        public static var ERROR_MESSAGE:String = "STOP. This should never happen: ";
+        
         public static var DEBUG:Boolean = false;
+        public static var LEVEL_EDITOR_ENABLED:Boolean = false;
         public static var GOD_MODE:Boolean = false;
         
 		public static var WIDTH:int = 800;
@@ -17,6 +25,12 @@ package pyrokid {
         public static var GAME_NOT_OVER:int = 0;
         public static var GAME_OVER_FADING:int = 1;
         public static var GAME_OVER_COMPLETE:int = 2;
+        
+        public static var DEATH_BY_ENEMY:String = "enemy";
+        public static var DEATH_BY_FIRE:String = "fire";
+        public static var DEATH_BY_SMOOSH:String = "smoosh";
+        public static var DEATH_BY_FALLING:String = "fall";
+        public static var DEATH_BY_RESTART:String = "leave";
         
         // level editor constants
         public static var EDITOR_OBJECT_MODE:int = 0;

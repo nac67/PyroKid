@@ -41,11 +41,8 @@ package pyrokid {
         public var dirty:Boolean; // whether dead items need to be cleared this frame
         public var gameOverState:int;
         
-        public function Level(recipe:Object):void {
-			reset(recipe);
-            Main.logging.recordLevelStart(1, "herp derp");
-            Main.logging.recordEvent(1, 2, "this is an event");
-            Main.logging.recordLevelEnd();
+        public function Level(recipe:Object, levelNum:int):void {
+			reset(recipe, levelNum);
         }
 		
 		public function get cellWidth():int {
@@ -62,7 +59,8 @@ package pyrokid {
             return cellHeight * Constants.CELL;
         }
         
-        public function reset(recipe:Object):void {
+        public function reset(recipe:Object, levelNum:int = -1):void {
+            Main.log.logBeginLevel(levelNum);
             LevelRecipe.complete(recipe);
             Key.reset();
             frameCount = 0;
@@ -259,6 +257,7 @@ package pyrokid {
                     projectiles.markForDeletion(projectile);
                     if (projectile is Fireball) {
                         entity.ignite(this, frameCount);
+                        Main.log.logFireballIgnite(cellX, cellY, Object(entity).constructor);
                     } else if (projectile is Waterball) {
                         // TODO extinguish fire -- Aaron
                         trace("sploosh!");
@@ -271,6 +270,7 @@ package pyrokid {
                         if (freeEntity.isTouching(projectile)) {
                             projectiles.markForDeletion(projectile);
                             freeEntity.ignite(this, frameCount);
+                            Main.log.logFireballIgnite(cellX, cellY, Object(freeEntity).constructor);
                             break;
                         }
                     }

@@ -4,6 +4,7 @@ package pyrokid {
     import flash.events.Event;
 	import flash.events.MouseEvent;
     import flash.utils.ByteArray;
+    import pyrokid.tools.LogMaster;
 	import ui.playstates.StateController;
 	import ui.*;
     import physics.*;
@@ -14,7 +15,7 @@ package pyrokid {
     public class Main extends Sprite {
 		
 		public static var MainStage:Stage;
-        public static var logging:Logging;
+        public static var log:LogMaster;
 		
 		private var curr_state:int;        
 		
@@ -27,9 +28,7 @@ package pyrokid {
         
         private function init(e:Event = null):void {
             // entry point
-            logging = new Logging(100, 1, true);
-            addChild(logging);
-            logging.recordPageLoad("xyz");
+            log = new LogMaster();
             
 			MainStage = stage;
             Key.init(stage);
