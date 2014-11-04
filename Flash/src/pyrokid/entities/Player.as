@@ -56,6 +56,7 @@ package pyrokid.entities {
             aimSWF.x = getCenterLocal().x;
             aimSWF.y = getCenterLocal().y;
             aimSWF.scaleX = aimSWF.scaleY = .7;
+            aimSWF.alpha = 0;
             addChild(aimSWF);
             
             this._width = width;
