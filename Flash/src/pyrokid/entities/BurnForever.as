@@ -23,8 +23,7 @@ package pyrokid.entities {
             if (!isOnFire()) {
                 super.ignite(level, ignitionFrame);
                 for each (var cellSprite:DisplayObject in cellSprites) {
-                    var mc:MovieClip = cellSprite as MovieClip;
-                    mc.gotoAndStop(2);
+                    addChild(cellSprite);
                 }
             }
 		}
