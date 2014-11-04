@@ -24,7 +24,7 @@ package pyrokid {
         public var reloadLevel:Function;
         
         private var editMode:int;
-		private var numEditModes:int = 5;
+		private var numEditModes:int = 4;
         private var UI_Elements:Array; // All level editor UI elements
         private var cellsWidthInput:LevelEditorInput;
         private var cellsHeightInput:LevelEditorInput;
