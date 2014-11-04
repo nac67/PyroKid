@@ -1,6 +1,9 @@
 package pyrokid.entities {
+    import flash.display.Bitmap;
+    import flash.display.DisplayObject;
 	import flash.display.Sprite;
     import flash.display.MovieClip;
+    import flash.geom.ColorTransform;
     import physics.*;
     import pyrokid.*;
     import pyrokid.Level;
@@ -26,6 +29,10 @@ package pyrokid.entities {
         
         private var _collisionCallback:Function;
         
+        
+        private var glowSprite:Sprite = new Sprite();
+        private var glowImage:Bitmap = new Embedded.GlowBMP() as Bitmap;
+       
         public function FreeEntity(level:Level, scale:Number, wArt:int, hArt:int,
                 xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1) {
             
@@ -53,6 +60,19 @@ package pyrokid.entities {
 			    graphics.drawRect(0, 0, wArt * scale, hArt * scale);
 			    graphics.endFill();
             }
+            
+            glowSprite.addChild(glowImage);
+            glowImage.x = -glowImage.width / 2;
+            glowImage.y = -glowImage.height / 2;
+            
+            
+            addChild(glowSprite);
+            glowSprite.x = this.wHit * 0.5;
+            glowSprite.y = this.hHit * 0.5;
+            
+            glow = 1.0;
+            glowRadius = this.wHit + this.hHit * 0.25;
+            glowVisible = false;
         }
         
         public function getLeadingCoorInGlobal():Vector2i {
@@ -99,6 +119,60 @@ package pyrokid.entities {
         
         public function get collisionCallback():Function {
             return _collisionCallback;
+        }
+        
+        /* Set Glow Properties Of The Sprite */
+        public function set glow(hue:Number):void {
+            var r:Number = 0.0;
+            var g:Number = 0.0;
+            var b:Number = 0.0;
+            
+            var c:Number = 1;
+            var x:Number = (1 - Math.abs(((3.0 * hue / Math.PI) % 2.0) - 1.0));
+            var p:int = (int)(3.0 * hue / Math.PI);
+            switch (p) {
+            case 0:
+                r = 1;
+                g = x;
+                break;
+            case 1:
+                g = 1;
+                r = x;
+                break;
+            case 2:
+                g = 1;
+                b = x;
+                break;
+            case 3:
+                b = 1;
+                g = x;
+                break;
+            case 4:
+                b = 1;
+                r = x;
+                break;
+            case 5:
+                r = 1;
+                b = x;
+                break;
+            default:
+                break;
+            }
+            
+            var ct:ColorTransform = new ColorTransform(
+                r * 0.3, g * 0.3, b * 0.3, 0.5,
+                150, 150, 150, 0
+                );
+            glowSprite.transform.colorTransform = ct;
+        }
+        public function set glowRadius(r:Number):void {
+            glowImage.width = r * 2;
+            glowImage.height = r * 2;
+            glowImage.x = -r;
+            glowImage.y = -r;
+        }
+        public function set glowVisible(isVisible:Boolean):void {
+            glowSprite.visible = isVisible;
         }
         
 		public override function ignite(level:Level, ignitionFrame:int):void {

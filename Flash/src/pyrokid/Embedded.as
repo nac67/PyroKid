@@ -92,6 +92,9 @@ package pyrokid {
         [Embed(source='../../assets/swf/Connector.swf', symbol='Connector')]
         public static var ConnectorSWF:Class; //cast as Sprite on instantiation
         
+        [Embed(source='../../assets/Glow.png')]
+        public static var GlowBMP:Class; //cast as Bitmap on instantiation
+        
         [Embed(source='../../assets/swf/player.swf', symbol='playerLegs')]
         public static var PlayerLegsSWF:Class; //cast as MovieClip on instantiation
         
