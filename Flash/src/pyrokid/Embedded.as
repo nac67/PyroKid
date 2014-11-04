@@ -182,6 +182,60 @@ package pyrokid {
 		
 		[Embed(source = "../../assets/swf/mainmenu.swf")]
 		public static var MainMenuSWF:Class;
+        
+        /////////////////
+        
+        [Embed(source="../../assets/levels/tut8.txt", mimeType="application/octet-stream")]
+        private static var ALevel1:Class;
+        public static var alevel1:ByteArray = new ALevel1();
+        
+        [Embed(source="../../assets/levels/tut9.txt", mimeType="application/octet-stream")]
+        private static var ALevel2:Class;
+        public static var alevel2:ByteArray = new ALevel2();
+        
+        [Embed(source="../../assets/levels/nlevel2.txt", mimeType="application/octet-stream")]
+        private static var ALevel3:Class;
+        public static var alevel3:ByteArray = new ALevel3();
+        
+        [Embed(source="../../assets/levels/nlevel5.txt", mimeType="application/octet-stream")]
+        private static var ALevel4:Class;
+        public static var alevel4:ByteArray = new ALevel4();
+        
+        [Embed(source="../../assets/levels/nlevel1.txt", mimeType="application/octet-stream")]
+        private static var ALevel5:Class;
+        public static var alevel5:ByteArray = new ALevel5();
+        
+        [Embed(source="../../assets/levels/nlevel4.txt", mimeType="application/octet-stream")]
+        private static var ALevel6:Class;
+        public static var alevel6:ByteArray = new ALevel6();
+        
+        [Embed(source="../../assets/levels/nlevel3.txt", mimeType="application/octet-stream")]
+        private static var ALevel7:Class;
+        public static var alevel7:ByteArray = new ALevel7();
+        
+        [Embed(source="../../assets/levels/fallingbomb.txt", mimeType="application/octet-stream")]
+        private static var ALevel8:Class;
+        public static var alevel8:ByteArray = new ALevel8();
+        
+        [Embed(source="../../assets/levels/introEdges.txt", mimeType="application/octet-stream")]
+        private static var ALevel9:Class;
+        public static var alevel9:ByteArray = new ALevel9();
+        
+        [Embed(source="../../assets/levels/introImmuneEnemies.txt", mimeType="application/octet-stream")]
+        private static var ALevel10:Class;
+        public static var alevel10:ByteArray = new ALevel10();
+        
+        [Embed(source="../../assets/levels/immuneEnemy2.txt", mimeType="application/octet-stream")]
+        private static var ALevel11:Class;
+        public static var alevel11:ByteArray = new ALevel11();
+        
+        [Embed(source="../../assets/levels/lotsOfSpiders.txt", mimeType="application/octet-stream")]
+        private static var ALevel12:Class;
+        public static var alevel12:ByteArray = new ALevel12();
+        
+        [Embed(source="../../assets/levels/droppingFlames.txt", mimeType="application/octet-stream")]
+        private static var ALevel13:Class;
+        public static var alevel13:ByteArray = new ALevel13();
 		
     }
 
