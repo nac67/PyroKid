@@ -210,7 +210,7 @@ package physics {
             var disp:Number;
             switch (e.direction) {
                 case Cardinal.NX: 
-                    if (r.motion.x < 0 || (r.PX - e.center.x) > r.halfSize.x * 0.5)
+                    if (r.motion.x < 0 || (r.PX - e.center.x) > r.halfSize.x)
                         return;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
                         if (r.PX > e.center.x) {
@@ -220,7 +220,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.PX:
-                    if (r.motion.x > 0 || (e.center.x - r.NX) > r.halfSize.x * 0.5)
+                    if (r.motion.x > 0 || (e.center.x - r.NX) > r.halfSize.x)
                         return;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
                         if (r.NX < e.center.x) {
@@ -230,7 +230,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.NY:
-                    if (r.motion.y < 0 || (r.PY - e.center.y) > r.halfSize.y * 0.5)
+                    if (r.motion.y < 0 || (r.PY - e.center.y) > r.halfSize.y)
                         return;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.PY > e.center.y) {
@@ -240,7 +240,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.PY:
-                    if (r.motion.y > 0 || (e.center.y - r.NY) > r.halfSize.y * 0.5)
+                    if (r.motion.y > 0 || (e.center.y - r.NY) > r.halfSize.y)
                         return;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.NY < e.center.y) {
