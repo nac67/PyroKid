@@ -8,6 +8,7 @@ package pyrokid {
     public class Constants {
         public static var DEBUG:Boolean = false;
         public static var GOD_MODE:Boolean = false;
+		public static var ALL_LEVELS_UNLOCKED:Boolean = false;
         
 		public static var WIDTH:int = 800;
 		public static var HEIGHT:int = 600;

@@ -2,6 +2,7 @@ package ui.playstates {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
+	import pyrokid.Constants;
 	import pyrokid.Embedded;
 	import pyrokid.Main;
 	import ui.buttons.LockedButton;
@@ -46,7 +47,7 @@ package ui.playstates {
 					if (LevelsInfo.levelDict[curr_level_num] != undefined) { //If this level exits, make the button
 						//var buttonString:String = LevelsInfo.isLevelLocked(curr_level_num) ? "" + curr_level_num + " (LOCKED)" : "" + curr_level_num;
 						//addChild(new LevelEditorButton(startAndSetLevel(curr_level_num), 80, 40, x_offset+(x_spacing*x), y_offset+(y_spacing*y), [buttonString], [LevelEditorButton.upColor]));
-						if (LevelsInfo.isLevelLocked(curr_level_num)) {
+						if (LevelsInfo.isLevelLocked(curr_level_num) && !Constants.ALL_LEVELS_UNLOCKED) {
 							addButton(new LockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), function() {});
 						} else {
 							addButton(new UnlockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));

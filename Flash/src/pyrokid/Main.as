@@ -30,6 +30,8 @@ package pyrokid {
             Key.init(stage);
             Constants.switchControlScheme(0);
 			
+			Utils.loadSavedData();
+			
 			addChild(StateController.display);
 			StateController.goToMainMenu();
         }
