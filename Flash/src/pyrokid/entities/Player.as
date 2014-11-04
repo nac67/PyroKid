@@ -37,6 +37,11 @@ package pyrokid.entities {
         public function Player(level:Level) {
             super(level, 1, 28, 44);
             
+            this.glowVisible = true;
+            this.glowRadius = 30;
+            this.glow = 0;
+            
+            
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
             legsSWF.stop();
             legsSWF.y = -5;
@@ -111,10 +116,10 @@ package pyrokid.entities {
             }
             
             // Vertical movement
-			velocity.Add(0, Constants.GRAVITY * Constants.CELL * Constants.DT);
 			if (isGrounded && Key.isDown(Constants.JUMP_BTN) && (!prevFrameJumpBtn || Constants.ALLOW_JUMP_HOLD)) {
-				velocity.y = -Constants.PLAYER_JUMP_SPEED;
+				velocity.y -= Constants.PLAYER_JUMP_SPEED * (1 + velocity.y * Constants.PLAYER_JUMP_FALLING_MULTIPLIER);
 			}
+			velocity.Add(0, Constants.GRAVITY_ENT * Constants.CELL * Constants.DT);
 			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
             
             // Firing

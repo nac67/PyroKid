@@ -9,6 +9,7 @@ package physics {
          * If An Object Moves More Than This Amount In A Single Step, Shit Will Get Shat
          */
         public static var MAX_MOTION:Number = 0.2;
+        public static var MAX_MOTION_ENT:Number = 0.205;
         /**
          * A Utility Used Upon Motion Values To Ensure Your Game Runs Without A Glitch
          * @param v Displacement Amount Desired In A Frame
@@ -17,6 +18,11 @@ package physics {
         public static function ClampedMotion(v:Number):Number {
             if (v < -MAX_MOTION) return -MAX_MOTION;
             if (v > MAX_MOTION) return MAX_MOTION;
+            return v;
+        }
+        public static function ClampedMotionEntity(v:Number):Number {
+            if (v < -MAX_MOTION_ENT) return -MAX_MOTION_ENT;
+            if (v > MAX_MOTION_ENT) return MAX_MOTION_ENT;
             return v;
         }
         
@@ -204,7 +210,7 @@ package physics {
             var disp:Number;
             switch (e.direction) {
                 case Cardinal.NX: 
-                    if (r.motion.x < 0 || (r.PX - e.center.x) > r.halfSize.x * 0.5)
+                    if (r.motion.x < 0 || (r.PX - e.center.x) > r.halfSize.x)
                         return;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
                         if (r.PX > e.center.x) {
@@ -214,7 +220,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.PX:
-                    if (r.motion.x > 0 || (e.center.x - r.NX) > r.halfSize.x * 0.5)
+                    if (r.motion.x > 0 || (e.center.x - r.NX) > r.halfSize.x)
                         return;
                     if (AreEdgesOverlapping(r.center.y, r.halfSize.y, e.center.y, e.halfSize)) {
                         if (r.NX < e.center.x) {
@@ -224,7 +230,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.NY:
-                    if (r.motion.y < 0 || (r.PY - e.center.y) > r.halfSize.y * 0.5)
+                    if (r.motion.y < 0 || (r.PY - e.center.y) > r.halfSize.y)
                         return;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.PY > e.center.y) {
@@ -234,7 +240,7 @@ package physics {
                     } else return;
                     break;
                 case Cardinal.PY:
-                    if (r.motion.y > 0 || (e.center.y - r.NY) > r.halfSize.y * 0.5)
+                    if (r.motion.y > 0 || (e.center.y - r.NY) > r.halfSize.y)
                         return;
                     if (AreEdgesOverlapping(r.center.x, r.halfSize.x, e.center.x, e.halfSize)) {
                         if (r.NY < e.center.y) {

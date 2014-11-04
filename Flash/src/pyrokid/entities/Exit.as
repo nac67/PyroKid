@@ -13,7 +13,7 @@ package pyrokid.entities {
         private var _canExit:Boolean = false;
         private var bombSwf:Sprite;
         private var holeSwf:Sprite;
-        private var isHole:Boolean;
+        public var isHole:Boolean;
         
 		public function Exit(level:Level, isHole:Boolean = false) {
             super(level, 1, 50, 50, 10, 10, 30, 30);
@@ -50,6 +50,15 @@ package pyrokid.entities {
             level.addChild(deathAnimation);
             return true;
 		}
+        
+        public override function update(level:Level):void {
+            if (isBeingSmooshed()) {
+                ignite(level);
+            }
+            if (!isHole) {
+                velocity.Add(0, Constants.GRAVITY * Constants.CELL * Constants.DT);
+            }
+        }
         
         public override function updateFire(level:Level, currentFrame:int):void {
             if (!isOnFire()) {

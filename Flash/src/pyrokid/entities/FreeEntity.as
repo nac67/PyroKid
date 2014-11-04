@@ -1,6 +1,9 @@
 package pyrokid.entities {
+    import flash.display.Bitmap;
+    import flash.display.DisplayObject;
 	import flash.display.Sprite;
     import flash.display.MovieClip;
+    import flash.geom.ColorTransform;
     import physics.*;
     import pyrokid.*;
     import pyrokid.Level;
@@ -24,8 +27,13 @@ package pyrokid.entities {
         public var touchRight:Boolean = false;
         public var touchTop:Boolean = false;
         
-        private var _collisionCallback:Function;
+        private var timeSinceHitCeiling:int = 0;
         
+        private var _collisionCallback:Function;
+                
+        private var glowSprite:Sprite = new Sprite();
+        private var glowImage:Bitmap = new Embedded.GlowBMP() as Bitmap;
+       
         public function FreeEntity(level:Level, scale:Number, wArt:int, hArt:int,
                 xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1) {
             
@@ -53,6 +61,19 @@ package pyrokid.entities {
 			    graphics.drawRect(0, 0, wArt * scale, hArt * scale);
 			    graphics.endFill();
             }
+            
+            glowSprite.addChild(glowImage);
+            glowImage.x = -glowImage.width / 2;
+            glowImage.y = -glowImage.height / 2;
+            
+            
+            addChild(glowSprite);
+            glowSprite.x = this.wHit * 0.5;
+            glowSprite.y = this.hHit * 0.5;
+            
+            glow = 1.0;
+            glowRadius = this.wHit + this.hHit * 0.25;
+            glowVisible = false;
         }
         
         public function getLeadingCoorInGlobal():Vector2i {
@@ -89,19 +110,19 @@ package pyrokid.entities {
             return enemyRect;
         }
         
-        private var butts:int = 0;
-        
         public function resolveCollision(r:PhysRectangle, a:CollisionAccumulator, o:PhysCallbackOptions):Boolean {
             if (a.accumNY > 0) isGrounded = true;
             if (a.accumPY > 0) {
                 touchTop = true;
-                //butts += 1;
-                //if (butts > 5) {
-                    //o.breakYVelocity = true;
-                    //butts = 0;
-                //} else {
-                    //o.breakYVelocity = false;
-                //}
+                timeSinceHitCeiling += 1;
+                if (timeSinceHitCeiling > Constants.PLAYER_CEILING_HANG_TIME) {
+                    o.breakYVelocity = true;
+                    timeSinceHitCeiling = 0;
+                } else {
+                    o.breakYVelocity = false;
+                }
+            } else {
+                timeSinceHitCeiling = 0;
             }
             if (a.accumNX > 0) touchRight = true;
             if (a.accumPX > 0) touchLeft = true;
@@ -112,9 +133,68 @@ package pyrokid.entities {
             return _collisionCallback;
         }
         
+        /* Set Glow Properties Of The Sprite */
+        public function set glow(hue:Number):void {
+            var r:Number = 0.0;
+            var g:Number = 0.0;
+            var b:Number = 0.0;
+            
+            var c:Number = 1;
+            var x:Number = (1 - Math.abs(((3.0 * hue / Math.PI) % 2.0) - 1.0));
+            var p:int = (int)(3.0 * hue / Math.PI);
+            switch (p) {
+            case 0:
+                r = 1;
+                g = x;
+                break;
+            case 1:
+                g = 1;
+                r = x;
+                break;
+            case 2:
+                g = 1;
+                b = x;
+                break;
+            case 3:
+                b = 1;
+                g = x;
+                break;
+            case 4:
+                b = 1;
+                r = x;
+                break;
+            case 5:
+                r = 1;
+                b = x;
+                break;
+            default:
+                break;
+            }
+            
+            var ct:ColorTransform = new ColorTransform(
+                r * 0.3, g * 0.3, b * 0.3, 0.5,
+                150, 150, 150, 0
+                );
+            glowSprite.transform.colorTransform = ct;
+        }
+        public function set glowRadius(r:Number):void {
+            glowImage.width = r * 2;
+            glowImage.height = r * 2;
+            glowImage.x = -r;
+            glowImage.y = -r;
+        }
+        public function set glowVisible(isVisible:Boolean):void {
+            glowSprite.visible = isVisible;
+        }
+        
 		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
             return super.ignite(level, coor, dir);
 		}
+        
+        protected function isBeingSmooshed():Boolean {
+            // TODO this doesn't quite cut it.
+            return isGrounded && touchTop;
+        }
         
         public function update(level:Level):void {
             // TODO try this with water bats or anything that is slightly in the air. Doesn't work
@@ -125,10 +205,16 @@ package pyrokid.entities {
             //if (!(this is Player) && touchTop) {
                 //trace("touch top on frame: " + level.frameCount);
             //}
-            if (isGrounded && touchTop) {
+            if (isBeingSmooshed()) {
                 var xVelocity:int = (Math.random() * 75 + 25) * (Math.random() > 0.5 ? -1 : 1);
                 var constr:Class = Object(this).constructor;
-                var newClip:Sprite = new constr(level);
+                var newClip:FreeEntity = new constr(level);
+                
+                //the reason for this poop line following is because BriefClips are
+                //centered by width/height properties, which change based on the contents
+                //of the sprite. ew
+                newClip.removeChild(newClip.glowSprite);
+                
                 var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), Constants.FADE_TIME, true, true);
                 kill(level, deathAnimation);
             }

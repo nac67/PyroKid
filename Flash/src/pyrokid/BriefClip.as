@@ -20,7 +20,9 @@ package pyrokid {
             this.affectedByGravity = affectedByGravity;
             this.smoosh = smoosh;
             
-            if (smoosh){
+            if (smoosh) {
+                // This is really shitty, maybe some day this will not rely on width/height
+                // see FreeEntity squash logic (in update) for the really poopy part
                 clip.x = -clip.width / 2;
                 clip.y = -clip.height / 2;
                 x = position.x + clip.width / 2;

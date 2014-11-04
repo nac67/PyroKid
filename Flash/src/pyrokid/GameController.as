@@ -162,6 +162,12 @@ package pyrokid {
             
             // update new positions of dynamic objects and update sprite stuff sequentially
             for each (var rect:ViewPRect in level.rectViews) {
+                if (rect.sprite is Exit) {
+                    var exit:Exit =  rect.sprite as Exit;
+                    if (exit.isHole) { // TODO this code sucks -- Aaron
+                        continue;
+                    }
+                }
                 rect.onUpdate(level.islands, rect.sprite.resolveCollision, rect.sprite.collisionCallback);
             }
         }

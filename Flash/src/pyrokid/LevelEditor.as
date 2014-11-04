@@ -54,7 +54,7 @@ package pyrokid {
             
             // Universal
             UI_Elements = [];
-			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Clumping Objects", "Connector Mode", "Object Properties", "Camera Zones"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF, 0x555555]));
+			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Clumping Objects", "Connector Mode", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF]));
 			cellsWidthInput = new LevelEditorInput("Map Width", level.cellWidth, 650, 100, updateWidth);
 			cellsHeightInput = new LevelEditorInput("Map Height", level.cellHeight, 650, 150, updateHeight);
             UI_Elements.push(cellsWidthInput, cellsHeightInput);
