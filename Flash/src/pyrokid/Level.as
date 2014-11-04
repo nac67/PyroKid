@@ -267,6 +267,7 @@ package pyrokid {
                     format.size = 20;
                     format.color = 0xFFFFFF;
                 }
+                textToAdd.selectable = false;
                 textToAdd.setTextFormat(format);
                 
                 addChild(textToAdd);
