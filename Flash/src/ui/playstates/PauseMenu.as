@@ -3,6 +3,7 @@ package ui.playstates {
 	import flash.events.Event;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import pyrokid.GameController;
 	import pyrokid.Main;
 	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
@@ -13,9 +14,12 @@ package ui.playstates {
 	public class PauseMenu extends BasePlayState
 	{
 		
-		public function PauseMenu() 
+		private var game_controller:GameController;
+		
+		public function PauseMenu(game_contr:GameController) 
 		{
 			//super(); //do not call this because it uses a different background
+			game_controller = game_contr;
 			
 			defaultBackground = new Shape(); // initializing the variable named rectangle
 			defaultBackground.graphics.beginFill(0x8C8C8C,0.5); // choosing the colour for the fill, here it is red
@@ -30,10 +34,11 @@ package ui.playstates {
 			pauseTextFormat.color = 0xFFFFFF;
 			addTextToScreen("PAUSED", 800, 100, 400, 70, pauseTextFormat);
 			
-			addButton(new MenuButton("Restart Level", 400, 200), StateController.restartCurrLevel);
-			addButton(new MenuButton("Levels", 400,250), StateController.goToLevelSelect);
-			//addButton(new MenuButton("Options", 400,300), StateController.displayOptions);
-			addButton(new MenuButton("Main Menu", 400,300), StateController.goToMainMenu);
+			addButton(new MenuButton("Resume", 400, 200), unpauseGame);
+			addButton(new MenuButton("Restart Level", 400, 250), StateController.restartCurrLevel);
+			addButton(new MenuButton("Levels", 400,300), StateController.goToLevelSelect);
+			//addButton(new MenuButton("Options", 400,350), StateController.displayOptions);
+			addButton(new MenuButton("Main Menu", 400,350), StateController.goToMainMenu);
 			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 200, ["Resume"], [LevelEditorButton.upColor]));
 			//addChild(new LevelEditorButton(StateController.restartCurrLevel, 80, 40, Main.MainStage.stageWidth / 2, 260, ["Restart Level"], [LevelEditorButton.upColor]));
 			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 320, ["Level Select"], [LevelEditorButton.upColor]));
@@ -43,7 +48,12 @@ package ui.playstates {
 		}
 		
 		
-		
+		private function unpauseGame(e:Event):void {
+			removeAllEventListeners();
+			Utils.removeAllChildren(this);
+			game_controller.removeChild(this);
+			game_controller.isPaused = false;
+		}
 		
 		private function goToPreviousScreen(e:Event = null):Function {
 			var self:BasePlayState = this;
