@@ -1,23 +1,30 @@
 package ui.playstates {
 	import flash.display.Shape;
 	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import flash.utils.Dictionary;
+	import mx.core.ButtonAsset;
 	import pyrokid.Main;
+	import ui.ButtonBackground;
+	import ui.buttons.ButtonBase;
 	/**
 	 * ...
 	 * @author Evan Niederhoffer
 	 */
 	public class BasePlayState extends Sprite
 	{
-		private var listenersArray:Array = [];
-		public var defaultBackground:Shape;
+		protected var listenersArray:Array = [];
+		protected var buttonListenersDict:Dictionary = new Dictionary();
+		protected var defaultBackground:Shape;
 		
 		public function BasePlayState() {
 			//make white background by default
 			defaultBackground = new Shape(); // initializing the variable named rectangle
-			defaultBackground.graphics.beginFill(0xFFFFFF); // choosing the colour for the fill, here it is red
+			defaultBackground.graphics.beginFill(0x000000); // choosing the colour for the fill, here it is red
 			defaultBackground.graphics.drawRect(0, 0, Main.MainStage.stageWidth,Main.MainStage.stageHeight); // (x spacing, y spacing, width, height)
 			defaultBackground.graphics.endFill(); // not always needed but I like to put it in to end the fill
 			addChild(defaultBackground); // adds the rectangle to the stage
@@ -35,6 +42,12 @@ package ui.playstates {
 				this.removeEventListener(listenersArray[i].type, listenersArray[i].listener);
 			  }
 		   }
+		   for (var key:* in buttonListenersDict) {
+			if (buttonListenersDict[key] != undefined && key.hasEventListener(buttonListenersDict[key].type)) {
+				key.removeEventListener(buttonListenersDict[key].type, buttonListenersDict[key].listener);
+			}
+		   }
+		   
 		   listenersArray = null
 		}
 		
@@ -52,6 +65,15 @@ package ui.playstates {
 			textToAdd.setTextFormat(format);
 			
 			addChild(textToAdd);
+		}
+		
+		protected function addButton(button:ButtonBase, fxn1:Function):void {
+			addChild(button);
+			
+			var type1:String = MouseEvent.CLICK;
+			button.addEventListener(type1, fxn1);
+			
+			buttonListenersDict[button] = { type:type1 , listener:fxn1 };
 		}
 		
 	}

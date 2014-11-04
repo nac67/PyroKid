@@ -1,8 +1,11 @@
 package ui.playstates {
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import pyrokid.Embedded;
 	import pyrokid.Main;
+	import ui.buttons.LockedButton;
+	import ui.buttons.UnlockedButton;
 	import ui.LevelEditorButton;
 	import ui.LevelsInfo;
 	/**
@@ -23,6 +26,8 @@ package ui.playstates {
 		}
 		
 		private function displayLevelButtons():void {
+			addChild(defaultBackground);
+			
 			//offset for grid of buttons from the top left corner of the screen
 			var x_offset:int = 270;
 			var y_offset:int = 200;
@@ -39,17 +44,23 @@ package ui.playstates {
 				for (var y:int = 0; y < y_tiles; y++) {
 					var curr_level_num:int = (curr_page * (x_tiles * y_tiles)) + (y * x_tiles + (x + 1));
 					if (LevelsInfo.levelDict[curr_level_num] != undefined) { //If this level exits, make the button
-						var buttonString:String = LevelsInfo.isLevelLocked(curr_level_num) ? "" + curr_level_num + " (LOCKED)" : "" + curr_level_num;
-						addChild(new LevelEditorButton(startAndSetLevel(curr_level_num), 80, 40, x_offset+(x_spacing*x), y_offset+(y_spacing*y), [buttonString], [LevelEditorButton.upColor]));
+						//var buttonString:String = LevelsInfo.isLevelLocked(curr_level_num) ? "" + curr_level_num + " (LOCKED)" : "" + curr_level_num;
+						//addChild(new LevelEditorButton(startAndSetLevel(curr_level_num), 80, 40, x_offset+(x_spacing*x), y_offset+(y_spacing*y), [buttonString], [LevelEditorButton.upColor]));
+						if (LevelsInfo.isLevelLocked(curr_level_num)) {
+							addButton(new LockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), function() {});
+						} else {
+							addButton(new UnlockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
+						}
 					}
 				}
 			}
 			
 			
 			//display paging buttons
-			if (curr_page > 0) addChild(new LevelEditorButton(goToPreviousPage, 20, 80, 20, 300, ["<"], [LevelEditorButton.upColor]));
+			
+			if (curr_page > 0) addButton(new UnlockedButton("<", 20, 300), goToPreviousPage);
 			var max_level_displayed = (curr_page+1) * (x_tiles * y_tiles);
-			if (max_level_displayed < LevelsInfo.getTotalNumberOfLevels()) addChild(new LevelEditorButton(goToNextPage, 20, 80, 780, 300, [">"], [LevelEditorButton.upColor]));
+			if (max_level_displayed < LevelsInfo.getTotalNumberOfLevels()) addButton(new UnlockedButton(">", 780, 300), goToNextPage);;
 		}
 		
 		private function goToPreviousPage(e:Event):void {

@@ -111,12 +111,10 @@ package pyrokid {
         }
         
         private function keyboardActionListener(e:KeyboardEvent):void {
-            if (e.keyCode == Keyboard.ESCAPE) {
-                StateController.goToMainMenu();
-            }
-			if (e.keyCode == Keyboard.SHIFT) {
+			if (e.keyCode == Keyboard.ESCAPE) {
 				if (isPaused) { //unpause game
 					pauseMenu.removeAllEventListeners();
+					Utils.removeAllChildren(pauseMenu);
 					removeChild(pauseMenu);
 				} else { //pause the game
 					pauseMenu = new PauseMenu();

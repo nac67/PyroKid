@@ -2,6 +2,7 @@ package ui.playstates {
 	import flash.display.Shape;
 	import flash.events.Event;
 	import pyrokid.Main;
+	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
 	/**
 	 * ...
@@ -20,11 +21,15 @@ package ui.playstates {
 			defaultBackground.graphics.endFill(); // not always needed but I like to put it in to end the fill
 			addChild(defaultBackground); // adds the rectangle to the stage
 			
+			addButton(new MenuButton("Restart Level", 400, 200), StateController.restartCurrLevel);
+			addButton(new MenuButton("Level Select", 400,250), StateController.goToLevelSelect);
+			addButton(new MenuButton("Options", 400,300), StateController.displayOptions);
+			addButton(new MenuButton("Main Menu", 400,350), StateController.goToMainMenu);
 			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 200, ["Resume"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(StateController.restartCurrLevel, 80, 40, Main.MainStage.stageWidth / 2, 260, ["Restart Level"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 320, ["Level Select"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(StateController.displayOptions, 80, 40, Main.MainStage.stageWidth / 2, 380, ["Options"], [LevelEditorButton.upColor]));
-			addChild(new LevelEditorButton(StateController.goToMainMenu, 80, 40, Main.MainStage.stageWidth / 2, 440, ["Main Menu"], [LevelEditorButton.upColor]));
+			//addChild(new LevelEditorButton(StateController.restartCurrLevel, 80, 40, Main.MainStage.stageWidth / 2, 260, ["Restart Level"], [LevelEditorButton.upColor]));
+			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 320, ["Level Select"], [LevelEditorButton.upColor]));
+			//addChild(new LevelEditorButton(StateController.displayOptions, 80, 40, Main.MainStage.stageWidth / 2, 380, ["Options"], [LevelEditorButton.upColor]));
+			//addChild(new LevelEditorButton(StateController.goToMainMenu, 80, 40, Main.MainStage.stageWidth / 2, 440, ["Main Menu"], [LevelEditorButton.upColor]));
 			
 		}
 		

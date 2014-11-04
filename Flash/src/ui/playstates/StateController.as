@@ -48,6 +48,8 @@ package ui.playstates {
 		}
 		
 		public static function goToGame(level:Object, editor:LevelEditor = null):Function {
+			Utils.removeAllChildren(display);
+			
 			if (!(level is ByteArray || level is LevelRecipe)) {
 				throw new Error("tried to start gamecontroller with bad level input (says StateController)");
 			}
