@@ -24,7 +24,7 @@ package pyrokid {
         public var reloadLevel:Function;
         
         private var editMode:int;
-		private var numEditModes:int = 5;
+		private var numEditModes:int = 4;
         private var UI_Elements:Array; // All level editor UI elements
         private var cellsWidthInput:LevelEditorInput;
         private var cellsHeightInput:LevelEditorInput;
@@ -155,20 +155,24 @@ package pyrokid {
 					var newRow:Array = [];
                     var newIslandRow:Array = [];
                     var newTileEntitiesRow:Array = [];
+                    var newEdgesRow:Array = [];
 					for (var x = 0; x < width; x++) {
 						newRow.push(1);
                         newIslandRow.push(0);
                         newTileEntitiesRow.push(entityId);
+                        newEdgesRow.push(0);
                         entityId += 1;
 					}
 					walls.push(newRow);
                     level.recipe.islands.push(newIslandRow);
                     level.recipe.tileEntities.push(newTileEntitiesRow);
+                    level.recipe.edges.push(newEdgesRow);
 				}
 			} else {
 				walls.splice(newHeight);
                 level.recipe.islands.splice(newHeight);
                 level.recipe.tileEntities.splice(newHeight);
+                level.recipe.edges.splice(newHeight);
 			}
 			level.recipe.walls = walls;
             level.reset(level.recipe);
@@ -190,6 +194,7 @@ package pyrokid {
 						walls[y].push(1);
                         level.recipe.islands[y].push(0);
                         level.recipe.tileEntities[y].push(entityId);
+                        level.recipe.edges[y].push(0);
                         entityId += 1;
 					}
 				}
@@ -198,6 +203,7 @@ package pyrokid {
 					walls[y].splice(newWidth);
                     level.recipe.islands[y].splice(newWidth);
                     level.recipe.tileEntities[y].splice(newWidth);
+                    level.recipe.edges[y].splice(newWidth);
 				}
 			}
 			level.recipe.walls = walls;
