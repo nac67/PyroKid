@@ -68,6 +68,14 @@ package pyrokid {
         private static var Level14:Class;
         public static var level14:ByteArray = new Level14();
         
+        [Embed(source="../../assets/levels/cage.txt", mimeType="application/octet-stream")]
+        private static var CLevel1:Class;
+        public static var clevel1:ByteArray = new CLevel1();
+        
+        [Embed(source="../../assets/levels/caution.txt", mimeType="application/octet-stream")]
+        private static var CLevel2:Class;
+        public static var clevel2:ByteArray = new CLevel2();
+        
         [Embed(source="../../assets/tile_art/dirt.png")]
         public static var DirtBMP:Class;
         
