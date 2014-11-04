@@ -110,7 +110,7 @@ package pyrokid.entities {
             }
             
             // Vertical movement
-			velocity.Add(0, Constants.GRAVITY * Constants.CELL * Constants.DT);
+			velocity.Add(0, Constants.GRAVITY_ENT * Constants.CELL * Constants.DT);
 			if (isGrounded && Key.isDown(Constants.JUMP_BTN) && (!prevFrameJumpBtn || Constants.ALLOW_JUMP_HOLD)) {
 				velocity.y = -Constants.PLAYER_JUMP_SPEED;
 			}

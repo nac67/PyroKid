@@ -9,6 +9,7 @@ package physics {
          * If An Object Moves More Than This Amount In A Single Step, Shit Will Get Shat
          */
         public static var MAX_MOTION:Number = 0.2;
+        public static var MAX_MOTION_ENT:Number = 0.205;
         /**
          * A Utility Used Upon Motion Values To Ensure Your Game Runs Without A Glitch
          * @param v Displacement Amount Desired In A Frame
@@ -17,6 +18,11 @@ package physics {
         public static function ClampedMotion(v:Number):Number {
             if (v < -MAX_MOTION) return -MAX_MOTION;
             if (v > MAX_MOTION) return MAX_MOTION;
+            return v;
+        }
+        public static function ClampedMotionEntity(v:Number):Number {
+            if (v < -MAX_MOTION_ENT) return -MAX_MOTION_ENT;
+            if (v > MAX_MOTION_ENT) return MAX_MOTION_ENT;
             return v;
         }
         
@@ -192,7 +198,7 @@ package physics {
                 
                 if (dx != 0 && opt.breakXVelocity)
                     nv.x = 0;
-                if (dy != 0 && opt.breakXVelocity)
+                if (dy != 0 && opt.breakYVelocity)
                     nv.y = 0;
                 if (opt.resolveXDisplacement)
                     r.center.x += dx;

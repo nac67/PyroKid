@@ -58,8 +58,10 @@ package pyrokid {
         public static var WATERBALL_RANGE:int = 7.5;
 		
 		public static var CAMERA_LAG:Number = 0.08;
-        public static var GRAVITY:Number = 9;
+        public static var GRAVITY:Number = 8;
+        public static var GRAVITY_ENT:Number = 9;
         public static var GRAVITY_VECTOR = new Vector2(0, GRAVITY);
+        public static var GRAVITY_VECTOR_ENT = new Vector2(0, GRAVITY_ENT);
         public static var SPIDER_SPEED:Number = 1.5*CELL;
         public static var DT:Number = 1 / 30.0;
         public static var PLAYER_XSPEED:int = 2 * CELL;
