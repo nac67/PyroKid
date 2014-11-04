@@ -13,7 +13,7 @@ package pyrokid.entities {
         private var _isDead:Boolean = false;
         public var velocity:Vector2 = new Vector2();
         
-        public function kill(level:Level, deathAnimation:BriefClip = null):void {
+        public function kill(level:Level, deathAnimation:BriefClip = null, method:String = ""):void {
             _isDead = true;
             level.dirty = true;
             if (deathAnimation != null) {

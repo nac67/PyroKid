@@ -233,17 +233,17 @@ package pyrokid {
 			Utils.removeAllChildren(this);
 		}
 		
-		private function onKeyUp(e:KeyboardEvent):void {
-			if (e.keyCode == Keyboard.O) { //o
-				trace("loading level");
-				LevelIO.loadLevel(reloadLevel);
-			} else if (e.keyCode == Keyboard.P) { //p
-				trace("saving level");
-				LevelIO.saveLevel(level.recipe);
-			} else if (e.keyCode == Keyboard.ENTER) {
-				StateController.goToGame(level.recipe, this);
-			}
-		}
+		//private function onKeyUp(e:KeyboardEvent):void {
+			//if (e.keyCode == Keyboard.O) { //o
+				//trace("loading level");
+				//LevelIO.loadLevel(reloadLevel);
+			//} else if (e.keyCode == Keyboard.P) { //p
+				//trace("saving level");
+				//LevelIO.saveLevel(level.recipe);
+			//} else if (e.keyCode == Keyboard.ENTER) {
+				//StateController.goToGame(level.recipe, this);
+			//}
+		//}
 		
 		public function loadLevel(level:Level):void {
 			this.level = level;

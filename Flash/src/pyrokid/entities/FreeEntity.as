@@ -216,7 +216,7 @@ package pyrokid.entities {
                 newClip.removeChild(newClip.glowSprite);
                 
                 var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), Constants.FADE_TIME, true, true);
-                kill(level, deathAnimation);
+                kill(level, deathAnimation, Constants.DEATH_BY_SMOOSH);
             }
         }
 		

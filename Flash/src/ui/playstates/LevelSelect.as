@@ -51,7 +51,7 @@ package ui.playstates {
 
 		}
 		
-		public static function startAndSetLevel(levelNum:int):Function {
+		public static function startAndSetLevel(levelNum:int, levelWon:Boolean = false):Function {
 			return function():void {
 				
 				if (levelDict[levelNum] == undefined) {
@@ -59,14 +59,14 @@ package ui.playstates {
 				} else {
 					currLevel = levelNum;
 				
-					StateController.goToGame(levelDict[levelNum])();
+					StateController.goToGame(levelDict[levelNum], levelNum, levelWon)();
 				}
 				
 			}
 		}
 		
 		public static function restartCurrLevel(e:Event = null):void {
-			StateController.goToGame(levelDict[currLevel])();
+			StateController.goToGame(levelDict[currLevel], currLevel)();
 		}
 		
 	}

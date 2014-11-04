@@ -79,12 +79,12 @@ package pyrokid.entities {
             if (lit) {
                 onFireSprite.visible = true;
                 var bc:BriefClip = new BriefClip(new Vector2(x, y), new Embedded.PlayerDieFireSWF() as MovieClip);
-                kill(level, bc);
+                kill(level, bc, Constants.DEATH_BY_FIRE);
             }
             return lit;
         }
         
-        public override function kill(level:Level, deathAnimation:BriefClip = null):void {
+        public override function kill(level:Level, deathAnimation:BriefClip = null, method:String = ""):void {
             level.gameOverState = Constants.GAME_OVER_FADING;
             if (deathAnimation == null) {
                 var delayedFunc:Function = function():void {
@@ -92,12 +92,15 @@ package pyrokid.entities {
                 }
                 level.delayedFunctions[delayedFunc] = Constants.FADE_TIME;
             }
+            var center:Vector2i = getCenter();
+            Main.log.logDeath(Utils.realToCell(center.x), Utils.realToCell(center.y), method, level.frameCount);
+            Main.log.logEndLevel();
             super.kill(level, deathAnimation);
         }
         
         public function damageFromEnemyContact(level:Level):void {
             var bc:BriefClip = new BriefClip(new Vector2(x, y), new Embedded.PlayerDiePainSWF() as MovieClip);
-            kill(level, bc);
+            kill(level, bc, Constants.DEATH_BY_ENEMY);
         }
         
         public override function update(level:Level):void {
