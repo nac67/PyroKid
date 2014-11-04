@@ -33,7 +33,7 @@ package pyrokid {
         private var cameraController:CameraController;
         public var level:Level;
         
-		private var isPaused:Boolean = false;
+		public var isPaused:Boolean = false;
 		private var pauseMenu:BasePlayState;
         
         private var curLevelNum:int;
@@ -129,7 +129,7 @@ package pyrokid {
 					Utils.removeAllChildren(pauseMenu);
 					removeChild(pauseMenu);
 				} else { //pause the game
-					pauseMenu = new PauseMenu();
+					pauseMenu = new PauseMenu(this);
 					addChild(pauseMenu);
 				}
 				isPaused = !isPaused;
@@ -137,7 +137,7 @@ package pyrokid {
         }
         
         private function killPlayerIfOffMap(level:Level):void {
-            if (level.player.y > level.worldHeight + 50) {
+            if (level.player.y > stage.stageHeight + 500) {
                 level.player.kill(level, null, Constants.DEATH_BY_FALLING);
             }
         }
