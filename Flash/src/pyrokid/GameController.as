@@ -137,7 +137,7 @@ package pyrokid {
         }
         
         private function killPlayerIfOffMap(level:Level):void {
-            if (level.player.y > stage.stageHeight + 500) {
+            if (level.player.y > level.worldHeight + 50) {
                 level.player.kill(level, null, Constants.DEATH_BY_FALLING);
             }
         }
