@@ -67,7 +67,7 @@ package pyrokid {
         public static var PLAYER_XSPEED:int = 2 * CELL;
         public static var PLAYER_JUMP_SPEED:int = 6.3 * CELL;
         public static var PLAYER_JUMP_FALLING_MULTIPLIER:Number = 1 / 450.0;
-        public static var PLAYER_CEILING_HANG_TIME:int = 6;
+        public static var PLAYER_CEILING_HANG_TIME:int = 5;
 		
         // TileEntity codes. Must be ints.
 		public static var EMPTY_TILE_CODE:int = 0;
