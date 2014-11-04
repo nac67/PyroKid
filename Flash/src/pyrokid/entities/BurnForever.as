@@ -23,8 +23,7 @@ package pyrokid.entities {
             var lit:Boolean = super.ignite(level, coor, dir);
             if (lit) {
                 for each (var cellSprite:DisplayObject in cellSprites) {
-                    var mc:MovieClip = cellSprite as MovieClip;
-                    mc.gotoAndStop(2);
+                    addChild(cellSprite);
                 }
             }
             return lit;

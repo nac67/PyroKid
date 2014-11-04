@@ -78,7 +78,8 @@ package pyrokid.entities {
             var lit:Boolean = super.ignite(level, coor, dir);
             if (lit) {
                 onFireSprite.visible = true;
-                kill(level);
+                var bc:BriefClip = new BriefClip(new Vector2(x, y), new Embedded.PlayerDieFireSWF() as MovieClip);
+                kill(level, bc);
             }
             return lit;
         }
@@ -95,7 +96,8 @@ package pyrokid.entities {
         }
         
         public function damageFromEnemyContact(level:Level):void {
-            kill(level);
+            var bc:BriefClip = new BriefClip(new Vector2(x, y), new Embedded.PlayerDiePainSWF() as MovieClip);
+            kill(level, bc);
         }
         
         public override function update(level:Level):void {

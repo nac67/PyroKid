@@ -80,6 +80,9 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/metal_merge.png")]
         public static var MetalMergeBMP:Class;
         
+        [Embed(source="../../assets/tile_art/lava.png")]
+        public static var LavaMergeBMP:Class;
+        
         [Embed(source="../../assets/tile_art/big_background.png")]
         public static var BGBMP:Class; //cast as Bitmap on instantiation
         
@@ -100,6 +103,12 @@ package pyrokid {
         
         [Embed(source='../../assets/swf/player.swf', symbol='playerTorso')]
         public static var PlayerTorsoSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/player.swf', symbol='dieFire')]
+        public static var PlayerDieFireSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/player.swf', symbol='diePain')]
+        public static var PlayerDiePainSWF:Class; //cast as MovieClip on instantiation
         
         [Embed(source='../../assets/swf/fireball.swf', symbol='fireball')]
         public static var FireballSWF:Class; //cast as MovieClip on instantiation
