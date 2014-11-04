@@ -89,9 +89,20 @@ package pyrokid.entities {
             return enemyRect;
         }
         
+        private var butts:int = 0;
+        
         public function resolveCollision(r:PhysRectangle, a:CollisionAccumulator, o:PhysCallbackOptions):Boolean {
             if (a.accumNY > 0) isGrounded = true;
-            if (a.accumPY > 0) touchTop = true;
+            if (a.accumPY > 0) {
+                touchTop = true;
+                //butts += 1;
+                //if (butts > 5) {
+                    //o.breakYVelocity = true;
+                    //butts = 0;
+                //} else {
+                    //o.breakYVelocity = false;
+                //}
+            }
             if (a.accumNX > 0) touchRight = true;
             if (a.accumPX > 0) touchLeft = true;
             return true;
@@ -101,10 +112,8 @@ package pyrokid.entities {
             return _collisionCallback;
         }
         
-		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
-            if (!isOnFire()) {
-                super.ignite(level);
-            }
+		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
+            return super.ignite(level, coor, dir);
 		}
         
         public function update(level:Level):void {
@@ -145,10 +154,20 @@ package pyrokid.entities {
                     // TODO when is the direction not one of these? -- Cristian
                     return;
                 }
+                var dir:int = Cardinal.getOpposite(edgeOfCollision.direction);
                 var entity:TileEntity = level.tileEntityGrid[cell.y][cell.x];
                 // TODO what if the thing is falling? Do we care? -- Aaron
+                // TODO this is all copy and pasted and is terrible style -- Aaron
                 if (entity != null) {
-                    entity.mutualIgnite(level, self);
+                    var coor:Vector2i = new Vector2i(cell.x, cell.y).SubV(entity.getGlobalAnchorAsVec2i());
+                    var thisOnFire:Boolean = self.isOnFire();
+                    var entityOnFire:Boolean = entity.isOnFire();
+                    if (entityOnFire && entity.canIgniteFrom(coor, edgeOfCollision.direction)) {
+                        self.ignite(level);
+                    }
+                    if (thisOnFire) {
+                        entity.ignite(level, coor, dir);
+                    }
                 }
             };
         }

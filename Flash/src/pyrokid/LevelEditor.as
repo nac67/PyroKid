@@ -70,7 +70,8 @@ package pyrokid {
 			options[Constants.SPIDER_CODE] = "Spider";
             options[Constants.IMMUNE_CODE] = "Immune Enemy";
             options[Constants.BAT_CODE] = "Water Bat";
-            options[Constants.EXIT_CODE] = "Exit";
+            options[Constants.BOMB_EXIT_CODE] = "Bomb Exit";
+            options[Constants.HOLE_EXIT_CODE] = "Hole Exit";
 			options["player"] = "Player";
             allObjectTypesButton = new SelectorButton(options, changeSelectedObject);
 			UI_Elements.push(allObjectTypesButton);

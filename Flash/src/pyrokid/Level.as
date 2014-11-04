@@ -84,6 +84,12 @@ package pyrokid {
 			
             setupTiles();
             setupFreeEntities();
+            for each (var enemy:FreeEntity in enemies) {
+                if (enemy is Exit) {
+                    setChildIndex(enemy, 0); // move exits behind all characters
+                }
+            }
+            setChildIndex(background, 0);
             setupMiscellaneous();
         }
         
@@ -176,8 +182,10 @@ package pyrokid {
                     enemy = new Spider(this);
                 } else if (recipe.freeEntities[i][2] == Constants.BAT_CODE) {
                     enemy = new WaterBat(this);
-                } else if (recipe.freeEntities[i][2] == Constants.EXIT_CODE) {
+                } else if (recipe.freeEntities[i][2] == Constants.BOMB_EXIT_CODE) {
                     enemy = new Exit(this);
+                } else if (recipe.freeEntities[i][2] == Constants.HOLE_EXIT_CODE) {
+                    enemy = new Exit(this, true);
                 } else {
                     enemy = new BurnForeverEnemy(this);
                 }
@@ -249,14 +257,25 @@ package pyrokid {
                 // ignite TileEntities
                 // TODO hit falling objects with fireball -- Aaron
                 
-                var cellX = Utils.realToCell(projectile.x);
-                var cellY = Utils.realToCell(projectile.y);
+                var cellX:int = Utils.realToCell(projectile.x);
+                var cellY:int = Utils.realToCell(projectile.y);
                 var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
                 if (entity != null) {
                     // remove fireball from list, also delete from stage
                     projectiles.markForDeletion(projectile);
+                    var dir:int;
+                    if (projectile.speedY > 0) {
+                        dir = Cardinal.PY;
+                    } else if (projectile.speedY < 0) {
+                        dir = Cardinal.NY;
+                    } else if (projectile.speedX > 0) {
+                        dir = Cardinal.PX;
+                    } else if (projectile.speedX < 0) {
+                        dir = Cardinal.NX;
+                    }
+                    var coor:Vector2i = new Vector2i(cellX, cellY).SubV(entity.getGlobalAnchorAsVec2i());
                     if (projectile is Fireball) {
-                        entity.ignite(this);
+                        entity.ignite(this, coor, dir);
                     } else if (projectile is Waterball) {
                         // TODO extinguish fire -- Aaron
                         trace("sploosh!");

@@ -53,8 +53,7 @@ package pyrokid.dev {
             mc = new Embedded.SpiderSWF() as MovieClip;
             addToList(mc);
             
-            mc = new Embedded.BombSWF() as MovieClip;
-            mc.gotoAndStop(1);
+            mc = new Embedded.Bomb1SWF() as MovieClip;
             addToList(mc);
             
             var pSprite:Sprite = new Sprite();

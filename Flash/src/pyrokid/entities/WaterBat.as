@@ -26,9 +26,9 @@ package pyrokid.entities {
             batHead.gotoAndStop(1);
         }
         
-        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
-            if (!isOnFire()) {
-                super.ignite(level);
+        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
+            var lit:Boolean = super.ignite(level, coor, dir);
+            if (lit) {
                 kill(level);
                 //var die:MovieClip = new Embedded.SpiderDieSWF() as MovieClip;
                 //die.x = swf.x + x;
@@ -39,6 +39,7 @@ package pyrokid.entities {
                 //level.addChild(briefClip);
                 //level.briefClips.push(briefClip);
             }
+            return lit;
         }
         
         public override function update(level:Level):void {

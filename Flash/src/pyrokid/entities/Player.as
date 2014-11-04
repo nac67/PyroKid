@@ -69,12 +69,13 @@ package pyrokid.entities {
             onFireSprite.visible = false;
         }
         
-        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
-            if (!isOnFire()) {
-                super.ignite(level);
+        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
+            var lit:Boolean = super.ignite(level, coor, dir);
+            if (lit) {
                 onFireSprite.visible = true;
                 kill(level);
             }
+            return lit;
         }
         
         public override function kill(level:Level, deathAnimation:BriefClip = null):void {

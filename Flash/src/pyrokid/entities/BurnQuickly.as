@@ -12,22 +12,15 @@ package pyrokid.entities {
 		public function BurnQuickly(x:int, y:int, objCode:int) {
 			super(x, y, objCode);
 		}
-		
-		protected override function getSpriteForCell(cell:Vector2i):DisplayObject {
-            var mc:MovieClip = new Embedded.WoodSWF();
-            mc.gotoAndStop(1);
-			return mc;
-		}
         
-        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
-            if (!isOnFire()) {
-                // TODO ignite should return boolean saying whether it was ignited. Only add
-                // sprites if ignited -- Aaron
-                super.ignite(level, coor, dir);
+        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
+            var lit:Boolean = super.ignite(level, coor, dir);
+            if (lit) {
                 for each (var cellSprite:DisplayObject in cellSprites) {
                     addChild(cellSprite);
                 }
             }
+            return lit;
 		}
         
         public override function updateFire(level:Level, currentFrame:int):void {

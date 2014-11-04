@@ -76,7 +76,8 @@ package pyrokid {
         public static var SPIDER_CODE:String = "spider";
         public static var IMMUNE_CODE:String = "immune";
         public static var BAT_CODE:String = "bat";
-        public static var EXIT_CODE:String = "exit";
+        public static var BOMB_EXIT_CODE:String = "exit";
+        public static var HOLE_EXIT_CODE:String = "hole_exit";
         
         public static var GROUNDED_TYPES:Array = [WALL_TILE_CODE];
         public static var SINGLE_TILE_TYPES:Array = [];

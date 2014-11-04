@@ -72,7 +72,7 @@ package pyrokid.entities {
             return parentIsland.globalAnchor.copy().AddV(islandAnchor.copyAsVec2());
         }
         
-        private function getGlobalAnchorAsVec2i():Vector2i {
+        public function getGlobalAnchorAsVec2i():Vector2i {
             return parentIsland.globalAnchor.copyAsVec2i().AddV(islandAnchor);
         }
 		
@@ -177,26 +177,28 @@ package pyrokid.entities {
                 //}
             //}
         }
+        
+        public function canIgniteFrom(coor:Vector2i, dir:int):Boolean {
+            return !edges[coor.toString()][dir];
+        }
 		
-        /* coor is which coordinate with respect to the entity's top left corner.
-         * dir is the direction FROM the coor doing the igniting TO the coor being
-         * ignited (coor param). */
-		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
-            if (!isOnFire()) {
-                if (coor != null) {
-                    var coorEdges:Array = edges[coor.toString()];
-                    if (this is BurnQuickly) {
-                        //trace("coor: " + coor + ", dir: " + dir + ", edge: " + coorEdges[Cardinal.getOpposite(dir)]);
-                    }
-                    if (!coorEdges[Cardinal.getOpposite(dir)]) {
-                        super.ignite(level, coor, dir);
-                        level.onFire.push(this);
-                    }
-                } else {
-                    super.ignite(level);
-                    level.onFire.push(this);
-                }
+        // EWW this function is awfully written
+		public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
+            if (isOnFire()) {
+                return false;
             }
+            
+            if (coor == null) {
+                level.onFire.push(this);
+                return super.ignite(level, coor, dir);
+            }
+            
+            var isEdge:Boolean = edges[coor.toString()][Cardinal.getOpposite(dir)];
+            if (!isEdge) {
+                level.onFire.push(this);
+                super.ignite(level, coor, dir);
+            }
+            return !isEdge;
 		}
         
         public override function updateFire(level:Level, currentFrame:int):void {

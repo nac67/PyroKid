@@ -38,10 +38,15 @@ package pyrokid.entities {
             return velocity.x + velocity.y != 0;
         }
 		
-		public function ignite(level:Level, coor:Vector2i = null, dir:int = -1):void {
+        /* coor is which coordinate with respect to the entity's top left corner.
+         * dir is the direction FROM the coor doing the igniting TO the coor being
+         * ignited (coor param). Return true iff this entity was successfully ignited. */
+		public function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
             if (!isOnFire()) {
                 _ignitionTime = level.frameCount;
+                return true;
             }
+            return false;
 		}
         
         public function updateFire(level:Level, currentFrame:int):void {

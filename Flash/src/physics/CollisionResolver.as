@@ -192,7 +192,7 @@ package physics {
                 
                 if (dx != 0 && opt.breakXVelocity)
                     nv.x = 0;
-                if (dy != 0 && opt.breakXVelocity)
+                if (dy != 0 && opt.breakYVelocity)
                     nv.y = 0;
                 if (opt.resolveXDisplacement)
                     r.center.x += dx;

@@ -83,6 +83,9 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/big_background.png")]
         public static var BGBMP:Class; //cast as Bitmap on instantiation
         
+        [Embed(source="../../assets/tile_art/rock.jpg")]
+        public static var RockBMP:Class;
+        
         [Embed(source='../../assets/swf/FireTile.swf', symbol='FireTile')]
         public static var FireTileSWF:Class; //cast as Sprite on instantiation
         
@@ -105,7 +108,13 @@ package pyrokid {
         public static var FiresplooshSWF:Class; //cast as MovieClip on instantiation
         
         [Embed(source='../../assets/swf/bombdoor.swf', symbol='BombAnim')]
-        public static var BombSWF:Class; //cast as MovieClip on instantiation
+        public static var Bomb2SWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/bombdoor.swf', symbol='BombRegular')]
+        public static var Bomb1SWF:Class; //cast as Sprite on instantiation
+        
+        [Embed(source='../../assets/swf/bombdoor.swf', symbol='BombHoleInWall')]
+        public static var Bomb3SWF:Class; //cast as Sprite on instantiation
         
         [Embed(source='../../assets/swf/spider.swf', symbol='Spider')]
         public static var SpiderSWF:Class; //cast as MovieClip on instantiation
@@ -121,6 +130,9 @@ package pyrokid {
         
         [Embed(source='../../assets/swf/BurningMan.swf', symbol='BurningMan')]
         public static var BurningManSWF:Class; //cast as MovieClip on instantiation
+        
+        [Embed(source='../../assets/swf/Lizard.swf', symbol='Lizard')]
+        public static var LizardSWF:Class; //cast as MovieClip on instantiation
         
         [Embed(source='../../assets/swf/oil.swf', symbol='Oil')]
         public static var OilSWF:Class; //cast as MovieClip on instantiation
