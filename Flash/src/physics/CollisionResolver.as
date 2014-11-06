@@ -208,6 +208,9 @@ package physics {
         }
         private static function ResolveCollision(r:PhysRectangle, e:PhysEdge, a:CollisionAccumulator, fCollisionCallback:Function, islandAnchor:Vector2):void {
             var disp:Number;
+            if (NotOverlappingCorner(r, e)) {
+                return;
+            }
             switch (e.direction) {
                 case Cardinal.NX: 
                     if (r.motion.x < 0 || (r.PX - e.center.x) > r.halfSize.x)
@@ -257,5 +260,21 @@ package physics {
             var d:Number = c2 > c1 ? c2 - c1 : c1 - c2;
             return d < (hs1 + hs2);
         }
+        
+        private static function NotOverlappingCorner(r:PhysRectangle, e:PhysEdge):Boolean {
+            var cornerTolerance:Number = 0.3;
+            switch (e.direction) {
+                case Cardinal.NX:
+                case Cardinal.PX:
+                    return (r.center.y + r.halfSize.y < e.center.y - e.halfSize + cornerTolerance
+                         || r.center.y - r.halfSize.y > e.center.y + e.halfSize - cornerTolerance);
+                case Cardinal.NY:
+                case Cardinal.PY:
+                    return (r.center.x + r.halfSize.x < e.center.x - e.halfSize + cornerTolerance
+                         || r.center.x - r.halfSize.x > e.center.x + e.halfSize - cornerTolerance);
+            }
+            return false;
+        }
+        
     }
 }
