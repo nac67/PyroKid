@@ -47,7 +47,7 @@ package ui {
         public static var tutorialMessages = {
             1: "Use the WASD keys to move. A and D walk and W jumps. Use ESC to pause.",
             3: "Use an arrow key to charge up a fireball, then release the arrow key to launch it.",
-            4: "Certain blocks will behave differently to fire.",
+            4: "Certain blocks will react differently to fire.",
             5: "Remember, you can shoot up if you hold the up arrow key.\nLatches will hold objects together.",
             10: "Sometimes you'll need to jump and shoot down at the same time",
             12: "Persistence is key, press R to restart.",

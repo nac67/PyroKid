@@ -8,8 +8,8 @@ package pyrokid {
     public class Constants {
         // LOGGING
         public static var TEAM_ID:int = 100;
-        public static var VERSION_ID:int = 1;
-        public static var DO_LOGGING:Boolean = false;
+        public static var VERSION_ID:int = 2;
+        public static var DO_LOGGING:Boolean = true;
         
         public static var ERROR_MESSAGE:String = "STOP. This should never happen: ";
         
