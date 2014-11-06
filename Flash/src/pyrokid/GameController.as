@@ -124,7 +124,7 @@ package pyrokid {
         }
         
         private function keyboardActionListener(e:KeyboardEvent):void {
-			if (e.keyCode == Keyboard.ESCAPE) {
+			if (e.keyCode == Keyboard.ESCAPE || e.keyCode == Keyboard.P && !editorMode) {
 				if (isPaused) { //unpause game
 					pauseMenu.removeAllEventListeners();
 					Utils.removeAllChildren(pauseMenu);
