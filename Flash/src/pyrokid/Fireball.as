@@ -20,10 +20,10 @@ package pyrokid {
             //range set externally
         }
         
-        /* Takes in a charge time and figures out how far it will travel */
-        public static function calculateRangeInCells(charge:int):Number {
-            return (Constants.MAX_BALL_RANGE-Constants.MIN_BALL_RANGE) * (Number(charge) / Constants.FIREBALL_CHARGE) + Constants.MIN_BALL_RANGE
-        }
+        ///* Takes in a charge time and figures out how far it will travel */
+        //public static function calculateRangeInCells(charge:int):Number {
+            //return (Constants.MAX_BALL_RANGE-Constants.MIN_BALL_RANGE) * (Number(charge) / Constants.FIREBALL_CHARGE) + Constants.MIN_BALL_RANGE
+        //}
     
     }
 

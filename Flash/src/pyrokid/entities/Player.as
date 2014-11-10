@@ -21,11 +21,9 @@ package pyrokid.entities {
         private var aimSWF:Sprite;
         
         public var fireballCooldown:int = 0; //0 = ready to shoot, otherwise decrement
-        public var fireballCharge:int = 0;
         
         public var animIsRunning:Boolean = false;
         
-        public var isCharging:Boolean = false;
         public var isShooting:Boolean = false;
         private var shootDirection:int=0;
         
@@ -144,34 +142,13 @@ package pyrokid.entities {
             if (Key.isDown(Constants.AIM_DOWN_BTN)) {
                 shootDirection = Constants.DIR_DOWN;
             }
-            if (shootButton && !isCharging) {
-                // Fire button pressed and not already charging
-                if(fireballCooldown == 0){
-                    fireballCharge = 0;
-                    isCharging = true;
-                    fireballCooldown = Constants.FIREBALL_COOLDOWN;
-                }
-			} else if (shootButton) {
-				// Fire button is being held
-                if (isCharging && fireballCharge < Constants.FIREBALL_CHARGE) {
-				    fireballCharge++;
-                }
-			} else if(prevFrameFireBtn) {
-				// Fire button is released
-                if(isCharging){
-                    isCharging = false;
-                    isShooting = true;
-                    
-                    if (fireballCharge > Constants.FIREBALL_CHARGE) {
-                        level.launchFireball(Constants.MAX_BALL_RANGE, shootDirection);
-                    } else {
-                        var range = Fireball.calculateRangeInCells(fireballCharge);
-                        level.launchFireball(range, shootDirection);
-                    }
-
-                }
-                fireballCharge = 0;
-			}
+            
+            if (shootButton && !prevFrameFireBtn && fireballCooldown == 0) {
+                level.launchFireball(Constants.MAX_BALL_RANGE, shootDirection);
+                fireballCooldown = Constants.FIREBALL_COOLDOWN;
+                isShooting = true;
+            }
+            
             if (fireballCooldown > 0) fireballCooldown--;
 			prevFrameFireBtn = shootButton;
             
@@ -179,11 +156,10 @@ package pyrokid.entities {
         }
         
         
-        
         public function updateAnimation():void {
             // Direction of movie clips
             var faceDirection = direction;
-            if ((isCharging || isShooting) && (shootDirection == Constants.DIR_LEFT ||
+            if (isShooting && (shootDirection == Constants.DIR_LEFT ||
                     shootDirection == Constants.DIR_RIGHT)) {
                 faceDirection = shootDirection;
             }
@@ -228,28 +204,6 @@ package pyrokid.entities {
                         torsoSWF.gotoAndStop(13);
                     }
                 }
-                
-            } else if (isCharging) {
-                if (fireballCharge < Constants.FIREBALL_CHARGE) {
-                    
-                    if (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT) {
-                        torsoSWF.gotoAndStop(5);
-                    } else if (shootDirection == Constants.DIR_UP) {
-                        torsoSWF.gotoAndStop(8);
-                    } else if (shootDirection == Constants.DIR_DOWN) {
-                        torsoSWF.gotoAndStop(11);
-                    }
-                
-                }else {
-                    if (shootDirection == Constants.DIR_LEFT || shootDirection == Constants.DIR_RIGHT) {
-                        torsoSWF.gotoAndStop(6);
-                    } else if (shootDirection == Constants.DIR_UP) {
-                        torsoSWF.gotoAndStop(9);
-                    } else if (shootDirection == Constants.DIR_DOWN) {
-                        torsoSWF.gotoAndStop(12);
-                    }
-                }
-                
             } else {
                 if (!isGrounded) {
                     if (velocity.y < 0) {
@@ -267,14 +221,14 @@ package pyrokid.entities {
             }
             
             // Aimer
-            aimSWF.alpha = .0 + 1.0 * (fireballCharge / Constants.FIREBALL_CHARGE);
-            var scale:Number = (fireballCharge == Constants.FIREBALL_CHARGE ? .9 : .7);
-            aimSWF.scaleX = aimSWF.scaleY = scale;
-            
-            var dirVec:Vector2i = Utils.getXYMultipliers(shootDirection);
-            
-            aimSWF.x = getCenterLocal().x + dirVec.x * Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
-            aimSWF.y = getCenterLocal().y + dirVec.y * Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
+            //aimSWF.alpha = .0 + 1.0 * (fireballCharge / Constants.FIREBALL_CHARGE);
+            //var scale:Number = (fireballCharge == Constants.FIREBALL_CHARGE ? .9 : .7);
+            //aimSWF.scaleX = aimSWF.scaleY = scale;
+            //
+            //var dirVec:Vector2i = Utils.getXYMultipliers(shootDirection);
+            //
+            //aimSWF.x = getCenterLocal().x + dirVec.x * Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
+            //aimSWF.y = getCenterLocal().y + dirVec.y * Fireball.calculateRangeInCells(fireballCharge) * Constants.CELL;
         }
     
     }
