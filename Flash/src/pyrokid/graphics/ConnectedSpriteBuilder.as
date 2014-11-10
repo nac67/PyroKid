@@ -40,7 +40,7 @@ package pyrokid.graphics {
                 texIDGridPadded[y] = new Array(w + 2);
                 for (var x = 0; x < texIDGridPadded[y].length; x++) {
                     if (x == 0 || x == (w + 1) || y == 0 || y == (h + 1))
-                        texIDGridPadded[y][x] = 1;
+                        texIDGridPadded[y][x] = 0;
                     else
                         texIDGridPadded[y][x] = texIDGrid[y - 1][x - 1];
                 }
