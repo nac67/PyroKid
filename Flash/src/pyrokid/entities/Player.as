@@ -33,7 +33,7 @@ package pyrokid.entities {
         private var onFireSprite:Sprite;
 
         public function Player(level:Level) {
-            super(level, 1, 28, 44);
+            super(level, 1, 26, 44, 8, 8, 16, 40);
             
             //this.glowVisible = true;
             //this.glowRadius = 30;
