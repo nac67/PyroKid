@@ -85,10 +85,10 @@ package pyrokid.entities {
             return objectCode != Constants.METAL_TILE_CODE && objectCode != Constants.WALL_TILE_CODE;
         }
 		
-		public function finalizeCells():void {
+		public function finalizeCells(level:Level):void {
             var tileSetMap:Bitmap = Constants.GET_TILE_SET(objectCode);
             if (tileSetMap != null) {
-                var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, tileSetMap);
+                var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, tileSetMap, level.cellWidth, level.cellHeight);
                 addChild(tileSet);
                 for each (var cell:Vector2i in cells) {
                     var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;

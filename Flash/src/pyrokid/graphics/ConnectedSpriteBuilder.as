@@ -14,13 +14,18 @@ package pyrokid.graphics {
      */
     public class ConnectedSpriteBuilder {
         
-        public static function buildSpriteFromCoors(coors:Array, bitmap:Bitmap):Bitmap {
+        public static function buildSpriteFromCoors(coors:Array, bitmap:Bitmap, lvlW:int, lvlH:int):Bitmap {
             var coor:Vector2i;
+            var minCoor:Vector2i = new Vector2i();
             var maxCoor:Vector2i = new Vector2i();
             for each (coor in coors) {
+                minCoor.x = Math.min(minCoor.x, coor.x);
+                minCoor.y = Math.min(minCoor.y, coor.y);
                 maxCoor.x = Math.max(maxCoor.x, coor.x);
                 maxCoor.y = Math.max(maxCoor.y, coor.y);
             }
+            var shouldBlendEdges:Boolean = minCoor.x == 0 && minCoor.y == 0 && maxCoor.x == lvlW - 1 && maxCoor.y == lvlH - 1;
+            
             maxCoor.AddD(1);
             var texIdGrid:Array = Utils.newArray(maxCoor.x, maxCoor.y);
             for each (coor in coors) {
@@ -28,10 +33,10 @@ package pyrokid.graphics {
             }
             var texMap:Object = new Object();
             texMap["1"] = bitmap.bitmapData;
-            return buildSprite(texIdGrid, texMap, new ConnectedSpriteOptions());
+            return buildSprite(texIdGrid, texMap, new ConnectedSpriteOptions(), shouldBlendEdges);
         }
         
-        public static function buildSprite(texIDGrid:Array, textureMap:Object, opt:ConnectedSpriteOptions):Bitmap {
+        public static function buildSprite(texIDGrid:Array, textureMap:Object, opt:ConnectedSpriteOptions, blendEdges:Boolean = false):Bitmap {
             var h:int = texIDGrid.length;
             var w:int = texIDGrid[0].length;
             
@@ -40,7 +45,7 @@ package pyrokid.graphics {
                 texIDGridPadded[y] = new Array(w + 2);
                 for (var x = 0; x < texIDGridPadded[y].length; x++) {
                     if (x == 0 || x == (w + 1) || y == 0 || y == (h + 1))
-                        texIDGridPadded[y][x] = 0;
+                        texIDGridPadded[y][x] = (blendEdges ? 1 : 0);
                     else
                         texIDGridPadded[y][x] = texIDGrid[y - 1][x - 1];
                 }
