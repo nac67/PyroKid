@@ -51,6 +51,11 @@ package pyrokid {
             return level.scaleX;
         }
         
+        public function set levelScale(s:Number):void {
+            level.scaleX = s;
+            level.scaleY = s;
+        }
+        
         public function LevelEditor(level:Level):void {
 			this.level = level;
 			editMode = 0;
@@ -238,8 +243,7 @@ package pyrokid {
             Main.MainStage.removeEventListener(Event.ENTER_FRAME, update);
             level.x = 0;
             level.y = 0;
-            level.scaleX = 1;
-            level.scaleY = 1;
+            levelScale = 1;
 			//Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, onKeyUp);
 			Utils.removeAllChildren(this);
 		}
@@ -369,12 +373,10 @@ package pyrokid {
                     level.y -= Constants.CELL;
                     break;
                 case Keyboard.Z:
-                    level.scaleX *= 1.2;
-                    level.scaleY *= 1.2;
+                    levelScale *= 1.2;
                     break;
                 case Keyboard.X:
-                    level.scaleX /= 1.2;
-                    level.scaleY /= 1.2;
+                    levelScale /= 1.2;
                     break;
                 case Keyboard.UP:
                     addEdgeToTilesInRect(Cardinal.NY);
