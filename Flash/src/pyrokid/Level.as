@@ -151,21 +151,10 @@ package pyrokid {
                 }
             }
             
-            var connectorGrid:Array = Connector.getConnectorSprites(recipe.islands, tileEntityGrid);
-            var print:Boolean = connectorGrid.length < 8;
-            if (print) {
-                Utils.print2DArr(connectorGrid, 25, true);
-            }
+            var connectorGrid:Array = Connector.getActualConnectedGrid(recipe.islands, tileEntityGrid);
             for each (var entity:TileEntity in tileEntityList) {
                 entity.addEdges(connectorGrid, true); 
             }
-            //for each (var islandView:ViewPIsland in islandViews) {
-                //islandView.sprite.connectors = Connector.getConnectorSprites(recipe.islands, islandView.sprite);
-                //for each (var sprite:Connector in islandView.sprite.connectors) {
-                    //addChild(sprite);
-                //}
-                //islandView.sprite.setConnectorPositions();
-            //}
         }
         
         private static function findParentIsland(coors:Array, islandViews:Array):Island {
@@ -461,23 +450,6 @@ package pyrokid {
                 for each (var newPhysIsland:PhysIsland in newIslands) {
                     newPhysIsland.globalAnchor.AddV(brokenPhysIsland.globalAnchor);
                 }
-                //for each (var sprite:Connector in brokenIslandView.sprite.connectors) {
-                    //var coor1:Vector2i = sprite.coorInIsland;
-                    //var coor2:Vector2i = Cardinal.getVector2i(sprite.direction).AddV(sprite.coorInIsland);
-                    //var islandFound:Boolean = false;
-                    //for each (var islandView:ViewPIsland in newIslandViews) {
-                        //if (Utils.index(islandView.sprite.tileEntityGrid, coor1.x, coor1.y)
-                                //&& Utils.index(islandView.sprite.tileEntityGrid, coor2.x, coor2.y)) {
-                            //islandView.sprite.connectors[Connector.getDictKey(coor1, sprite.direction)] = sprite;
-                            //sprite.setSpriteLocationFromIslandAnchor(islandView.sprite.globalAnchor);
-                            //islandFound = true;
-                            //break;
-                        //}
-                    //}
-                    //if (!islandFound) {
-                        //removeChild(sprite);
-                    //}
-                //}
             }
             
             movingTiles = [];

@@ -24,7 +24,7 @@ package pyrokid.entities {
         public var parentIsland:Island;
         public var cellSprites:Array;
         protected var objectCode:int;
-		
+        		
 		public function TileEntity(x:int, y:int, objCode:int) {
             objectCode = objCode;
 			this.x = x;

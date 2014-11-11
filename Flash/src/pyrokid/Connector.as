@@ -9,35 +9,7 @@ package pyrokid {
     
     public class Connector extends Sprite {
         
-        public var coorInIsland:Vector2i;
-        public var direction:int;
-        
-        public function Connector(/*coor:Vector2i, */dir:int) {
-            //coorInIsland = coor;
-            direction = dir;
-            var sprite:Sprite = new Embedded.ConnectorSWF() as Sprite;
-            sprite.scaleX = sprite.scaleY = 0.7;
-            sprite.rotation = dir == Cardinal.NY || dir == Cardinal.PY ? 90 : 0;
-            addChild(sprite);
-        }
-        
-        public function setSpriteLocationFromIslandAnchor(islandAnchor:Vector2):void {
-            var halfWay:Vector2 = Cardinal.getVector2i(direction).copyAsVec2().DivD(2);
-            var spriteCoor:Vector2 = coorInIsland.copyAsVec2().AddV(halfWay).AddD(0.5); // shift from corner to center
-            spriteCoor.AddV(islandAnchor).MulD(Constants.CELL);
-            x = spriteCoor.x;
-            y = spriteCoor.y;
-        }
-        
-        public static function getDictKey(coor:Vector2i, dir:int):String {
-            if (dir == Cardinal.NX || dir == Cardinal.NY) {
-                coor = Cardinal.getVector2i(dir).AddV(coor);
-                dir = Cardinal.getOpposite(dir);
-            }
-            return coor.toString() + ", " + dir.toString();
-        }
-        
-        public static function getConnectorSprites(connectedGrid:Array, tileEntityGrid:Array):Array {
+        public static function getActualConnectedGrid(connectedGrid:Array, tileEntityGrid:Array):Array {
             var allConnectors:Array = Utils.newArrayOfSize(tileEntityGrid);
             Utils.foreach(tileEntityGrid, function(x:int, y:int, tileEntity:TileEntity):void {
                 if (tileEntity == null) {

@@ -60,19 +60,12 @@ package pyrokid {
             return new Vector2i(Math.round(globalAnchor.x), Math.round(globalAnchor.y));
         }
         
-        public function setConnectorPositions():void {
-            for each (var connector:Connector in connectors) {
-                connector.setSpriteLocationFromIslandAnchor(globalAnchor);
-            }
-        }
-        
         public function set globalAnchor(value:Vector2):void {
             _globalAnchor = value;
             for each (var entity:TileEntity in entityList) {
                 entity.x = (value.x + entity.islandAnchor.x) * Constants.CELL;
                 entity.y = (value.y + entity.islandAnchor.y) * Constants.CELL;
             }
-            setConnectorPositions();
         }
         
     }
