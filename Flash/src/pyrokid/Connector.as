@@ -12,8 +12,8 @@ package pyrokid {
         public var coorInIsland:Vector2i;
         public var direction:int;
         
-        public function Connector(coor:Vector2i, dir:int) {
-            coorInIsland = coor;
+        public function Connector(/*coor:Vector2i, */dir:int) {
+            //coorInIsland = coor;
             direction = dir;
             var sprite:Sprite = new Embedded.ConnectorSWF() as Sprite;
             sprite.scaleX = sprite.scaleY = 0.7;
@@ -37,28 +37,24 @@ package pyrokid {
             return coor.toString() + ", " + dir.toString();
         }
         
-        public static function getConnectorSprites(connectedGrid:Array, gameIsland:Island):Dictionary {
-            var allConnectors:Dictionary = new Dictionary();
-            Utils.foreach(gameIsland.tileEntityGrid, function(x:int, y:int, tileEntity:TileEntity):void {
+        public static function getConnectorSprites(connectedGrid:Array, tileEntityGrid:Array):Array {
+            var allConnectors:Array = Utils.newArrayOfSize(tileEntityGrid);
+            Utils.foreach(tileEntityGrid, function(x:int, y:int, tileEntity:TileEntity):void {
                 if (tileEntity == null) {
                     return;
                 }
                 
-                var globalCoor:Vector2i = gameIsland.globalAnchor.copyAsVec2i().Add(x, y);
+                var globalCoor:Vector2i = new Vector2i(x, y);
                 var connectorBools:Array = Utils.getBooleansFromInt(connectedGrid[globalCoor.y][globalCoor.x]);
-                for (var i = 0; i < 4; i++) {
-                    var coor:Vector2i = new Vector2i(x, y);
-                    var otherCoor:Vector2i = Cardinal.getVector2i(i).AddV(coor);
-                    var otherEntity:TileEntity = Utils.index(gameIsland.tileEntityGrid, otherCoor.x, otherCoor.y);
+                var actualConnectors:Array = [false, false, false, false];
+                for (var i:int = 0; i < 4; i++) {
+                    var otherCoor:Vector2i = Cardinal.getVector2i(i).AddV(globalCoor);
+                    var otherEntity:TileEntity = Utils.index(tileEntityGrid, otherCoor.x, otherCoor.y);
                     if (connectorBools[i] && otherEntity != null && tileEntity != otherEntity) {
-                        var dictKey:String = getDictKey(coor, i);
-                        var loc:Connector = allConnectors[dictKey];
-                        if (loc == undefined) {
-                            // relative to island
-                            allConnectors[dictKey] = new Connector(coor, i);
-                        }
+                        actualConnectors[i] = true;
                     }
                 }
+                allConnectors[y][x] = Utils.getIntFromBooleans(actualConnectors);
             });
             return allConnectors;
         }
