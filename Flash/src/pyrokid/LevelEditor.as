@@ -20,7 +20,6 @@ package pyrokid {
     public class LevelEditor extends Sprite {
 		
 		private var level:Level;
-        private var levelScale:Number;
         public var reloadLevel:Function;
         
         private var editMode:int;
@@ -48,12 +47,26 @@ package pyrokid {
         private var rectLowY:int;
         private var rectHighY:int;
         
+        public function get levelScale():Number {
+            return level.scaleX;
+        }
+        
         public function LevelEditor(level:Level):void {
 			this.level = level;
 			editMode = 0;
             
-            // Universal
             UI_Elements = [];
+            
+            draggingRect = new Sprite();
+            draggingRect.graphics.lineStyle(0, 0xFF00FF);
+            draggingRect.graphics.beginFill(0xffffff, 0.1);
+            draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
+            draggingRect.graphics.endFill();
+            // TODO draggingRect should be in levelEditor, not in level!!!! But it crashes right now when I do this.
+            UI_Elements.push(draggingRect);
+            
+            // Universal
+            
 			UI_Elements.push(new LevelEditorButton(toggleEditMode, 120, 25, 650, 50, ["Editing Objects", "Clumping Objects", "Connector Mode", "Object Properties"], [LevelEditorButton.upColor, 0xFF0000, 0x00FF00, 0x0000FF]));
 			cellsWidthInput = new LevelEditorInput("Map Width", level.cellWidth, 650, 100, updateWidth);
 			cellsHeightInput = new LevelEditorInput("Map Height", level.cellHeight, 650, 150, updateHeight);
@@ -75,13 +88,7 @@ package pyrokid {
 			options["player"] = "Player";
             allObjectTypesButton = new SelectorButton(options, changeSelectedObject);
 			UI_Elements.push(allObjectTypesButton);
-            draggingRect = new Sprite();
-            draggingRect.graphics.lineStyle(0, 0xFF00FF);
-            draggingRect.graphics.beginFill(0xffffff, 0.1);
-            draggingRect.graphics.drawRect(0, 0, Constants.CELL, Constants.CELL);
-            draggingRect.graphics.endFill();
-            // TODO draggingRect should be in levelEditor, not in level!!!! But it crashes right now when I do this.
-            //UI_Elements.push(draggingRect);
+            
 			
             // Edit mode 1: object properties
 			objectEditor = new Sprite();
@@ -137,7 +144,6 @@ package pyrokid {
         
         private function newLevel(event:MouseEvent):void {
             reloadLevel(LevelRecipe.generateTemplate(16, 12));
-            level.addChild(draggingRect);
         }
         
         private function updateHeight(newHeight:int):void {
@@ -230,7 +236,6 @@ package pyrokid {
 			Main.MainStage.removeEventListener(MouseEvent.MOUSE_UP, mouseUp);
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyDown);
             Main.MainStage.removeEventListener(Event.ENTER_FRAME, update);
-            level.removeChild(draggingRect);
             level.x = 0;
             level.y = 0;
             level.scaleX = 1;
@@ -253,7 +258,6 @@ package pyrokid {
 		
 		public function loadLevel(level:Level):void {
 			this.level = level;
-            this.level.addChild(draggingRect);
             renderVisibleObjects();
 		}
 		
@@ -274,10 +278,10 @@ package pyrokid {
             }
             dragging = true;
             holdStart = new Vector2i(cellX, cellY);
-            draggingRect.x = cellX * (Constants.CELL);
-            draggingRect.y = cellY * (Constants.CELL);
-            draggingRect.width = Constants.CELL;
-            draggingRect.height = Constants.CELL;
+            draggingRect.x = cellX * (Constants.CELL) * levelScale + level.x;
+            draggingRect.y = cellY * (Constants.CELL) * levelScale + level.y;
+            draggingRect.width = Constants.CELL * levelScale;
+            draggingRect.height = Constants.CELL * levelScale;
             draggingRect.visible = true;
         }
         
@@ -295,10 +299,10 @@ package pyrokid {
                 var w:int = rectHighX - rectLowX + 1;
                 var h:int = rectHighY - rectLowY + 1;
                 
-                draggingRect.x = rectLowX * Constants.CELL;
-                draggingRect.y = rectLowY * Constants.CELL;
-                draggingRect.width = w * (Constants.CELL);
-                draggingRect.height = h * (Constants.CELL);
+                draggingRect.x = rectLowX * Constants.CELL * levelScale + level.x;
+                draggingRect.y = rectLowY * Constants.CELL * levelScale + level.y;
+                draggingRect.width = w * (Constants.CELL) * levelScale;
+                draggingRect.height = h * (Constants.CELL) * levelScale;
                 
                 //draggingRect.visible = w >= 1 || h >= 1;
                 draggingRect.visible = true;
@@ -348,7 +352,6 @@ package pyrokid {
             
             renderVisibleObjects();
 			level.reset(level.recipe);
-            level.addChild(draggingRect);
 		}
         
         private function onKeyDown(e:KeyboardEvent):void {
