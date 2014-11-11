@@ -35,6 +35,7 @@ package pyrokid {
         /* FreeEntities (not bound to tiles). */
         public var player:Player;
         public var enemies:Array;
+        public var smooshedPlayer:BriefClip;
 		
 		/* TileEntities (bound to tiles except when falling). */
 		public var tileEntityGrid:Array; // 2D grid, indexed by [y][x]
@@ -84,6 +85,7 @@ package pyrokid {
 		    frameCount = 0;
             dirty = false;
             gameOverState = Constants.GAME_NOT_OVER;
+            smooshedPlayer = null;
             
             background = new CaveBackground(Utils.getW(walls), Utils.getH(walls));
             this.addChild(background);

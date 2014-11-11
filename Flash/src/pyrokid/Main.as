@@ -36,6 +36,7 @@ package pyrokid {
             			
 			Utils.loadSavedData();
 			
+            Embedded.musicSound.play(0, 999999);
 			addChild(StateController.display);
 			StateController.goToMainMenu();
         }

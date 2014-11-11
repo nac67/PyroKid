@@ -163,10 +163,6 @@ package pyrokid {
         [Embed(source='../../assets/swf/oil.swf', symbol='CrateExplode')]
         public static var WoodExplodeSWF:Class; //cast as MovieClip on instantiation
         
-        // should no longer be used
-        [Embed(source='../../assets/tile_art/wood.png')]
-        public static var WoodBMP:Class; //cast as Bitmap on instantiation
-        
         [Embed(source='../../assets/tile_art/Metal.png')]
         public static var MetalBMP:Class; //cast as Bitmap on instantiation
         
@@ -179,9 +175,16 @@ package pyrokid {
 		[Embed(source="../../assets/sound/fireball-sound.mp3")]
 		private static var fireballSoundClass:Class;
 		public static var fireballSound:Sound = new fireballSoundClass();
+        
+        [Embed(source="../../assets/sound/The Complex Quieter.mp3")]
+		private static var musicClass:Class;
+		public static var musicSound:Sound = new musicClass();
 		
 		[Embed(source = "../../assets/swf/mainmenu.swf")]
 		public static var MainMenuSWF:Class;
+        
+        [Embed(source='../../assets/swf/spotlight.swf', symbol='Spotlight')]
+        public static var SpotlightSWF:Class; //cast as MovieClip on instantiation
         
         /////////////////
         
