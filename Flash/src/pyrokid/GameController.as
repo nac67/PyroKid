@@ -33,6 +33,7 @@ package pyrokid {
         private var cameraController:CameraController;
         private var largeZoom:Number = 1.0;
         public var level:Level;
+        public var spotlight:Spotlight;
         
 		public var isPaused:Boolean = false;
 		private var pauseMenu:BasePlayState;
@@ -82,10 +83,18 @@ package pyrokid {
             if (level != null) {
                 removeChild(camera);
             }
+            if (spotlight != null && this.contains(spotlight)) {
+                this.removeChild(spotlight);
+            }
             level = new Level(levelRecipe, curLevelNum);
             camera = new Camera(level);
             addChild(camera);
             setChildIndex(camera, 0);
+            
+            spotlight = new Spotlight();
+            addChild(spotlight);
+            //spotlight.visible = false;
+            
             if (editorMode) {
                 levelEditor.loadLevel(level);
             }
@@ -180,6 +189,18 @@ package pyrokid {
             
             // Update Camera
             cameraController.update(focus, level, new Point(0, 0), new Point(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL), dt, cZoom);
+            
+            // Place spotlight
+            var playerPos:Point;
+            if (level.smooshedPlayer == null) {
+                playerPos = new Point(level.player.getCenter().x, level.player.getCenter().y);
+            } else {
+                playerPos = new Point(level.smooshedPlayer.x, level.smooshedPlayer.y);
+            }
+            playerPos = level.localToGlobal(playerPos);
+            playerPos.y = Math.min(playerPos.y, Constants.HEIGHT);
+            spotlight.x = playerPos.x;
+            spotlight.y = playerPos.y;
         }
         
         private function handlePhysics():void {
@@ -277,11 +298,18 @@ package pyrokid {
         
         // --------------------MAIN UPDATE LOOP-------------------- //
         private function update(event:Event):void {
+            spotlight.visible = !editorMode;
             if (editorMode || isPaused) {
                 return;
             }
+            
+            // ---------------------- Universal Visuals ----------------------//
+            centerOnPlayer(Constants.DT);
+            spotlight.step();
+            
             // ---------------------- Game Lose Conditions -------------------- //
             if (level.gameOverState == Constants.GAME_OVER_FADING) {
+                spotlight.shrink = true;
                 executeClipsAndDelayedFunctions();
                 if (level.gameOverState == Constants.GAME_OVER_COMPLETE) {
                     restartLevel();
@@ -308,7 +336,6 @@ package pyrokid {
             killPlayerIfOffMap(level);
             
             // --------------------------- Visuals -------------------------- //
-            centerOnPlayer(Constants.DT);
             executeClipsAndDelayedFunctions();
 
             level.removeDead();

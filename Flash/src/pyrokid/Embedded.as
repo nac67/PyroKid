@@ -183,6 +183,9 @@ package pyrokid {
 		[Embed(source = "../../assets/swf/mainmenu.swf")]
 		public static var MainMenuSWF:Class;
         
+        [Embed(source='../../assets/swf/spotlight.swf', symbol='Spotlight')]
+        public static var SpotlightSWF:Class; //cast as MovieClip on instantiation
+        
         /////////////////
         
         [Embed(source="../../assets/levels/tut8.txt", mimeType="application/octet-stream")]
