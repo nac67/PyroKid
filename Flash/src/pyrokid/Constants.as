@@ -1,5 +1,6 @@
 package pyrokid {
     import flash.display.Bitmap;
+    import flash.display.InteractiveObject;
     import flash.utils.Dictionary;
     import physics.*;
     import pyrokid.entities.*;
@@ -90,6 +91,10 @@ package pyrokid {
         public static var OIL_TILE_CODE:int = 2;
         public static var WOOD_TILE_CODE:int = 3;
         public static var METAL_TILE_CODE:int = 4;
+        
+        // Edge codes
+        public static var CONNECTOR_CODE:int = 0;
+        public static var METAL_EDGE_CODE:int = 1;
         
         // FreeEntity codes. Must be Strings.
         public static var SPIDER_CODE:String = "spider";

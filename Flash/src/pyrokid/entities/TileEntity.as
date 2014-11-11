@@ -24,7 +24,7 @@ package pyrokid.entities {
         public var parentIsland:Island;
         public var cellSprites:Array;
         protected var objectCode:int;
-		
+        		
 		public function TileEntity(x:int, y:int, objCode:int) {
             objectCode = objCode;
 			this.x = x;
@@ -121,33 +121,76 @@ package pyrokid.entities {
 		}
         
         // TODO TODO TODO change when island breaks apart
-        public function addEdges(levelRecipeEdges:Array):void {
+        public function addEdges(levelRecipeEdges:Array, connector:Boolean = false):void {
             for each (var cell:Vector2i in cells) {
                 var cellInGlobal:Vector2i = getGlobalAnchorAsVec2i().AddV(cell);
                 var edgeBools:Array = Utils.getBooleansFromInt(levelRecipeEdges[cellInGlobal.y][cellInGlobal.x]);
-                edges[cell.toString()] = edgeBools;
+                if (!connector) {
+                    edges[cell.toString()] = edgeBools;
+                }
                 
-                if (edgeBools[Cardinal.NX]) {
-                    addEdge(cell.x * Constants.CELL, (cell.y + 1) * Constants.CELL, 270);
-                }
-                if (edgeBools[Cardinal.PX]) {
-                    addEdge((cell.x + 1) * Constants.CELL, cell.y * Constants.CELL, 90);
-                }
-                if (edgeBools[Cardinal.NY]) {
-                    addEdge(cell.x * Constants.CELL, cell.y * Constants.CELL, 0);
-                }
-                if (edgeBools[Cardinal.PY]) {
-                    addEdge((cell.x + 1) * Constants.CELL, (cell.y + 1) * Constants.CELL, 180);
+                for (var dir:int = 0; dir < 4; dir++) {
+                    if (edgeBools[dir]) {
+                        addEdge(cell, dir, connector);
+                    }
                 }
             }
         }
         
-        private function addEdge(x:int, y:int, rotation:int):void {
-            var edgeChild:Bitmap = new Embedded.MetalEdgeBMP() as Bitmap;
-            edgeChild.x = x;
-            edgeChild.y = y;
-            edgeChild.rotation = rotation;
-            addChild(edgeChild);
+        private function addEdge(cell:Vector2i, dir:int, connector:Boolean):void {
+            var child:DisplayObject;
+            var edgeType:int;
+            if (connector) {
+                child = new Embedded.ConnectorSWF() as Sprite;
+                child.scaleX = child.scaleY = 0.7;
+                edgeType = Constants.CONNECTOR_CODE;
+            } else {
+                child = new Embedded.MetalEdgeBMP() as Bitmap;
+                edgeType = Constants.METAL_EDGE_CODE;
+            }
+            child.rotation = getEdgeRotation(dir, edgeType);
+            var edgeOffset:Vector2i = getEdgeOffset(dir, edgeType);
+            child.x = cell.x * Constants.CELL + edgeOffset.x;
+            child.y = cell.y * Constants.CELL + edgeOffset.y;
+            addChild(child);
+        }
+        
+        private static function getEdgeOffset(dir:int, edgeType:int):Vector2i {
+            switch (edgeType) {
+                case Constants.CONNECTOR_CODE:
+                    switch (dir) {
+                        case Cardinal.NX: return new Vector2i(0, Constants.CELL / 2);
+                        case Cardinal.PX: return new Vector2i(Constants.CELL, Constants.CELL / 2);
+                        case Cardinal.NY: return new Vector2i(Constants.CELL / 2, 0);
+                        case Cardinal.PY: return new Vector2i(Constants.CELL / 2, Constants.CELL);
+                    }
+                    break;
+                case Constants.METAL_EDGE_CODE:
+                    switch (dir) {
+                        case Cardinal.NX: return new Vector2i(0, Constants.CELL);
+                        case Cardinal.PX: return new Vector2i(Constants.CELL, 0);
+                        case Cardinal.NY: return new Vector2i(0, 0);
+                        case Cardinal.PY: return new Vector2i(Constants.CELL, Constants.CELL);
+                    }
+                    break;
+            }
+            return null;
+        }
+        
+        private static function getEdgeRotation(dir:int, edgeType:int):int {
+            switch (edgeType) {
+                case Constants.CONNECTOR_CODE:
+                    return dir == Cardinal.NY || dir == Cardinal.PY ? 90 : 0;
+                case Constants.METAL_EDGE_CODE:
+                    switch (dir) {
+                        case Cardinal.NX: return 270;
+                        case Cardinal.PX: return 90;
+                        case Cardinal.NY: return 0;
+                        case Cardinal.PY: return 180;
+                    }
+                    break;
+            }
+            return 0;
         }
         
         public function spreadToNeighbors(level:Level):void {
