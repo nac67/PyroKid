@@ -188,7 +188,8 @@ package pyrokid {
             cZoom *= largeZoom;
             
             // Update Camera
-            cameraController.update(focus, level, new Point(0, 0), new Point(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL), dt, cZoom);
+            //cameraController.update(focus, level, new Point(0, 0), new Point(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL), dt, cZoom);
+            cameraController.updateNick(focus, new Point(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL))
             
             // Place spotlight
             var playerPos:Point;

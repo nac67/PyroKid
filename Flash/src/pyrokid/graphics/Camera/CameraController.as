@@ -78,6 +78,20 @@ package pyrokid.graphics.Camera {
             
             camera.rotationCamera = curTarget.rotation;
         }
+
+        public function updateNick(p:Vector2, maxCoords:Point) {
+            var desiredTarget:CameraTarget = new CameraTarget();
+            desiredTarget.position.SetV(p);
+
+            curTarget = CameraTarget.lerp(curTarget, desiredTarget, Constants.CAMERA_LAG);
+            camera.xCamera = Math.floor(curTarget.position.x);
+            camera.yCamera = Math.floor(curTarget.position.y);
+
+            // contain in bounds
+            //camera.xCamera = Math.max(0,camera.xCamera);
+            //camera.yCamera = Math.max(0,camera.yCamera);
+            //camera.xCamera = Math.min()
+        }
         
         private function updateZones(p:Vector2):void {
             // Pop Off Zones Until We Reach An Available Zone
