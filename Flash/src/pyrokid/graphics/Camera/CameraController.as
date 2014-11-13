@@ -84,8 +84,8 @@ package pyrokid.graphics.Camera {
             desiredTarget.position.SetV(p);
 
             curTarget = CameraTarget.lerp(curTarget, desiredTarget, Constants.CAMERA_LAG);
-            camera.xCamera = Math.floor(curTarget.position.x);
-            camera.yCamera = Math.floor(curTarget.position.y);
+            camera.xCamera = Math.floor(curTarget.position.x - Constants.WIDTH / 2);
+            camera.yCamera = Math.floor(curTarget.position.y - Constants.HEIGHT / 2);
 
             // contain in bounds
             //camera.xCamera = Math.max(0,camera.xCamera);

@@ -45,7 +45,7 @@ package pyrokid {
         /* levelRecipe is not specified if you want to load from browser
          * Otherwise give it a byte array from an embedded level file */
         public function GameController(level:Object = null, levelNum:int = -1) {
-            benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES"]);
+            benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES"], 120);
             curLevelNum = levelNum;
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
