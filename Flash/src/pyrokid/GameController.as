@@ -39,10 +39,13 @@ package pyrokid {
 		private var pauseMenu:BasePlayState;
         
         private var curLevelNum:int;
+        
+        private var benchmarker:Benchmarker;
 		
         /* levelRecipe is not specified if you want to load from browser
          * Otherwise give it a byte array from an embedded level file */
         public function GameController(level:Object = null, levelNum:int = -1) {
+            benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES"]);
             curLevelNum = levelNum;
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
@@ -147,7 +150,7 @@ package pyrokid {
         }
         
         private function killPlayerIfOffMap(level:Level):void {
-            if (level.player.y > stage.stageHeight + 500) {
+            if (level.player.y > level.worldHeight + Constants.FALL_TO_DEATH_HEIGHT) {
                 level.player.kill(level, null, Constants.DEATH_BY_FALLING);
             }
         }
@@ -299,6 +302,9 @@ package pyrokid {
         
         // --------------------MAIN UPDATE LOOP-------------------- //
         private function update(event:Event):void {
+            benchmarker.endPhase();
+            benchmarker.endFrame();
+            benchmarker.beginFrame();
             spotlight.visible = !editorMode;
             if (editorMode || isPaused) {
                 return;
@@ -327,9 +333,13 @@ package pyrokid {
                 enemy.update(level);
             }
             level.projectileUpdate();
+            benchmarker.beginPhase("FIRE");
             FireHandler.spreadFire(level);
+            benchmarker.endPhase();
             // -------------------------- Physics --------------------------- //
+            benchmarker.beginPhase("PHYSICS");
             handlePhysics();
+            benchmarker.endPhase();
             resolveFreeEntityCollisions();
             
             // ------------------------ After physics game logic ------------ //
@@ -345,6 +355,7 @@ package pyrokid {
 				LevelsInfo.checkAndUnlockNextLevel();
                 LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1, true)();
             }
+            benchmarker.beginPhase("BETWEEN UPDATES");
         }
     
     }
