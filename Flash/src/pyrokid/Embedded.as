@@ -12,13 +12,33 @@ package pyrokid {
      */
     public class Embedded {
         
-        [Embed(source="../../assets/levels/tut1.txt", mimeType="application/octet-stream")]
-        private static var Level1:Class;
-        public static var level1:ByteArray = new Level1();
+        [Embed(source="../../assets/levels/introTown2.txt", mimeType="application/octet-stream")]
+        private static var FirstIntroTown:Class;
+        public static var firstIntroTown:ByteArray = new FirstIntroTown();
         
-        [Embed(source="../../assets/levels/tut2.txt", mimeType="application/octet-stream")]
-        private static var Level2:Class;
-        public static var level2:ByteArray = new Level2();
+        [Embed(source="../../assets/levels_wip/newBlankLevel.txt", mimeType="application/octet-stream")]
+        private static var NewBlankLevel:Class;
+        public static var newBlankLevel:ByteArray = new NewBlankLevel();
+        
+        [Embed(source="../../assets/levels/secondIntroTown.txt", mimeType="application/octet-stream")]
+        private static var SecondIntroTown:Class;
+        public static var secondIntroTown:ByteArray = new SecondIntroTown();
+        
+        [Embed(source="../../assets/levels/thirdIntroTown3.txt", mimeType="application/octet-stream")]
+        private static var ThirdIntroTown:Class;
+        public static var thirdIntroTown:ByteArray = new ThirdIntroTown();
+        
+        [Embed(source="../../assets/levels/introFallUnderground.txt", mimeType="application/octet-stream")]
+        private static var IntroFallUnderground:Class;
+        public static var introFallUnderground:ByteArray = new IntroFallUnderground();
+        
+        [Embed(source="../../assets/levels/learnDirectionalShoot.txt", mimeType="application/octet-stream")]
+        private static var LevelLearnDirectionalShoot:Class;
+        public static var levelLearnDirectionalShoot:ByteArray = new LevelLearnDirectionalShoot();
+        
+        [Embed(source="../../assets/levels/learnShootDown4.txt", mimeType="application/octet-stream")]
+        private static var LevelLearnShootDown:Class;
+        public static var levelLearnShootDown:ByteArray = new LevelLearnShootDown();
         
         [Embed(source="../../assets/levels/tut3.txt", mimeType="application/octet-stream")]
         private static var Level3:Class;
@@ -227,10 +247,6 @@ package pyrokid {
         [Embed(source="../../assets/levels/introImmuneEnemies.txt", mimeType="application/octet-stream")]
         private static var ALevel10:Class;
         public static var alevel10:ByteArray = new ALevel10();
-        
-        [Embed(source="../../assets/levels/immuneEnemy2.txt", mimeType="application/octet-stream")]
-        private static var ALevel11:Class;
-        public static var alevel11:ByteArray = new ALevel11();
         
         [Embed(source="../../assets/levels/lotsOfSpiders.txt", mimeType="application/octet-stream")]
         private static var ALevel12:Class;

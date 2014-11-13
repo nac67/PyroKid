@@ -9,9 +9,16 @@ package ui {
 	{
 		public static var levelDict:Array = [
             null, // No level 0
-            Embedded.level1,
-            Embedded.level2,
-            Embedded.level3,
+            //Embedded.level1,
+            //Embedded.level2,
+            //Embedded.newBlankLevel,
+            Embedded.firstIntroTown,
+            Embedded.secondIntroTown,
+            Embedded.thirdIntroTown,
+            Embedded.introFallUnderground,
+            Embedded.levelLearnDirectionalShoot,
+            Embedded.levelLearnShootDown,
+            //Embedded.level3,
             Embedded.level4,
             Embedded.level5,
             Embedded.level6,
@@ -27,7 +34,6 @@ package ui {
             Embedded.alevel8,
             Embedded.alevel9,
             Embedded.alevel10,
-            //Embedded.alevel11,
             Embedded.alevel12,
             Embedded.alevel13,
             Embedded.level9,
