@@ -44,6 +44,7 @@ package ui {
             Embedded.level12,
             Embedded.level13,
             Embedded.level14,
+            Embedded.mazeRunner,
         ]
 		
 		public static var currLevel:int = 1;

@@ -16,6 +16,10 @@ package pyrokid {
         private static var FirstIntroTown:Class;
         public static var firstIntroTown:ByteArray = new FirstIntroTown();
         
+        [Embed(source="../../assets/levels/mazeRunner3.txt", mimeType="application/octet-stream")]
+        private static var MazeRunner:Class;
+        public static var mazeRunner:ByteArray = new MazeRunner();
+        
         [Embed(source="../../assets/levels_wip/newBlankLevel.txt", mimeType="application/octet-stream")]
         private static var NewBlankLevel:Class;
         public static var newBlankLevel:ByteArray = new NewBlankLevel();
