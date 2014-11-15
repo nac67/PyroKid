@@ -371,7 +371,7 @@ package pyrokid {
             fball.setDirection(direction);
             projectiles.push(fball);
             addChild(fball);
-			Embedded.fireballSound.play();
+			if (Constants.SOUND_ON) Embedded.fireballSound.play();
         }
         
         public function launchWaterball(x:int, y:int, range:Number, direction:int):void {

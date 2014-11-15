@@ -214,7 +214,11 @@ package pyrokid {
 		private static var spiderdieSoundClass:Class;
 		public static var spiderdieSound:Sound = new spiderdieSoundClass();
         
-        [Embed(source="../../assets/sound/The Complex Quieter.mp3")]
+        [Embed(source="../../assets/sound/bomb.mp3")]
+		private static var bombSoundClass:Class;
+		public static var bombSound:Sound = new bombSoundClass();
+        
+        [Embed(source="../../assets/sound/Pyrokid_bgm.mp3")]
 		private static var musicClass:Class;
 		public static var musicSound:Sound = new musicClass();
 		

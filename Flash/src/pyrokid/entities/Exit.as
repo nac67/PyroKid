@@ -38,11 +38,14 @@ package pyrokid.entities {
         }
         
         public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
+            Constants.beginMusic();
             if (isHole || isOnFire()) {
                 return false;
             }
             super.ignite(level, coor, dir);
             setIsHole(true);
+            
+            if (Constants.SOUND_ON) Embedded.bombSound.play();
             
             var explode:MovieClip = new Embedded.Bomb2SWF() as MovieClip;
             var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), explode);

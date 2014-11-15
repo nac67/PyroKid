@@ -14,6 +14,7 @@ package pyrokid {
         public function Fireball() {
             
             //origin at center of ball
+            Constants.endMusic();
             fball = new Embedded.FireballSWF() as MovieClip;
             addChild(fball);
             speed = Constants.FBALL_SPEED;
