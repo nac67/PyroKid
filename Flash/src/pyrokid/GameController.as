@@ -151,7 +151,8 @@ package pyrokid {
         
         private function killPlayerIfOffMap(level:Level):void {
             if (level.player.y > level.worldHeight + Constants.FALL_TO_DEATH_HEIGHT) {
-                level.player.kill(level, null, Constants.DEATH_BY_FALLING);
+                var fireFromBottom:BriefClip = new BriefClip(new Vector2(level.player.x, level.player.y), new Embedded.FireTileSWF() as MovieClip, new Vector2(), Constants.FADE_TIME, true, Constants.DEATH_CLIP_TYPE_FIRE);
+                level.player.kill(level, fireFromBottom, Constants.DEATH_BY_FALLING);
             }
         }
         

@@ -85,12 +85,14 @@ package pyrokid.entities {
         
         public override function kill(level:Level, deathAnimation:BriefClip = null, method:String = ""):void {
             level.gameOverState = Constants.GAME_OVER_FADING;
-            if (deathAnimation == null) {
-                var delayedFunc:Function = function():void {
-                    level.gameOverState = Constants.GAME_OVER_COMPLETE;
-                }
-                level.delayedFunctions[delayedFunc] = Constants.FADE_TIME;
+            
+            var fade_time:int = method == Constants.DEATH_BY_FALLING ? 30 : Constants.FADE_TIME;
+            
+            var delayedFunc:Function = function():void {
+                level.gameOverState = Constants.GAME_OVER_COMPLETE;
             }
+            level.delayedFunctions[delayedFunc] = fade_time;
+
             var center:Vector2i = getCenter();
             Main.log.logDeath(Utils.realToCell(center.x), Utils.realToCell(center.y), method, level.frameCount);
             Main.log.logEndLevel();

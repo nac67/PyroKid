@@ -25,6 +25,9 @@ package pyrokid {
         
         public static var FALL_TO_DEATH_HEIGHT:int = 0;
         
+        public static var DEATH_CLIP_TYPE_SMOOSH = 0;
+        public static var DEATH_CLIP_TYPE_FIRE = 1;
+        
         public static var FADE_TIME:int = 60;
         public static var GAME_NOT_OVER:int = 0;
         public static var GAME_OVER_FADING:int = 1;
