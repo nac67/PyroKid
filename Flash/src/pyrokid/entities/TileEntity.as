@@ -24,6 +24,8 @@ package pyrokid.entities {
         public var parentIsland:Island;
         public var cellSprites:Array;
         protected var objectCode:int;
+        
+        public var visualCells:Array; // DON'T USE THIS. IT IS FOR TUTORIALS ONLY.
         		
 		public function TileEntity(x:int, y:int, objCode:int) {
             objectCode = objCode;
@@ -31,6 +33,7 @@ package pyrokid.entities {
 			this.y = y;
 			cells = [];
             cellSprites = [];
+            visualCells = [];
 		}
         
         /* Returns an array of tile coordinates this TileEntity occupies
@@ -84,6 +87,13 @@ package pyrokid.entities {
         private function isFlammable():Boolean {
             return objectCode != Constants.METAL_TILE_CODE && objectCode != Constants.WALL_TILE_CODE;
         }
+        
+        public function addFireLocation(relativeCell:Vector2i):void {
+            var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;
+            fire.x = relativeCell.x * Constants.CELL;
+            fire.y = relativeCell.y * Constants.CELL;
+            cellSprites.push(fire);
+        }
 		
 		public function finalizeCells(level:Level, globalAnchor:Vector2i):void {
             var tileSetMap:Bitmap = Constants.GET_TILE_SET(objectCode);
@@ -91,10 +101,7 @@ package pyrokid.entities {
                 var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, globalAnchor, objectCode == Constants.WALL_TILE_CODE, tileSetMap, level.cellWidth, level.cellHeight);
                 addChild(tileSet);
                 for each (var cell:Vector2i in cells) {
-                    var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;
-                    fire.x = cell.x * Constants.CELL;
-                    fire.y = cell.y * Constants.CELL;
-                    cellSprites.push(fire);
+                    addFireLocation(cell);
                 }
             } else {
                 for (var i:int = 0; i < cells.length; i++) {

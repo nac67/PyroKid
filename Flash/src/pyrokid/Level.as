@@ -280,6 +280,12 @@ package pyrokid {
                     var tileEntity:TileEntity = Utils.index(tileEntityGrid, coor.x, coor.y);
                     if (tileEntity != null) {
                         tileEntity.addChild(getTutorialImage(type));
+                        if (type == "house") {
+                            for (var i:int = 0; i < 3; i++) {
+                                tileEntity.addFireLocation(new Vector2i(i, -1));
+                                tileEntity.visualCells.push(new Vector2i(i, -1));
+                            }
+                        }
                     }
                 }
             }

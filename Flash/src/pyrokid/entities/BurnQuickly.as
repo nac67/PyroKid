@@ -29,13 +29,20 @@ package pyrokid.entities {
             }
             if (currentFrame - ignitionTime == Constants.QUICK_BURN_TIME) {
                 for each (var coor:Vector2 in coorsInGlobal()) {
-                    var w:MovieClip = new Embedded.WoodExplodeSWF() as MovieClip;
-                    var fireClip:BriefClip = new BriefClip(coor.MulD(Constants.CELL), w, velocity.copy().MulD(0.1));
-                    level.briefClips.push(fireClip);
-                    level.addChild(fireClip);
-                    kill(level);
+                    addWoodExplode(coor, level);
                 }
+                for each (var visualCell:Vector2i in visualCells) {
+                    addWoodExplode(visualCell.copyAsVec2().AddV(getGlobalAnchor()), level);
+                }
+                kill(level);
             }
+        }
+        
+        private function addWoodExplode(coor:Vector2, level:Level):void {
+            var w:MovieClip = new Embedded.WoodExplodeSWF() as MovieClip;
+            var fireClip:BriefClip = new BriefClip(coor.MulD(Constants.CELL), w, velocity.copy().MulD(0.1));
+            level.briefClips.push(fireClip);
+            level.addChild(fireClip);
         }
 		
 	}
