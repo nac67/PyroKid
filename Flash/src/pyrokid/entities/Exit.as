@@ -38,7 +38,6 @@ package pyrokid.entities {
         }
         
         public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
-            Constants.beginMusic();
             if (isHole || isOnFire()) {
                 return false;
             }

@@ -150,7 +150,7 @@ package pyrokid {
         
         public static var _MUSIC_ON:Boolean = false;
         
-        public static function get MUSIC_ON():void {
+        public static function get MUSIC_ON():Boolean {
             return _MUSIC_ON;
         }
         
