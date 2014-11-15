@@ -27,20 +27,6 @@ package pyrokid {
         }
         
         private function init(e:Event = null):void {
-            this.stage.loaderInfo.bytesLoaded;
-            this.addEventListener(Event.ENTER_FRAME, loading);
-        } 
-        
-        private function loading(event:Event) {
-            var loaded:int = stage.loaderInfo.bytesLoaded;
-            var total:int = stage.loaderInfo.bytesTotal;
-            if (loaded == total) {
-                this.removeEventListener(Event.ENTER_FRAME, loading);
-                beginEverything();
-            }
-        }
-        
-        private function beginEverything():void {
             // entry point
             log = new LogMaster();
             
@@ -54,7 +40,6 @@ package pyrokid {
             Constants.MUSIC_ON = Constants.MUSIC_STARTS_ON;
 			addChild(StateController.display);
 			StateController.goToMainMenu();
-        
         }
     }
 
