@@ -82,6 +82,10 @@ package pyrokid.entities {
             return new Vector2(x + xDiff, y + hArt / 2).DivD(Constants.CELL).floor();
         }
         
+        public function getCurrentCoorInGlobal():Vector2i {
+            return new Vector2(x + wArt / 2, y + hArt / 2).DivD(Constants.CELL).floor();
+        }
+        
         //protected function constructHitBox(scale:Number, xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1):void {
             //hitBox = new Box(xHit * scale, yHit * scale, this.wHit * scale, this.hHit * scale);
         //}

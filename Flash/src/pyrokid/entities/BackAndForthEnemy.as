@@ -61,9 +61,13 @@ package pyrokid.entities {
         public override function update(level:Level):void {
             super.update(level);
             var leadingCoor:Vector2i = getLeadingCoorInGlobal();
+            var belowCoor:Vector2i = getCurrentCoorInGlobal().Add(0, 1);
             var leadingEntity:TileEntity = Utils.index(level.tileEntityGrid, leadingCoor.x, leadingCoor.y);
+            var belowEntity:TileEntity = Utils.index(level.tileEntityGrid, belowCoor.x, belowCoor.y);
+            
             var belowLeadingEntity:TileEntity = Utils.index(level.tileEntityGrid, leadingCoor.x, leadingCoor.y + 1);
-            if (gravity && velocity.y == 0 && leadingEntity == null && belowLeadingEntity == null) {
+            
+            if (gravity && velocity.y == 0 && leadingEntity == null && belowLeadingEntity == null && belowEntity != null) {
                 if (direction == Constants.DIR_RIGHT) {
                     direction = Constants.DIR_LEFT;
                 } else {
