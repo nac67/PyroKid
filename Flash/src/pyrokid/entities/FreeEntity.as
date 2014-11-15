@@ -217,7 +217,7 @@ package pyrokid.entities {
                 
                
                 
-                var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), Constants.FADE_TIME, true, true);
+                var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), Constants.FADE_TIME, true, Constants.DEATH_CLIP_TYPE_SMOOSH);
                  if (newClip is Player) {
                     level.smooshedPlayer = deathAnimation;
                 }
@@ -246,7 +246,7 @@ package pyrokid.entities {
                     return;
                 }
                 var dir:int = Cardinal.getOpposite(edgeOfCollision.direction);
-                var entity:TileEntity = level.tileEntityGrid[cell.y][cell.x];
+                var entity:TileEntity = Utils.index(level.tileEntityGrid, cell.x, cell.y);
                 // TODO what if the thing is falling? Do we care? -- Aaron
                 // TODO this is all copy and pasted and is terrible style -- Aaron
                 if (entity != null) {
