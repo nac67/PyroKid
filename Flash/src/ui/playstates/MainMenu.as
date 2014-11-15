@@ -6,7 +6,7 @@ package ui.playstates {
 	import flash.text.TextFormatAlign;
 	import pyrokid.Embedded;
 	import pyrokid.GameController;
-	import pyrokid.Main;
+	import Main;
 	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
 	/**

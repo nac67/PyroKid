@@ -1,10 +1,11 @@
-package pyrokid {
+package  {
     import flash.display.Sprite;
 	import flash.display.Stage;
     import flash.events.Event;
 	import flash.events.MouseEvent;
     import flash.utils.ByteArray;
     import pyrokid.tools.LogMaster;
+    import pyrokid.Constants;
 	import ui.playstates.StateController;
 	import ui.*;
     import physics.*;
@@ -12,6 +13,7 @@ package pyrokid {
     import pyrokid.tools.Key;
     import pyrokid.dev.LevelEditor;
     
+    [Frame(factoryClass="Preloader")]
     public class Main extends Sprite {
 		
 		public static var MainStage:Stage;
@@ -27,18 +29,11 @@ package pyrokid {
         }
         
         private function init(e:Event = null):void {
-            this.stage.loaderInfo.bytesLoaded;
-            this.addEventListener(Event.ENTER_FRAME, loading);
+            //new Preloader(stage, beginEverything);
+            beginEverything();
         } 
         
-        private function loading(event:Event) {
-            var loaded:int = stage.loaderInfo.bytesLoaded;
-            var total:int = stage.loaderInfo.bytesTotal;
-            if (loaded == total) {
-                this.removeEventListener(Event.ENTER_FRAME, loading);
-                beginEverything();
-            }
-        }
+        
         
         private function beginEverything():void {
             // entry point

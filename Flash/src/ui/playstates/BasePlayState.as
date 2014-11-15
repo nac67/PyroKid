@@ -8,7 +8,7 @@ package ui.playstates {
 	import flash.text.TextFormatAlign;
 	import flash.utils.Dictionary;
 	import mx.core.ButtonAsset;
-	import pyrokid.Main;
+	import Main;
 	import ui.ButtonBackground;
 	import ui.buttons.ButtonBase;
 	/**

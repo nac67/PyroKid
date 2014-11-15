@@ -3,7 +3,7 @@ package ui.playstates {
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	import pyrokid.Main;
+	import Main;
 	import ui.LevelEditorButton;
 	/**
 	 * ...

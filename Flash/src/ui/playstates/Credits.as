@@ -1,5 +1,5 @@
 package ui.playstates {
-	import pyrokid.Main;
+	import Main;
 	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
 	/**
