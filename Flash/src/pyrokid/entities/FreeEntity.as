@@ -246,7 +246,7 @@ package pyrokid.entities {
                     return;
                 }
                 var dir:int = Cardinal.getOpposite(edgeOfCollision.direction);
-                var entity:TileEntity = level.tileEntityGrid[cell.y][cell.x];
+                var entity:TileEntity = Utils.index(level.tileEntityGrid, cell.x, cell.y);
                 // TODO what if the thing is falling? Do we care? -- Aaron
                 // TODO this is all copy and pasted and is terrible style -- Aaron
                 if (entity != null) {
