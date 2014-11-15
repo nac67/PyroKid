@@ -404,7 +404,6 @@ package pyrokid {
                 }
             }
             // TODO don't add edge if empty thing there!!!
-            // TODO dragging rect isn't child of caller when this happens . . .
             level.reset(level.recipe);
         }
         
@@ -413,7 +412,7 @@ package pyrokid {
                 for (var cx:int = lowX; cx <= highX; cx++) {
                     for (var cy:int = lowY; cy <= highY; cy++) {
                         placeObject(cx, cy);
-                        // TODO clumping bug when placing new objects -- Aaron
+                        splitNeighbors(level.recipe.tileEntities, new Vector2i(cx, cy));
                     }   
                 }
                 
@@ -502,6 +501,30 @@ package pyrokid {
             });
         }
         
+        private function splitNeighbors(grid:Array, coor:Vector2i):void {
+            var nextId:int = getMaxId(grid) + 1;
+            for each (var dir:int in Cardinal.DIRECTIONS) {
+                var otherCoor:Vector2i = Cardinal.getVector2i(dir).AddV(coor);
+                var entityId:int = Utils.index(grid, otherCoor.x, otherCoor.y);
+                if (entityId == 0) {
+                    continue;
+                }
+                
+                var isNeighbor:Function = function(coor:Vector2i):Boolean {
+                    return entityId == grid[coor.y][coor.x];
+                };
+                var processNode:Function = function(coor:Vector2i):Boolean {
+                    grid[coor.y][coor.x] = nextId;
+                    return false;
+                };
+                Utils.BFS(Utils.getW(grid), Utils.getH(grid), otherCoor, isNeighbor, processNode);
+                nextId += 1;
+            }
+            
+            connectAllEntities();
+            normalizeIds(grid);
+        }
+        
         private function mergeRectangleTiles(grid:Array, lowX:int, highX:int, lowY:int, highY:int, canMergeWith:Function, onlyMergeTypes:Array = null):void {
             var nextId:int = getMaxId(grid) + 1;
             var minValOfNewIds:int = nextId;
@@ -578,6 +601,7 @@ package pyrokid {
             // clear location that is about to be placed on
             level.recipe.walls[cellY][cellX] = Constants.EMPTY_TILE_CODE;
             clearConnectors(cellX, cellY);
+            level.recipe.edges[cellY][cellX] = 0;
             level.recipe.tileEntities[cellY][cellX] = Constants.EMPTY_TILE_CODE;
             level.recipe.freeEntities = level.recipe.freeEntities.filter(function(ent) {
                 return ent[0] != cellX || ent[1] != cellY;

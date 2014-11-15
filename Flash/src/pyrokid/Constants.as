@@ -23,7 +23,7 @@ package pyrokid {
 		public static var HEIGHT:int = 600;
         public static var CELL:int = 50;
         
-        public static var FALL_TO_DEATH_HEIGHT:int = 100;
+        public static var FALL_TO_DEATH_HEIGHT:int = 0;
         
         public static var FADE_TIME:int = 60;
         public static var GAME_NOT_OVER:int = 0;
