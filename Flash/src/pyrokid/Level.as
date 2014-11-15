@@ -186,7 +186,9 @@ package pyrokid {
             for (var i:int = 0; i < recipe.freeEntities.length; i++) {
                 var enemy:FreeEntity;
                 if (recipe.freeEntities[i][2] == Constants.SPIDER_CODE) {
-                    enemy = new Spider(this);
+                    enemy = new Spider(this, 1);
+                } else if (recipe.freeEntities[i][2] == Constants.SPIDER_ARMOR_CODE) {
+                    enemy = new Spider(this, 2);
                 } else if (recipe.freeEntities[i][2] == Constants.BAT_CODE) {
                     enemy = new WaterBat(this);
                 } else if (recipe.freeEntities[i][2] == Constants.BOMB_EXIT_CODE) {

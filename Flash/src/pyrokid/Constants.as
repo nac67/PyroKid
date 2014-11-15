@@ -103,6 +103,7 @@ package pyrokid {
         
         // FreeEntity codes. Must be Strings.
         public static var SPIDER_CODE:String = "spider";
+        public static var SPIDER_ARMOR_CODE:String = "spider_armor";
         public static var IMMUNE_CODE:String = "immune";
         public static var BAT_CODE:String = "bat";
         public static var BOMB_EXIT_CODE:String = "exit";

@@ -86,6 +86,7 @@ package pyrokid {
 			options[Constants.WOOD_TILE_CODE] = "Quick Burn";
             options[Constants.METAL_TILE_CODE] = "Metal";
 			options[Constants.SPIDER_CODE] = "Spider";
+            options[Constants.SPIDER_ARMOR_CODE] = "Armored Spider";
             options[Constants.IMMUNE_CODE] = "Immune Enemy";
             options[Constants.BAT_CODE] = "Water Bat";
             options[Constants.BOMB_EXIT_CODE] = "Bomb Exit";
