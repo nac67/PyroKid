@@ -54,8 +54,8 @@ package pyrokid.graphics.Camera {
             curTarget = CameraTarget.lerp(curTarget, desiredTarget, Constants.CAMERA_LAG);
             
             // Modify The Camera
-            camera.xCamera = curTarget.position.x;
-            camera.yCamera = curTarget.position.y;
+            camera.xCamera = Math.round(curTarget.position.x);
+            camera.yCamera = Math.round(curTarget.position.y);
             camera.scaleCamera = curTarget.scaling;
             camera.x = Constants.WIDTH / 2;
             camera.y = Constants.HEIGHT / 2;

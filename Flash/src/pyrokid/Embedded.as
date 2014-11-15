@@ -12,6 +12,12 @@ package pyrokid {
      */
     public class Embedded {
         
+        [Embed(source='../../assets/tile_art/brick_building.png')]
+        public static var BrickBuildingBMP:Class; //cast as Bitmap on instantiation
+        
+        [Embed(source='../../assets/tile_art/house.png')]
+        public static var HouseBMP:Class; //cast as Bitmap on instantiation
+        
         [Embed(source="../../assets/levels/introTown2.txt", mimeType="application/octet-stream")]
         private static var FirstIntroTown:Class;
         public static var firstIntroTown:ByteArray = new FirstIntroTown();

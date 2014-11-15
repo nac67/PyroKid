@@ -1,4 +1,5 @@
 package pyrokid {
+    import flash.display.Bitmap;
 	import flash.display.DisplayObject;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
@@ -247,8 +248,41 @@ package pyrokid {
             });
             
             addTutorialMessage();
+            addTutorialImages();
             
             delayedFunctions = new Dictionary();
+        }
+        
+        private function addTutorialImages():void {
+            var houseCoors:Array = LevelsInfo.tutorialHouses[LevelsInfo.currLevel];
+            var buildingCoors:Array = LevelsInfo.tutorialBuildings[LevelsInfo.currLevel];
+            addImages(houseCoors, "house");
+            addImages(buildingCoors, "building");
+        }
+        
+        function getTutorialImage(type:String):Bitmap {
+            if (type == "house") {
+                var house:Bitmap = new Embedded.HouseBMP() as Bitmap;
+                house.y = -50;
+                return house;
+            }
+            if (type == "building") {
+                var building:Bitmap = new Embedded.BrickBuildingBMP() as Bitmap;
+                building.height = 202;
+                return building;
+            }
+            return null;
+        }
+        
+        private function addImages(coors:Array, type:String):void {
+            if (coors != undefined && coors != null) {
+                for each (var coor:Vector2i in coors) {
+                    var tileEntity:TileEntity = Utils.index(tileEntityGrid, coor.x, coor.y);
+                    if (tileEntity != null) {
+                        tileEntity.addChild(getTutorialImage(type));
+                    }
+                }
+            }
         }
 		
         private function addTutorialMessage():void {

@@ -45,7 +45,7 @@ package ui {
             Embedded.level13,
             Embedded.level14,
             Embedded.mazeRunner,
-        ]
+        ];
 		
 		public static var currLevel:int = 1;
 		public static var maxUnlockedLevel:int = 1; //TODO: LOAD THIS FROM SHAREDOBJECT
@@ -61,10 +61,17 @@ package ui {
             //30: "Remember, at any time, press R to restart.",
             8: "Sometimes you have to make your own exit. Look for a bomb in the cave.",
             17: "Some blocks are guarded by metal edges. Fire will not go past that side."
-        }
-			
-		public function LevelsInfo() {
-		}
+        };
+        
+        public static var tutorialHouses = {
+            2: [new Vector2i(34, 6)],
+            3: [new Vector2i(22, 6), new Vector2i(34, 6), new Vector2i(43, 6)]
+        };
+        
+        public static var tutorialBuildings = {
+            1: [new Vector2i(2, 8), new Vector2i(16, 7), new Vector2i(35, 6)],
+            2: [new Vector2i(1, 6), new Vector2i(17, 4)]
+        };
 		
 		public static function getTotalNumberOfLevels():int {
 			if (totalNumberOfLevels == -1) {
