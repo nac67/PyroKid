@@ -14,7 +14,7 @@ package pyrokid.graphics {
      */
     public class ConnectedSpriteBuilder {
         
-        public static function buildSpriteFromCoors(coors:Array, bitmap:Bitmap, lvlW:int, lvlH:int):Bitmap {
+        public static function buildSpriteFromCoors(coors:Array, globalAnchor:Vector2i, isDirt:Boolean, bitmap:Bitmap, lvlW:int, lvlH:int):Bitmap {
             var coor:Vector2i;
             var minCoor:Vector2i = new Vector2i();
             var maxCoor:Vector2i = new Vector2i();
@@ -24,7 +24,19 @@ package pyrokid.graphics {
                 maxCoor.x = Math.max(maxCoor.x, coor.x);
                 maxCoor.y = Math.max(maxCoor.y, coor.y);
             }
-            var shouldBlendEdges:Boolean = minCoor.x == 0 && minCoor.y == 0 && maxCoor.x == lvlW - 1 && maxCoor.y == lvlH - 1;
+            var isOnEdgesOfLevel = [0, 0, 0, 0];
+            if (minCoor.x + globalAnchor.x == 0 && isDirt) {
+                isOnEdgesOfLevel[Cardinal.NX] = 1;
+            }
+            if (minCoor.y + globalAnchor.y == 0 && isDirt) {
+                isOnEdgesOfLevel[Cardinal.NY] = 1;
+            }
+            if (maxCoor.x + globalAnchor.x == lvlW - 1 && isDirt) {
+                isOnEdgesOfLevel[Cardinal.PX] = 1;
+            }
+            if (maxCoor.y + globalAnchor.y == lvlH - 1 && isDirt) {
+                isOnEdgesOfLevel[Cardinal.PY] = 1;
+            }
             
             maxCoor.AddD(1);
             var texIdGrid:Array = Utils.newArray(maxCoor.x, maxCoor.y);
@@ -33,10 +45,10 @@ package pyrokid.graphics {
             }
             var texMap:Object = new Object();
             texMap["1"] = bitmap.bitmapData;
-            return buildSprite(texIdGrid, texMap, new ConnectedSpriteOptions(), shouldBlendEdges);
+            return buildSprite(texIdGrid, texMap, new ConnectedSpriteOptions(), isOnEdgesOfLevel);
         }
         
-        public static function buildSprite(texIDGrid:Array, textureMap:Object, opt:ConnectedSpriteOptions, blendEdges:Boolean = false):Bitmap {
+        public static function buildSprite(texIDGrid:Array, textureMap:Object, opt:ConnectedSpriteOptions, isOnEdgesOfLevel:Array):Bitmap {
             var h:int = texIDGrid.length;
             var w:int = texIDGrid[0].length;
             
@@ -44,10 +56,17 @@ package pyrokid.graphics {
             for (var y = 0; y < texIDGridPadded.length; y++) {
                 texIDGridPadded[y] = new Array(w + 2);
                 for (var x = 0; x < texIDGridPadded[y].length; x++) {
-                    if (x == 0 || x == (w + 1) || y == 0 || y == (h + 1))
-                        texIDGridPadded[y][x] = (blendEdges ? 1 : 0);
-                    else
+                    if (x == 0) {
+                        texIDGridPadded[y][x] = isOnEdgesOfLevel[Cardinal.NX];
+                    } else if (y == 0) {
+                        texIDGridPadded[y][x] = isOnEdgesOfLevel[Cardinal.NY];
+                    } else if (x == w + 1) {
+                        texIDGridPadded[y][x] = isOnEdgesOfLevel[Cardinal.PX];
+                    } else if (y == h + 1) {
+                        texIDGridPadded[y][x] = isOnEdgesOfLevel[Cardinal.PY];
+                    } else {
                         texIDGridPadded[y][x] = texIDGrid[y - 1][x - 1];
+                    }
                 }
             }
             

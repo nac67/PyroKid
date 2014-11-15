@@ -143,7 +143,7 @@ package pyrokid {
                 });
                 entity.x = globalAnchor.x * Constants.CELL;
                 entity.y = globalAnchor.y * Constants.CELL;
-                entity.finalizeCells(this);
+                entity.finalizeCells(this, globalAnchor.copyAsVec2i());
                 
                 parentIsland.addEntity(entity, globalAnchor);
                 entity.addEdges(recipe.edges);
