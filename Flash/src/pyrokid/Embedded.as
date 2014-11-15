@@ -206,6 +206,14 @@ package pyrokid {
 		private static var fireballSoundClass:Class;
 		public static var fireballSound:Sound = new fireballSoundClass();
         
+        [Embed(source="../../assets/sound/losearmor.mp3")]
+		private static var loseArmorSoundClass:Class;
+		public static var loseArmorSound:Sound = new loseArmorSoundClass();
+        
+        [Embed(source="../../assets/sound/spiderdie.mp3")]
+		private static var spiderdieSoundClass:Class;
+		public static var spiderdieSound:Sound = new spiderdieSoundClass();
+        
         [Embed(source="../../assets/sound/The Complex Quieter.mp3")]
 		private static var musicClass:Class;
 		public static var musicSound:Sound = new musicClass();
