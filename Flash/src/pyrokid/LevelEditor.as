@@ -413,9 +413,9 @@ package pyrokid {
                 for (var cx:int = lowX; cx <= highX; cx++) {
                     for (var cy:int = lowY; cy <= highY; cy++) {
                         placeObject(cx, cy);
-                        splitNeighbors(level.recipe.tileEntities, new Vector2i(cx, cy));
                     }   
                 }
+                splitNeighbors(level.recipe.tileEntities, lowX, highX, lowY, highY);
                 
                 // If you're holding space, merge rectangle together
                 if (Key.isDown(Key.SPACE)) {
@@ -502,28 +502,42 @@ package pyrokid {
             });
         }
         
-        private function splitNeighbors(grid:Array, coor:Vector2i):void {
+        private function splitNeighbors(grid:Array, lowX:int, highX:int, lowY:int, highY:int):void {
+            var neighborCoors:Array = [];
+            
+            for (var cx:int = lowX; cx <= highX; cx++) {
+                neighborCoors.push(new Vector2i(cx, lowY - 1));
+                neighborCoors.push(new Vector2i(cx, highY + 1));
+            }
+            for (var cy:int = lowY; cy <= highY; cy++) {
+                neighborCoors.push(new Vector2i(lowX - 1, cy));
+                neighborCoors.push(new Vector2i(highX + 1, cy));
+            }   
+            
             var nextId:int = getMaxId(grid) + 1;
-            for each (var dir:int in Cardinal.DIRECTIONS) {
-                var otherCoor:Vector2i = Cardinal.getVector2i(dir).AddV(coor);
-                var entityId:int = Utils.index(grid, otherCoor.x, otherCoor.y);
-                if (entityId == 0) {
-                    continue;
-                }
-                
-                var isNeighbor:Function = function(coor:Vector2i):Boolean {
-                    return entityId == grid[coor.y][coor.x];
-                };
-                var processNode:Function = function(coor:Vector2i):Boolean {
-                    grid[coor.y][coor.x] = nextId;
-                    return false;
-                };
-                Utils.BFS(Utils.getW(grid), Utils.getH(grid), otherCoor, isNeighbor, processNode);
+            for each (var neighborCoor:Vector2i in neighborCoors) {
+                giveNewId(grid, neighborCoor, nextId);
                 nextId += 1;
             }
             
             connectAllEntities();
             normalizeIds(grid);
+        }
+        
+        private function giveNewId(grid:Array, entCoor:Vector2i, newId:int):void {
+            var entityId:int = Utils.index(grid, entCoor.x, entCoor.y);
+            if (entityId == 0) {
+                return;
+            }
+            
+            var isNeighbor:Function = function(coor:Vector2i):Boolean {
+                return entityId == grid[coor.y][coor.x];
+            };
+            var processNode:Function = function(coor:Vector2i):Boolean {
+                grid[coor.y][coor.x] = newId;
+                return false;
+            };
+            Utils.BFS(Utils.getW(grid), Utils.getH(grid), entCoor, isNeighbor, processNode);
         }
         
         private function mergeRectangleTiles(grid:Array, lowX:int, highX:int, lowY:int, highY:int, canMergeWith:Function, onlyMergeTypes:Array = null):void {
