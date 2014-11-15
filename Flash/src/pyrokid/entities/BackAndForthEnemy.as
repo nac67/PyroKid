@@ -16,6 +16,8 @@ package pyrokid.entities {
         protected var swf:Sprite;
         protected var gravity:Boolean;
         
+        protected var health:int;
+        
         public function BackAndForthEnemy(level:Level, swf:Sprite, scale:Number, wArt:int, hArt:int,
                 xHit:int = 0, yHit:int = 0, wHit:int = -1, hHit:int = -1, gravity:Boolean = true) {
             super(level, scale, wArt, hArt, xHit, yHit, wHit, hHit);
@@ -46,6 +48,15 @@ package pyrokid.entities {
                 hitBox.scaleX = -1;
             }
         }
+        
+        public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
+            if (health > 1) {
+                health --;
+                return false;
+            } else {
+                return super.ignite(level, coor, dir);
+            }
+		}
         
         public override function update(level:Level):void {
             super.update(level);
