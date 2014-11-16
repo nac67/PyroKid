@@ -25,7 +25,7 @@ package ui.playstates {
 		}
 		
 		private function displayLevelButtons():void {
-			addChild(defaultBackground);
+			addChild(background);
 			
 			//offset for grid of buttons from the top left corner of the screen
 			var x_offset:int = 300;

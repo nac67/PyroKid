@@ -136,7 +136,7 @@ package pyrokid {
         }
         
         private function keyboardActionListener(e:KeyboardEvent):void {
-			if (e.keyCode == Keyboard.ESCAPE || e.keyCode == Keyboard.P && !editorMode) {
+			if ((e.keyCode == Keyboard.ESCAPE || e.keyCode == Keyboard.P) && !editorMode) {
 				if (isPaused) { //unpause game
 					pauseMenu.removeAllEventListeners();
 					Utils.removeAllChildren(pauseMenu);
@@ -305,7 +305,7 @@ package pyrokid {
             benchmarker.endPhase();
             benchmarker.endFrame();
             benchmarker.beginFrame();
-            spotlight.visible = !editorMode;
+            spotlight.visible = !editorMode && !isPaused;
             if (editorMode || isPaused) {
                 return;
             }

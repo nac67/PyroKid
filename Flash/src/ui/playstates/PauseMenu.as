@@ -1,52 +1,63 @@
 package ui.playstates {
-	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
-	import pyrokid.GameController;
-	import pyrokid.Main;
 	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
-	/**
-	 * ...
-	 * @author Evan Niederhoffer
-	 */
-	public class PauseMenu extends BasePlayState
-	{
+    import flash.display.*;
+    import flash.geom.*;
+	import pyrokid.*;
+    
+	public class PauseMenu extends BasePlayState {
 		
 		private var game_controller:GameController;
 		
-		public function PauseMenu(game_contr:GameController) 
-		{
-			//super(); //do not call this because it uses a different background
+		public function PauseMenu(game_contr:GameController) {
+            super(false);
 			game_controller = game_contr;
-			
-			defaultBackground = new Shape(); // initializing the variable named rectangle
-			defaultBackground.graphics.beginFill(0x8C8C8C,0.5); // choosing the colour for the fill, here it is red
-			defaultBackground.graphics.drawRect(0, 0, Main.MainStage.stageWidth,Main.MainStage.stageHeight); // (x spacing, y spacing, width, height)
-			defaultBackground.graphics.endFill(); // not always needed but I like to put it in to end the fill
-			addChild(defaultBackground); // adds the rectangle to the stage
+            
+            addMinimap(game_contr.level);
 			
 			var pauseTextFormat:TextFormat = new TextFormat();
-			pauseTextFormat.size = 60;
+			pauseTextFormat.size = 40;
 			pauseTextFormat.align = TextFormatAlign.CENTER;
-			pauseTextFormat.font = "Arial";
+			pauseTextFormat.font = "Impact";
 			pauseTextFormat.color = 0xFFFFFF;
-			addTextToScreen("PAUSED", 800, 100, 400, 70, pauseTextFormat);
+			addTextToScreen("Paused", 800, 100, 400, 70, pauseTextFormat);
 			
-			addButton(new MenuButton("Resume", 400, 200), unpauseGame);
-			addButton(new MenuButton("Restart Level", 400, 250), StateController.restartCurrLevel);
-			addButton(new MenuButton("Levels", 400,300), StateController.goToLevelSelect);
+            var buttonHeight:int = 526;
+			addButton(new MenuButton("Resume", 100, buttonHeight), unpauseGame);
+			addButton(new MenuButton("Restart", 300, buttonHeight), StateController.restartCurrLevel);
+			addButton(new MenuButton("Levels", 500, buttonHeight), StateController.goToLevelSelect);
 			//addButton(new MenuButton("Options", 400,350), StateController.displayOptions);
-			addButton(new MenuButton("Main Menu", 400,350), StateController.goToMainMenu);
-			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 200, ["Resume"], [LevelEditorButton.upColor]));
-			//addChild(new LevelEditorButton(StateController.restartCurrLevel, 80, 40, Main.MainStage.stageWidth / 2, 260, ["Restart Level"], [LevelEditorButton.upColor]));
-			//addChild(new LevelEditorButton(StateController.goToLevelSelect, 80, 40, Main.MainStage.stageWidth / 2, 320, ["Level Select"], [LevelEditorButton.upColor]));
-			//addChild(new LevelEditorButton(StateController.displayOptions, 80, 40, Main.MainStage.stageWidth / 2, 380, ["Options"], [LevelEditorButton.upColor]));
-			//addChild(new LevelEditorButton(StateController.goToMainMenu, 80, 40, Main.MainStage.stageWidth / 2, 440, ["Main Menu"], [LevelEditorButton.upColor]));
-			
+			addButton(new MenuButton("Menu", 700, buttonHeight), StateController.goToMainMenu);
 		}
-		
+        
+        private function addMinimap(level:Level):void {
+            var minimapBitmap:Bitmap = new Bitmap();
+            var minimapBitmapData:BitmapData = new BitmapData(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL);
+            minimapBitmap.bitmapData = minimapBitmapData;
+            
+            minimapBitmap.scaleY = minimapBitmap.scaleX = 0.2;
+            minimapBitmap.x = (Constants.WIDTH - minimapBitmap.width) / 2;
+            minimapBitmap.y = (Constants.HEIGHT - minimapBitmap.height) / 2 - 20;
+            minimapBitmapData.draw(level);
+            addChild(minimapBitmap);
+            
+            var fadeOutOverlay:Sprite = new Sprite();
+            for (var i:int = 0; i < 70; i++) {
+                var lineWidth:int = 5;
+                fadeOutOverlay.graphics.lineStyle(lineWidth, 0x000000, Math.min(1, 0.75 + i * 0.003), false, "normal", null, JointStyle.MITER);
+                var distFromEdge:int = lineWidth / 2 + lineWidth * i;
+                fadeOutOverlay.graphics.drawRect(
+                    minimapBitmap.x - distFromEdge,
+                    minimapBitmap.y - distFromEdge,
+                    minimapBitmap.width + 2*distFromEdge,
+                    minimapBitmap.height + 2*distFromEdge
+                );
+            }
+            addChild(fadeOutOverlay);
+        }
 		
 		private function unpauseGame(e:Event):void {
 			removeAllEventListeners();

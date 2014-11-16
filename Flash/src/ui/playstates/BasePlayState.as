@@ -19,17 +19,21 @@ package ui.playstates {
 	{
 		protected var listenersArray:Array = [];
 		protected var buttonListenersDict:Dictionary = new Dictionary();
-		protected var defaultBackground:Shape;
+		protected var background:Shape;
 		
-		public function BasePlayState() {
-			//make white background by default
-			defaultBackground = new Shape(); // initializing the variable named rectangle
-			defaultBackground.graphics.beginFill(0x000000); // choosing the colour for the fill, here it is red
-			defaultBackground.graphics.drawRect(0, 0, Main.MainStage.stageWidth,Main.MainStage.stageHeight); // (x spacing, y spacing, width, height)
-			defaultBackground.graphics.endFill(); // not always needed but I like to put it in to end the fill
-			addChild(defaultBackground); // adds the rectangle to the stage
-			
+		public function BasePlayState(setBackground:Boolean = true) {
+            if (setBackground) {
+                addBackground(0x000000);
+            }
 		}
+        
+        protected function addBackground(color:uint, alpha:Number = 1.0):void {
+            background = new Shape();
+            background.graphics.beginFill(color, alpha);
+            background.graphics.drawRect(0, 0, Main.MainStage.stageWidth, Main.MainStage.stageHeight);
+            background.graphics.endFill();
+            addChild(background);
+        }
 		
 		override public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void {
 			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
