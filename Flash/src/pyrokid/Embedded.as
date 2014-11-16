@@ -18,6 +18,18 @@ package pyrokid {
         [Embed(source='../../assets/tile_art/house.png')]
         public static var HouseBMP:Class; //cast as Bitmap on instantiation
         
+        [Embed(source='../../assets/swf/buttons.swf', symbol='Sound')]
+        public static var SoundIcon:Class; //cast as Sprite on instantiation
+        
+        [Embed(source='../../assets/swf/buttons.swf', symbol='SoundMuted')]
+        public static var SoundMutedIcon:Class; //cast as Sprite on instantiation
+        
+        [Embed(source='../../assets/swf/buttons.swf', symbol='Music')]
+        public static var MusicIcon:Class; //cast as Sprite on instantiation
+        
+        [Embed(source='../../assets/swf/buttons.swf', symbol='MusicMuted')]
+        public static var MusicMutedIcon:Class; //cast as Sprite on instantiation
+        
         [Embed(source="../../assets/levels/introTown2.txt", mimeType="application/octet-stream")]
         private static var FirstIntroTown:Class;
         public static var firstIntroTown:ByteArray = new FirstIntroTown();

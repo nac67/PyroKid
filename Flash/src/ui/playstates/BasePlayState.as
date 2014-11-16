@@ -8,9 +8,10 @@ package ui.playstates {
 	import flash.text.TextFormatAlign;
 	import flash.utils.Dictionary;
 	import mx.core.ButtonAsset;
-	import pyrokid.Main;
+	import Main;
 	import ui.ButtonBackground;
 	import ui.buttons.ButtonBase;
+    import ui.buttons.CoreButton;
 	/**
 	 * ...
 	 * @author Evan Niederhoffer
@@ -20,12 +21,27 @@ package ui.playstates {
 		protected var listenersArray:Array = [];
 		protected var buttonListenersDict:Dictionary = new Dictionary();
 		protected var background:Shape;
+        
+        private var buttons:Array;
 		
 		public function BasePlayState(setBackground:Boolean = true) {
             if (setBackground) {
                 addBackground(0x000000);
             }
+            buttons = [];
 		}
+        
+        public function destroy():void {
+            for each (var button:CoreButton in buttons) {
+                button.removeListeners();
+            }
+            Utils.removeAllChildren(this);
+        }
+        
+        public function addCoreButton(button:CoreButton):void {
+            addChild(button);
+            buttons.push(button);
+        }
         
         protected function addBackground(color:uint, alpha:Number = 1.0):void {
             background = new Shape();
@@ -37,7 +53,8 @@ package ui.playstates {
 		
 		override public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void {
 			super.addEventListener(type, listener, useCapture, priority, useWeakReference);
-			listenersArray.push({type:type, listener:listener});
+			listenersArray.push( { type:type, listener:listener } );
+            trace("buttssssss");
 		}
 		
 		public function removeAllEventListeners():void {
@@ -52,7 +69,10 @@ package ui.playstates {
 			}
 		   }
 		   
-		   listenersArray = null
+            for each (var button:CoreButton in buttons) {
+                button.removeListeners();
+            }
+		   listenersArray = null;
 		}
 		
 		public function addTextToScreen(text:String,w:int,h:int,x:int,y:int,format:TextFormat=null):void {

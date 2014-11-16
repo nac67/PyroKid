@@ -45,7 +45,6 @@ package pyrokid {
             
             if (affectedByGravity) {
                 velocity.Add(0, Constants.GRAVITY * Constants.DT * Constants.CELL);
-                velocity.Add(0, Constants.GRAVITY * Constants.DT * Constants.CELL);
             }
             
             var movement:Vector2 = velocity.copy().MulD(Constants.DT);

@@ -2,6 +2,9 @@ package ui.playstates {
 	import flash.events.Event;
 	import flash.text.TextFormat;
 	import flash.text.TextFormatAlign;
+	import pyrokid.GameController;
+	import Main;
+    import ui.buttons.CoreButton;
 	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
     import flash.display.*;
@@ -24,14 +27,24 @@ package ui.playstates {
 			pauseTextFormat.font = "Impact";
 			pauseTextFormat.color = 0xFFFFFF;
 			addTextToScreen("Paused", 800, 100, 400, 70, pauseTextFormat);
-			
-            var buttonHeight:int = 526;
-			addButton(new MenuButton("Resume", 100, buttonHeight), unpauseGame);
-			addButton(new MenuButton("Restart", 300, buttonHeight), StateController.restartCurrLevel);
-			addButton(new MenuButton("Levels", 500, buttonHeight), StateController.goToLevelSelect);
-			addButton(new MenuButton("Menu", 700, buttonHeight), StateController.goToMainMenu);
+            			
+            var buttonHeight:int = 489;
+            addCoreButton(new CoreButton(50, buttonHeight, 100, 36, unpauseGame, "Resume"));
+            addCoreButton(new CoreButton(250, buttonHeight, 100, 36, StateController.restartCurrLevel, "Restart"));
+            addCoreButton(new CoreButton(450, buttonHeight, 100, 36, StateController.goToLevelSelect, "Levels"));
+            addCoreButton(new CoreButton(650, buttonHeight, 100, 36, StateController.goToMainMenu, "Menu"));
             
-			//StateController.displayOptions();
+            var soundToggle:CoreButton = new CoreButton(100, 100, 60, 50, GameSettings.toggleSound, new Embedded.SoundIcon() as Sprite, new Embedded.SoundMutedIcon() as Sprite);
+            if (!GameSettings.soundOn) soundToggle.toggle();
+            addCoreButton(soundToggle);
+            
+            var musicToggle:CoreButton = new CoreButton(100, 200, 60, 50, GameSettings.toggleMusic, new Embedded.MusicIcon() as Sprite, new Embedded.MusicMutedIcon() as Sprite);
+            if (!GameSettings.musicOn) musicToggle.toggle();
+            addCoreButton(musicToggle);
+            
+            var controlToggle:CoreButton = new CoreButton(30, 300, 120, 50, GameSettings.toggleControlScheme, "Default Controls", "Inverted Controls");
+            if (GameSettings.controlSchemeInverted) controlToggle.toggle();
+            addCoreButton(controlToggle);
 		}
         
         private function addMinimap(level:Level):void {
@@ -60,7 +73,7 @@ package ui.playstates {
             addChild(fadeOutOverlay);
         }
 		
-		private function unpauseGame(e:Event):void {
+		private function unpauseGame(e:Event = null):void {
 			removeAllEventListeners();
 			Utils.removeAllChildren(this);
 			game_controller.removeChild(this);

@@ -1,17 +1,20 @@
-package pyrokid {
+package  {
     import flash.display.Sprite;
 	import flash.display.Stage;
     import flash.events.Event;
 	import flash.events.MouseEvent;
     import flash.utils.ByteArray;
     import pyrokid.tools.LogMaster;
+    import pyrokid.Constants;
 	import ui.playstates.StateController;
 	import ui.*;
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.Key;
     import pyrokid.dev.LevelEditor;
+    import pyrokid.GameSettings;
     
+    [Frame(factoryClass="Preloader")]
     public class Main extends Sprite {
 		
 		public static var MainStage:Stage;
@@ -32,12 +35,9 @@ package pyrokid {
             
 			MainStage = stage;
             Key.init(stage);
-            Constants.switchControlScheme(0);
             			
 			Utils.loadSavedData();
-			
-            // TODO make this togglable
-            Constants.MUSIC_ON = Constants.MUSIC_STARTS_ON;
+			            
 			addChild(StateController.display);
 			StateController.goToMainMenu();
         }

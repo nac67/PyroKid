@@ -129,44 +129,8 @@ package pyrokid {
             return null;
         }
         
-        public static function switchControlScheme(scheme:int):void {
-            if (scheme == 0) {
-                LEFT_BTN = 65;
-                RIGHT_BTN = 68;
-                JUMP_BTN = 87;
-                AIM_UP_BTN = Key.UP;
-                AIM_DOWN_BTN = Key.DOWN;
-                AIM_LEFT_BTN = Key.LEFT;
-                AIM_RIGHT_BTN = Key.RIGHT;
-            } else if (scheme == 1) {
-                LEFT_BTN = Key.LEFT;
-                RIGHT_BTN = Key.RIGHT;
-                JUMP_BTN = Key.UP;
-                AIM_UP_BTN = 87;
-                AIM_DOWN_BTN = 83;
-                AIM_LEFT_BTN = 65;
-                AIM_RIGHT_BTN = 68;
-            }
-        }
-        
-        
-        // Sound control
-        public static var SOUND_ON:Boolean = true;
-        public static var MUSIC_STARTS_ON:Boolean = true;
-        
-        public static var _MUSIC_ON:Boolean = false;
-        
-        public static function get MUSIC_ON():Boolean {
-            return _MUSIC_ON;
-        }
-        
-        public static function set MUSIC_ON(on:Boolean):void {
-            if (on) {
-                Embedded.musicSound.play(0, 999999);
-            } else {
-                SoundMixer.stopAll();
-            }
-        }
+        public static var MUSIC_STARTS_ON:Boolean = false;
+        public static var CONTROLS_START_INVERTED:Boolean = false;
     
     }
 

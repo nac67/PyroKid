@@ -7,7 +7,7 @@ package ui.playstates {
 	import flash.text.TextFormatAlign;
 	import pyrokid.Embedded;
 	import pyrokid.GameController;
-	import pyrokid.Main;
+	import Main;
     import ui.buttons.CoreButton;
 	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
@@ -37,18 +37,18 @@ package ui.playstates {
 //
 			//}
             
-            var tracePoo:Function = function():void {
-                trace("poo");
-            }
+            //var tracePoo:Function = function():void {
+                //trace("poo");
+            //}
             //var butt:CoreButton = CoreButton.createTextButton(100, 35, tracePoo, "swham" , "doo", "two and heif");
-            var a = new Embedded.DirtBMP() as DisplayObject;
-            var b = new Embedded.MetalBMP() as DisplayObject;
-            a.scaleX = a.scaleY = 0.6;
-            b.scaleX = b.scaleY = 0.3;
-            var butt:CoreButton = new CoreButton(100, 50, tracePoo, "shwam", a, "doo", b);
-            butt.x = 100;
-            butt.y = 100;
-            addChild(butt);
+            //var a = new Embedded.DirtBMP() as DisplayObject;
+            //var b = new Embedded.MetalBMP() as DisplayObject;
+            //a.scaleX = a.scaleY = 0.6;
+            //b.scaleX = b.scaleY = 0.3;
+            //var butt:CoreButton = new CoreButton(400, 400, tracePoo, "shwam", a, "doo", b);
+            //butt.x = 100;
+            //butt.y = 100;
+            //addChild(butt);
 			
 		}
 		

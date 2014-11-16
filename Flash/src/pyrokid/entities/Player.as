@@ -110,38 +110,38 @@ package pyrokid.entities {
             // Moving left right
 			velocity.x = 0;
             animIsRunning = false; 
-            if (Key.isDown(Constants.LEFT_BTN)) {
+            if (Key.isDown(GameSettings.leftBtn)) {
                 velocity.x -= Constants.PLAYER_XSPEED;
                 direction = Constants.DIR_LEFT;
                 animIsRunning = true;
             }
-            if (Key.isDown(Constants.RIGHT_BTN)) {
+            if (Key.isDown(GameSettings.rightBtn)) {
                 velocity.x += Constants.PLAYER_XSPEED;
                 direction = Constants.DIR_RIGHT;
                 animIsRunning = true;
             }
             
             // Vertical movement
-			if (isGrounded && Key.isDown(Constants.JUMP_BTN) && (!prevFrameJumpBtn || Constants.ALLOW_JUMP_HOLD)) {
+			if (isGrounded && Key.isDown(GameSettings.jumpBtn) && (!prevFrameJumpBtn || Constants.ALLOW_JUMP_HOLD)) {
 				velocity.y -= Constants.PLAYER_JUMP_SPEED * (1 + velocity.y * Constants.PLAYER_JUMP_FALLING_MULTIPLIER);
 			}
 			velocity.Add(0, Constants.GRAVITY_ENT * Constants.CELL * Constants.DT);
-			prevFrameJumpBtn = Key.isDown(Constants.JUMP_BTN);
+			prevFrameJumpBtn = Key.isDown(GameSettings.jumpBtn);
             
             // Firing
-            var shootButton = Key.isDown(Constants.AIM_LEFT_BTN) || Key.isDown(Constants.AIM_RIGHT_BTN) ||
-                    Key.isDown(Constants.AIM_UP_BTN) || Key.isDown(Constants.AIM_DOWN_BTN);
+            var shootButton:Boolean = Key.isDown(GameSettings.shootLeftBtn) || Key.isDown(GameSettings.shootRightBtn) ||
+                    Key.isDown(GameSettings.shootUpBtn) || Key.isDown(GameSettings.shootDownBtn);
   
-            if (Key.isDown(Constants.AIM_LEFT_BTN)) {
+            if (Key.isDown(GameSettings.shootLeftBtn)) {
                 shootDirection = Constants.DIR_LEFT;
             }
-            if (Key.isDown(Constants.AIM_RIGHT_BTN)) {
+            if (Key.isDown(GameSettings.shootRightBtn)) {
                 shootDirection = Constants.DIR_RIGHT;
             }
-            if (Key.isDown(Constants.AIM_UP_BTN)) {
+            if (Key.isDown(GameSettings.shootUpBtn)) {
                 shootDirection = Constants.DIR_UP;
             }
-            if (Key.isDown(Constants.AIM_DOWN_BTN)) {
+            if (Key.isDown(GameSettings.shootDownBtn)) {
                 shootDirection = Constants.DIR_DOWN;
             }
             
