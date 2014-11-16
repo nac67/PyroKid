@@ -29,8 +29,9 @@ package ui.playstates {
 			addButton(new MenuButton("Resume", 100, buttonHeight), unpauseGame);
 			addButton(new MenuButton("Restart", 300, buttonHeight), StateController.restartCurrLevel);
 			addButton(new MenuButton("Levels", 500, buttonHeight), StateController.goToLevelSelect);
-			//addButton(new MenuButton("Options", 400,350), StateController.displayOptions);
 			addButton(new MenuButton("Menu", 700, buttonHeight), StateController.goToMainMenu);
+            
+			//StateController.displayOptions();
 		}
         
         private function addMinimap(level:Level):void {

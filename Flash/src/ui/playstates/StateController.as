@@ -75,13 +75,13 @@ package ui.playstates {
 			StateController.goToGame(LevelsInfo.levelDict[LevelsInfo.currLevel])();
 		}
 		
-		public static function goToCompletedLevel(e:Event=null) {
+		public static function goToCompletedLevel(e:Event=null):void {
 			Utils.removeAllChildren(display);
 			
 			display.addChild(new CompletedLevel());
 		}
 		
-		public static function goToCredits(e:Event=null) {
+		public static function goToCredits(e:Event=null):void {
 			Utils.removeAllChildren(display);
 			
             if (currGameController != null) {
@@ -92,7 +92,7 @@ package ui.playstates {
 			display.addChild(new Credits());
 		}
 		
-		public static function displayHowToPlay(e:Event=null) {
+		public static function displayHowToPlay(e:Event=null):void {
 			display.addChild(new HowToPlayMenu());
 		}
 		
@@ -100,11 +100,11 @@ package ui.playstates {
 			//display.addChild(new PauseMenu());
 		//}
 		
-		public static function displayOptions(e:Event=null) {
+		public static function displayOptions(e:Event=null):void {
 			display.addChild(new OptionsMenu());
 		}
 		
-		public static function removeOverlayedScreen(screen:BasePlayState) {
+		public static function removeOverlayedScreen(screen:BasePlayState):void {
 			screen.removeAllEventListeners();
 			display.removeChild(screen);
 		}
