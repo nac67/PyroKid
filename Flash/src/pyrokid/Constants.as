@@ -146,7 +146,7 @@ package pyrokid {
         
         // Sound control
         public static var SOUND_ON:Boolean = true;
-        public static var MUSIC_STARTS_ON:Boolean = true;
+        public static var MUSIC_STARTS_ON:Boolean = false;
         
         public static var _MUSIC_ON:Boolean = false;
         
