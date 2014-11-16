@@ -450,6 +450,7 @@ package pyrokid {
                 }
                 for each (var newPhysIsland:PhysIsland in newIslands) {
                     newPhysIsland.globalAnchor.AddV(brokenPhysIsland.globalAnchor);
+                    newPhysIsland.resetBoundingRect();
                 }
                 for each (var sprite:Connector in brokenIslandView.sprite.connectors) {
                     var coor1:Vector2i = sprite.coorInIsland;

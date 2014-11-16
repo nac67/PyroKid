@@ -6,8 +6,14 @@ package physics {
      * @author Cristian Zaloj
      */
     public class PhysRectangle {
-        public var center:Vector2 = new Vector2();
-        public var halfSize:Vector2 = new Vector2(1, 1);
+        public var rect:PRect = new PRect();
+        
+        public function get center():Vector2 {
+            return rect.center;
+        }
+        public function get halfSize():Vector2 {
+            return rect.halfSize;
+        }
         
         public var velocity:Vector2 = new Vector2();
         public var motion:Vector2 = new Vector2();

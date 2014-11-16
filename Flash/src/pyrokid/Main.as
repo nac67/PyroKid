@@ -4,6 +4,7 @@ package pyrokid {
     import flash.events.Event;
 	import flash.events.MouseEvent;
     import flash.utils.ByteArray;
+    import net.hires.debug.Stats;
     import pyrokid.tools.LogMaster;
 	import ui.playstates.StateController;
 	import ui.*;
@@ -38,6 +39,7 @@ package pyrokid {
 			
 			addChild(StateController.display);
 			StateController.goToMainMenu();
+            addChild(new Stats());
         }
     }
 
