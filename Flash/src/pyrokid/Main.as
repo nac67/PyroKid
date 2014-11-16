@@ -37,7 +37,7 @@ package pyrokid {
 			Utils.loadSavedData();
 			
             // TODO make this togglable
-            //Embedded.musicSound.play(0, 999999);
+            Constants.MUSIC_ON = Constants.MUSIC_STARTS_ON;
 			addChild(StateController.display);
 			StateController.goToMainMenu();
         }

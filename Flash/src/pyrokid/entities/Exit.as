@@ -44,6 +44,8 @@ package pyrokid.entities {
             super.ignite(level, coor, dir);
             setIsHole(true);
             
+            if (Constants.SOUND_ON) Embedded.bombSound.play();
+            
             var explode:MovieClip = new Embedded.Bomb2SWF() as MovieClip;
             var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), explode);
             level.briefClips.push(deathAnimation);

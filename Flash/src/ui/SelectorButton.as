@@ -12,8 +12,15 @@ package ui {
 		public function SelectorButton(options:Dictionary, onSelectedChange:Function):void {
 			toggleChildren = [];
 			this.onSelectedChange = onSelectedChange;
-			var i:int = 0;
-			for (var key:Object in options) {
+            
+            var keys:Array = [];
+            for (var key:Object in options) {
+                keys.push(key);
+            }
+            keys.sort();
+            
+			for (var i = 0; i < keys.length; i++) {
+                var key = keys[i];
 				var value:String = options[key];
 				var button:LevelEditorButton = new LevelEditorButton(null, 120, 20, 650, 200 + i * 20, [value, value], [LevelEditorButton.upColor, 0xFF0000]);
 				button.setOnClick(getSelectorFunction(key, button));
@@ -22,7 +29,6 @@ package ui {
 					selectedButton = button;
 					selectedButton.toggle();
 				}
-				i++;
 			}
 		}
 		

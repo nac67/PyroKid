@@ -2,6 +2,7 @@ package pyrokid {
     import flash.display.Bitmap;
     import flash.display.InteractiveObject;
     import flash.utils.Dictionary;
+    import flash.media.SoundMixer;
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.*;
@@ -139,6 +140,25 @@ package pyrokid {
                 AIM_DOWN_BTN = 83;
                 AIM_LEFT_BTN = 65;
                 AIM_RIGHT_BTN = 68;
+            }
+        }
+        
+        
+        // Sound control
+        public static var SOUND_ON:Boolean = true;
+        public static var MUSIC_STARTS_ON:Boolean = true;
+        
+        public static var _MUSIC_ON:Boolean = false;
+        
+        public static function get MUSIC_ON():Boolean {
+            return _MUSIC_ON;
+        }
+        
+        public static function set MUSIC_ON(on:Boolean):void {
+            if (on) {
+                Embedded.musicSound.play(0, 999999);
+            } else {
+                SoundMixer.stopAll();
             }
         }
     
