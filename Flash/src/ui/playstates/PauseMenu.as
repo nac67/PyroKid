@@ -34,17 +34,8 @@ package ui.playstates {
             addCoreButton(new CoreButton(450, buttonHeight, 100, 36, StateController.goToLevelSelect, "Levels"));
             addCoreButton(new CoreButton(650, buttonHeight, 100, 36, StateController.goToMainMenu, "Menu"));
             
-            var soundToggle:CoreButton = new CoreButton(100, 100, 60, 50, GameSettings.toggleSound, new Embedded.SoundIcon() as Sprite, new Embedded.SoundMutedIcon() as Sprite);
-            if (!GameSettings.soundOn) soundToggle.toggle();
-            addCoreButton(soundToggle);
-            
-            var musicToggle:CoreButton = new CoreButton(100, 200, 60, 50, GameSettings.toggleMusic, new Embedded.MusicIcon() as Sprite, new Embedded.MusicMutedIcon() as Sprite);
-            if (!GameSettings.musicOn) musicToggle.toggle();
-            addCoreButton(musicToggle);
-            
-            var controlToggle:CoreButton = new CoreButton(30, 300, 120, 50, GameSettings.toggleControlScheme, "Default Controls", "Inverted Controls");
-            if (GameSettings.controlSchemeInverted) controlToggle.toggle();
-            addCoreButton(controlToggle);
+            // TODO after unpausing focus back on level -- Aaron, Nick
+            addChild(new OptionsMenu(true));
 		}
         
         private function addMinimap(level:Level):void {

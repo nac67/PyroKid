@@ -35,6 +35,7 @@ package ui.playstates {
             for each (var button:CoreButton in buttons) {
                 button.removeListeners();
             }
+            buttons = null;
             Utils.removeAllChildren(this);
         }
         
@@ -72,6 +73,7 @@ package ui.playstates {
             for each (var button:CoreButton in buttons) {
                 button.removeListeners();
             }
+            buttons = null;
 		   listenersArray = null;
 		}
 		

@@ -47,10 +47,10 @@ package ui.playstates {
 			display.addChild(new LevelSelect());
 		}
 		
-		public static function goToGame(level:Object, levelWon:Boolean = false, editor:LevelEditor = null):Function {
+		public static function goToGame(level:Object = null, levelWon:Boolean = false, editor:LevelEditor = null):Function {
 			Utils.removeAllChildren(display);
 			
-			if (!(level is ByteArray || level is LevelRecipe)) {
+			if (!(level is ByteArray || level is LevelRecipe || level == null)) {
 				throw new Error("tried to start gamecontroller with bad level input (says StateController)");
 			}
 			if (editor != null) {
@@ -65,7 +65,7 @@ package ui.playstates {
 			return function():void {
 				Utils.removeAllChildren(display);
 				
-				currGameController = new GameController(level, LevelsInfo.currLevel);
+				currGameController = new GameController(level, level == null ? -1 : LevelsInfo.currLevel);
 				display.addChild(currGameController);
 			}
 			
@@ -79,6 +79,17 @@ package ui.playstates {
 			Utils.removeAllChildren(display);
 			
 			display.addChild(new CompletedLevel());
+		}
+        
+        public static function goToOptions(e:Event=null):void {
+			Utils.removeAllChildren(display);
+			
+            if (currGameController != null) {
+				currGameController.destroy();
+				currGameController = null;
+			}
+            
+			display.addChild(new OptionsMenu());
 		}
 		
 		public static function goToCredits(e:Event=null):void {

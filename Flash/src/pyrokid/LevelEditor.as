@@ -149,7 +149,7 @@ package pyrokid {
 		}
         
         private function newLevel(event:MouseEvent):void {
-            reloadLevel(LevelRecipe.generateTemplate(16, 12));
+            reloadLevel(LevelRecipe.generateTemplate());
         }
         
         private function updateHeight(newHeight:int):void {

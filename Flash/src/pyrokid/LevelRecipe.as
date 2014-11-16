@@ -22,7 +22,7 @@ package pyrokid {
 		 * [cellX, cellY, objectType, . . . optional properties . . .] */
 		public var freeEntities:Array;
         
-        public static function generateTemplate(cellsWide:int, cellsTall:int):LevelRecipe {
+        public static function generateTemplate(cellsWide:int = 16, cellsTall:int = 12):LevelRecipe {
             var rec:LevelRecipe = new LevelRecipe();
             
             rec.islands = Utils.newArray(cellsWide, cellsTall);

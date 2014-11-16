@@ -35,7 +35,6 @@ package pyrokid {
         
         public static function toggleControlScheme():void {
             _controlsInverted = !_controlsInverted;
-            trace(_controlsInverted);
         }
         
         public static function get leftBtn():int {

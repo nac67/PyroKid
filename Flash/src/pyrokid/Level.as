@@ -254,6 +254,9 @@ package pyrokid {
         }
         
         private function addTutorialImages():void {
+            if (LevelsInfo.currLevel == -1) {
+                return;
+            }
             var houseCoors:Array = LevelsInfo.tutorialHouses[LevelsInfo.currLevel];
             var buildingCoors:Array = LevelsInfo.tutorialBuildings[LevelsInfo.currLevel];
             addImages(houseCoors, "house");

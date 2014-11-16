@@ -16,6 +16,10 @@ package ui.buttons {
         
         private var listener:Function;
         
+        private var cornerSizeX:int = 16;
+        private var cornerSizeY:int = 16;
+        private var lineWidth:int = 3;
+        
         public function CoreButton(x:int, y:int, w:int, h:int, onClick:Function, ... buttonStatesContent) {
             this.x = x;
             this.y = y;
@@ -25,7 +29,7 @@ package ui.buttons {
             
             var hitBox:Sprite = new Sprite();
             hitBox.graphics.beginFill(0x000000);
-            hitBox.graphics.drawRoundRect(0, 0, w, h, 24, 20);
+            hitBox.graphics.drawRoundRect(0, 0, w, h, cornerSizeX, cornerSizeY);
             hitBox.graphics.endFill();
             hitTestState = hitBox;
             
@@ -81,7 +85,6 @@ package ui.buttons {
             
             listener = function(event:Event):void {
                 toggle();
-                trace("toggle state is: " + toggleState);
                 onClick();
             };
             addEventListener(MouseEvent.CLICK, listener);
@@ -140,14 +143,14 @@ package ui.buttons {
         private function getBackground(child:DisplayObject, mouseState:int):Sprite {
             var background:Sprite = new Sprite();
             if (mouseState != Constants.MOUSE_STATE_UP) {
-                background.graphics.lineStyle(2, 0xFFFFFF);
+                background.graphics.lineStyle(lineWidth, 0xFFFFFF);
                 
                 if (mouseState == Constants.MOUSE_STATE_DOWN) {
                     background.graphics.beginFill(0xAF1616);
-                    background.graphics.drawRoundRect(0, 0, w, h, 24, 20);
+                    background.graphics.drawRoundRect(0, 0, w, h, cornerSizeX, cornerSizeY);
                     background.graphics.endFill();
                 } else {
-                    background.graphics.drawRoundRect(0, 0, w, h, 24, 20);
+                    background.graphics.drawRoundRect(0, 0, w, h, cornerSizeX, cornerSizeY);
                 }
             }
             background.addChild(child);

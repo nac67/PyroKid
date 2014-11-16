@@ -42,7 +42,7 @@ package pyrokid {
         
         private var benchmarker:Benchmarker;
 		
-        /* levelRecipe is not specified if you want to load from browser
+        /* level is not specified if you want to start a new level in the level editor
          * Otherwise give it a byte array from an embedded level file */
         public function GameController(level:Object = null, levelNum:int = -1) {
             benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES"]);
@@ -51,8 +51,11 @@ package pyrokid {
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
             if (level == null) {
-                // Load level with browser
-                LevelIO.loadLevel(initializeLevelAndEditor);
+                // Load new level with browser
+                //LevelIO.loadLevel(initializeLevelAndEditor);
+                initializeLevelAndEditor(LevelRecipe.generateTemplate());
+                editorMode = true;
+                levelEditor.turnEditorOn();
             } else if (level is ByteArray) {
                 // Load embedded level
                 level.position = 0;
