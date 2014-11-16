@@ -493,6 +493,7 @@ package pyrokid {
                 }
                 for each (var newPhysIsland:PhysIsland in newIslands) {
                     newPhysIsland.globalAnchor.AddV(brokenPhysIsland.globalAnchor);
+                    newPhysIsland.resetBoundingRect();
                 }
             }
             

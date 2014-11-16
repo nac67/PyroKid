@@ -110,7 +110,7 @@ package pyrokid.entities {
         
         public function genPhysRect():PhysRectangle {
             var enemyRect:PhysRectangle = new PhysRectangle();
-            enemyRect.halfSize = new Vector2(wArt * scale / 2, hArt * scale / 2).DivD(Constants.CELL);
+            enemyRect.halfSize.Set(wArt * scale / 2, hArt * scale / 2).DivD(Constants.CELL);
             return enemyRect;
         }
         

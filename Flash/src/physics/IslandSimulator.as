@@ -187,7 +187,8 @@ package physics {
             // Create Island At Its Starting Min Location
             var island:PhysIsland = new PhysIsland(xBounds.y - xBounds.x + 1, yBounds.y - yBounds.x + 1);
             island.tileOriginalLocation.Set(xBounds.x, yBounds.x);
-            island.globalAnchor.Set(xBounds.x, yBounds.x);
+            island.x = xBounds.x;
+            island.y = yBounds.x;
             
             // Add All The Tiles
             for each (var p:Vector2i in pos) {
@@ -197,7 +198,6 @@ package physics {
             }
             
             // Construct Edges
-            island.RebuildEdges();
             return island;
         }
         
@@ -266,34 +266,9 @@ package physics {
          * @return A Collision Column
          */
         private static function CreateColumn(island:PhysIsland, x:int, sy:int, c:int):CollisionColumn {
-            var cEdges:Array = [];
-            var vOff:Vector2 = new Vector2(x, sy);
-            for (var i:int = 0; i < c; i++) {
-                island.tileGrid[sy + i][x].ProvideEdgesSpecial(cEdges, vOff);
-                vOff.y += 1;
-            }
-            vOff.y = sy;
-            island.tileGrid[sy][x].ProvideEdgesDirection(Cardinal.NY, cEdges, vOff);
-            vOff.y = sy + c - 1;
-            island.tileGrid[sy + c - 1][x].ProvideEdgesDirection(Cardinal.PY, cEdges, vOff);
-            
             var col:CollisionColumn = new CollisionColumn(island);
-            for each(var e:PhysEdge in cEdges) {
-                switch(e.direction) {
-                    case Cardinal.NY:
-                        if (col.nyEdge == null)
-                            col.nyEdge = e;
-                        else if (e.center.y < col.nyEdge.center.y)
-                            col.nyEdge = e;
-                        break;
-                    case Cardinal.PY:
-                        if (col.pyEdge == null)
-                            col.pyEdge = e;
-                        else if (e.center.y > col.pyEdge.center.y)
-                            col.pyEdge = e;
-                        break;
-                }
-            }
+            col.nyEdge = new PhysEdge(Cardinal.NY, x + 0.5, sy, 1.0);
+            col.pyEdge = new PhysEdge(Cardinal.PY, x + 0.5, sy + c, 1.0);
             return col;
         }
         
@@ -304,7 +279,7 @@ package physics {
          * @param gravAcceleration Acceleration Vector In Physics Engine Units
          * @param dt Time Step Of The Simulation
          */
-        public static function Simulate(islands:Array, columns:Array, gravAcceleration:Vector2, dt:Number) {
+        public static function Simulate(islands:Array, columns:Array, gravAcceleration:Vector2, dt:Number):void {
             for each(var island:PhysIsland in islands) {
                 if (!island.isGrounded) {
                     island.velocity.Add(gravAcceleration.x * dt, gravAcceleration.y * dt);
@@ -312,6 +287,7 @@ package physics {
                     island.motion.x = CollisionResolver.ClampedMotion(island.motion.x);
                     island.motion.y = CollisionResolver.ClampedMotion(island.motion.y);
                     island.globalAnchor.AddV(island.motion);
+                    island.resetBoundingRect();
                     island.columnAccumulator.Set(0, 0);
                 }
             }
@@ -332,12 +308,10 @@ package physics {
                     island.velocity.y = 0.0;
                     island.motion.y += dy;
                     island.globalAnchor.y += dy;
+                    island.resetBoundingRect();
                 }
                 island.motion.MulD(1.1);
             }
-            
-            // Refresh Edge Set
-            CollisionResolver.BuildTrimmedEdgeSet(islands, 0.1);
         }
         /**
          * Detect And Accumulate Collision Resolution Data Between Two Columns
