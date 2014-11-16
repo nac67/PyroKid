@@ -1,10 +1,11 @@
-package pyrokid {
+package  {
     import flash.display.Sprite;
 	import flash.display.Stage;
     import flash.events.Event;
 	import flash.events.MouseEvent;
     import flash.utils.ByteArray;
     import pyrokid.tools.LogMaster;
+    import pyrokid.Constants;
 	import ui.playstates.StateController;
 	import ui.*;
     import physics.*;
@@ -12,6 +13,7 @@ package pyrokid {
     import pyrokid.tools.Key;
     import pyrokid.dev.LevelEditor;
     
+    [Frame(factoryClass="Preloader")]
     public class Main extends Sprite {
 		
 		public static var MainStage:Stage;

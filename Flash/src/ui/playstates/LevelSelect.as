@@ -5,7 +5,7 @@ package ui.playstates {
 	import pyrokid.Constants;
     import pyrokid.Constants;
 	import pyrokid.Embedded;
-	import pyrokid.Main;
+	import Main;
 	import ui.buttons.LockedButton;
 	import ui.buttons.UnlockedButton;
 	import ui.LevelEditorButton;
