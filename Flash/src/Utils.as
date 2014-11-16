@@ -79,6 +79,9 @@ package  {
         }
         
         public static function removeAllChildren(obj:Sprite):void {
+            if (obj == null) {
+                return;
+            }
             for (var i:int = obj.numChildren - 1; i >= 0; i--) {
 				if (obj.getChildAt(i) is BasePlayState) {
 					BasePlayState(obj.getChildAt(i)).removeAllEventListeners();
