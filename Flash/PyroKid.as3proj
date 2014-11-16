@@ -42,7 +42,7 @@
     <option linkReport="" />
     <option loadExterns="" />
     <option staticLinkRSL="True" />
-    <option additional="-frame numba2 Main" />
+    <option additional="" />
     <option compilerConstants="" />
     <option minorVersion="" />
   </build>
