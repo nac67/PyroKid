@@ -31,6 +31,10 @@ package pyrokid {
             return allConnectors;
         }
         
+        public static function coorAndDirToString(coor:Vector2i, dir:int):String {
+            return coor.toString() + ", " + dir;
+        }
+        
     }
     
 }

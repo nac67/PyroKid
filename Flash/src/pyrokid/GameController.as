@@ -46,7 +46,7 @@ package pyrokid {
         /* level is not specified if you want to start a new level in the level editor
          * Otherwise give it a byte array from an embedded level file */
         public function GameController(level:Object) {
-            benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES"]);
+            benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES", "REMOVE DEAD"]);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
@@ -327,7 +327,9 @@ package pyrokid {
             // --------------------------- Visuals -------------------------- //
             executeClipsAndDelayedFunctions();
 
+            benchmarker.beginPhase("REMOVE DEAD");
             level.removeDead();
+            benchmarker.endPhase();
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
                 levelJustWon = true;

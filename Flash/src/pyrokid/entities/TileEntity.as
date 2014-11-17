@@ -25,6 +25,9 @@ package pyrokid.entities {
         public var fireSprites:Array;
         protected var objectCode:int;
         
+        private var connectors:Dictionary;
+        private var partnerConnectors:Array;
+        
         public var visualCells:Array; // DON'T USE THIS. IT IS FOR TUTORIALS ONLY.
         		
 		public function TileEntity(x:int, y:int, objCode:int) {
@@ -34,6 +37,8 @@ package pyrokid.entities {
 			cells = [];
             fireSprites = [];
             visualCells = [];
+            connectors = new Dictionary();
+            partnerConnectors = [];
 		}
         
         /* Returns an array of tile coordinates this TileEntity occupies
@@ -127,7 +132,35 @@ package pyrokid.entities {
             neighborCells = neighbors.toArray();
 		}
         
-        // TODO TODO TODO change when island breaks apart
+        public function removePartnerConnectors():void {
+            for each (var partnerConn:Array in partnerConnectors) {
+                var oppositeEntity:TileEntity = partnerConn[0];
+                var child:Sprite = partnerConn[1];
+                oppositeEntity.removeChild(child);
+                oppositeEntity.partnerConnectors.filter(function(item:Array, i:int, a:Array):Boolean {
+                    return item[0] != this;
+                });
+            }
+        }
+        
+        public function clearConnectorDict():void {
+            connectors = null;
+        }
+        
+        public function setUpPartnerConnectors():void {
+            for each (var value:Array in connectors) {
+                var coor:Vector2i = value[0];
+                var dir:int = value[1];
+                var oppositeCoorInIsland:Vector2i = Cardinal.getVector2i(dir).AddV(coor);
+                var oppositeDir:int = Cardinal.getOpposite(dir);
+                var oppositeEntity:TileEntity = Utils.index(parentIsland.tileEntityGrid, oppositeCoorInIsland.x, oppositeCoorInIsland.y);
+                var connectorKey:String = Connector.coorAndDirToString(oppositeCoorInIsland, oppositeDir);
+                var oppositeConnectorArr:Array = oppositeEntity.connectors[connectorKey];
+                var child:Sprite = oppositeConnectorArr[2];
+                partnerConnectors.push([oppositeEntity, child]);
+            }
+        }
+        
         public function addEdges(levelRecipeEdges:Array, connector:Boolean = false):void {
             for each (var cell:Vector2i in cells) {
                 var cellInGlobal:Vector2i = getGlobalAnchorAsVec2i().AddV(cell);
@@ -151,6 +184,8 @@ package pyrokid.entities {
                 child = new Embedded.ConnectorSWF() as Sprite;
                 child.scaleX = child.scaleY = 0.7;
                 edgeType = Constants.CONNECTOR_CODE;
+                var islandCoor:Vector2i = cell.copy().AddV(islandAnchor);
+                connectors[Connector.coorAndDirToString(islandCoor, dir)] = [islandCoor, dir, child];
             } else {
                 child = new Embedded.MetalEdgeBMP() as Bitmap;
                 edgeType = Constants.METAL_EDGE_CODE;

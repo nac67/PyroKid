@@ -158,6 +158,12 @@ package pyrokid {
             for each (var entity:TileEntity in tileEntityList) {
                 entity.addEdges(connectorGrid, true); 
             }
+            for each (var entity:TileEntity in tileEntityList) {
+                entity.setUpPartnerConnectors();
+            }
+            for each (var entity:TileEntity in tileEntityList) {
+                entity.clearConnectorDict();
+            }
         }
         
         private static function findParentIsland(coors:Array, islandViews:Array):Island {
@@ -467,6 +473,7 @@ package pyrokid {
                 var entityRemoved:Boolean = false;
                 gameIsland.entityList = gameIsland.entityList.filter(function(entity) {
                     if (entity.isDead) {
+                        entity.removePartnerConnectors();
                         removeChild(entity);
                         for each (var coor:Vector2i in entity.coorsInIsland()) {
                             gameIsland.tileEntityGrid[coor.y][coor.x] = null;
