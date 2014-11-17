@@ -7,7 +7,7 @@ package pyrokid.entities {
     
     public class Spider extends BackAndForthEnemy {
         
-        public function Spider(level:Level, startingHealth:int) {
+        public function Spider(level:Level, startingHealth:int=1) {
             health = startingHealth;
             var swf:MovieClip;
             if (health == 2) {
