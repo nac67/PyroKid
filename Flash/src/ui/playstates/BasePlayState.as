@@ -1,5 +1,6 @@
 package ui.playstates {
 	import flash.display.Shape;
+    import flash.display.SimpleButton;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -10,7 +11,6 @@ package ui.playstates {
 	import mx.core.ButtonAsset;
 	import Main;
 	import ui.ButtonBackground;
-	import ui.buttons.ButtonBase;
     import ui.buttons.CoreButton;
 	/**
 	 * ...
@@ -97,7 +97,7 @@ package ui.playstates {
 			addChild(textToAdd);
 		}
 		
-		protected function addButton(button:ButtonBase, fxn1:Function):void {
+		protected function addButton(button:SimpleButton, fxn1:Function):void {
 			addChild(button);
 			
 			var type1:String = MouseEvent.CLICK;

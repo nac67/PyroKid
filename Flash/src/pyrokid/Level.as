@@ -48,8 +48,8 @@ package pyrokid {
         public var dirty:Boolean; // whether dead items need to be cleared this frame
         public var gameOverState:int;
         
-        public function Level(recipe:Object, levelNum:int):void {
-			reset(recipe, levelNum);
+        public function Level(recipe:Object):void {
+			reset(recipe);
         }
 		
 		public function get cellWidth():int {
@@ -66,8 +66,8 @@ package pyrokid {
             return cellHeight * Constants.CELL;
         }
         
-        public function reset(recipe:Object, levelNum:int = -1):void {
-            Main.log.logBeginLevel(levelNum);
+        public function reset(recipe:Object):void {
+            Main.log.logBeginLevel(LevelsInfo.currLevel);
             LevelRecipe.complete(recipe);
             Key.reset();
             frameCount = 0;
@@ -239,7 +239,7 @@ package pyrokid {
             
             briefClips = new RingBuffer(50, function(o:Object) {
                 if (o is DisplayObject) {
-                    var dispObj = o as DisplayObject;
+                    var dispObj:DisplayObject = o as DisplayObject;
                     self.removeChild(dispObj);
                     
                     if (o.clip is Player || o.clip is Embedded.PlayerDieFireSWF || o.clip is Embedded.PlayerDiePainSWF) {

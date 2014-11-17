@@ -10,7 +10,7 @@ package ui.buttons
 	 * @author Evan Niederhoffer
 	 */
 	[Embed(source="../../../assets/swf/buttons.swf", symbol="LevelLock")]
-	public class LockedButton extends ButtonBase 
+	public class LockedButton extends SimpleButton 
 	{
 		
 		public function LockedButton(txt:String, x:int, y:int)

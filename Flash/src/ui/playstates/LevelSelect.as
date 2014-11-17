@@ -6,6 +6,7 @@ package ui.playstates {
     import pyrokid.Constants;
 	import pyrokid.Embedded;
 	import Main;
+    import ui.buttons.CoreButton;
 	import ui.buttons.LockedButton;
 	import ui.buttons.UnlockedButton;
 	import ui.LevelEditorButton;
@@ -48,8 +49,8 @@ package ui.playstates {
 						if (LevelsInfo.isLevelLocked(curr_level_num) && !Constants.ALL_LEVELS_UNLOCKED) {
 							addButton(new LockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), function() {});
 						} else {
-							addButton(new UnlockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
-						}
+                            addButton(new UnlockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
+                        }
 					}
 				}
 			}
@@ -75,11 +76,9 @@ package ui.playstates {
 			displayLevelButtons();
 		}
 
-        public static function startAndSetLevel(levelNum:int, levelWon:Boolean = false):Function {
+        public static function startAndSetLevel(levelNum:int):Function {
 			if (LevelsInfo.isLevelLocked(levelNum) && !Constants.ALL_LEVELS_UNLOCKED) { //if the level is locked, return empty function
-				return function():void {
-					
-				}
+				return function():void {}
 			} else { //otherwise, function will either activate the level or go to GAME COMPLETE screen
 				return function():void { 
 					var levelDict:Dictionary = LevelsInfo.levelDict;
@@ -88,11 +87,11 @@ package ui.playstates {
 						StateController.goToCredits();
 					} else {
 						LevelsInfo.currLevel = levelNum;
-						StateController.goToGame(levelDict[levelNum], levelWon)();
+						StateController.goToGame();
 					}
 					
 				}
-			}			
+			}
 		}
 		
 		

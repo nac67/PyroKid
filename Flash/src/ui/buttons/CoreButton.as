@@ -20,9 +20,15 @@ package ui.buttons {
         private var cornerSizeY:int = 18;
         private var lineWidth:int = 3;
         
-        public function CoreButton(x:int, y:int, w:int, h:int, onClick:Function, ... buttonStatesContent) {
-            this.x = x;
-            this.y = y;
+        /**
+         * @param w width of button
+         * @param h height of button
+         * @param onClick function to be executed when the button is clicked. Takes no parameters and returns void.
+         * @param ... buttonStatesContent The first argument provided here will be displayed on the button. If it is
+         * a string, it will be displayed on the button as text. Otherwise it must be a display object. If more than
+         * one argument is supplied, the button will toggle through all states when clicked.
+         */
+        public function CoreButton(w:int, h:int, onClick:Function, ... buttonStatesContent) {
             this.w = w;
             this.h = h;
             toggleState = 0;
@@ -40,6 +46,18 @@ package ui.buttons {
             setOnClick(onClick);
             reset();
 		}
+        
+        public function centerOn(x:int, y:int):CoreButton {
+            this.x = x - w / 2;
+            this.y = y - h / 2;
+            return this;
+        }
+        
+        public function setCorner(x:int, y:int):CoreButton {
+            this.x = x;
+            this.y = y;
+            return this;
+        }
         
         public function removeListeners():void {
             if (listener != null) {

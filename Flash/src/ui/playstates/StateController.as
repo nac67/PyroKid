@@ -46,33 +46,28 @@ package ui.playstates {
 			
 			display.addChild(new LevelSelect());
 		}
+        
+        public static function goToLevelEditor():void {
+            LevelsInfo.currLevel = -1; // not in numbered level
+            goToGame();
+            currGameController.toggleLevelEditor();
+        }
 		
-		public static function goToGame(level:Object = null, levelWon:Boolean = false, editor:LevelEditor = null):Function {
+		public static function goToGame():void {
+            var level:Object = LevelsInfo.getCurrLevelRecipe();
 			Utils.removeAllChildren(display);
-			
-			if (!(level is ByteArray || level is LevelRecipe || level == null)) {
-				throw new Error("tried to start gamecontroller with bad level input (says StateController)");
-			}
-			if (editor != null) {
-				editor.turnEditorOff();
-			}
-			
+            
 			if (currGameController != null) {
-				currGameController.destroy(!levelWon);
+				currGameController.destroy();
 				currGameController = null;
 			}
-			
-			return function():void {
-				Utils.removeAllChildren(display);
-				
-				currGameController = new GameController(level, level == null ? -1 : LevelsInfo.currLevel);
-				display.addChild(currGameController);
-			}
-			
+			            
+            currGameController = new GameController(level);
+            display.addChild(currGameController);
 		}
 		
 		public static function restartCurrLevel(e:Event = null):void {
-			StateController.goToGame(LevelsInfo.levelDict[LevelsInfo.currLevel])();
+			StateController.goToGame();
 		}
 		
 		public static function goToCompletedLevel(e:Event=null):void {

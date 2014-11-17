@@ -1,6 +1,8 @@
 package ui {
+    import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import pyrokid.Embedded;
+    import pyrokid.LevelRecipe;
 	/**
 	 * ...
 	 * @author Evan Niederhoffer
@@ -47,7 +49,26 @@ package ui {
             Embedded.mazeRunner,
         ];
 		
-		public static var currLevel:int = 1;
+		private static var _currLevel:int = 1;
+        
+        public static function get currLevel():int {
+            return _currLevel;
+        }
+        
+        public static function set currLevel(lvl:int):void {
+            _currLevel = lvl;
+        }
+        
+        public static function getCurrLevelRecipe():Object {
+            if (currLevel <= 0 || currLevel >= levelDict.length) {
+                return LevelRecipe.generateTemplate();
+            } else {
+                var levelBytes:ByteArray = levelDict[currLevel] as ByteArray;
+                levelBytes.position = 0;
+                return levelBytes.readObject();
+            }
+        }
+        
 		public static var maxUnlockedLevel:int = 1; //TODO: LOAD THIS FROM SHAREDOBJECT
 		public static var totalNumberOfLevels:int = -1;
         

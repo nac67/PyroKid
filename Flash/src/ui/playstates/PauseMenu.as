@@ -5,7 +5,6 @@ package ui.playstates {
 	import pyrokid.GameController;
 	import Main;
     import ui.buttons.CoreButton;
-	import ui.buttons.MenuButton;
 	import ui.LevelEditorButton;
     import flash.display.*;
     import flash.geom.*;
@@ -28,11 +27,11 @@ package ui.playstates {
 			pauseTextFormat.color = 0xFFFFFF;
 			addTextToScreen("Paused", 800, 100, 400, 70, pauseTextFormat);
             			
-            var buttonHeight:int = 489;
-            addCoreButton(new CoreButton(50, buttonHeight, 100, 36, unpauseGame, "Resume"));
-            addCoreButton(new CoreButton(250, buttonHeight, 100, 36, StateController.restartCurrLevel, "Restart"));
-            addCoreButton(new CoreButton(450, buttonHeight, 100, 36, StateController.goToLevelSelect, "Levels"));
-            addCoreButton(new CoreButton(650, buttonHeight, 100, 36, StateController.goToMainMenu, "Menu"));
+            var buttonHeight:int = 526;
+            addCoreButton(new CoreButton(100, 36, unpauseGame, "Resume").centerOn(100, buttonHeight));
+            addCoreButton(new CoreButton(100, 36, StateController.restartCurrLevel, "Restart").centerOn(300, buttonHeight));
+            addCoreButton(new CoreButton(100, 36, StateController.goToLevelSelect, "Levels").centerOn(500, buttonHeight));
+            addCoreButton(new CoreButton(100, 36, StateController.goToMainMenu, "Menu").centerOn(700, buttonHeight));
             
             // TODO after unpausing focus back on level -- Aaron, Nick
             addChild(new OptionsMenu(true));

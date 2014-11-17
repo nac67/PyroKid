@@ -38,36 +38,23 @@ package pyrokid {
 
 		public var isPaused:Boolean = false;
 		private var pauseMenu:BasePlayState;
-        
-        private var curLevelNum:int;
-        
+                
         private var benchmarker:Benchmarker;
+        
+        private var levelJustWon:Boolean = false;
 		
         /* level is not specified if you want to start a new level in the level editor
          * Otherwise give it a byte array from an embedded level file */
-        public function GameController(level:Object = null, levelNum:int = -1) {
+        public function GameController(level:Object) {
             benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES"]);
-            curLevelNum = levelNum;
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
-            if (level == null) {
-                // Load new level with browser
-                //LevelIO.loadLevel(initializeLevelAndEditor);
-                initializeLevelAndEditor(LevelRecipe.generateTemplate());
-                editorMode = true;
-                levelEditor.turnEditorOn();
-            } else if (level is ByteArray) {
-                // Load embedded level
-                level.position = 0;
-                initializeLevelAndEditor(level.readObject());
-			} else if (level is LevelRecipe) {
-				initializeLevelAndEditor(level);
-			}
+            initializeLevelAndEditor(level);
         }
         
-        public function destroy(logLeave:Boolean = true):void {
-            if (logLeave) {
+        public function destroy():void {
+            if (!levelJustWon) {
                 var pCenter:Vector2i = level.player.getCenter();
                 Main.log.logDeath(Utils.realToCell(pCenter.x), Utils.realToCell(pCenter.y), Constants.DEATH_BY_RESTART, level.frameCount);
             }
@@ -75,12 +62,12 @@ package pyrokid {
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.removeEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             removeEventListener(Event.ENTER_FRAME, update);
+            levelJustWon = false;
         }
         
         private function initializeLevelAndEditor(levelRecipe:Object):void {
             reloadLevel(levelRecipe);
             levelEditor = new pyrokid.LevelEditor(level);
-            //addChild(new pyrokid.dev.LevelEditor(level));
             levelEditor.reloadLevel = reloadLevel;
             addChild(levelEditor);
             addEventListener(Event.ENTER_FRAME, update);
@@ -93,14 +80,13 @@ package pyrokid {
             if (spotlight != null && this.contains(spotlight)) {
                 this.removeChild(spotlight);
             }
-            level = new Level(levelRecipe, curLevelNum);
+            level = new Level(levelRecipe);
             camera = new Camera(level);
             addChild(camera);
             setChildIndex(camera, 0);
             
             spotlight = new Spotlight();
             addChild(spotlight);
-            //spotlight.visible = false;
             
             if (editorMode) {
                 levelEditor.loadLevel(level);
@@ -114,16 +100,20 @@ package pyrokid {
             }
         }
         
+        public function toggleLevelEditor():void {
+            editorMode = !editorMode;
+            if (editorMode) {
+                levelEditor.turnEditorOn();
+            } else {
+                levelEditor.turnEditorOff();
+                level.frameCount = 0;
+            }
+            reloadLevel(level.recipe);
+        }
+        
         private function levelEditorListener(e:KeyboardEvent):void {
             if (e.keyCode == Keyboard.ENTER && Constants.LEVEL_EDITOR_ENABLED) {
-                editorMode = !editorMode;
-                if (editorMode) {
-                    levelEditor.turnEditorOn();
-                } else {
-                    levelEditor.turnEditorOff();
-                    level.frameCount = 0;
-                }
-                reloadLevel(level.recipe);
+                toggleLevelEditor();
             }
             
             if (editorMode) {
@@ -150,6 +140,7 @@ package pyrokid {
 					pauseMenu.removeAllEventListeners();
 					Utils.removeAllChildren(pauseMenu);
 					removeChild(pauseMenu);
+                    Main.MainStage.focus = camera;
 				} else { //pause the game
 					pauseMenu = new PauseMenu(this);
 					addChild(pauseMenu);
@@ -364,8 +355,9 @@ package pyrokid {
             level.removeDead();
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
+                levelJustWon = true;
 				LevelsInfo.checkAndUnlockNextLevel();
-                LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1, true)();
+                LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1)();
             }
             benchmarker.beginPhase("BETWEEN UPDATES");
         }
