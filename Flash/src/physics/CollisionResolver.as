@@ -73,22 +73,23 @@ package physics {
          * func(rect:PhysRectangle, edgeOfCollision:PhysEdge, penetration:Number):void
          */
         public static function Resolve(r:PhysRectangle, iList:Array, fCallback:Function = null, fCollisionCallback:Function = null):void {
-            r.motion.MulD(1.1);
-            var newVelocity:Vector2 = new Vector2(r.velocity.x, r.velocity.y);
-            
             var possibleCollisions:Array = [];
-            
             var disp:Vector2 = new Vector2();
             var xBounds:Vector2i = new Vector2i();
             var yBounds:Vector2i = new Vector2i();
+            var iBounds:PRect = new PRect()
             for each (var i:PhysIsland in iList) {
                 // Test If Rectangles Overlap
-                if (!PRect.intersects(i.boundingRect, r.rect, disp)) continue;
+                iBounds.center.Set(i.tilesWidth, i.tilesHeight).MulD(0.5).Add(i.globalAnchor.x, i.globalAnchor.y);
+                iBounds.halfSize.Set(i.tilesWidth, i.tilesHeight).MulD(0.5).AddD(0.5);
+                if (!PRect.intersects(iBounds, r.rect, disp)) continue;
                 
-                xBounds.x = MathHelper.clampI(int(r.NX), 0, i.tilesWidth - 1);
-                xBounds.y = MathHelper.clampI(int(r.PX), 0, i.tilesWidth - 1);
-                yBounds.x = MathHelper.clampI(int(r.NY), 0, i.tilesHeight - 1);
-                yBounds.y = MathHelper.clampI(int(r.PY), 0, i.tilesHeight - 1);
+                r.center.SubV(i.globalAnchor);
+                xBounds.x = MathHelper.clampI(int(r.NX - 0.5), 0, i.tilesWidth - 1);
+                xBounds.y = MathHelper.clampI(int(r.PX + 0.5), 0, i.tilesWidth - 1);
+                yBounds.x = MathHelper.clampI(int(r.NY - 0.5), 0, i.tilesHeight - 1);
+                yBounds.y = MathHelper.clampI(int(r.PY + 0.5), 0, i.tilesHeight - 1);
+                r.center.AddV(i.globalAnchor);
                 
                 for (var iy:int = yBounds.x; iy <= yBounds.y; iy++) {
                     for (var ix:int = xBounds.x; ix <= xBounds.y; ix++) {
@@ -100,25 +101,11 @@ package physics {
             }
             
             // Clip Edges
-            for (var i1:int = 0; i1 < possibleCollisions.length - 1; i1++ ) {
-                for (var i2:int = i1 + 1; i2 < possibleCollisions.length; i2++) {
-                    checkEdges(possibleCollisions[i1], possibleCollisions[i2]);
-                }
-            }
-
-            // DEBUG Check Collisions
-            var cc:int = 0;
-            for each (var pc:PossibleTile in possibleCollisions) {
-                cc += pc.collideNX ? 1 : 0;
-                cc += pc.collidePX ? 1 : 0;
-                cc += pc.collideNY ? 1 : 0;
-                cc += pc.collidePY ? 1 : 0;
-            }
-            if (cc > 0) trace("Possible Collisions: " + cc);
+            cullEdges(possibleCollisions);
             
             // Sort Collisions By Distance
             r.rect.center.SubV(r.motion);
-            possibleCollisions.sort(function (a:PossibleTile, b:PossibleTile):Number {
+            possibleCollisions = possibleCollisions.sort(function (a:PossibleTile, b:PossibleTile):Number {
                 var d1:Number = tileDistanceSq(a, r.rect, r.velocity);
                 var d2:Number = tileDistanceSq(b, r.rect, r.velocity);
                 return d1 - d2;
@@ -162,6 +149,13 @@ package physics {
             cx -= t.rect.center.x;
             cy -= t.rect.center.y;
             return cx * cx + cy * cy;
+        }
+        public static function cullEdges(tiles:Array):void {
+            for (var i1:int = 0; i1 < tiles.length - 1; i1++ ) {
+                for (var i2:int = i1 + 1; i2 < tiles.length; i2++) {
+                    checkEdges(tiles[i1], tiles[i2]);
+                }
+            }
         }
         private static function checkEdges(a:PossibleTile, b:PossibleTile):void {
             if (Math.abs(a.rect.center.x - b.rect.center.x) < DISTANCE_TOLERANCE) {
@@ -233,7 +227,7 @@ package physics {
             var dy = 0;
             
             var rv:Vector2 = new Vector2(r.velocity.x, r.velocity.y).SubV(t.island.velocity);
-            if (r.rect.NX < t.rect.PX && r.rect.PX > t.rect.NX && r.rect.NY < t.rect.PY && r.rect.PY > t.rect.NY) {
+            if (r.rect.NX <= t.rect.PX && r.rect.PX >= t.rect.NX && r.rect.NY <= t.rect.PY && r.rect.PY >= t.rect.NY) {
                 if (t.collidePX && disp.x > 0 && rv.x < 0) {
                     if (r.rect.NX < t.rect.PX) {
                         dx = t.rect.PX - r.rect.NX;
@@ -269,7 +263,7 @@ package physics {
                 }
             }
             
-            if (dx == 0 && dy == 0) return
+            if (dx == 0 && dy == 0) return;
             
             if (dy == 0 || (dx != 0 && Math.abs(dx) < Math.abs(dy))) {
                 if (dx < 0) {

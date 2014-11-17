@@ -22,10 +22,14 @@ package physics {
             rect.center.SetV(island.globalAnchor).Add(tx + 0.5, ty + 0.5);
             rect.halfSize.Set(0.5, 0.5);
             
-            if (ty > 0 && i.tileGrid[ty - 1][tx] != null) collideNY = false;
-            if (ty < i.tilesHeight - 1 && i.tileGrid[ty + 1][tx] != null) collidePY = false;
-            if (tx > 0 && i.tileGrid[ty][tx - 1] != null) collideNX = false;
-            if (tx < i.tilesWidth - 1 && i.tileGrid[ty][tx + 1] != null) collidePX = false;
+            if ((ty > 0) && (i.tileGrid[ty - 1][tx] != null))
+                collideNY = false;
+            if ((ty < i.tilesHeight - 1) && (i.tileGrid[ty + 1][tx] != null))
+                collidePY = false;
+            if ((tx > 0) && (i.tileGrid[ty][tx - 1] != null))
+                collideNX = false;
+            if ((tx < i.tilesWidth - 1) && (i.tileGrid[ty][tx + 1] != null))
+                collidePX = false;
         }
     }
 

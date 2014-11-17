@@ -34,7 +34,8 @@ package pyrokid {
         private var largeZoom:Number = 1.0;
         public var level:Level;
         public var spotlight:Spotlight;
-        
+        private var physDebug:PhysDebugLayer;
+
 		public var isPaused:Boolean = false;
 		private var pauseMenu:BasePlayState;
         
@@ -103,6 +104,9 @@ package pyrokid {
             }
             Main.MainStage.focus = camera;
             cameraController = new CameraController(camera, null);
+            
+            physDebug = new PhysDebugLayer();
+            level.addChild(physDebug);
         }
         
         private function levelEditorListener(e:KeyboardEvent):void {
@@ -226,6 +230,9 @@ package pyrokid {
                 }
                 rect.onUpdate(level.islands, rect.sprite.resolveCollision, rect.sprite.collisionCallback);
             }
+            
+            var rects = level.rectViews.map(function (v:ViewPRect, i:int, a:Array) { return v.phys; });
+            physDebug.draw(level.islands, rects);
         }
         
         // TODO TODO TODO
