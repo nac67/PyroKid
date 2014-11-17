@@ -286,6 +286,19 @@ package  {
             }
         }
         
+        public static function centerInCell(freeEntity:FreeEntity, cellX:int, cellY:int):void {
+            centerInCellVert(freeEntity, cellY);
+            centerInCellHoriz(freeEntity, cellX);
+        }
+        
+        public static function centerInCellVert(freeEntity:FreeEntity, cellY:int):void {
+            freeEntity.y = (cellY + .5) * Constants.CELL - (freeEntity.entityHeight / 2);
+        }
+        
+        public static function centerInCellHoriz(freeEntity:FreeEntity, cellX:int):void {
+            freeEntity.x = (cellX + .5) * Constants.CELL - (freeEntity.entityWidth / 2);
+        }
+        
         /** given a vector of x,y this returns which
          * cardinal direction it is closest to. */
         public static function getQuadrant(dx:int, dy:int) {

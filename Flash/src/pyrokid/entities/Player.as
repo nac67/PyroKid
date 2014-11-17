@@ -124,6 +124,7 @@ package pyrokid.entities {
             // Vertical movement
 			if (isGrounded && Key.isDown(GameSettings.jumpBtn) && (!prevFrameJumpBtn || Constants.ALLOW_JUMP_HOLD)) {
 				velocity.y -= Constants.PLAYER_JUMP_SPEED * (1 + velocity.y * Constants.PLAYER_JUMP_FALLING_MULTIPLIER);
+                timeSinceHitCeiling = 0;
 			}
 			velocity.Add(0, Constants.GRAVITY_ENT * Constants.CELL * Constants.DT);
 			prevFrameJumpBtn = Key.isDown(GameSettings.jumpBtn);
