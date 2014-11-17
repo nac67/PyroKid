@@ -205,7 +205,8 @@ package pyrokid {
         }
         
         private function initializeFreeEntity(freeEntity:FreeEntity, startCellX:int, startCellY:int):void {
-            freeEntity.x = startCellX * Constants.CELL;
+            //put top at top of cell, center object in middle of cell horizontally
+            freeEntity.x = (startCellX + .5) * Constants.CELL - (freeEntity.entityWidth / 2);
             freeEntity.y = startCellY * Constants.CELL;
             addChild(freeEntity);
             rectViews.push(new ViewPRect(freeEntity, freeEntity.genPhysRect()));
@@ -496,6 +497,7 @@ package pyrokid {
                 }
                 for each (var newPhysIsland:PhysIsland in newIslands) {
                     newPhysIsland.globalAnchor.AddV(brokenPhysIsland.globalAnchor);
+                    newPhysIsland.resetBoundingRect();
                 }
             }
             

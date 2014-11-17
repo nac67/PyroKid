@@ -110,7 +110,7 @@ package pyrokid.entities {
         
         public function genPhysRect():PhysRectangle {
             var enemyRect:PhysRectangle = new PhysRectangle();
-            enemyRect.halfSize = new Vector2(wArt * scale / 2, hArt * scale / 2).DivD(Constants.CELL);
+            enemyRect.halfSize.Set(wArt * scale / 2, hArt * scale / 2).DivD(Constants.CELL);
             return enemyRect;
         }
         
@@ -131,6 +131,10 @@ package pyrokid.entities {
             if (a.accumNX > 0) touchRight = true;
             if (a.accumPX > 0) touchLeft = true;
             return true;
+        }
+        
+        public function get entityWidth():int {
+            return wArt * scale;
         }
         
         public function get collisionCallback():Function {

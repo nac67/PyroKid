@@ -20,12 +20,10 @@ package physics {
         // Tiles Of The Island
         public var tileGrid:Array;
         
-        /**
-         * List Of PhysEdge Objects
-         */
-        public var edges:Array;
-        public var clippedEdges:Array;
-        
+        // Bounding Rectangle Of The Island
+        public var boundingRect:PRect = new PRect();
+
+        // Used For Island-Island Collision
         public var columnAccumulator:Vector2 = new Vector2();
         
         /**
@@ -36,11 +34,25 @@ package physics {
         public function PhysIsland(w:int, h:int) {
             tilesWidth = w;
             tilesHeight = h;
+            boundingRect.halfSize.Set(w, h).MulD(0.5);
             
             tileGrid = new Array(tilesHeight);
             for (var i:int; i < tileGrid.length; i++) {
                 tileGrid[i] = new Array(tilesWidth);
             }
+        }
+        
+        public function set x(v:Number):void {
+            globalAnchor.x = v;
+            boundingRect.center.x = globalAnchor.x + boundingRect.halfSize.x;
+        }
+        public function set y(v:Number):void {
+            globalAnchor.y = v;
+            boundingRect.center.y = globalAnchor.y + boundingRect.halfSize.y;
+        }
+        public function set position(v:Vector2):void {
+            x = v.x;
+            y = v.y;
         }
         
         public function AddTile(x:int, y:int, tile:IPhysTile):void {
@@ -53,8 +65,8 @@ package physics {
             isGrounded = isGrounded || tile.IsGrounded;
         }
         
-        public function RebuildEdges():void {
-            edges = CollisionResolver.ConstructEdges(tileGrid);
+        public function resetBoundingRect():void {
+            boundingRect.center.SetV(globalAnchor).AddV(boundingRect.halfSize);
         }
     }
 }
