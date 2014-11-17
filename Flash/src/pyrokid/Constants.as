@@ -106,12 +106,6 @@ package pyrokid {
         public static var GROUNDED_TYPES:Array = [WALL_TILE_CODE];
         public static var SINGLE_TILE_TYPES:Array = [];
         
-        // UI constants
-        public static var MOUSE_STATES:Array = [MOUSE_STATE_UP, MOUSE_STATE_OVER, MOUSE_STATE_DOWN];
-        public static var MOUSE_STATE_UP:int = 0;
-        public static var MOUSE_STATE_OVER:int = 1;
-        public static var MOUSE_STATE_DOWN:int = 2;
-        
         public static function GET_TILE_SET(tileCode:int):Bitmap {
             switch (tileCode) {
                 case WALL_TILE_CODE: return new Embedded.DirtMergeBMP() as Bitmap;
@@ -124,6 +118,16 @@ package pyrokid {
         
         public static var MUSIC_STARTS_ON:Boolean = false;
         public static var CONTROLS_START_INVERTED:Boolean = false;
+        
+        // UI constants
+        public static var MOUSE_STATES:Array = [MOUSE_STATE_UP, MOUSE_STATE_OVER, MOUSE_STATE_DOWN];
+        public static var MOUSE_STATE_UP:int = 0;
+        public static var MOUSE_STATE_OVER:int = 1;
+        public static var MOUSE_STATE_DOWN:int = 2;
+        
+        public static var DEFAULT_BUTTON_WIDTH:int = 100;
+        public static var DEFAULT_BUTTON_HEIGHT:int = 36;
+        public static var BUTTON_PADDING:int = 56;
     
     }
 

@@ -8,17 +8,17 @@ package ui.buttons {
     
     public class CoreButton extends SimpleButton {
         
-		private var w:int;
-		private var h:int;
+		private var _w:int;
+		private var _h:int;
         
         private var toggleState:int;
         private var stateChildren:Array;
         
         private var listener:Function;
         
-        private var cornerSizeX:int = 18;
-        private var cornerSizeY:int = 18;
-        private var lineWidth:int = 3;
+        private static var cornerSizeX:int = 18;
+        private static var cornerSizeY:int = 18;
+        private static var lineWidth:int = 3;
         
         /**
          * @param w width of button
@@ -28,24 +28,62 @@ package ui.buttons {
          * a string, it will be displayed on the button as text. Otherwise it must be a display object. If more than
          * one argument is supplied, the button will toggle through all states when clicked.
          */
-        public function CoreButton(w:int, h:int, onClick:Function, ... buttonStatesContent) {
-            this.w = w;
-            this.h = h;
-            toggleState = 0;
+        //public function CoreButton(w:int, h:int, onClick:Function, ... buttonStatesContent) {
+            //this._w = w;
+            //this._h = h;
+            //x = 0;
+            //y = 0;
+            //toggleState = 0;
+            //
+            //var hitBox:Sprite = new Sprite();
+            //hitBox.graphics.beginFill(0x000000);
+            //hitBox.graphics.drawRoundRect(0, 0, w, h, cornerSizeX, cornerSizeY);
+            //hitBox.graphics.endFill();
+            //hitTestState = hitBox;
+            //
+			//useHandCursor = true;
+            //visible = true;
+            //
+            //setButtonContent(buttonStatesContent);
+            //setOnClick(onClick);
+            //reset();
+		//}
+        
+        public static function createDefaultSize(onClick:Function, ... buttonStatesContent):CoreButton {
+            var args:Array = [Constants.DEFAULT_BUTTON_WIDTH, Constants.DEFAULT_BUTTON_HEIGHT, onClick];
+            return CoreButton.create.apply(null, args.concat(buttonStatesContent));
+        }
+        
+        public static function create(w:int, h:int, onClick:Function, ... buttonStatesContent):CoreButton {
+            var B:CoreButton = new CoreButton();
+            B._w = w;
+            B._h = h;
+            B.x = 0;
+            B.y = 0;
+            B.toggleState = 0;
             
             var hitBox:Sprite = new Sprite();
             hitBox.graphics.beginFill(0x000000);
             hitBox.graphics.drawRoundRect(0, 0, w, h, cornerSizeX, cornerSizeY);
             hitBox.graphics.endFill();
-            hitTestState = hitBox;
+            B.hitTestState = hitBox;
             
-			useHandCursor = true;
-            visible = true;
+			B.useHandCursor = true;
+            B.visible = true;
             
-            setButtonContent(buttonStatesContent);
-            setOnClick(onClick);
-            reset();
-		}
+            B.setButtonContent(buttonStatesContent);
+            B.setOnClick(onClick);
+            B.reset();
+            return B;
+        }
+        
+        public function get w():int {
+            return _w;
+        }
+        
+        public function get h():int {
+            return _h;
+        }
         
         public function centerOn(x:int, y:int):CoreButton {
             this.x = x - w / 2;

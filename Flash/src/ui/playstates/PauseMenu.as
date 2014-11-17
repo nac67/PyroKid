@@ -28,13 +28,14 @@ package ui.playstates {
 			addTextToScreen("Paused", 800, 100, 400, 70, pauseTextFormat);
             			
             var buttonHeight:int = 526;
-            addCoreButton(new CoreButton(100, 36, unpauseGame, "Resume").centerOn(100, buttonHeight));
-            addCoreButton(new CoreButton(100, 36, StateController.restartCurrLevel, "Restart").centerOn(300, buttonHeight));
-            addCoreButton(new CoreButton(100, 36, StateController.goToLevelSelect, "Levels").centerOn(500, buttonHeight));
-            addCoreButton(new CoreButton(100, 36, StateController.goToMainMenu, "Menu").centerOn(700, buttonHeight));
             
-            // TODO after unpausing focus back on level -- Aaron, Nick
-            addChild(new OptionsMenu(true));
+            createButtonDefaultSize(unpauseGame, "Resume").centerOn(100, buttonHeight);
+            createButtonDefaultSize(StateController.restartCurrLevel, "Restart").centerOn(300, buttonHeight);
+            createButtonDefaultSize(StateController.goToLevelSelect, "Levels").centerOn(500, buttonHeight);
+            createButtonDefaultSize(StateController.goToMainMenu, "Menu").centerOn(700, buttonHeight);
+            
+            //StateController.displayOptions(true, Constants.BUTTON_PADDING, Constants.BUTTON_PADDING);
+            addChild(new OptionsMenu(true, Constants.BUTTON_PADDING, Constants.BUTTON_PADDING));
 		}
         
         private function addMinimap(level:Level):void {
