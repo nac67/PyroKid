@@ -146,7 +146,11 @@ package pyrokid.entities {
             }
             
             if (shootButton && !prevFrameFireBtn && fireballCooldown == 0) {
-                level.launchFireball(Constants.MAX_BALL_RANGE, shootDirection);
+                if (isGrounded && shootDirection == Constants.DIR_DOWN) {
+                    level.launchFireball(.5, shootDirection);
+                } else {
+                    level.launchFireball(Constants.MAX_BALL_RANGE, shootDirection);
+                }
                 fireballCooldown = Constants.FIREBALL_COOLDOWN;
                 isShooting = true;
             }

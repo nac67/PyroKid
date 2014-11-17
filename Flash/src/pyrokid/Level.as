@@ -380,7 +380,7 @@ package pyrokid {
                 if (projectile is Waterball) {
                     if (player.isTouching(projectile)) {
                         projectiles.markForDeletion(projectile);
-                        player.velocity.AddV(new Vector2(projectile.speedX, projectile.speedY));
+                        player.damageFromEnemyContact(this);
                     }
                 }
                 
@@ -418,11 +418,24 @@ package pyrokid {
 			if (GameSettings.soundOn) Embedded.fireballSound.play();
         }
         
-        public function launchWaterball(x:int, y:int, range:Number, direction:int):void {
+        public function launchWaterball(x:int, y:int, range:Number, direction:int, additionalVel:Vector2):void {
             var wball:Waterball = new Waterball();
             wball.x = x;
             wball.y = y;
-            wball.setDirection(direction);
+            
+            var ballVel:Vector2 = new Vector2(0, 0);
+            if (direction == Constants.DIR_LEFT) {
+                ballVel.x = -Constants.WATERBALL_SPEED;
+            } else if (direction == Constants.DIR_RIGHT) {
+                ballVel.x = Constants.WATERBALL_SPEED;
+            } else if (direction == Constants.DIR_UP) {
+                ballVel.y = -Constants.WATERBALL_SPEED;
+            } else if (direction == Constants.DIR_DOWN) {
+                ballVel.y = Constants.WATERBALL_SPEED;
+            }
+            ballVel.AddV(additionalVel);
+            wball.setVelocity(ballVel);
+            
             projectiles.push(wball);
             addChild(wball);
         }

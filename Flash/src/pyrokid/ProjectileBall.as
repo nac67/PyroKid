@@ -34,6 +34,11 @@ package pyrokid {
             }
         }
         
+        public function setVelocity(v:Vector2) {
+            speedX = v.x;
+            speedY = v.y;
+        }
+        
         /* set range in number of cells, converts to time till expiration */
         public function setRange(numCells:Number):void {
             range = numCells * Constants.CELL / speed;
