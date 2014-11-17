@@ -165,33 +165,8 @@ package pyrokid {
             // Focus On The Player
             var focus:Vector2 = new Vector2(level.player.x, level.player.y);
 
-            // Zoom Out Based On Velocity
-            var cZoom:Number = 1.0;
-            if (Constants.PLAYER_MOVE_ZOOM) {
-                cZoom = level.player.velocity.length / 100.0;
-                cZoom = 1.0 / Math.max(0.8, Math.min(1.0, cZoom));
-            }
-            
-            if (Key.isDown(Keyboard.SPACE)) {
-                var min:Point = level.localToGlobal(new Point(0, 0));
-                var max:Point = level.localToGlobal(new Point(level.worldWidth, level.worldHeight));
-                
-                if (max.x <= (Constants.WIDTH + 5) &&
-                    max.y <= (Constants.HEIGHT + 5) &&
-                    min.x >= -5 &&
-                    min.y >= -5
-                    ) {
-                }
-                else {
-                    largeZoom *= 0.99;
-                }
-            }
-            else {
-                largeZoom = Utils.lerp(largeZoom, 1.0, 0.9);
-            }
-            cZoom *= largeZoom;
-            
             // Update Camera
+            var cZoom:Number = 1.0;
             cameraController.update(focus, level, new Point(0, 0), new Point(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL), dt, cZoom);
             
             // Place spotlight
