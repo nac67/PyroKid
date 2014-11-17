@@ -137,6 +137,10 @@ package pyrokid.entities {
             return wArt * scale;
         }
         
+        public function get entityHeight():int {
+            return hArt * scale;
+        }
+        
         public function get collisionCallback():Function {
             return _collisionCallback;
         }
@@ -237,8 +241,8 @@ package pyrokid.entities {
             var self:FreeEntity = this;
             return function(edgeOfCollision:PhysEdge, islandAnchor:Vector2):void {
                 var center:Vector2 = new Vector2(
-                    edgeOfCollision.center.x + islandAnchor.x,
-                    edgeOfCollision.center.y + islandAnchor.y
+                    edgeOfCollision.center.x,
+                    edgeOfCollision.center.y
                 );
                 var cell:Vector2i;
                 if (edgeOfCollision.direction == Cardinal.NX) {
