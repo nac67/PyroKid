@@ -77,7 +77,13 @@ package pyrokid.entities {
                     var headShift:Vector2i = Utils.getXYMultipliers(dirToShoot).MulD(LENGTH_OF_HEAD);
                     shootSpot.AddV(headShift);
                     
-                    level.launchWaterball(shootSpot.x, shootSpot.y, 5, dirToShoot);
+                    var drift:Vector2 = new Vector2(0, 0);
+                    if (direction == Constants.DIR_LEFT) {
+                        drift.x = -2;
+                    } else if (direction == Constants.DIR_RIGHT) {
+                        drift.x = 2;
+                    }
+                    level.launchWaterball(shootSpot.x, shootSpot.y, 5, dirToShoot, drift);
                 }
             }
             
