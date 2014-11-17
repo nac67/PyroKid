@@ -224,6 +224,14 @@ package pyrokid {
 		private static var bombSoundClass:Class;
 		public static var bombSound:Sound = new bombSoundClass();
         
+        [Embed(source="../../assets/sound/babyjag.mp3")]
+		private static var immuneSoundClass:Class;
+		public static var immuneSound:Sound = new immuneSoundClass();
+        
+        [Embed(source="../../assets/sound/squish.mp3")]
+		private static var squishSoundClass:Class;
+		public static var squishSound:Sound = new squishSoundClass();
+        
         [Embed(source="../../assets/sound/Pyrokid_bgm.mp3")]
 		private static var musicClass:Class;
 		public static var musicSound:Sound = new musicClass();
