@@ -14,8 +14,10 @@ package pyrokid {
         public var tileEntityGrid:Array;
         public var entityList:Array;
         public var connectors:Dictionary;
+        public var island:PhysIsland;
         
         public function Island(physIsland:PhysIsland) {
+            island = physIsland;
             entityList = [];
             connectors = new Dictionary();
             tileEntityGrid = Utils.newArrayOfSize(physIsland.tileGrid);
