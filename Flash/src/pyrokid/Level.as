@@ -205,11 +205,9 @@ package pyrokid {
         }
         
         private function initializeFreeEntity(freeEntity:FreeEntity, startCellX:int, startCellY:int):void {
-            freeEntity.x = startCellX * Constants.CELL;
+            //put top at top of cell, center object in middle of cell horizontally
+            freeEntity.x = (startCellX + .5) * Constants.CELL - (freeEntity.entityWidth / 2);
             freeEntity.y = startCellY * Constants.CELL;
-            if (freeEntity is Exit) {
-                freeEntity.x ++;
-            }
             addChild(freeEntity);
             rectViews.push(new ViewPRect(freeEntity, freeEntity.genPhysRect()));
         }

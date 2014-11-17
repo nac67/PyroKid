@@ -133,6 +133,10 @@ package pyrokid.entities {
             return true;
         }
         
+        public function get entityWidth():int {
+            return wArt * scale;
+        }
+        
         public function get collisionCallback():Function {
             return _collisionCallback;
         }
