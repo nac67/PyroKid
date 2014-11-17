@@ -328,8 +328,6 @@ package pyrokid {
         //////////////////////////////////
         
         public function projectileUpdate():void {
-				
-            
             for (var i:int = 0; i < projectiles.size(); i++) {
                 var projectile:ProjectileBall = projectiles.get(i) as ProjectileBall;
 				projectile.x += projectile.speedX;
@@ -359,8 +357,10 @@ package pyrokid {
                         entity.ignite(this, coor, dir);
                         Main.log.logFireballIgnite(cellX, cellY, Object(entity).constructor);
                     } else if (projectile is Waterball) {
-                        // TODO extinguish fire -- Aaron
-                        trace("sploosh!");
+                        if (entity is BurnForever) {
+                            var burnForeverEntity:BurnForever = entity as BurnForever;
+                            burnForeverEntity.douse(this);
+                        }
                     }
                 }
                 

@@ -28,6 +28,21 @@ package pyrokid.entities {
             }
             return lit;
 		}
+        
+        public function douse(level:Level):void {
+            // TODO -- Aaron probably make this more generic to work on any flaming object
+            if (!isOnFire()) {
+                return;
+            }
+            _ignitionTime = -1;
+            var self = this;
+            level.onFire.filter(function(item:TileEntity, i:int, a:Array):Boolean {
+                return item != self;
+            });
+            for each (var cellSprite:DisplayObject in cellSprites) {
+                removeChild(cellSprite);
+            }
+        }
 	}
 	
 }
