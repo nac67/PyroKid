@@ -30,14 +30,13 @@ package pyrokid.entities {
             var lit:Boolean = super.ignite(level, coor, dir);
             if (lit) {
                 kill(level);
-                //var die:MovieClip = new Embedded.SpiderDieSWF() as MovieClip;
-                //die.x = swf.x + x;
-                //die.y = swf.y + y;
-                //die.scaleX = swf.scaleX;
-                //die.scaleY = swf.scaleY;
-                //var briefClip:BriefClip = new BriefClip(new Vector2(swf.x + x, swf.y + y), die);
-                //level.addChild(briefClip);
-                //level.briefClips.push(briefClip);
+                var die:MovieClip = new Embedded.WaterBatDieSWF() as MovieClip;
+                die.scaleX = swf.scaleX;
+                die.scaleY = swf.scaleY;
+                var xpos:int = (direction == Constants.DIR_RIGHT ? x : x + wArt);
+                var briefClip:BriefClip = new BriefClip(new Vector2(xpos, y), die);
+                level.addChild(briefClip);
+                level.briefClips.push(briefClip);
             }
             return lit;
         }

@@ -189,6 +189,8 @@ package pyrokid {
         
         [Embed(source='../../assets/swf/waterbat.swf', symbol='WaterBat')]
         public static var WaterBatSWF:Class; //cast as MovieClip on instantiation
+        [Embed(source='../../assets/swf/waterbat.swf', symbol='WaterBatDie')]
+        public static var WaterBatDieSWF:Class; //cast as MovieClip on instantiation
         
         [Embed(source='../../assets/swf/spider.swf', symbol='spiderdie')]
         public static var SpiderDieSWF:Class; //cast as MovieClip on instantiation
