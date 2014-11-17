@@ -47,15 +47,14 @@ package pyrokid.entities {
             var xdis:int = level.player.x - this.x;
             var ydis:int = level.player.y - this.y;
             dirToShoot = Utils.getQuadrant(xdis, ydis);
-            var shouldShoot:Boolean = true;
             
             if (dirToShoot == Constants.DIR_UP) {
                 this.batHead.rotation = -90 - HEAD_ROT_OFFSET;
             } else if (dirToShoot == Constants.DIR_DOWN) {
                 this.batHead.rotation = 90 - HEAD_ROT_OFFSET;
             } else if (dirToShoot != this.direction) {
-                shouldShoot = false;
-                this.batHead.rotation = 180;
+                dirToShoot = Constants.DIR_DOWN;
+                this.batHead.rotation = 90 - HEAD_ROT_OFFSET;
             } else {
                 this.batHead.rotation =  - HEAD_ROT_OFFSET;
             }
@@ -64,26 +63,26 @@ package pyrokid.entities {
                 timeToWaterball ++;
             } else {
                 timeToWaterball = 0;
-                if (shouldShoot) {
                     
-                    // Find center of water bat
-                    var shootSpot:Vector2i = this.getCenter();
-                    
-                    // Offset to head depending on direction
-                    shootSpot.AddV(new Vector2i((direction == Constants.DIR_RIGHT ? X_CENTER_TO_HEAD : -X_CENTER_TO_HEAD), 0));
-                    
-                    // Offset to end of head depending on rotation of head
-                    var headShift:Vector2i = Utils.getXYMultipliers(dirToShoot).MulD(LENGTH_OF_HEAD);
-                    shootSpot.AddV(headShift);
-                    
-                    var drift:Vector2 = new Vector2(0, 0);
-                    if (direction == Constants.DIR_LEFT) {
-                        drift.x = -2;
-                    } else if (direction == Constants.DIR_RIGHT) {
-                        drift.x = 2;
-                    }
-                    level.launchWaterball(shootSpot.x, shootSpot.y, 5, dirToShoot, drift);
+                // Find center of water bat
+                var shootSpot:Vector2i = this.getCenter();
+                
+                // Offset to head depending on direction
+                shootSpot.AddV(new Vector2i((direction == Constants.DIR_RIGHT ? X_CENTER_TO_HEAD : -X_CENTER_TO_HEAD), 0));
+                
+                // Offset to end of head depending on rotation of head
+                var headShift:Vector2i = Utils.getXYMultipliers(dirToShoot).MulD(LENGTH_OF_HEAD);
+                shootSpot.AddV(headShift);
+                
+                var drift:Vector2 = new Vector2(0, 0);
+                if (direction == Constants.DIR_LEFT) {
+                    drift.x = -2;
+                } else if (direction == Constants.DIR_RIGHT) {
+                    drift.x = 2;
                 }
+                level.launchWaterball(shootSpot.x, shootSpot.y, 5, dirToShoot, drift);
+                
+                
             }
             
         }
