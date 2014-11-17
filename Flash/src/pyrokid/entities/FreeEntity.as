@@ -209,14 +209,6 @@ package pyrokid.entities {
         }
         
         public function update(level:Level):void {
-            // TODO try this with water bats or anything that is slightly in the air. Doesn't work
-            // because they're on different frames. -- Aaron, Nick, Cristian
-            //if (!(this is Player) && isGrounded) {
-                //trace("grounded on frame: " + level.frameCount);
-            //}
-            //if (!(this is Player) && touchTop) {
-                //trace("touch top on frame: " + level.frameCount);
-            //}
             if (isBeingSmooshed()) {
                 var xVelocity:int = (Math.random() * 75 + 25) * (Math.random() > 0.5 ? -1 : 1);
                 var constr:Class = Object(this).constructor;
@@ -264,12 +256,21 @@ package pyrokid.entities {
                 if (entity != null) {
                     var coor:Vector2i = new Vector2i(cell.x, cell.y).SubV(entity.getGlobalAnchorAsVec2i());
                     var thisOnFire:Boolean = self.isOnFire();
+                    var thisIsWater:Boolean = self is WaterBat;
                     var entityOnFire:Boolean = entity.isOnFire();
-                    if (entityOnFire && entity.canIgniteFrom(coor, edgeOfCollision.direction)) {
-                        self.ignite(level);
-                    }
-                    if (thisOnFire) {
-                        entity.ignite(level, coor, dir);
+                    if (!thisIsWater) {
+                        if (entityOnFire && entity.canIgniteFrom(coor, edgeOfCollision.direction)) {
+                            self.ignite(level);
+                        }
+                        if (thisOnFire) {
+                            entity.ignite(level, coor, dir);
+                        }
+                    } else {
+                        if (entityOnFire && entity.canIgniteFrom(coor, edgeOfCollision.direction)) {
+                            if (entity is BurnForever) {
+                                BurnForever(entity).douse(level);
+                            }
+                        }
                     }
                 }
             };
