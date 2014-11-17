@@ -17,7 +17,7 @@ package pyrokid.tools {
                 currLevel = num;
                 //trace("begin level " + num);
                 logging.recordLevelStart(num);
-            } else {
+            } else if (!Constants.LEVEL_EDITOR_ENABLED) {
                 trace(Constants.ERROR_MESSAGE + "beginLevel");
             }
         }
@@ -27,7 +27,7 @@ package pyrokid.tools {
                 currLevel = -1;
                 //trace("level end");
                 logging.recordLevelEnd();
-            } else {
+            } else if (!Constants.LEVEL_EDITOR_ENABLED) {
                 trace(Constants.ERROR_MESSAGE + "endLevel");
             }
         }
@@ -44,7 +44,7 @@ package pyrokid.tools {
             if (currLevel != -1) {
                 //trace(msg);
                 logging.recordEvent(currLevel, action, msg);
-            } else {
+            } else if (!Constants.LEVEL_EDITOR_ENABLED) {
                 trace( Constants.ERROR_MESSAGE + "logEvent");
             }
         }

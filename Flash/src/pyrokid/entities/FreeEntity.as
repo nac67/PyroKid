@@ -27,7 +27,7 @@ package pyrokid.entities {
         public var touchRight:Boolean = false;
         public var touchTop:Boolean = false;
         
-        private var timeSinceHitCeiling:int = 0;
+        protected var timeSinceHitCeiling:int = 0;
         
         private var _collisionCallback:Function;
                 
@@ -117,19 +117,20 @@ package pyrokid.entities {
         public function resolveCollision(r:PhysRectangle, a:CollisionAccumulator, o:PhysCallbackOptions):Boolean {
             if (a.accumNY > 0) isGrounded = true;
             if (a.accumPY > 0) {
+                o.breakYVelocity = false;
                 touchTop = true;
+            }
+            if (a.accumNX > 0) touchRight = true;
+            if (a.accumPX > 0) touchLeft = true;
+            
+            if (!o.breakYVelocity) {
                 timeSinceHitCeiling += 1;
                 if (timeSinceHitCeiling > Constants.PLAYER_CEILING_HANG_TIME) {
                     o.breakYVelocity = true;
                     timeSinceHitCeiling = 0;
-                } else {
-                    o.breakYVelocity = false;
                 }
-            } else {
-                timeSinceHitCeiling = 0;
             }
-            if (a.accumNX > 0) touchRight = true;
-            if (a.accumPX > 0) touchLeft = true;
+            
             return true;
         }
         
@@ -209,6 +210,16 @@ package pyrokid.entities {
         }
         
         public function update(level:Level):void {
+            if (this is WaterBat) {
+                if (touchTop) {
+                    velocity.y = 5;
+                } else {
+                    velocity.y = 0;
+                }
+                if (velocity.y == 0) {
+                    Utils.centerInCellVert(this, Math.round(getCenter().y / Constants.CELL));
+                }
+            }
             if (isBeingSmooshed()) {
                 var xVelocity:int = (Math.random() * 75 + 25) * (Math.random() > 0.5 ? -1 : 1);
                 var constr:Class = Object(this).constructor;
