@@ -16,8 +16,8 @@ package ui.buttons {
         
         private var listener:Function;
         
-        private var cornerSizeX:int = 16;
-        private var cornerSizeY:int = 16;
+        private var cornerSizeX:int = 18;
+        private var cornerSizeY:int = 18;
         private var lineWidth:int = 3;
         
         public function CoreButton(x:int, y:int, w:int, h:int, onClick:Function, ... buttonStatesContent) {
@@ -143,18 +143,22 @@ package ui.buttons {
         private function getBackground(child:DisplayObject, mouseState:int):Sprite {
             var background:Sprite = new Sprite();
             if (mouseState != Constants.MOUSE_STATE_UP) {
-                background.graphics.lineStyle(lineWidth, 0xFFFFFF);
+                background.graphics.lineStyle(lineWidth, 0xFFFFFF, 1, true);
                 
                 if (mouseState == Constants.MOUSE_STATE_DOWN) {
                     background.graphics.beginFill(0xAF1616);
-                    background.graphics.drawRoundRect(0, 0, w, h, cornerSizeX, cornerSizeY);
+                    drawBorder(background);
                     background.graphics.endFill();
                 } else {
-                    background.graphics.drawRoundRect(0, 0, w, h, cornerSizeX, cornerSizeY);
+                    drawBorder(background);
                 }
             }
             background.addChild(child);
             return background;
+        }
+        
+        private function drawBorder(background:Sprite):void {
+            background.graphics.drawRoundRect(0, 0, w, h, cornerSizeX, cornerSizeY);
         }
     }
     

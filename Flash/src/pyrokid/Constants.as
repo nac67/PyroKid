@@ -51,14 +51,6 @@ package pyrokid {
         public static var QUICK_BURN_TIME:int = SPREAD_RATE;
         public static var SPREAD_WHILE_FALLING:Boolean = false;
         
-        public static var LEFT_BTN:int;
-        public static var RIGHT_BTN:int;
-        public static var JUMP_BTN:int;
-        public static var AIM_UP_BTN:int;
-        public static var AIM_DOWN_BTN:int;
-        public static var AIM_LEFT_BTN:int;
-        public static var AIM_RIGHT_BTN:int;
-        
         public static var ALLOW_JUMP_HOLD:Boolean = false;
         public static var PLAYER_MOVE_ZOOM:Boolean = false;
         
