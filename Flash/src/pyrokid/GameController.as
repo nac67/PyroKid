@@ -105,8 +105,10 @@ package pyrokid {
             Main.MainStage.focus = camera;
             cameraController = new CameraController(camera, null);
             
-            physDebug = new PhysDebugLayer();
-            level.addChild(physDebug);
+            if(Constants.DEBUG_DRAW){
+                physDebug = new PhysDebugLayer();
+                level.addChild(physDebug);
+            }
         }
         
         private function levelEditorListener(e:KeyboardEvent):void {
@@ -232,7 +234,7 @@ package pyrokid {
             }
             
             var rects = level.rectViews.map(function (v:ViewPRect, i:int, a:Array) { return v.phys; });
-            physDebug.draw(level.islands, rects);
+            if (Constants.DEBUG_DRAW) physDebug.draw(level.islands, rects);
         }
         
         // TODO TODO TODO

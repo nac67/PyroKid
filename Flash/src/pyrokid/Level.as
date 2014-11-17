@@ -207,6 +207,9 @@ package pyrokid {
         private function initializeFreeEntity(freeEntity:FreeEntity, startCellX:int, startCellY:int):void {
             freeEntity.x = startCellX * Constants.CELL;
             freeEntity.y = startCellY * Constants.CELL;
+            if (freeEntity is Exit) {
+                freeEntity.x ++;
+            }
             addChild(freeEntity);
             rectViews.push(new ViewPRect(freeEntity, freeEntity.genPhysRect()));
         }

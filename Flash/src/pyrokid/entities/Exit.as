@@ -16,7 +16,7 @@ package pyrokid.entities {
         public var isHole:Boolean;
         
 		public function Exit(level:Level, isHole:Boolean = false) {
-            super(level, 1, 50, 50, 10, 10, 30, 30);
+            super(level, 1, 48, 48, 10, 10, 30, 30);
             bombSwf = new Embedded.Bomb1SWF() as Sprite;
             holeSwf = new Embedded.Bomb3SWF() as Sprite;
             addChild(bombSwf);

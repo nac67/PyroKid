@@ -43,7 +43,10 @@ package  {
             Constants.MUSIC_ON = Constants.MUSIC_STARTS_ON;
 			addChild(StateController.display);
 			StateController.goToMainMenu();
-            addChild(new Stats());
+            
+            if (Constants.DEBUG_DRAW) {
+                addChild(new Stats());
+            }
         }
     }
 
