@@ -227,7 +227,7 @@ package pyrokid.entities {
                 //of the sprite. ew
                 newClip.removeChild(newClip.glowSprite);
                 
-                if (Constants.SOUND_ON) Embedded.squishSound.play();
+                if (GameSettings.soundOn) Embedded.squishSound.play();
                 
                 var deathAnimation:BriefClip = new BriefClip(new Vector2(x, y), newClip, new Vector2(xVelocity, -300), Constants.FADE_TIME, true, Constants.DEATH_CLIP_TYPE_SMOOSH);
                  if (newClip is Player) {
