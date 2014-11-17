@@ -22,7 +22,7 @@ package pyrokid.entities {
         // position, in tile coordinates, relative to the corner of the island.
         public var islandAnchor:Vector2i;
         public var parentIsland:Island;
-        public var cellSprites:Array;
+        public var fireSprites:Array;
         protected var objectCode:int;
         
         public var visualCells:Array; // DON'T USE THIS. IT IS FOR TUTORIALS ONLY.
@@ -32,7 +32,7 @@ package pyrokid.entities {
 			this.x = x;
 			this.y = y;
 			cells = [];
-            cellSprites = [];
+            fireSprites = [];
             visualCells = [];
 		}
         
@@ -92,7 +92,7 @@ package pyrokid.entities {
             var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;
             fire.x = relativeCell.x * Constants.CELL;
             fire.y = relativeCell.y * Constants.CELL;
-            cellSprites.push(fire);
+            fireSprites.push(fire);
         }
 		
 		public function finalizeCells(level:Level, globalAnchor:Vector2i):void {
@@ -109,7 +109,7 @@ package pyrokid.entities {
                     child.x = cells[i].x * Constants.CELL;
                     child.y = cells[i].y * Constants.CELL;
                     addChild(child);
-                    cellSprites.push(child);
+                    fireSprites.push(child);
                 }
             }
             

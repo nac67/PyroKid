@@ -148,6 +148,9 @@ package pyrokid {
         [Embed(source='../../assets/swf/FireTile.swf', symbol='FireTile')]
         public static var FireTileSWF:Class; //cast as Sprite on instantiation
         
+        [Embed(source='../../assets/swf/Douse.swf', symbol='Douse')]
+        public static var DouseSWF:Class; //cast as Sprite on instantiation
+        
         [Embed(source='../../assets/swf/Connector.swf', symbol='Connector')]
         public static var ConnectorSWF:Class; //cast as Sprite on instantiation
         

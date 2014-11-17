@@ -16,7 +16,7 @@ package pyrokid.entities {
         public override function ignite(level:Level, coor:Vector2i = null, dir:int = -1):Boolean {
             var lit:Boolean = super.ignite(level, coor, dir);
             if (lit) {
-                for each (var cellSprite:DisplayObject in cellSprites) {
+                for each (var cellSprite:DisplayObject in fireSprites) {
                     addChild(cellSprite);
                 }
             }
