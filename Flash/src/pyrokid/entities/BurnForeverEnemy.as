@@ -16,6 +16,7 @@ package pyrokid.entities {
             var swfAsMC:MovieClip = swf as MovieClip;
             var lit:Boolean = super.ignite(level, coor, dir);
             if (lit) {
+                if (Constants.SOUND_ON) Embedded.immuneSound.play();
                 swfAsMC.gotoAndStop(2);
             }
             return lit;
