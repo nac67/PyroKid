@@ -30,6 +30,12 @@ package pyrokid {
         [Embed(source='../../assets/swf/buttons.swf', symbol='MusicMuted')]
         public static var MusicMutedIcon:Class; //cast as Sprite on instantiation
         
+        [Embed(source='../../assets/swf/buttons.swf', symbol='ControlsBTN')]
+        public static var ControlsDefaultIcon:Class; //cast as Sprite on instantiation
+        
+        [Embed(source='../../assets/swf/buttons.swf', symbol='ControlsBTN2')]
+        public static var ControlsInvertedIcon:Class; //cast as Sprite on instantiation
+        
         [Embed(source="../../assets/levels/introTown2.txt", mimeType="application/octet-stream")]
         private static var FirstIntroTown:Class;
         public static var firstIntroTown:ByteArray = new FirstIntroTown();
