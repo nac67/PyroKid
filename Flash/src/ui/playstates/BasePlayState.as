@@ -39,9 +39,22 @@ package ui.playstates {
             Utils.removeAllChildren(this);
         }
         
-        public function addCoreButton(button:CoreButton):void {
+        public function addCoreButton(button:CoreButton):CoreButton {
             addChild(button);
             buttons.push(button);
+            return button;
+        }
+        
+        public function createReturnToMainMenuButton():CoreButton {
+            return createButtonDefaultSize(StateController.goToMainMenu, "Main");
+        }
+        
+        public function createButtonDefaultSize(onClick:Function, ... buttonStatesContent):CoreButton {
+            return addCoreButton(CoreButton.createDefaultSize.apply(null, [onClick].concat(buttonStatesContent)));
+        }
+        
+        public function createCoreButton(w:int, h:int, onClick:Function, ... buttonStatesContent):CoreButton {
+            return addCoreButton(CoreButton.create.apply(null, [w, h, onClick].concat(buttonStatesContent)));
         }
         
         protected function addBackground(color:uint, alpha:Number = 1.0):void {

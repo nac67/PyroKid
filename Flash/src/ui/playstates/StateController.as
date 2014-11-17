@@ -78,13 +78,11 @@ package ui.playstates {
         
         public static function goToOptions(e:Event=null):void {
 			Utils.removeAllChildren(display);
-			
             if (currGameController != null) {
 				currGameController.destroy();
 				currGameController = null;
 			}
-            
-			display.addChild(new OptionsMenu());
+            displayOptions(false, Constants.WIDTH / 2, Constants.HEIGHT / 2);
 		}
 		
 		public static function goToCredits(e:Event=null):void {
@@ -102,12 +100,16 @@ package ui.playstates {
 			display.addChild(new HowToPlayMenu());
 		}
 		
-		//public static function displayPause(e:Event=null) {
-			//display.addChild(new PauseMenu());
+		//public static function displayPause(level:Level) {
+			//display.addChild(new PauseMenu(level));
 		//}
+        //
+        //public static function deletePause() {
+            //display.removeChild(
+        //}
 		
-		public static function displayOptions(e:Event=null):void {
-			display.addChild(new OptionsMenu());
+		public static function displayOptions(inPauseMenu:Boolean = false, x:int = 0, y:int = 0):void {
+			display.addChild(new OptionsMenu(inPauseMenu, x, y));
 		}
 		
 		public static function removeOverlayedScreen(screen:BasePlayState):void {
