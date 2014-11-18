@@ -582,6 +582,13 @@ package pyrokid {
                 }
             }
         }
+        
+        public function addBriefClip(clazz:Class, pos:Vector2) {
+            var mc:MovieClip = new clazz() as MovieClip;
+            var bc:BriefClip = new BriefClip(pos, mc)
+            briefClips.push(bc);
+            addChild(bc);
+        }
     }
 
 }

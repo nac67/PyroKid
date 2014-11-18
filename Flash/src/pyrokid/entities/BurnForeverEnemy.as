@@ -27,6 +27,8 @@ package pyrokid.entities {
                 _ignitionTime = -1;
                 var swfAsMC:MovieClip = swf as MovieClip;
                 swfAsMC.gotoAndStop(1);
+                
+                level.addBriefClip(Embedded.DouseSWF, new Vector2(x, y));
             }
         }
     }
