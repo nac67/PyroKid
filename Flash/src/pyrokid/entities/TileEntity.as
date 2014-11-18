@@ -273,12 +273,17 @@ package pyrokid.entities {
                 return false;
             }
             
-            if (coor == null) {
+            if (coor == null || dir == -1) {
                 level.onFire.push(this);
                 return super.ignite(level, coor, dir);
             }
             
-            var isEdge:Boolean = edges[coor.toString()][Cardinal.getOpposite(dir)];
+            var edgeBools:Array = edges[coor.toString()];
+            if (edgeBools == null) {
+                trace(Constants.ERROR_MESSAGE + " There is a bug with igniting. Expecting to ignite a coordinate but that coordinate is not part of this entity");
+                return false;
+            }
+            var isEdge:Boolean = edgeBools[Cardinal.getOpposite(dir)];
             if (!isEdge) {
                 level.onFire.push(this);
                 super.ignite(level, coor, dir);

@@ -332,6 +332,33 @@ package pyrokid {
         //////////////////////////////////
         //////////////////////////////////
         
+        private function getProjectileDirection(projectile:ProjectileBall):int {
+            if (projectile.speedY > 0) {
+                return Cardinal.PY;
+            } else if (projectile.speedY < 0) {
+                return Cardinal.NY;
+            } else if (projectile.speedX > 0) {
+                return Cardinal.PX;
+            } else if (projectile.speedX < 0) {
+                return Cardinal.NX;
+            }
+            return -1;
+        }
+        
+        private function projectileImpact(projectile:ProjectileBall, entity:TileEntity, impactCoor:Vector2i, globalCoor:Vector2):void {
+            projectiles.markForDeletion(projectile);
+            var dir:int = getProjectileDirection(projectile);
+            if (projectile is Fireball) {
+                entity.ignite(this, impactCoor, dir);
+                Main.log.logFireballIgnite(globalCoor.x, globalCoor.y, Object(entity).constructor);
+            } else if (projectile is Waterball) {
+                if (entity is BurnForever) {
+                    var burnForeverEntity:BurnForever = entity as BurnForever;
+                    burnForeverEntity.douse(this);
+                }
+            }
+        }
+        
         public function projectileUpdate():void {
             for (var i:int = 0; i < projectiles.size(); i++) {
                 var projectile:ProjectileBall = projectiles.get(i) as ProjectileBall;
@@ -356,58 +383,19 @@ package pyrokid {
                     if (tx < 0 || tx >= isle.tilesWidth) continue;
                     if (ty < 0 || ty >= isle.tilesHeight) continue;
                     if (isle.tileGrid[ty][tx] == null) continue;
-                    var ti:TileEntity = vi.sprite.tileEntityGrid[ty][tx];
+                    var entity:TileEntity = vi.sprite.tileEntityGrid[ty][tx];
                     
-                    var v:Vector2 = new Vector2(projectile.speedX, projectile.speedY).DivD(Constants.CELL).SubV(isle.velocity);
-                    var dir:int;
-                    if (v.y > 0) {
-                        dir = Cardinal.PY;
-                    } else if (v.y < 0) {
-                        dir = Cardinal.NY;
-                    } else if (v.x > 0) {
-                        dir = Cardinal.PX;
-                    } else if (v.x < 0) {
-                        dir = Cardinal.NX;
-                    }
-                    var coor:Vector2i = new Vector2i(tx, ty);
-                    if (projectile is Fireball) {
-                        ti.ignite(this, coor, dir);
-                        Main.log.logFireballIgnite(int(projectile.x), int(projectile.y), Object(ti).constructor);
-                    } else if (projectile is Waterball) {
-                        if (ti is BurnForever) {
-                            var burnForeverEntity:BurnForever = ti as BurnForever;
-                            burnForeverEntity.douse(this);
-                        }
-                    }
+                    var coor:Vector2i = new Vector2i(tx, ty).SubV(entity.islandAnchor);
+                    var globalCoor:Vector2 = new Vector2(projectile.x / Constants.CELL, projectile.y / Constants.CELL);
+                    projectileImpact(projectile, entity, coor, globalCoor);
                 }
-                
                 
                 var cellX:int = Utils.realToCell(projectile.x);
                 var cellY:int = Utils.realToCell(projectile.y);
                 var entity:TileEntity = Utils.index(tileEntityGrid, cellX, cellY);
                 if (entity != null) {
-                    // remove fireball from list, also delete from stage
-                    projectiles.markForDeletion(projectile);
-                    var dir:int;
-                    if (projectile.speedY > 0) {
-                        dir = Cardinal.PY;
-                    } else if (projectile.speedY < 0) {
-                        dir = Cardinal.NY;
-                    } else if (projectile.speedX > 0) {
-                        dir = Cardinal.PX;
-                    } else if (projectile.speedX < 0) {
-                        dir = Cardinal.NX;
-                    }
                     var coor:Vector2i = new Vector2i(cellX, cellY).SubV(entity.getGlobalAnchorAsVec2i());
-                    if (projectile is Fireball) {
-                        entity.ignite(this, coor, dir);
-                        Main.log.logFireballIgnite(cellX, cellY, Object(entity).constructor);
-                    } else if (projectile is Waterball) {
-                        if (entity is BurnForever) {
-                            var burnForeverEntity:BurnForever = entity as BurnForever;
-                            burnForeverEntity.douse(this);
-                        }
-                    }
+                    projectileImpact(projectile, entity, coor, new Vector2(cellX, cellY));
                 }
                 
                 // ignite FreeEntities

@@ -13,13 +13,11 @@ package pyrokid {
         private var _globalAnchor:Vector2;
         public var tileEntityGrid:Array;
         public var entityList:Array;
-        public var connectors:Dictionary;
         public var island:PhysIsland;
         
         public function Island(physIsland:PhysIsland) {
             island = physIsland;
             entityList = [];
-            connectors = new Dictionary();
             tileEntityGrid = Utils.newArrayOfSize(physIsland.tileGrid);
             _velocity = physIsland.velocity.copy().MulD(Constants.CELL);
             _globalAnchor = physIsland.globalAnchor.copy();
