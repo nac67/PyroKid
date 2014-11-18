@@ -34,6 +34,7 @@ package ui {
             Embedded.firstIntroTown,
             Embedded.secondIntroTown,
             Embedded.thirdIntroTown,
+            Embedded.fourthIntroTown,
             Embedded.introFallUnderground,
             Embedded.levelLearnDirectionalShoot,
             Embedded.levelLearnShootDown,
@@ -100,9 +101,9 @@ package ui {
                     var controls:String = GameSettings.controlSchemeInverted ? "arrow" : "WASD";
                     return [[new Vector2(0, 10), "Use the " + controls + " keys to move and jump. Use ESC to pause."]];
                 case 3:
-                    var controls:String = GameSettings.controlSchemeInverted ? "an arrow key" : "W, A, S, or D";
-                    return [[new Vector2(40, 570), "Use " + controls + " to charge up a fireball, then release the arrow key to launch it."]];
-                case 4: return [[new Vector2(0, 10), "Certain blocks will react differently to fire."]];
+                    var controls:String = !GameSettings.controlSchemeInverted ? "an arrow key" : "W, A, S, or D";
+                    return [[new Vector2(40, 570), "Use " + controls + " to shoot a fireball"]];
+                case 4: return [[new Vector2(240, 110), "He's burning houses, get him"]];
                 case 5: return [[new Vector2(0, 10), "Remember, you can shoot up if you hold the up arrow key.\nLatches will hold objects together."]];
                 case 10: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
                 case 12: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
@@ -119,7 +120,8 @@ package ui {
         
         public static var tutorialHouses:Object = {
             2: [new Vector2i(34, 6)],
-            3: [new Vector2i(22, 6), new Vector2i(34, 6), new Vector2i(43, 6)]
+            3: [new Vector2i(22, 6)],
+            4: [new Vector2i(33, 4), new Vector2i(23, 4)]
         };
         
         public static var tutorialBuildings:Object = {

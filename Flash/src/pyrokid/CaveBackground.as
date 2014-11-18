@@ -44,7 +44,7 @@ package pyrokid {
             } else if (LevelsInfo.currLevel == 2) {
                 bg = new Embedded.TutorialBackground2() as Bitmap;
                 bg.scaleY = scale;
-            } else if (LevelsInfo.currLevel == 3) {
+            } else if (LevelsInfo.currLevel == 3 || LevelsInfo.currLevel == 4) {
                 bg = new Embedded.TutorialBackground3() as Bitmap;
                 bg.scaleY = scale;
             } else {

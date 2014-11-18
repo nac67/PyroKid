@@ -204,7 +204,11 @@ package pyrokid {
                 } else if (recipe.freeEntities[i][2] == Constants.HOLE_EXIT_CODE) {
                     enemy = new Exit(this, true);
                 } else {
-                    enemy = new BurnForeverEnemy(this);
+                    if (LevelsInfo.currLevel == 4) {
+                        enemy = new Mob(this);
+                    } else {
+                        enemy = new BurnForeverEnemy(this);
+                    }
                 }
                 initializeFreeEntity(enemy, recipe.freeEntities[i][0], recipe.freeEntities[i][1]);
                 enemies.push(enemy);
@@ -277,6 +281,8 @@ package pyrokid {
                 addChild(talisman);
                 setChildIndex(talisman, 1);
             }
+            trace(LevelsInfo.currLevel);
+            trace(houseCoors);
             addImages(houseCoors, "house");
             addImages(buildingCoors, "building");
         }
@@ -299,6 +305,7 @@ package pyrokid {
             if (coors != undefined && coors != null) {
                 for each (var coor:Vector2i in coors) {
                     var tileEntity:TileEntity = Utils.index(tileEntityGrid, coor.x, coor.y);
+                    trace(tileEntity);
                     if (tileEntity != null) {
                         tileEntity.addChild(getTutorialImage(type));
                         if (type == "house") {
