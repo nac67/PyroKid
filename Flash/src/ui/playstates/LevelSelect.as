@@ -161,7 +161,7 @@ package ui.playstates {
                     //check if level is on unlocked page
                     var currLevelPage:int = LevelSelect.levelToPageNum(levelNum)
                     //trace("current level, "+levelNum +", on page " +currLevelPage+" is locked = "+LevelsInfo.isPageLocked(currLevelPage));
-                    if (LevelsInfo.isPageLocked(currLevelPage)) {
+                    if (LevelsInfo.isPageLocked(currLevelPage) && !Constants.ALL_LEVELS_UNLOCKED) {
                         StateController.goToLevelSelectAtPage(currLevelPage-1)(); //page for level to start is locked; go to PREVIOUS page
                     } else { //page is not locked, so we can legally start that level
                         LevelsInfo.currLevel = levelNum;
