@@ -106,7 +106,7 @@ package ui.playstates {
                                 addButton(new LockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), function() {});
                             } else if (LevelsInfo.isLevelCompleted(curr_level_num)) {
                                	addButton(new CompletedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
-								if (LevelsInfo.bestLevelCompletionTimes[curr_level_num] != undefined) {
+								if (LevelsInfo.bestLevelCompletionTimes[curr_level_num] != undefined && (!Constants.IS_VERSION_A || Constants.ALWAYS_DISPLAY_COMPLETION_TIME)) {
 									addTextToScreen(Utils.frameCountToTimeDisplay(LevelsInfo.bestLevelCompletionTimes[curr_level_num]), 60, 50, x_offset + (x_spacing * x), y_offset + (y_spacing * y)+40);
 								}
                             } else {
