@@ -383,12 +383,16 @@ package  {
 					//}
 				}
 
+				if (levelSO.data.hasOwnProperty("bestLevelCompletionTimes")) {
+					LevelsInfo.bestLevelCompletionTimes = levelSO.data.bestLevelCompletionTimes;
+				}
 			}
 		}
 		public static function saveLevelData():void {
 			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
 			levelSO.data.maxUnlockedLevel = LevelsInfo.maxUnlockedLevel;
 			levelSO.data.completedLevels = LevelsInfo.completedLevels;
+			levelSO.data.bestLevelCompletionTimes = LevelsInfo.bestLevelCompletionTimes;
 			levelSO.flush();
 			//trace("saved data");
 			//trace("completedLevels looks like: ");

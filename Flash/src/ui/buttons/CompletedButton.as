@@ -9,19 +9,17 @@ package ui.buttons
 	 * ...
 	 * @author Evan Niederhoffer
 	 */
-	[Embed(source="../../../assets/swf/buttons.swf", symbol="LevelUnlock")]
+	[Embed(source="../../../assets/swf/buttons.swf", symbol="LevelComplete")]
 	public class CompletedButton extends SimpleButton 
 	{
 		
 		public function CompletedButton(txt:String, x:int, y:int) {
-			txt = txt + "+"
-			
 			this.x = x;
 			this.y = y;
 			
-			(this.upState as TextField).text = txt;
-			((this.downState as DisplayObjectContainer).getChildAt(1) as TextField).text = txt;
-			((this.overState as DisplayObjectContainer).getChildAt(1) as TextField).text = txt;
+			((this.upState as DisplayObjectContainer).getChildAt(1) as TextField).text = txt;
+			((this.downState as DisplayObjectContainer).getChildAt(2) as TextField).text = txt;
+			((this.overState as DisplayObjectContainer).getChildAt(2) as TextField).text = txt;
 			
 		
 		}
