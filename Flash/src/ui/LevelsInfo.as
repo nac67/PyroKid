@@ -109,6 +109,7 @@ package ui {
                 case 4: return [[new Vector2(240, 110), "He's burning houses, get him!"]];
                 case 6: return [[new Vector2(0, 10), "Remember, you can shoot in any direction."]];
                 case 7: return [[new Vector2(0, 10), "Latches will hold objects together."]];
+                case 9: return [[new Vector2(0, 10), "If you get stuck, you can press R to restart."]];
                 case 17: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
                 case 16: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
                 //30: "Remember, at any time, press R to restart.",

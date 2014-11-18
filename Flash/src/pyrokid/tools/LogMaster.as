@@ -47,7 +47,7 @@ package pyrokid.tools {
             logEvent(2, "fball: " + cellX + "," + cellY + "," + type);
         }
         
-        private function logEvent(action:int, msg:String):void {
+        public function logEvent(action:int, msg:String):void {
             if (currLevel != -1) {
                 //trace(msg);
                 logging.recordEvent(currLevel, action, msg);

@@ -77,6 +77,10 @@ package ui.playstates {
 		}
         
 		public static function doOnLevelComplete(completedFrameCount:int):void {
+            if (LevelsInfo.currLevel == 1) {
+                var version:String = Constants.IS_VERSION_A ? "A" : "B";
+                Main.log.logEvent(3, "ABversion:" + version);
+            }
 			LevelsInfo.setCurrentLevelAsCompleted(completedFrameCount);
             LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1)();
 		}
