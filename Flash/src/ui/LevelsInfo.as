@@ -14,36 +14,20 @@ package ui {
 	{
 		public static var levelDict:Array = [
             null, // No level 0
-            //Embedded.level1,
-            //Embedded.level2,
-            //Embedded.newBlankLevel,
-			//Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
-            //Embedded.introFallUnderground,
             Embedded.firstIntroTown,
             Embedded.secondIntroTown,
             Embedded.thirdIntroTown,
             Embedded.fourthIntroTown,
             Embedded.introFallUnderground,
             Embedded.levelLearnDirectionalShoot,
+            Embedded.level5,
+            Embedded.alevel1,
+            Embedded.level4,
+            
             Embedded.levelLearnShootDown,
             //Embedded.level3,
-            Embedded.level4,
-            Embedded.level5,
             Embedded.level6,
             Embedded.level7,
-            Embedded.alevel1,
             Embedded.alevel2,
             Embedded.level8,
             Embedded.alevel3,
@@ -89,7 +73,7 @@ package ui {
         
 		public static var maxUnlockedLevel:int = 1; //TODO: LOAD THIS FROM SHAREDOBJECT
 		public static var totalNumberOfLevels:int = -1;
-		public static const numOfTutorialLevels:int = 5;
+		public static const numOfTutorialLevels:int = 8;
         
 		public static var completedLevels:Dictionary = new Dictionary();
 		public static var completedLevelsByPage:Dictionary = new Dictionary();
@@ -99,12 +83,13 @@ package ui {
             switch (levelNum) {
                 case 1:
                     var controls:String = GameSettings.controlSchemeInverted ? "arrow" : "WASD";
-                    return [[new Vector2(0, 10), "Use the " + controls + " keys to move and jump. Use ESC to pause."]];
+                    return [[new Vector2(100, 560), "Use the " + controls + " keys to move and jump. Use ESC to pause."]];
                 case 3:
                     var controls:String = !GameSettings.controlSchemeInverted ? "an arrow key" : "W, A, S, or D";
                     return [[new Vector2(40, 570), "Use " + controls + " to shoot a fireball"]];
                 case 4: return [[new Vector2(240, 110), "He's burning houses, get him!"]];
-                case 5: return [[new Vector2(0, 10), "Remember, you can shoot up if you hold the up arrow key.\nLatches will hold objects together."]];
+                case 6: return [[new Vector2(0, 10), "Remember, you can shoot in any direction."]];
+                case 7: return [[new Vector2(0, 10), "Latches will hold objects together."]];
                 case 10: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
                 case 12: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
                 //30: "Remember, at any time, press R to restart.",
