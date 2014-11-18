@@ -333,6 +333,13 @@ package  {
         public static function toMC(obj:Object):MovieClip {
             return obj as MovieClip;
         }
+        
+        public static function frameCountToTimeDisplay(fc:int):String {
+            var seconds:int = fc / 60;
+            var minutes:int = seconds / 60;
+            seconds = seconds % 60;
+            return minutes + ":" + (seconds < 10 ? "0" + seconds : seconds);
+        }
 		
 		// -------------------- Coordinate Conversion Functions --------------------- //
 		public static function cellToPixel(cellCoor:int):int {

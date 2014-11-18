@@ -20,6 +20,7 @@ package pyrokid {
 	import ui.playstates.PauseMenu;
 	import ui.playstates.StateController;
     import ui.playstates.LevelSelect;
+    import ui.TimerHUD;
     
     public class GameController extends Sprite {
         
@@ -34,6 +35,7 @@ package pyrokid {
         private var largeZoom:Number = 1.0;
         public var level:Level;
         public var spotlight:Spotlight;
+        public var timerHUD:TimerHUD;
         private var physDebug:PhysDebugLayer;
 
 		public var isPaused:Boolean = false;
@@ -80,6 +82,9 @@ package pyrokid {
             if (spotlight != null && this.contains(spotlight)) {
                 this.removeChild(spotlight);
             }
+            if (timerHUD != null && this.contains(timerHUD)) {
+                this.removeChild(timerHUD);
+            }
             level = new Level(levelRecipe);
             camera = new Camera(level);
             addChild(camera);
@@ -87,6 +92,9 @@ package pyrokid {
             
             spotlight = new Spotlight();
             addChild(spotlight);
+            
+            timerHUD = new TimerHUD();
+            if(!Constants.IS_VERSION_A) addChild(timerHUD);
             
             if (editorMode) {
                 levelEditor.loadLevel(level);
@@ -283,10 +291,15 @@ package pyrokid {
             benchmarker.endPhase();
             benchmarker.endFrame();
             benchmarker.beginFrame();
-            spotlight.visible = !editorMode && !isPaused;
+            spotlight.visible = false;
+            
             if (editorMode || isPaused) {
                 return;
             }
+            
+            spotlight.visible = true;
+            level.frameCount += 1;
+            timerHUD.time = level.frameCount;
             
             // ---------------------- Universal Visuals ----------------------//
             centerOnPlayer(Constants.DT);
@@ -302,7 +315,7 @@ package pyrokid {
                 return;
             }
             
-            level.frameCount += 1;
+            
             level.dirty = false;
             
             // ------------------------- Game logic ------------------------ //
@@ -333,7 +346,7 @@ package pyrokid {
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
                 levelJustWon = true;
-				LevelsInfo.checkAndUnlockNextLevel();
+				LevelsInfo.checkAndUnlockNextLevel(level.frameCount);
                 LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1)();
             }
             benchmarker.beginPhase("BETWEEN UPDATES");
