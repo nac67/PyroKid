@@ -89,11 +89,10 @@ package ui {
         
 		public static var maxUnlockedLevel:int = 1; //TODO: LOAD THIS FROM SHAREDOBJECT
 		public static var totalNumberOfLevels:int = -1;
-		public static const numOfTutorialLevels:int = 5;
+		public static const numOfTutorialLevels:int = 6;
         
 		public static var completedLevels:Dictionary = new Dictionary();
 		public static var completedLevelsByPage:Dictionary = new Dictionary();
-		public static var bestLevelCompletionTimes:Dictionary = new Dictionary();
 		
         public static function getTutorialMessage(levelNum:int):String {
             switch (levelNum) {
@@ -155,7 +154,7 @@ package ui {
 		}
 		
 		//Give this function the # of the level that was just won and it will unlock the next level if needed
-		public static function setCurrentLevelAsCompleted(completedFrameCount:int):void {
+		public static function setCurrentLevelAsCompleted():void {
 			var currPage:int = LevelSelect.levelToPageNum(currLevel);
 			if (completedLevelsByPage[currPage] == undefined) {
 				completedLevelsByPage[currPage] = new Dictionary();
@@ -174,13 +173,6 @@ package ui {
 				//maxUnlockedLevel++;
 				//
 			//}
-			
-			//update the best completion time for a level
-			if (bestLevelCompletionTimes[currLevel] == undefined) {
-				bestLevelCompletionTimes[currLevel] = completedFrameCount;
-			} else {
-				bestLevelCompletionTimes[currLevel] = Math.min(completedFrameCount, bestLevelCompletionTimes[currLevel]);
-			}
 			
 			Utils.saveLevelData();
 			

@@ -327,7 +327,7 @@ package pyrokid {
                 if (format == null) {
                     var format:TextFormat = new TextFormat();
                     format.align = TextFormatAlign.CENTER;
-                    format.font = "Arial";
+                    format.font = "Impact";
                     format.size = 20;
                     format.color = 0xFFFFFF;
                 }

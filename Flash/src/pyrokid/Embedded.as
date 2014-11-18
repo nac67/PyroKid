@@ -18,6 +18,9 @@ package pyrokid {
         [Embed(source='../../assets/tile_art/house.png')]
         public static var HouseBMP:Class; //cast as Bitmap on instantiation
         
+        [Embed(source="../../assets/swf/Mob.swf", symbol="Mob")]
+        public static var Mob:Class; //cast as Sprite on instantiation
+        
         [Embed(source="../../assets/swf/Talisman.swf", symbol="Talisman")]
         public static var Talisman:Class; //cast as Sprite on instantiation
         
@@ -61,9 +64,13 @@ package pyrokid {
         private static var SecondIntroTown:Class;
         public static var secondIntroTown:ByteArray = new SecondIntroTown();
         
-        [Embed(source="../../assets/levels/thirdIntroTown3.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/introTown4.txt", mimeType="application/octet-stream")]
         private static var ThirdIntroTown:Class;
         public static var thirdIntroTown:ByteArray = new ThirdIntroTown();
+        
+        [Embed(source="../../assets/levels/introTown3.txt", mimeType="application/octet-stream")]
+        private static var FourthIntroTown:Class;
+        public static var fourthIntroTown:ByteArray = new FourthIntroTown();
         
         [Embed(source="../../assets/levels/introFallUnderground.txt", mimeType="application/octet-stream")]
         private static var IntroFallUnderground:Class;
