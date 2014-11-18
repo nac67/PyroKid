@@ -14,34 +14,37 @@ package ui {
 	{
 		public static var levelDict:Array = [
             null, // No level 0
-            Embedded.firstIntroTown,
-            Embedded.secondIntroTown,
-            Embedded.thirdIntroTown,
-            Embedded.fourthIntroTown,
-            Embedded.introFallUnderground,
-            Embedded.levelLearnDirectionalShoot,
-            Embedded.level5,
-            Embedded.alevel1,
-            Embedded.level4,
-            
-            Embedded.levelLearnShootDown,
-            //Embedded.level3,
-            Embedded.level6,
-            Embedded.level7,
-            Embedded.alevel2,
-            Embedded.level8,
-            Embedded.alevel3,
-            Embedded.alevel4,
-            Embedded.alevel5,
-            Embedded.alevel6,
-            Embedded.alevel7,
-            Embedded.alevel8,
-            Embedded.alevel9,
-            Embedded.alevel10,
-            Embedded.alevel12,
-            Embedded.alevel13,
-            Embedded.level9,
+            /*1*/Embedded.firstIntroTown,
+            /*2*/Embedded.secondIntroTown,
+            /*3*/Embedded.thirdIntroTown,
+            /*4*/Embedded.fourthIntroTown,
+            /*5*/Embedded.introFallUnderground,
+            /*6*/Embedded.levelLearnDirectionalShoot,
+            /*7*/Embedded.level5,
+            /*8*/Embedded.alevel1,
+            /*9*/Embedded.level4,
+            /*10*/Embedded.level6,
+            /*11*/Embedded.level7,
+            /*12*/Embedded.alevel2,
+            /*13*/Embedded.introSpider,
+            /*14*/Embedded.alevel10,
             Embedded.level10,
+            
+            /*15*/Embedded.levelLearnShootDown,
+            //Embedded.level3,
+            /*16*/Embedded.level8,
+            /*17*/Embedded.alevel4,
+            
+            /*18*/Embedded.alevel5,
+            /*19*/Embedded.alevel9,
+            /*20*/Embedded.alevel8,
+            /*21*/Embedded.alevel6,
+            /*22*/Embedded.alevel12,
+            /*23*/Embedded.alevel13,
+            /*24*/Embedded.alevel7, // hard spider thing
+            
+            Embedded.alevel3, // hard lizard thing
+            //Embedded.level9, //this one sucks
             Embedded.level11,
             Embedded.clevel1,
             Embedded.clevel2,
@@ -90,11 +93,11 @@ package ui {
                 case 4: return [[new Vector2(240, 110), "He's burning houses, get him!"]];
                 case 6: return [[new Vector2(0, 10), "Remember, you can shoot in any direction."]];
                 case 7: return [[new Vector2(0, 10), "Latches will hold objects together."]];
-                case 10: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
-                case 12: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
+                case 16: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
+                case 15: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
                 //30: "Remember, at any time, press R to restart.",
                 case 8: return [[new Vector2(0, 10), "Sometimes you have to make your own exit. Look for a bomb in the cave."]];
-                case 17: return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
+                case 19: return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
             }
             return [];
         }
