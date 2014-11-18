@@ -44,7 +44,7 @@ package ui.playstates {
 		}
 		
 		private function displayLevelButtons():void {
-			addChild(new CaveBackground(10,10));
+			addChild(new CaveBackground(10,10, true));
 			
 			//display text for top of level select screen
             if (curr_page == 1) {

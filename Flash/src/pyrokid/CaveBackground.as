@@ -6,8 +6,11 @@ package pyrokid {
     public class CaveBackground extends Sprite {
         
         private var isRock:Boolean = false;
+        private var menu:Boolean;
                 
-        public function CaveBackground(levelNum:int, cellsWide:int, cellsTall:int) {
+        public function CaveBackground(cellsWide:int, cellsTall:int, menu:Boolean = false) {
+            var levelNum:int = LevelsInfo.currLevel;
+            this.menu = menu;
             var neededWidth = cellsWide * Constants.CELL + 640;
             var neededHeight = cellsTall * Constants.CELL + 480;
             
@@ -31,7 +34,11 @@ package pyrokid {
         private function getBackgroundBitmap(levelNum:int):Bitmap {
             var bg:Bitmap;
             var scale:Number = 1.05;
-            if (LevelsInfo.currLevel == 1) {
+            if (menu) {
+                bg = new Embedded.RockBMP() as Bitmap;
+                bg.scaleX = bg.scaleY = .5;
+                isRock = true;
+            } else if (LevelsInfo.currLevel == 1) {
                 bg = new Embedded.TutorialBackground1() as Bitmap;
                 bg.scaleY = scale;
             } else if (LevelsInfo.currLevel == 2) {

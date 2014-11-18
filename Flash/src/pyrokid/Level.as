@@ -89,7 +89,7 @@ package pyrokid {
             gameOverState = Constants.GAME_NOT_OVER;
             smooshedPlayer = null;
             
-            background = new CaveBackground(LevelsInfo.currLevel, Utils.getW(walls), Utils.getH(walls));
+            background = new CaveBackground(Utils.getW(walls), Utils.getH(walls));
             this.addChild(background);
 			
             setupTiles();
