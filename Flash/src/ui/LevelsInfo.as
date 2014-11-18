@@ -34,6 +34,7 @@ package ui {
             Embedded.firstIntroTown,
             Embedded.secondIntroTown,
             Embedded.thirdIntroTown,
+            Embedded.fourthIntroTown,
             Embedded.introFallUnderground,
             Embedded.levelLearnDirectionalShoot,
             Embedded.levelLearnShootDown,
@@ -119,7 +120,8 @@ package ui {
         
         public static var tutorialHouses:Object = {
             2: [new Vector2i(34, 6)],
-            3: [new Vector2i(22, 6), new Vector2i(34, 6), new Vector2i(43, 6)]
+            3: [new Vector2i(22, 6)],
+            4: [new Vector2i(33, 4), new Vector2i(23, 4)]
         };
         
         public static var tutorialBuildings:Object = {

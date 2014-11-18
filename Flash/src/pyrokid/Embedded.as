@@ -68,7 +68,7 @@ package pyrokid {
         private static var ThirdIntroTown:Class;
         public static var thirdIntroTown:ByteArray = new ThirdIntroTown();
         
-        [Embed(source="../../assets/levels/introTown3.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/introTownMob.txt", mimeType="application/octet-stream")]
         private static var FourthIntroTown:Class;
         public static var fourthIntroTown:ByteArray = new FourthIntroTown();
         
