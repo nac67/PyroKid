@@ -76,8 +76,8 @@ package ui.playstates {
 			StateController.goToGame();
 		}
         
-		public static function doOnLevelComplete():void {
-			LevelsInfo.setCurrentLevelAsCompleted();
+		public static function doOnLevelComplete(completedFrameCount:int):void {
+			LevelsInfo.setCurrentLevelAsCompleted(completedFrameCount);
             LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1)();
 		}
 		

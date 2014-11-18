@@ -44,6 +44,8 @@ package ui.playstates {
 		
 		private function displayLevelButtons():void {
 			addChild(background);
+			
+			//display text for top of level select screen
             if (curr_page == 1) {
                 addTextToScreen("Tutorial Levels", 200, 50, 400, 100);
 
@@ -64,7 +66,11 @@ package ui.playstates {
                     if (numLevelsToAdvanceNextPage > 0) addTextToScreen("Beat "+numLevelsToAdvanceNextPage+" levels on this page to advance", 500, 50, 400, 150);
                 }
             }
+			
+			//display level select page on bottom of page
+			addTextToScreen("page " + curr_page, 150, 50, 400, 500);
             
+			//draw level buttons
 			if (curr_page == 1) {
 				for (var x:int = 0; x < x_tiles; x++) {
 					for (var y:int = 0; y < y_tiles; y++) {
@@ -99,7 +105,10 @@ package ui.playstates {
                             if (LevelsInfo.isPageLocked(curr_page) && !Constants.ALL_LEVELS_UNLOCKED) {
                                 addButton(new LockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), function() {});
                             } else if (LevelsInfo.isLevelCompleted(curr_level_num)) {
-                                addButton(new CompletedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
+                               	addButton(new CompletedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
+								if (LevelsInfo.bestLevelCompletionTimes[curr_level_num] != undefined) {
+									addTextToScreen(Utils.frameCountToTimeDisplay(LevelsInfo.bestLevelCompletionTimes[curr_level_num]), 60, 50, x_offset + (x_spacing * x), y_offset + (y_spacing * y)+40);
+								}
                             } else {
                                 addButton(new UnlockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
                             }
