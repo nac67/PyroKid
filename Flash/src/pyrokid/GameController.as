@@ -94,7 +94,7 @@ package pyrokid {
             addChild(spotlight);
             
             timerHUD = new TimerHUD();
-            if(!Constants.IS_VERSION_A) addChild(timerHUD);
+            if(!Constants.IS_VERSION_A && LevelsInfo.currLevel > LevelsInfo.numOfTutorialLevels) addChild(timerHUD);
             
             if (editorMode) {
                 levelEditor.loadLevel(level);
