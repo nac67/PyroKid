@@ -44,7 +44,27 @@ package ui.playstates {
 		
 		private function displayLevelButtons():void {
 			addChild(background);
-					
+            if (curr_page == 1) {
+                addTextToScreen("Tutorial Levels", 200, 50, 400, 100);
+
+            } else if (LevelsInfo.isPageLocked(curr_page)) {
+                if (curr_page == 2) {
+                   addTextToScreen("Beat tutorial levels to advance", 500, 50, 400, 100);
+                } else {
+                   var numToUnlock:int = LevelsInfo.getNumLevelsLeftBeforePageUnlocked(curr_page);
+                   addTextToScreen("Beat "+numToUnlock+" levels on page "+(curr_page-1)+" to advance", 500, 50, 400, 100);
+                }
+            } else {
+                addTextToScreen("Choose Level", 200, 50, 400, 100);
+                
+                //if next page exists, show how many levels needed to unlock the next page
+                var max_level_displayed = (curr_page-1) * (x_tiles * y_tiles) + LevelsInfo.numOfTutorialLevels;
+                if (max_level_displayed < LevelsInfo.getTotalNumberOfLevels()) {
+                    var numLevelsToAdvanceNextPage:int = LevelsInfo.getNumLevelsLeftBeforePageUnlocked(curr_page+1);
+                    if (numLevelsToAdvanceNextPage > 0) addTextToScreen("Beat "+numLevelsToAdvanceNextPage+" levels on this page to advance", 500, 50, 400, 150);
+                }
+            }
+            
 			if (curr_page == 1) {
 				for (var x:int = 0; x < x_tiles; x++) {
 					for (var y:int = 0; y < y_tiles; y++) {

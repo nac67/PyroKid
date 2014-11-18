@@ -101,8 +101,8 @@ package ui.playstates {
 			if (format == null) {
 				var format:TextFormat = new TextFormat();
 				format.align = TextFormatAlign.CENTER;
-				format.font = "Arial";
-				format.size = 15;
+				format.font = "Impact";
+				format.size = 20;
 				format.color = 0xFFFFFF;
 			}
 			textToAdd.setTextFormat(format);

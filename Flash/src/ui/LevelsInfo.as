@@ -189,6 +189,24 @@ package ui {
 				}
 			}
 		}
+        
+        public static function getNumOfUnlockedLevelsForPage(pageNum:int):int {
+            if (completedLevelsByPage[pageNum] == undefined) { //if previous page doesn't have any completed levels, currPage is DEF not unlocked
+				return 0;
+			} else {
+				var completedLevelsOnPage:Dictionary = completedLevelsByPage[pageNum];
+				var levelsCompleted:Number = Utils.sizeOfDict(completedLevelsOnPage);
+                return levelsCompleted;
+            }
+        }
+        
+        public static function getNumLevelsLeftBeforePageUnlocked(pageNum:int):int {
+            var levelsUnlockedOnPrevPage:int = getNumOfUnlockedLevelsForPage(pageNum - 1);
+            
+            var levelsNeededToUnlockToAdvance:Number = LevelSelect.levelsPerPage * Constants.LEVEL_UNLOCK_NEXT_PAGE_PROPORTION;
+            
+            return levelsNeededToUnlockToAdvance - levelsUnlockedOnPrevPage;
+        }
 		
 		public static function isLevelCompleted(levelNum:int):Boolean {
 			return completedLevels[levelNum] != undefined;
