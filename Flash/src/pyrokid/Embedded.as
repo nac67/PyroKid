@@ -339,6 +339,61 @@ package pyrokid {
         [Embed(source="../../assets/levels/droppingFlames.txt", mimeType="application/octet-stream")]
         private static var ALevel13:Class;
         public static var alevel13:ByteArray = new ALevel13();
+        
+        // ALL OF NICKS NEW LEVELS START HERE
+        
+        [Embed(source="../../assets/levels/waterbat4.txt", mimeType="application/octet-stream")]
+        private static var WBatIntro:Class;
+        public static var wBatIntro:ByteArray = new WBatIntro();
+        
+        [Embed(source="../../assets/levels/waterbat0.txt", mimeType="application/octet-stream")]
+        private static var WBat0:Class;
+        public static var wBat0:ByteArray = new WBat0();
+        
+        [Embed(source="../../assets/levels/waterbat1.txt", mimeType="application/octet-stream")]
+        private static var WBat1:Class;
+        public static var wBat1:ByteArray = new WBat1();
+        
+        [Embed(source="../../assets/levels/waterbat2.txt", mimeType="application/octet-stream")]
+        private static var WBat2:Class;
+        public static var wBat2:ByteArray = new WBat2();
+        
+        [Embed(source="../../assets/levels/waterbat3.txt", mimeType="application/octet-stream")]
+        private static var WBat3:Class;
+        public static var wBat3:ByteArray = new WBat3();
+        
+        [Embed(source="../../assets/levels/waterbat5.txt", mimeType="application/octet-stream")]
+        private static var WBat5:Class;
+        public static var wBat5:ByteArray = new WBat5();
+        
+        [Embed(source="../../assets/levels/waterbat6.txt", mimeType="application/octet-stream")]
+        private static var WBat6:Class;
+        public static var wBat6:ByteArray = new WBat6();
+        
+        [Embed(source="../../assets/levels/waterbat7.txt", mimeType="application/octet-stream")]
+        private static var WBat7:Class;
+        public static var wBat7:ByteArray = new WBat7();
+        
+        [Embed(source="../../assets/levels/waterbat8.txt", mimeType="application/octet-stream")]
+        private static var WBat8:Class;
+        public static var wBat8:ByteArray = new WBat8();
+        
+        [Embed(source="../../assets/levels/new_nick_droppy.txt", mimeType="application/octet-stream")]
+        private static var NickDrop:Class;
+        public static var nickDrop:ByteArray = new NickDrop();
+        
+        [Embed(source="../../assets/levels/new_nick_anvil.txt", mimeType="application/octet-stream")]
+        private static var NickAnvil:Class;
+        public static var nickAnvil:ByteArray = new NickAnvil();
+        
+        [Embed(source="../../assets/levels/introspider.txt", mimeType="application/octet-stream")]
+        private static var IntroSpider:Class;
+        public static var introSpider:ByteArray = new IntroSpider();
+        
+        [Embed(source="../../assets/levels/usetheenemytokill.txt", mimeType="application/octet-stream")]
+        private static var SpiderFun:Class;
+        public static var spiderFun:ByteArray = new SpiderFun();
+        
 		
     }
 
