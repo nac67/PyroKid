@@ -46,7 +46,7 @@ package ui.playstates {
         }
         
         public function createReturnToMainMenuButton():CoreButton {
-            return createButtonDefaultSize(StateController.goToMainMenu, "Main");
+            return createButtonDefaultSize(StateController.goToMainMenu, "Main Menu");
         }
         
         public function createButtonDefaultSize(onClick:Function, ... buttonStatesContent):CoreButton {

@@ -33,7 +33,7 @@ package ui.playstates {
             createButtonDefaultSize(unpauseGame, "Resume").centerOn(100, buttonHeight);
             createButtonDefaultSize(StateController.restartCurrLevel, "Restart").centerOn(300, buttonHeight);
             createButtonDefaultSize(StateController.goToLevelSelectAtPage(LevelSelect.levelToPageNum(LevelsInfo.currLevel)), "Levels").centerOn(500, buttonHeight);
-            createButtonDefaultSize(StateController.goToMainMenu, "Menu").centerOn(700, buttonHeight);
+            createReturnToMainMenuButton().centerOn(700, buttonHeight);
             
             //StateController.displayOptions(true, Constants.BUTTON_PADDING, Constants.BUTTON_PADDING);
             addChild(new OptionsMenu(true, Constants.BUTTON_PADDING, Constants.BUTTON_PADDING));
