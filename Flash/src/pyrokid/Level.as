@@ -204,7 +204,11 @@ package pyrokid {
                 } else if (recipe.freeEntities[i][2] == Constants.HOLE_EXIT_CODE) {
                     enemy = new Exit(this, true);
                 } else {
-                    enemy = new BurnForeverEnemy(this);
+                    if (LevelsInfo.currLevel == 4) {
+                        enemy = new Mob(this);
+                    } else {
+                        enemy = new BurnForeverEnemy(this);
+                    }
                 }
                 initializeFreeEntity(enemy, recipe.freeEntities[i][0], recipe.freeEntities[i][1]);
                 enemies.push(enemy);
@@ -277,6 +281,8 @@ package pyrokid {
                 addChild(talisman);
                 setChildIndex(talisman, 1);
             }
+            trace(LevelsInfo.currLevel);
+            trace(houseCoors);
             addImages(houseCoors, "house");
             addImages(buildingCoors, "building");
         }
@@ -295,10 +301,11 @@ package pyrokid {
             return null;
         }
         
-        private function addImages(coors:Array, type:String):void {
+        public function addImages(coors:Array, type:String):void {
             if (coors != undefined && coors != null) {
                 for each (var coor:Vector2i in coors) {
                     var tileEntity:TileEntity = Utils.index(tileEntityGrid, coor.x, coor.y);
+                    trace(tileEntity);
                     if (tileEntity != null) {
                         tileEntity.addChild(getTutorialImage(type));
                         if (type == "house") {
@@ -311,18 +318,14 @@ package pyrokid {
                 }
             }
         }
-		
-        private function addTutorialMessage():void {
-            var message:String = LevelsInfo.getTutorialMessage(LevelsInfo.currLevel);
-            if (message != null) {
-                
-                //TODO: put this in a function, preferably in utils -- Evan, Nick
+        
+        public function addMessage(message:String, x:Number, y:Number):void {
                 var textToAdd:TextField = new TextField();
                 textToAdd.width = 800;
                 textToAdd.height = 600;
-                textToAdd.text = message
-                textToAdd.y = 10;
-                textToAdd.x = 0
+                textToAdd.text = message;
+                textToAdd.y = y;
+                textToAdd.x = x;
                 
                 if (format == null) {
                     var format:TextFormat = new TextFormat();
@@ -335,7 +338,12 @@ package pyrokid {
                 textToAdd.setTextFormat(format);
                 
                 addChild(textToAdd);
-                
+		}
+        
+        private function addTutorialMessage():void {
+            var messages:Array = LevelsInfo.getTutorialMessages(LevelsInfo.currLevel);
+            for each (var message:Array in messages) {
+                addMessage(message[1], message[0].x, message[0].y);
             }
         }
         

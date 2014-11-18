@@ -34,6 +34,7 @@ package ui {
             Embedded.firstIntroTown,
             Embedded.secondIntroTown,
             Embedded.thirdIntroTown,
+            Embedded.fourthIntroTown,
             Embedded.introFallUnderground,
             Embedded.levelLearnDirectionalShoot,
             Embedded.levelLearnShootDown,
@@ -94,23 +95,23 @@ package ui {
 		public static var completedLevelsByPage:Dictionary = new Dictionary();
 		public static var bestLevelCompletionTimes:Dictionary = new Dictionary();
 		
-        public static function getTutorialMessage(levelNum:int):String {
+        public static function getTutorialMessages(levelNum:int):Array {
             switch (levelNum) {
                 case 1:
                     var controls:String = GameSettings.controlSchemeInverted ? "arrow" : "WASD";
-                    return "Use the " + controls + " keys to move and jump. Use ESC to pause.";
+                    return [[new Vector2(0, 10), "Use the " + controls + " keys to move and jump. Use ESC to pause."]];
                 case 3:
-                    var controls:String = GameSettings.controlSchemeInverted ? "an arrow key" : "W, A, S, or D";
-                    return "Use " + controls + " to charge up a fireball, then release the arrow key to launch it.";
-                case 4: return "Certain blocks will react differently to fire.";
-                case 5: return "Remember, you can shoot up if you hold the up arrow key.\nLatches will hold objects together.";
-                case 10: return "Sometimes you'll need to jump and shoot down at the same time";
-                case 12: return "Persistence is key, press R to restart.";
+                    var controls:String = !GameSettings.controlSchemeInverted ? "an arrow key" : "W, A, S, or D";
+                    return [[new Vector2(40, 570), "Use " + controls + " to shoot a fireball"]];
+                case 4: return [[new Vector2(240, 110), "He's burning houses, get him"]];
+                case 5: return [[new Vector2(0, 10), "Remember, you can shoot up if you hold the up arrow key.\nLatches will hold objects together."]];
+                case 10: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
+                case 12: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
                 //30: "Remember, at any time, press R to restart.",
-                case 8: return "Sometimes you have to make your own exit. Look for a bomb in the cave.";
-                case 17: return "Some blocks are guarded by metal edges. Fire will not go past that side.";
+                case 8: return [[new Vector2(0, 10), "Sometimes you have to make your own exit. Look for a bomb in the cave."]];
+                case 17: return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
             }
-            return null;
+            return [];
         }
         
         public static var tutorialTalisman:Object = {
@@ -119,7 +120,8 @@ package ui {
         
         public static var tutorialHouses:Object = {
             2: [new Vector2i(34, 6)],
-            3: [new Vector2i(22, 6), new Vector2i(34, 6), new Vector2i(43, 6)]
+            3: [new Vector2i(22, 6)],
+            4: [new Vector2i(33, 4), new Vector2i(23, 4)]
         };
         
         public static var tutorialBuildings:Object = {

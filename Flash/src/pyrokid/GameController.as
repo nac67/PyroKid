@@ -298,6 +298,8 @@ package pyrokid {
                 level.removeChild(level.talisman);
                 level.talisman = null;
                 level.player.fireDisabled = false;
+                
+                level.addMessage("Press the right arrow key to shoot right", 300, 500);
             }
         }
         
