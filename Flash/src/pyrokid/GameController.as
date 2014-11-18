@@ -311,7 +311,7 @@ package pyrokid {
         
         // --------------------MAIN UPDATE LOOP-------------------- //
         private function update(event:Event):void {
-            benchmarker.endPhase();
+			benchmarker.endPhase();
             benchmarker.endFrame();
             benchmarker.beginFrame();
             spotlight.visible = !editorMode && !isPaused;
@@ -361,8 +361,7 @@ package pyrokid {
             level.removeDead();
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
-				LevelsInfo.checkAndUnlockNextLevel();
-                LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1, true)();
+				StateController.doOnLevelComplete();
             }
             benchmarker.beginPhase("BETWEEN UPDATES");
         }

@@ -9,6 +9,7 @@ package ui.playstates {
     import flash.display.*;
     import flash.geom.*;
 	import pyrokid.*;
+	import ui.LevelsInfo;
     
 	public class PauseMenu extends BasePlayState {
 		
@@ -30,7 +31,7 @@ package ui.playstates {
             var buttonHeight:int = 526;
 			addButton(new MenuButton("Resume", 100, buttonHeight), unpauseGame);
 			addButton(new MenuButton("Restart", 300, buttonHeight), StateController.restartCurrLevel);
-			addButton(new MenuButton("Levels", 500, buttonHeight), StateController.goToLevelSelect);
+			addButton(new MenuButton("Levels", 500, buttonHeight), StateController.goToLevelSelectAtPage(LevelSelect.levelToPageNum(LevelsInfo.currLevel)));
 			//addButton(new MenuButton("Options", 400,350), StateController.displayOptions);
 			addButton(new MenuButton("Menu", 700, buttonHeight), StateController.goToMainMenu);
 		}

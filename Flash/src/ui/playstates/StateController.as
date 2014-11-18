@@ -36,7 +36,7 @@ package ui.playstates {
 			display.addChild(new MainMenu());
 		}
 		
-		public static function goToLevelSelect(e:Event=null) {
+		public static function goToLevelSelect(e:Event=null,pageNum:int = 1) {
 			Utils.removeAllChildren(display);
 			
 			if (currGameController != null) {
@@ -44,7 +44,13 @@ package ui.playstates {
 				currGameController = null;
 			}
 			
-			display.addChild(new LevelSelect());
+			display.addChild(new LevelSelect(pageNum));
+		}
+		
+		public static function goToLevelSelectAtPage(pageNum:int) {
+			return function() {
+				goToLevelSelect(null, pageNum);
+			}
 		}
 		
 		public static function goToGame(level:Object, levelWon:Boolean = false, editor:LevelEditor = null):Function {
@@ -75,7 +81,13 @@ package ui.playstates {
 			StateController.goToGame(LevelsInfo.levelDict[LevelsInfo.currLevel])();
 		}
 		
-		public static function goToCompletedLevel(e:Event=null) {
+		public static function doOnLevelComplete():void {
+			LevelsInfo.setCurrentLevelAsCompleted();
+			
+            LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1, true)();
+		}
+		
+		public static function goToCompletedLevel(e:Event=null):void {
 			Utils.removeAllChildren(display);
 			
 			display.addChild(new CompletedLevel());

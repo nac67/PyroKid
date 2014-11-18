@@ -38,8 +38,10 @@ package ui.playstates {
 		//PUBLICLY ACCESSIBLE VALUES
 		public static var levelsPerPage:Number = x_tiles * y_tiles;
 		
-		public function LevelSelect() {
+		public function LevelSelect(go_to_page:int = 1) {
 			super();
+			
+			curr_page = go_to_page;
 			displayLevelButtons();
 		}
 		
@@ -57,10 +59,13 @@ package ui.playstates {
 							//var buttonString:String = LevelsInfo.isLevelLocked(curr_level_num) ? "" + curr_level_num + " (LOCKED)" : "" + curr_level_num;
 							//addChild(new LevelEditorButton(startAndSetLevel(curr_level_num), 80, 40, x_offset+(x_spacing*x), y_offset+(y_spacing*y), [buttonString], [LevelEditorButton.upColor]));
 							if (LevelsInfo.isLevelLocked(curr_level_num) && !Constants.ALL_LEVELS_UNLOCKED) {
+								//trace("locked");
 								addButton(new LockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), function() {});
 							} else if (LevelsInfo.isLevelCompleted(curr_level_num)) {
+								//trace("completed");
 								addButton(new CompletedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
 							} else {
+								//trace("unlocked");
 								addButton(new UnlockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
 							}
 							
@@ -136,8 +141,15 @@ package ui.playstates {
 					if (levelDict[levelNum] == undefined) {
 						StateController.goToCredits();
 					} else {
-						LevelsInfo.currLevel = levelNum;
-						StateController.goToGame(levelDict[levelNum], levelWon)();
+						//check if level is on unlocked page
+						var currLevelPage:int = LevelSelect.levelToPageNum(levelNum)
+						//trace("current level, "+levelNum +", on page " +currLevelPage+" is locked = "+LevelsInfo.isPageLocked(currLevelPage));
+						if (LevelsInfo.isPageLocked(currLevelPage)) {
+							StateController.goToLevelSelectAtPage(currLevelPage-1)(); //page for level to start is locked; go to PREVIOUS page
+						} else { //page is not locked, so we can legally start that level
+							LevelsInfo.currLevel = levelNum;
+							StateController.goToGame(levelDict[levelNum], levelWon)();
+						}
 					}
 					
 				}			

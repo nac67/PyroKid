@@ -341,10 +341,24 @@ package  {
 			
 			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
 			if (levelSO != undefined) {
-				if (levelSO.data.hasOwnProperty("maxUnlockedLevel")) LevelsInfo.maxUnlockedLevel = levelSO.data.maxUnlockedLevel;
+				if (levelSO.data.hasOwnProperty("maxUnlockedLevel")) {
+					LevelsInfo.maxUnlockedLevel = levelSO.data.maxUnlockedLevel;
+					//trace(LevelsInfo.maxUnlockedLevel);
+				}
 				
 				//Completed levels and creating dictionary of pages to levels
-				if (levelSO.data.hasOwnProperty("completedLevels")) LevelsInfo.restoreCompletedLevels(levelSO.data.completedLevels);
+				if (levelSO.data.hasOwnProperty("completedLevels")) {
+					LevelsInfo.restoreCompletedLevels(levelSO.data.completedLevels);
+					//for (var key:* in levelSO.data.completedLevels) {
+						//trace(key);
+					//}
+					//trace("done loading completed levels /n");
+				} else {
+					//trace("does not have completedLevels property");
+					//for (var key:* in LevelsInfo.completedLevels) {
+						//trace(key);
+					//}
+				}
 
 			}
 		}
@@ -353,6 +367,11 @@ package  {
 			levelSO.data.maxUnlockedLevel = LevelsInfo.maxUnlockedLevel;
 			levelSO.data.completedLevels = LevelsInfo.completedLevels;
 			levelSO.flush();
+			//trace("saved data");
+			//trace("completedLevels looks like: ");
+			//for (var key:* in levelSO.data.completedLevels) {
+				//trace(key);
+			//}
 		}
 		
     }
