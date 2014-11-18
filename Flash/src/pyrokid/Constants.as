@@ -10,17 +10,17 @@ package pyrokid {
     public class Constants {
         // LOGGING
         public static var TEAM_ID:int = 100;
-        public static var VERSION_ID:int = 3; //!!!
-        public static var DO_LOGGING:Boolean = true; //!!!
+        public static var VERSION_ID:int = 4; //!!!
+        public static var DO_LOGGING:Boolean = false; //!!!
         public static var IS_VERSION_A:Boolean; //set in LogMaster.as
         
         public static var ERROR_MESSAGE:String = "STOP. This should never happen: ";
         
         public static var DEBUG:Boolean = false;
         public static var DEBUG_DRAW:Boolean = false;
-        public static var LEVEL_EDITOR_ENABLED:Boolean = false; //!!!
+        public static var LEVEL_EDITOR_ENABLED:Boolean = true; //!!!
         public static var GOD_MODE:Boolean = false;
-		public static var ALL_LEVELS_UNLOCKED:Boolean = false; //!!!
+		public static var ALL_LEVELS_UNLOCKED:Boolean = true; //!!!
 		public static var LEVEL_UNLOCK_NEXT_PAGE_PROPORTION:Number = (7 / 9);
 		public static var START_FRESH_GAME:Boolean = false;
 		public static var ALWAYS_DISPLAY_COMPLETION_TIME:Boolean = false;
