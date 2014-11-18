@@ -13,6 +13,7 @@ package ui.buttons {
         
         private var toggleState:int;
         private var stateChildren:Array;
+        private var stateOverlays:Array;
         
         private var listener:Function;
         
@@ -97,6 +98,12 @@ package ui.buttons {
             return this;
         }
         
+        /** overlay should be either a String or a DisplayObject. */
+        public function addOverlay(overlay:Object, toggleState:int = 0):CoreButton {
+            stateOverlays[toggleState] = getDisplayObject(overlay);
+            return this;
+        }
+        
         public function removeListeners():void {
             if (listener != null) {
                 removeEventListener(MouseEvent.CLICK, listener);
@@ -132,6 +139,9 @@ package ui.buttons {
             upState = stateChildren[Constants.MOUSE_STATE_UP][toggleState];
             overState = stateChildren[Constants.MOUSE_STATE_OVER][toggleState];
             downState = stateChildren[Constants.MOUSE_STATE_DOWN][toggleState];
+            
+            //var overlay:DisplayObject = stateOverlays[toggleState];
+            //upState (overlay);// add child
         }
 		
 		private function setOnClick(onClick:Function):void {
@@ -146,8 +156,25 @@ package ui.buttons {
             addEventListener(MouseEvent.CLICK, listener);
 		}
         
+        private function getDisplayObject(content:Object):DisplayObject {
+            var contentAsDisplayObj:DisplayObject;
+            if (content is String) {
+                // Create TextField from the content string
+                contentAsDisplayObj = getTextSprite(content as String);
+            } else {
+                // Duplicate the DisplayObject so it can be added to multiple states
+                var constr:Class = Object(content).constructor;
+                contentAsDisplayObj = new constr() as DisplayObject;
+                contentAsDisplayObj.scaleX = contentAsDisplayObj.scaleY = content.scaleX;
+                contentAsDisplayObj.x = w / 2;//(w - contentAsDisplayObj.width) / 2;
+                contentAsDisplayObj.y = h / 2;//(h - contentAsDisplayObj.height) / 2;
+            }
+            return contentAsDisplayObj;
+        }
+        
         private function setButtonContent(statesContent:Array):void {
             stateChildren = new Array(Constants.MOUSE_STATES.length);
+            stateOverlays = [];
             for (var i:int = 0; i < stateChildren.length; i++) {
                 stateChildren[i] = [];
             }
@@ -159,22 +186,11 @@ package ui.buttons {
                 }
                 
                 for each (var mouseState:int in Constants.MOUSE_STATES) {
-                    var contentAsDisplayObj:DisplayObject;
-                    if (content is String) {
-                        // Create TextField from the content string
-                        contentAsDisplayObj = getTextSprite(content as String);
-                    } else {
-                        // Duplicate the DisplayObject so it can be added to multiple states
-                        var constr:Class = Object(content).constructor;
-                        contentAsDisplayObj = new constr() as DisplayObject;
-                        contentAsDisplayObj.scaleX = contentAsDisplayObj.scaleY = content.scaleX;
-                        contentAsDisplayObj.x = w / 2;//(w - contentAsDisplayObj.width) / 2;
-                        contentAsDisplayObj.y = h / 2;//(h - contentAsDisplayObj.height) / 2;
-                    }
-                    
+                    var contentAsDisplayObj:DisplayObject = getDisplayObject(content);
                     var contentWithVisuals:DisplayObject = getBackground(contentAsDisplayObj, mouseState);
                     stateChildren[mouseState].push(contentWithVisuals);
                 }
+                stateOverlays.push(null);
             }
         }
         
