@@ -105,6 +105,14 @@ package  {
             }
             return bools;
         }
+		
+		public static function sizeOfDict(dict:Object):int {
+			var count:int = 0;
+			for (var key:* in dict) {
+				count++;
+			}
+			return count;
+		}
         
         /** Performs BFS on an array of size height by width, starting at start.
          *  It considers an element in the array a neighbor if it is
@@ -345,14 +353,21 @@ package  {
 		// ------------------- Shared Object Functions -------------------------------//
 		
 		public static function loadSavedData():void {
+			if (Constants.START_FRESH_GAME) return;
+			
 			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
 			if (levelSO != undefined) {
 				if (levelSO.data.hasOwnProperty("maxUnlockedLevel")) LevelsInfo.maxUnlockedLevel = levelSO.data.maxUnlockedLevel;
+				
+				//Completed levels and creating dictionary of pages to levels
+				if (levelSO.data.hasOwnProperty("completedLevels")) LevelsInfo.restoreCompletedLevels(levelSO.data.completedLevels);
+
 			}
 		}
 		public static function saveLevelData():void {
 			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
 			levelSO.data.maxUnlockedLevel = LevelsInfo.maxUnlockedLevel;
+			levelSO.data.completedLevels = LevelsInfo.completedLevels;
 			levelSO.flush();
 		}
 		
