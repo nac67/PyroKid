@@ -69,7 +69,7 @@ package ui.playstates {
             }
 			
 			//display level select page on bottom of page
-			addTextToScreen("page " + curr_page, 150, 50, 400, 480);
+			addTextToScreen("page " + curr_page, 150, 50, 400, 530);
 			
 			createReturnToMainMenuButton().setCorner(10,10);
             
