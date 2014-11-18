@@ -281,8 +281,6 @@ package pyrokid {
                 addChild(talisman);
                 setChildIndex(talisman, 1);
             }
-            trace(LevelsInfo.currLevel);
-            trace(houseCoors);
             addImages(houseCoors, "house");
             addImages(buildingCoors, "building");
         }
@@ -305,7 +303,6 @@ package pyrokid {
             if (coors != undefined && coors != null) {
                 for each (var coor:Vector2i in coors) {
                     var tileEntity:TileEntity = Utils.index(tileEntityGrid, coor.x, coor.y);
-                    trace(tileEntity);
                     if (tileEntity != null) {
                         tileEntity.addChild(getTutorialImage(type));
                         if (type == "house") {
