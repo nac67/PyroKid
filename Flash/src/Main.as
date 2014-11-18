@@ -14,6 +14,7 @@ package  {
     import pyrokid.tools.Key;
     import pyrokid.dev.LevelEditor;
     import pyrokid.GameSettings;
+    import pyrokid.Embedded;
     
     [Frame(factoryClass="Preloader")]
     public class Main extends Sprite {
@@ -39,6 +40,9 @@ package  {
             			
 			Utils.loadSavedData();
 			            
+            if (Constants.MUSIC_STARTS_ON) Embedded.musicSound.play(0, 999999);
+
+            
 			addChild(StateController.display);
 			StateController.goToMainMenu();
             
