@@ -21,6 +21,14 @@ package pyrokid.entities {
             }
             return lit;
 		}
+        
+        public function douse(level:Level):void {
+            if (isOnFire()) {
+                _ignitionTime = -1;
+                var swfAsMC:MovieClip = swf as MovieClip;
+                swfAsMC.gotoAndStop(1);
+            }
+        }
     }
     
 }

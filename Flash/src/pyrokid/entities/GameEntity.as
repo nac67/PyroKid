@@ -55,6 +55,17 @@ package pyrokid.entities {
         
         /* If entity is on fire, it will light this object on fire, and vice versa. */
         public function mutualIgnite(level:Level, entity:GameEntity):void {
+            var lizard:BurnForeverEnemy;
+            if (this is WaterBat && entity is BurnForeverEnemy) {
+                lizard = entity as BurnForeverEnemy;
+                lizard.douse(level);
+                return;
+            }
+            if (this is BurnForeverEnemy && entity is WaterBat) {
+                lizard = this as BurnForeverEnemy;
+                lizard.douse(level);
+                return;
+            }
             var thisOnFire:Boolean = isOnFire();
             var entityOnFire:Boolean = entity.isOnFire();
             if (entityOnFire) {

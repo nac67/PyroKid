@@ -399,17 +399,21 @@ package pyrokid {
                 }
                 
                 // ignite FreeEntities
-                if (projectile is Fireball) {
-                    for each (var freeEntity:FreeEntity in enemies) {
-                        if (freeEntity.isTouching(projectile)) {
+                for each (var freeEntity:FreeEntity in enemies) {
+                    if (freeEntity.isTouching(projectile)) {
+                        if (projectile is Fireball) {
                             projectiles.markForDeletion(projectile);
                             freeEntity.ignite(this);
                             Main.log.logFireballIgnite(cellX, cellY, Object(freeEntity).constructor);
                             break;
                         }
+                        if (projectile is Waterball && freeEntity is BurnForeverEnemy) {
+                            var lizard:BurnForeverEnemy = freeEntity as BurnForeverEnemy;
+                            lizard.douse(this);
+                            break;
+                        }
                     }
-                }
-                
+                }                
                 
                 if (projectile is Waterball) {
                     if (player.isTouching(projectile)) {
