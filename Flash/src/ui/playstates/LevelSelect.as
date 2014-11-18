@@ -80,6 +80,7 @@ package ui.playstates {
 								addButton(new LockedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), function() {});
 							} else if (LevelsInfo.isLevelCompleted(curr_level_num)) {
 								//trace("completed");
+                                //createCoreButton(50, 50, startAndSetLevel(curr_level_num), "" + curr_level_num).setCorner((x_spacing * x), y_offset + (y_spacing * y));
 								addButton(new CompletedButton("" + curr_level_num, x_offset + (x_spacing * x), y_offset + (y_spacing * y)), startAndSetLevel(curr_level_num));
 							} else {
 								//trace("unlocked");

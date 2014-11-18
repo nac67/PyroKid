@@ -31,6 +31,8 @@ package pyrokid.entities {
         public var prevFrameJumpBtn:Boolean = false;
         
         private var onFireSprite:Sprite;
+        
+        public var fireDisabled:Boolean = false;
 
         public function Player(level:Level) {
             super(level, 1, 26, 44, 8, 8, 16, 40);
@@ -130,8 +132,8 @@ package pyrokid.entities {
 			prevFrameJumpBtn = Key.isDown(GameSettings.jumpBtn);
             
             // Firing
-            var shootButton:Boolean = Key.isDown(GameSettings.shootLeftBtn) || Key.isDown(GameSettings.shootRightBtn) ||
-                    Key.isDown(GameSettings.shootUpBtn) || Key.isDown(GameSettings.shootDownBtn);
+            var shootButton:Boolean = (Key.isDown(GameSettings.shootLeftBtn) || Key.isDown(GameSettings.shootRightBtn) ||
+                    Key.isDown(GameSettings.shootUpBtn) || Key.isDown(GameSettings.shootDownBtn)) && !fireDisabled;
   
             if (Key.isDown(GameSettings.shootLeftBtn)) {
                 shootDirection = Constants.DIR_LEFT;

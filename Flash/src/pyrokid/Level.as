@@ -47,7 +47,8 @@ package pyrokid {
 		public var frameCount:int;
         public var dirty:Boolean; // whether dead items need to be cleared this frame
         public var gameOverState:int;
-        //public var frameCount
+
+        public var talisman:MovieClip;
         
         public function Level(recipe:Object):void {
 			reset(recipe);
@@ -88,7 +89,7 @@ package pyrokid {
             gameOverState = Constants.GAME_NOT_OVER;
             smooshedPlayer = null;
             
-            background = new CaveBackground(Utils.getW(walls), Utils.getH(walls));
+            background = new CaveBackground(LevelsInfo.currLevel, Utils.getW(walls), Utils.getH(walls));
             this.addChild(background);
 			
             setupTiles();
@@ -265,6 +266,17 @@ package pyrokid {
             }
             var houseCoors:Array = LevelsInfo.tutorialHouses[LevelsInfo.currLevel];
             var buildingCoors:Array = LevelsInfo.tutorialBuildings[LevelsInfo.currLevel];
+            var talismanCoor:Vector2i = LevelsInfo.tutorialTalisman[LevelsInfo.currLevel];
+            if (LevelsInfo.currLevel == 1 || LevelsInfo.currLevel == 2) {
+                player.fireDisabled = true;
+            }
+            if (talismanCoor != null) {
+                talisman = new Embedded.Talisman() as MovieClip;
+                talisman.x = talismanCoor.x * Constants.CELL;
+                talisman.y = talismanCoor.y * Constants.CELL;
+                addChild(talisman);
+                setChildIndex(talisman, 1);
+            }
             addImages(houseCoors, "house");
             addImages(buildingCoors, "building");
         }

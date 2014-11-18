@@ -18,6 +18,15 @@ package pyrokid {
         [Embed(source='../../assets/tile_art/house.png')]
         public static var HouseBMP:Class; //cast as Bitmap on instantiation
         
+        [Embed(source="../../assets/swf/Talisman.swf", symbol="Talisman")]
+        public static var Talisman:Class; //cast as Sprite on instantiation
+        
+        [Embed(source="../../assets/swf/Talisman.swf", symbol="TalismanObtain")]
+        public static var TalismanObtain:Class; //cast as Sprite on instantiation
+        
+        [Embed(source="../../assets/swf/buttons.swf", symbol="Check")]
+        public static var CheckIcon:Class; //cast as Sprite on instantiation
+        
         [Embed(source='../../assets/swf/buttons.swf', symbol='Sound')]
         public static var SoundIcon:Class; //cast as Sprite on instantiation
         
@@ -141,6 +150,15 @@ package pyrokid {
         
         [Embed(source="../../assets/tile_art/big_background.png")]
         public static var BGBMP:Class; //cast as Bitmap on instantiation
+        
+        [Embed(source="../../assets/tile_art/tut_bg1.png")]
+        public static var TutorialBackground1:Class; //cast as Bitmap on instantiation
+        
+        [Embed(source="../../assets/tile_art/tut_bg2.png")]
+        public static var TutorialBackground2:Class; //cast as Bitmap on instantiation
+        
+        [Embed(source="../../assets/tile_art/tut_bg3.png")]
+        public static var TutorialBackground3:Class; //cast as Bitmap on instantiation
         
         [Embed(source="../../assets/tile_art/rock.jpg")]
         public static var RockBMP:Class;

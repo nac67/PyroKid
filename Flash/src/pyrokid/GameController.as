@@ -286,6 +286,21 @@ package pyrokid {
             level.delayedFunctions = newDelayedFunctions;
         }
         
+        private function checkTalisman():void {
+            if (level.talisman == null || LevelsInfo.tutorialTalisman[LevelsInfo.currLevel] == null) {
+                return;
+            }
+            
+            if (level.player.hitTestObject(level.talisman)) {
+                var pos:Vector2 = new Vector2(level.talisman.x, level.talisman.y);
+                level.addBriefClip(Embedded.TalismanObtain, pos);
+                level.addBriefClip(Embedded.FireTileSWF, pos);
+                level.removeChild(level.talisman);
+                level.talisman = null;
+                level.player.fireDisabled = false;
+            }
+        }
+        
         // --------------------MAIN UPDATE LOOP-------------------- //
         private function update(event:Event):void {
 			benchmarker.endPhase();
@@ -296,6 +311,8 @@ package pyrokid {
             if (editorMode || isPaused) {
                 return;
             }
+            
+            checkTalisman();
             
             spotlight.visible = true;
             level.frameCount += 1;

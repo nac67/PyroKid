@@ -1,4 +1,5 @@
 package ui {
+    import flash.display.MovieClip;
     import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import pyrokid.Constants;
@@ -111,6 +112,10 @@ package ui {
             }
             return null;
         }
+        
+        public static var tutorialTalisman:Object = {
+            2: new Vector2i(10, 7)
+        };
         
         public static var tutorialHouses:Object = {
             2: [new Vector2i(34, 6)],
