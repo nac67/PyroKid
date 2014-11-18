@@ -3,6 +3,7 @@ package ui.playstates {
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
+	import pyrokid.CaveBackground;
 	import pyrokid.Constants;
     import pyrokid.Constants;
 	import pyrokid.Embedded;
@@ -43,7 +44,7 @@ package ui.playstates {
 		}
 		
 		private function displayLevelButtons():void {
-			addChild(background);
+			addChild(new CaveBackground(10,10));
 			
 			//display text for top of level select screen
             if (curr_page == 1) {
@@ -68,7 +69,9 @@ package ui.playstates {
             }
 			
 			//display level select page on bottom of page
-			addTextToScreen("page " + curr_page, 150, 50, 400, 500);
+			addTextToScreen("page " + curr_page, 150, 50, 400, 480);
+			
+			addChild(createReturnToMainMenuButton().setCorner(10,10));
             
 			//draw level buttons
 			if (curr_page == 1) {
