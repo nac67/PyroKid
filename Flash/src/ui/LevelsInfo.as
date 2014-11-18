@@ -89,8 +89,8 @@ package ui {
 		public static var totalNumberOfLevels:int = -1;
 		public static const numOfTutorialLevels:int = 5;
         
-		public static var completedLevels:Object = { };
-		public static var completedLevelsByPage:Object = { };
+		public static var completedLevels:Dictionary = new Dictionary();
+		public static var completedLevelsByPage:Dictionary = new Dictionary();
 		
         public static var tutorialMessages:Object = {
             1: "Use the WASD keys to move. A and D walk and W jumps. Use ESC to pause.",
@@ -121,13 +121,15 @@ package ui {
 			return totalNumberOfLevels;
 		}
 		
-		public static function restoreCompletedLevels(completedList:Object):void {
-			for each(var currLevel:int in completedList) {
+		public static function restoreCompletedLevels(completedList:Dictionary):void {
+			//trace("RESTORING LEVELS");
+			for (var currLevel:* in completedList) {
+				//trace("current completed level is: " + currLevel);
 				var currPage:int = LevelSelect.levelToPageNum(currLevel);
 				if (completedLevelsByPage[currPage] == undefined) {
-					completedLevelsByPage[currPage] = { };
+					completedLevelsByPage[currPage] = new Dictionary();
 				}
-				var completedLevelsForCurrLevelPage:Object = completedLevelsByPage[currPage];
+				var completedLevelsForCurrLevelPage:Dictionary = completedLevelsByPage[currPage];
 				
 				if (completedLevels[currLevel] == undefined) {
 					completedLevels[currLevel] = 1;
@@ -139,12 +141,12 @@ package ui {
 		}
 		
 		//Give this function the # of the level that was just won and it will unlock the next level if needed
-		public static function checkAndUnlockNextLevel():void {
+		public static function setCurrentLevelAsCompleted():void {
 			var currPage:int = LevelSelect.levelToPageNum(currLevel);
 			if (completedLevelsByPage[currPage] == undefined) {
-				completedLevelsByPage[currPage] = { };
+				completedLevelsByPage[currPage] = new Dictionary();
 			}
-			var completedLevelsForCurrLevelPage:Object = completedLevelsByPage[currPage];
+			var completedLevelsForCurrLevelPage:Dictionary = completedLevelsByPage[currPage];
 			
 			//If level is not yet marked as completed, add it to completed list and completed-by-page list
 			if (completedLevels[currLevel] == undefined) {
@@ -171,13 +173,16 @@ package ui {
 		}
 		
 		public static function isPageLocked(pageNum:int):Boolean {
+			if (pageNum == 1) return false; //page 1 is ALWAYS unlocked
+			
 			if (completedLevelsByPage[pageNum - 1] == undefined) { //if previous page doesn't have any completed levels, currPage is DEF not unlocked
 				return true;
 			} else {
-				var completedLevelsOnPrevPage:Object = completedLevelsByPage[pageNum - 1];
+				var completedLevelsOnPrevPage:Dictionary = completedLevelsByPage[pageNum - 1];
 				var prevLevelsCompleted:Number = Utils.sizeOfDict(completedLevelsOnPrevPage);
-				if (pageNum == 2) {
-
+				if (pageNum == 1) {
+					return false;
+				} else if (pageNum == 2) {
 					return (prevLevelsCompleted / numOfTutorialLevels) != 1.0;
 				} else {
 					return (prevLevelsCompleted / LevelSelect.levelsPerPage) < Constants.LEVEL_UNLOCK_NEXT_PAGE_PROPORTION;

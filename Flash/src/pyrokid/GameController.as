@@ -288,7 +288,7 @@ package pyrokid {
         
         // --------------------MAIN UPDATE LOOP-------------------- //
         private function update(event:Event):void {
-            benchmarker.endPhase();
+			benchmarker.endPhase();
             benchmarker.endFrame();
             benchmarker.beginFrame();
             spotlight.visible = false;
@@ -346,8 +346,7 @@ package pyrokid {
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
                 levelJustWon = true;
-				LevelsInfo.checkAndUnlockNextLevel(level.frameCount);
-                LevelSelect.startAndSetLevel(LevelsInfo.currLevel + 1)();
+				StateController.doOnLevelComplete();
             }
             benchmarker.beginPhase("BETWEEN UPDATES");
         }
