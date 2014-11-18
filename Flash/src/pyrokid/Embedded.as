@@ -88,9 +88,25 @@ package pyrokid {
         private static var Level3:Class;
         public static var level3:ByteArray = new Level3();
         
+        [Embed(source="../../assets/levels/learntosquash.txt", mimeType="application/octet-stream")]
+        private static var LearnToSmoosh:Class;
+        public static var learnToSmoosh:ByteArray = new LearnToSmoosh();
+        
+        [Embed(source="../../assets/levels/runFast.txt", mimeType="application/octet-stream")]
+        private static var RunFast:Class;
+        public static var runFast:ByteArray = new RunFast();
+        
+        [Embed(source="../../assets/levels/shootInCorrectOrder2.txt", mimeType="application/octet-stream")]
+        private static var ShootInCorrectOrder:Class;
+        public static var shootInCorrectOrder:ByteArray = new ShootInCorrectOrder();
+        
         [Embed(source="../../assets/levels/tut4.txt", mimeType="application/octet-stream")]
         private static var Level4:Class;
         public static var level4:ByteArray = new Level4();
+        
+        [Embed(source="../../assets/levels/learnCreateMetalPath.txt", mimeType="application/octet-stream")]
+        private static var Level4New:Class;
+        public static var level4New:ByteArray = new Level4New();
         
         [Embed(source="../../assets/levels/tut5.txt", mimeType="application/octet-stream")]
         private static var Level5:Class;
@@ -377,6 +393,10 @@ package pyrokid {
         [Embed(source="../../assets/levels/waterbat8.txt", mimeType="application/octet-stream")]
         private static var WBat8:Class;
         public static var wBat8:ByteArray = new WBat8();
+        
+        [Embed(source="../../assets/levels/waterbat9.txt", mimeType="application/octet-stream")]
+        private static var WBat9:Class;
+        public static var wBat9:ByteArray = new WBat9();
         
         [Embed(source="../../assets/levels/new_nick_droppy.txt", mimeType="application/octet-stream")]
         private static var NickDrop:Class;

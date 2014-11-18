@@ -22,12 +22,14 @@ package ui {
             /*6*/Embedded.levelLearnDirectionalShoot,
             /*7*/Embedded.level5,
             /*8*/Embedded.alevel1,
-            /*9*/Embedded.level4,
+            ///*9*/Embedded.level4,
+            /*9*/Embedded.level4New,
             /*10*/Embedded.level6,
             /*11*/Embedded.level7,
             /*12*/Embedded.alevel2,
             /*13*/Embedded.introSpider,
             /*14*/Embedded.alevel10,
+            Embedded.wBatIntro, // lizard intro
             Embedded.level10,
             
             /*15*/Embedded.levelLearnShootDown,
@@ -40,18 +42,32 @@ package ui {
             /*20*/Embedded.alevel8,
             /*21*/Embedded.alevel6,
             /*22*/Embedded.alevel12,
+            Embedded.learnToSmoosh,
             /*23*/Embedded.alevel13,
+            Embedded.wBat8,
+            Embedded.wBat1,
+            Embedded.wBat5,
+            Embedded.wBat2,
+            Embedded.wBat6,
+            Embedded.wBat3,
+            Embedded.level11,
             /*24*/Embedded.alevel7, // hard spider thing
             
             Embedded.alevel3, // hard lizard thing
             //Embedded.level9, //this one sucks
-            Embedded.level11,
+            Embedded.shootInCorrectOrder,
+            Embedded.nickDrop,
+            Embedded.nickAnvil,
+            Embedded.runFast,
+            Embedded.level12,
+            Embedded.wBat9,
+            Embedded.spiderFun,
+            Embedded.mazeRunner,
+            Embedded.level13,
             Embedded.clevel1,
             Embedded.clevel2,
-            Embedded.level12,
-            Embedded.level13,
+            Embedded.wBat7,
             Embedded.level14,
-            Embedded.mazeRunner,
         ];
 		
 		private static var _currLevel:int = 1;
@@ -93,11 +109,11 @@ package ui {
                 case 4: return [[new Vector2(240, 110), "He's burning houses, get him!"]];
                 case 6: return [[new Vector2(0, 10), "Remember, you can shoot in any direction."]];
                 case 7: return [[new Vector2(0, 10), "Latches will hold objects together."]];
-                case 16: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
-                case 15: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
+                case 17: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
+                case 16: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
                 //30: "Remember, at any time, press R to restart.",
                 case 8: return [[new Vector2(0, 10), "Sometimes you have to make your own exit. Look for a bomb in the cave."]];
-                case 19: return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
+                case 21: return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
             }
             return [];
         }
