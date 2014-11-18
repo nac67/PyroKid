@@ -145,7 +145,7 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/rock.jpg")]
         public static var RockBMP:Class;
         
-        [Embed(source='../../assets/swf/FireTile.swf', symbol='FireTile')]
+        [Embed(source='../../assets/swf/FireTileOptimized.swf', symbol='FireTile')]
         public static var FireTileSWF:Class; //cast as Sprite on instantiation
         
         [Embed(source='../../assets/swf/Douse.swf', symbol='Douse')]

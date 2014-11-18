@@ -338,8 +338,49 @@ package pyrokid {
 				projectile.x += projectile.speedX;
                 projectile.y += projectile.speedY;
                 
-                // ignite TileEntities
-                // TODO hit falling objects with fireball -- Aaron
+                // Ignite falling TileEntities
+                var fbRect:PRect = new PRect();
+                var pxp:Vector2 = new Vector2(projectile.x, projectile.y).DivD(Constants.CELL);
+                fbRect.center.Set(pxp.x, pxp.y);
+                fbRect.halfSize.Set(0, 0);
+                
+                var disp:Vector2 = new Vector2();
+                for each (var vi:ViewPIsland in movingTiles) {
+                    var isle:PhysIsland = vi.phys;
+                    if (!PRect.intersects(isle.getBoundingRect(), fbRect, disp)) continue;
+                    
+                    disp.SetV(fbRect.center);
+                    disp.SubV(isle.globalAnchor);
+                    var tx:int = int(disp.x);
+                    var ty:int = int(disp.y);
+                    if (tx < 0 || tx >= isle.tilesWidth) continue;
+                    if (ty < 0 || ty >= isle.tilesHeight) continue;
+                    if (isle.tileGrid[ty][tx] == null) continue;
+                    var ti:TileEntity = vi.sprite.tileEntityGrid[ty][tx];
+                    
+                    var v:Vector2 = new Vector2(projectile.speedX, projectile.speedY).DivD(Constants.CELL).SubV(isle.velocity);
+                    var dir:int;
+                    if (v.y > 0) {
+                        dir = Cardinal.PY;
+                    } else if (v.y < 0) {
+                        dir = Cardinal.NY;
+                    } else if (v.x > 0) {
+                        dir = Cardinal.PX;
+                    } else if (v.x < 0) {
+                        dir = Cardinal.NX;
+                    }
+                    var coor:Vector2i = new Vector2i(tx, ty);
+                    if (projectile is Fireball) {
+                        ti.ignite(this, coor, dir);
+                        Main.log.logFireballIgnite(int(projectile.x), int(projectile.y), Object(ti).constructor);
+                    } else if (projectile is Waterball) {
+                        if (ti is BurnForever) {
+                            var burnForeverEntity:BurnForever = ti as BurnForever;
+                            burnForeverEntity.douse(this);
+                        }
+                    }
+                }
+                
                 
                 var cellX:int = Utils.realToCell(projectile.x);
                 var cellY:int = Utils.realToCell(projectile.y);

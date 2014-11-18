@@ -65,6 +65,13 @@ package physics {
             isGrounded = isGrounded || tile.IsGrounded;
         }
         
+        public function getBoundingRect():PRect {
+            var r:PRect = new PRect();
+            r.halfSize.Set(tilesWidth, tilesHeight).MulD(0.5);
+            r.center.SetV(globalAnchor).AddV(r.halfSize);
+            return r;
+        }
+        
         public function resetBoundingRect():void {
             boundingRect.center.SetV(globalAnchor).AddV(boundingRect.halfSize);
         }
