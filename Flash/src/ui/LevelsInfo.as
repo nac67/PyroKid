@@ -5,6 +5,7 @@ package ui {
 	import pyrokid.Embedded;
     import pyrokid.LevelRecipe;
 	import ui.playstates.LevelSelect;
+    import pyrokid.GameSettings;
 	/**
 	 * ...
 	 * @author Evan Niederhoffer
@@ -92,17 +93,24 @@ package ui {
 		public static var completedLevels:Dictionary = new Dictionary();
 		public static var completedLevelsByPage:Dictionary = new Dictionary();
 		
-        public static var tutorialMessages:Object = {
-            1: "Use the WASD keys to move. A and D walk and W jumps. Use ESC to pause.",
-            3: "Use an arrow key to charge up a fireball, then release the arrow key to launch it.",
-            4: "Certain blocks will react differently to fire.",
-            5: "Remember, you can shoot up if you hold the up arrow key.\nLatches will hold objects together.",
-            10: "Sometimes you'll need to jump and shoot down at the same time",
-            12: "Persistence is key, press R to restart.",
-            //30: "Remember, at any time, press R to restart.",
-            8: "Sometimes you have to make your own exit. Look for a bomb in the cave.",
-            17: "Some blocks are guarded by metal edges. Fire will not go past that side."
-        };
+        public static function getTutorialMessage(levelNum:int):String {
+            switch (levelNum) {
+                case 1:
+                    var controls:String = GameSettings.controlSchemeInverted ? "arrow" : "WASD";
+                    return "Use the " + controls + " keys to move and jump. Use ESC to pause.";
+                case 3:
+                    var controls:String = GameSettings.controlSchemeInverted ? "an arrow key" : "W, A, S, or D";
+                    return "Use " + controls + " to charge up a fireball, then release the arrow key to launch it.";
+                case 4: return "Certain blocks will react differently to fire.";
+                case 5: return "Remember, you can shoot up if you hold the up arrow key.\nLatches will hold objects together.";
+                case 10: return "Sometimes you'll need to jump and shoot down at the same time";
+                case 12: return "Persistence is key, press R to restart.";
+                //30: "Remember, at any time, press R to restart.",
+                case 8: return "Sometimes you have to make your own exit. Look for a bomb in the cave.";
+                case 17: return "Some blocks are guarded by metal edges. Fire will not go past that side.";
+            }
+            return null;
+        }
         
         public static var tutorialHouses:Object = {
             2: [new Vector2i(34, 6)],

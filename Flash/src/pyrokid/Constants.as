@@ -22,7 +22,7 @@ package pyrokid {
         public static var GOD_MODE:Boolean = false;
 		public static var ALL_LEVELS_UNLOCKED:Boolean = false;
 		public static var LEVEL_UNLOCK_NEXT_PAGE_PROPORTION:Number = (7 / 9);
-		public static var START_FRESH_GAME:Boolean = true;
+		public static var START_FRESH_GAME:Boolean = false;
         
 		public static var WIDTH:int = 800;
 		public static var HEIGHT:int = 600;
