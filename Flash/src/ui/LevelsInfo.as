@@ -205,7 +205,7 @@ package ui {
 				if (pageNum == 1) {
 					return false;
 				} else if (pageNum == 2) {
-					return (prevLevelsCompleted / numOfTutorialLevels) != 1.0;
+					return (prevLevelsCompleted / numOfTutorialLevels) < 1.0;
 				} else {
 					return (prevLevelsCompleted / LevelSelect.levelsPerPage) < Constants.LEVEL_UNLOCK_NEXT_PAGE_PROPORTION;
 				}
