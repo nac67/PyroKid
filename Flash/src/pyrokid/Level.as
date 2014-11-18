@@ -301,8 +301,8 @@ package pyrokid {
         }
 		
         private function addTutorialMessage():void {
-            if (LevelsInfo.tutorialMessages[LevelsInfo.currLevel] != undefined) {
-                var message:String = LevelsInfo.tutorialMessages[LevelsInfo.currLevel];
+            var message:String = LevelsInfo.getTutorialMessage(LevelsInfo.currLevel);
+            if (message != null) {
                 
                 //TODO: put this in a function, preferably in utils -- Evan, Nick
                 var textToAdd:TextField = new TextField();
