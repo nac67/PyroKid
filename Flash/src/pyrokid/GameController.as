@@ -346,7 +346,7 @@ package pyrokid {
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
                 levelJustWon = true;
-				StateController.doOnLevelComplete();
+				StateController.doOnLevelComplete(level.frameCount);
             }
             benchmarker.beginPhase("BETWEEN UPDATES");
         }
