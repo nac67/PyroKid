@@ -102,7 +102,7 @@ package ui {
 		}
 		
 		//Give this function the # of the level that was just won and it will unlock the next level if needed
-		public static function checkAndUnlockNextLevel():void {
+		public static function checkAndUnlockNextLevel(timeToBeat:int):void {
 			if (currLevel == maxUnlockedLevel) {
 				maxUnlockedLevel++;
 				Utils.saveLevelData();

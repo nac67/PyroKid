@@ -47,6 +47,7 @@ package pyrokid {
 		public var frameCount:int;
         public var dirty:Boolean; // whether dead items need to be cleared this frame
         public var gameOverState:int;
+        //public var frameCount
         
         public function Level(recipe:Object):void {
 			reset(recipe);
@@ -70,7 +71,6 @@ package pyrokid {
             Main.log.logBeginLevel(LevelsInfo.currLevel);
             LevelRecipe.complete(recipe);
             Key.reset();
-            frameCount = 0;
             Utils.removeAllChildren(this);
             
 			this.recipe = recipe;
