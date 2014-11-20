@@ -15,6 +15,7 @@ package pyrokid {
     import pyrokid.dev.LevelEditor;
     import flash.ui.Keyboard;
 	import flash.utils.getTimer;
+    import ui.buttons.CoreButton;
 	import ui.LevelsInfo;
 	import ui.playstates.BasePlayState;
 	import ui.playstates.PauseMenu;
@@ -53,6 +54,9 @@ package pyrokid {
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
             initializeLevelAndEditor(level);
+            if (Constants.SKIP_BUTTON_ENABLED) {
+                addSkipButton();
+            }
         }
         
         public function destroy():void {
@@ -368,6 +372,12 @@ package pyrokid {
 				StateController.doOnLevelComplete(level.frameCount);
             }
             benchmarker.beginPhase("BETWEEN UPDATES");
+        }
+        
+        private function addSkipButton():void {
+            addChild(CoreButton.createDefaultSize(function():void {
+                StateController.doOnLevelComplete(level.frameCount);
+            }, "Skip Level"));
         }
     
     }
