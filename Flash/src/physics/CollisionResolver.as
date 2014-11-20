@@ -231,39 +231,29 @@ package physics {
                 if (t.collidePX && disp.x > 0 && rv.x < 0) {
                     if (r.rect.NX < t.rect.PX) {
                         dx = t.rect.PX - r.rect.NX;
-                        //a.accumPX = Math.max(a.accumPX, t.rect.PX - r.rect.NX);
-                        //if (fCollisionCallback != null)
-                            //fCollisionCallback.call(null, new PhysEdge(Cardinal.PX, t.rect.PX, t.rect.center.y, 1.0), t.island.globalAnchor);
                     }
                 }
                 else if (t.collideNX && disp.x < 0 && rv.x > 0) {
                     if (r.rect.PX > t.rect.NX) {
                         dx = t.rect.NX - r.rect.PX;
-                        //a.accumNX = Math.max(a.accumNX, r.rect.PX - t.rect.NX);
-                        //if (fCollisionCallback != null)
-                            //fCollisionCallback.call(null, new PhysEdge(Cardinal.NX, t.rect.NX, t.rect.center.y, 1.0), t.island.globalAnchor);
                     }
                 }
                 
                 if (t.collidePY && disp.y > 0 && rv.y < 0) {
                     if (r.rect.NY < t.rect.PY) {
                         dy = t.rect.PY - r.rect.NY;
-                        //a.accumPY = Math.max(a.accumPY, t.rect.PY - r.rect.NY);
-                        //if (fCollisionCallback != null)
-                            //fCollisionCallback.call(null, new PhysEdge(Cardinal.PY, t.rect.center.x, t.rect.PY, 1.0), t.island.globalAnchor);
                     }
                 }
                 else if (t.collideNY && disp.y < 0 && rv.y > 0) {
                     if (r.rect.PY > t.rect.NY) {
                         dy = t.rect.NY - r.rect.PY;
-                        //a.accumNY = Math.max(a.accumNY, r.rect.PY - t.rect.NY);
-                        //if (fCollisionCallback != null)
-                            //fCollisionCallback.call(null, new PhysEdge(Cardinal.NY, t.rect.center.x, t.rect.NY, 1.0), t.island.globalAnchor);
                     }
                 }
             }
             
             if (dx == 0 && dy == 0) return;
+            dx *= 1.01;
+            //dy *= 1.01;
             
             if (dy == 0 || (dx != 0 && Math.abs(dx) < Math.abs(dy))) {
                 if (dx < 0) {
