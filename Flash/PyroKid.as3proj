@@ -53,6 +53,7 @@
   <!-- SWC Libraries -->
   <libraryPaths>
     <element path="assets\Logging.swc" />
+    <element path="assets\Flint_4_0_1_swc\Flint2d_4.0.1.swc" />
   </libraryPaths>
   <!-- External Libraries -->
   <externalLibraryPaths>

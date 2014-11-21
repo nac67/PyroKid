@@ -10,6 +10,7 @@ package pyrokid {
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.graphics.Camera.CameraController;
+    import pyrokid.graphics.ParticleEngine;
     import pyrokid.tools.*;
     import pyrokid.LevelEditor;
     import pyrokid.dev.LevelEditor;
@@ -106,6 +107,11 @@ package pyrokid {
                 physDebug = new PhysDebugLayer();
                 level.addChild(physDebug);
             }
+            
+            var eng:ParticleEngine = new ParticleEngine();
+            eng.scaleX = eng.scaleY = Constants.CELL;
+            eng.addFireTrail(level.player.emitterPosition);
+            level.addChildAt(eng, 1);
         }
         
         public function toggleLevelEditor():void {
