@@ -10,6 +10,9 @@ package  {
 	import Vector2i;
 	import pyrokid.entities.*;
     import pyrokid.*;
+    
+    import flash.display.*;
+    import flash.geom.*;
 	import ui.playstates.BasePlayState;
     import pyrokid.tools.HashSet;
     
@@ -355,6 +358,23 @@ package  {
             if (v < min) return min;
             else if (v > max) return max;
             else return v;
+        }
+        
+        
+        public static function generateMinimap(level:Level) {
+            var minimapBitmap:Bitmap = new Bitmap();
+            minimapBitmap.bitmapData =  new BitmapData(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL);
+            minimapBitmap.bitmapData.draw(level);
+            return minimapBitmap;
+        }
+        
+        public static function getLevelIcon (levelNum:int) {
+            var oldCurrLevel:int = LevelsInfo.currLevel;
+            LevelsInfo.currLevel = levelNum;
+            var recipe:Object = LevelsInfo.getCurrLevelRecipe(levelNum);
+            var level:Level = new Level(recipe);
+            LevelsInfo.currLevel = oldCurrLevel;
+            return generateMinimap(level);
         }
 		
 		// ------------------- Shared Object Functions -------------------------------//

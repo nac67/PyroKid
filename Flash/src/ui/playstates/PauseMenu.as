@@ -40,14 +40,10 @@ package ui.playstates {
 		}
         
         private function addMinimap(level:Level):void {
-            var minimapBitmap:Bitmap = new Bitmap();
-            var minimapBitmapData:BitmapData = new BitmapData(level.cellWidth * Constants.CELL, level.cellHeight * Constants.CELL);
-            minimapBitmap.bitmapData = minimapBitmapData;
-            
+            var minimapBitmap:Bitmap = Utils.generateMinimap(level);
             minimapBitmap.scaleY = minimapBitmap.scaleX = 0.2;
             minimapBitmap.x = (Constants.WIDTH - minimapBitmap.width) / 2;
             minimapBitmap.y = (Constants.HEIGHT - minimapBitmap.height) / 2 - 20;
-            minimapBitmapData.draw(level);
             addChild(minimapBitmap);
             
             var fadeOutOverlay:Sprite = new Sprite();
@@ -64,6 +60,8 @@ package ui.playstates {
             }
             addChild(fadeOutOverlay);
         }
+        
+        
 		
 		private function unpauseGame(e:Event = null):void {
 			removeAllEventListeners();

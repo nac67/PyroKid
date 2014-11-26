@@ -167,8 +167,8 @@ package pyrokid.entities {
 			prevFrameFireBtn = shootButton;
             
             updateAnimation();
-            emitterPosition.x = (x + width * 0.3) / Constants.CELL;
-            emitterPosition.y = (y + height * 0.8) / Constants.CELL;
+            //emitterPosition.x = (x + width * 0.3) / Constants.CELL;
+            //emitterPosition.y = (y + height * 0.8) / Constants.CELL;
         }
         
         

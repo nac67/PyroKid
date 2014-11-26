@@ -38,13 +38,13 @@ package pyrokid {
                 bg = new Embedded.RockBMP() as Bitmap;
                 bg.scaleX = bg.scaleY = .5;
                 isRock = true;
-            } else if (LevelsInfo.currLevel == 1) {
+            } else if (levelNum == 1) {
                 bg = new Embedded.TutorialBackground1() as Bitmap;
                 bg.scaleY = scale;
-            } else if (LevelsInfo.currLevel == 2) {
+            } else if (levelNum == 2) {
                 bg = new Embedded.TutorialBackground2() as Bitmap;
                 bg.scaleY = scale;
-            } else if (LevelsInfo.currLevel == 3 || LevelsInfo.currLevel == 4) {
+            } else if (levelNum == 3 || levelNum == 4) {
                 bg = new Embedded.TutorialBackground3() as Bitmap;
                 bg.scaleY = scale;
             } else {

@@ -119,7 +119,7 @@ package pyrokid {
             return null;
         }
         
-        public static var MUSIC_STARTS_ON:Boolean = true;
+        public static var MUSIC_STARTS_ON:Boolean = false;
         public static var CONTROLS_START_INVERTED:Boolean = false;
         
         // UI constants

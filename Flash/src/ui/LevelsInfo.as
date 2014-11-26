@@ -80,11 +80,13 @@ package ui {
             _currLevel = lvl;
         }
         
-        public static function getCurrLevelRecipe():Object {
-            if (currLevel <= 0 || currLevel >= levelDict.length) {
+        public static function getCurrLevelRecipe(num = -1):Object {
+            var levelToGet:int = (num != -1 ? num : currLevel);
+            
+            if (levelToGet <= 0 || levelToGet >= levelDict.length) {
                 return LevelRecipe.generateTemplate();
             } else {
-                var levelBytes:ByteArray = levelDict[currLevel] as ByteArray;
+                var levelBytes:ByteArray = levelDict[levelToGet] as ByteArray;
                 levelBytes.position = 0;
                 return levelBytes.readObject();
             }
