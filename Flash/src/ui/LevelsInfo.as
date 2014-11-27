@@ -14,60 +14,54 @@ package ui {
 	{
 		public static var levelDict:Array = [
             null, // No level 0
-            /*1*/Embedded.firstIntroTown,
-            /*2*/Embedded.secondIntroTown,
-            /*3*/Embedded.thirdIntroTown,
-            /*4*/Embedded.fourthIntroTown,
-            /*5*/Embedded.introFallUnderground,
-            /*6*/Embedded.levelLearnDirectionalShoot,
-            /*7*/Embedded.level5,
-            /*8*/Embedded.alevel1,
-            ///*9*/Embedded.level4,
-            /*9*/Embedded.level4New,
+            /*01*/Embedded.firstIntroTown,
+            /*02*/Embedded.secondIntroTown,
+            /*03*/Embedded.thirdIntroTown,
+            /*04*/Embedded.fourthIntroTown,
+            /*05*/Embedded.introFallUnderground,
+            /*06*/Embedded.levelLearnDirectionalShoot,
+            /*07*/Embedded.level5,
+            /*08*/Embedded.alevel1,
+            /*09*/Embedded.level4New,
             /*10*/Embedded.level6,
             /*11*/Embedded.level7,
             /*12*/Embedded.alevel2,
             /*13*/Embedded.introSpider,
             /*14*/Embedded.alevel10,
-            Embedded.wBatIntro, // lizard intro
-            Embedded.level10,
-            
-            /*15*/Embedded.levelLearnShootDown,
-            //Embedded.level3,
-            /*16*/Embedded.level8,
-            /*17*/Embedded.alevel4,
-            
-            /*18*/Embedded.alevel5,
-            /*19*/Embedded.alevel9,
-            /*20*/Embedded.alevel8,
-            /*21*/Embedded.alevel6,
-            /*22*/Embedded.alevel12,
-            Embedded.learnToSmoosh,
-            /*23*/Embedded.alevel13,
-            Embedded.wBat8,
-            Embedded.wBat1,
-            Embedded.wBat5,
-            Embedded.wBat2,
-            Embedded.wBat6,
-            Embedded.wBat3,
-            Embedded.level11,
-            /*24*/Embedded.alevel7, // hard spider thing
-            
-            Embedded.alevel3, // hard lizard thing
-            //Embedded.level9, //this one sucks
-            Embedded.shootInCorrectOrder,
-            Embedded.nickDrop,
-            Embedded.nickAnvil,
-            Embedded.runFast,
-            Embedded.level12,
-            Embedded.wBat9,
-            Embedded.spiderFun,
-            Embedded.mazeRunner,
-            Embedded.level13,
-            Embedded.clevel1,
-            Embedded.clevel2,
-            Embedded.wBat7,
-            Embedded.level14,
+            /*15*/Embedded.wBatIntro, // lizard intro
+            /*16*/Embedded.level10,
+            /*17*/Embedded.levelLearnShootDown,
+            /*18*/Embedded.level8,
+            /*19*/Embedded.alevel4,
+            /*20*/Embedded.alevel5,
+            /*21*/Embedded.alevel9,
+            /*22*/Embedded.alevel8,
+            /*23*/Embedded.alevel6,
+            /*24*/Embedded.alevel12,
+            /*25*/Embedded.learnToSmoosh,
+            /*26*/Embedded.alevel13,
+            /*27*/Embedded.wBat8,
+            /*28*/Embedded.wBat1,
+            /*29*/Embedded.wBat5,
+            /*30*/Embedded.wBat2,
+            /*31*/Embedded.wBat6,
+            /*32*/Embedded.wBat3,
+            /*33*/Embedded.level11,
+            /*34*/Embedded.alevel7, // hard spider thing
+            /*35*/Embedded.alevel3, // hard lizard thing
+            /*36*/Embedded.shootInCorrectOrder,
+            /*37*/Embedded.nickDrop,
+            /*38*/Embedded.nickAnvil,
+            /*39*/Embedded.runFast,
+            /*40*/Embedded.level12,
+            /*41*/Embedded.wBat9,
+            /*42*/Embedded.spiderFun,
+            /*43*/Embedded.mazeRunner,
+            /*44*/Embedded.level13,
+            /*45*/Embedded.clevel1,
+            /*46*/Embedded.clevel2,
+            /*47*/Embedded.wBat7,
+            /*48*/Embedded.level14,
         ];
 		
 		private static var _currLevel:int = 1;
@@ -101,22 +95,30 @@ package ui {
 		public static var bestLevelCompletionTimes:Dictionary = new Dictionary();
 		
         public static function getTutorialMessages(levelNum:int):Array {
-            switch (levelNum) {
-                case 1:
+            var level = levelDict[levelNum];
+            switch (level) {
+                case Embedded.firstIntroTown:
                     var controls:String = GameSettings.controlSchemeInverted ? "arrow" : "WASD";
                     return [[new Vector2(100, 560), "Use the " + controls + " keys to move and jump. Use ESC to pause."]];
-                case 3:
+                case Embedded.thirdIntroTown:
                     var controls:String = !GameSettings.controlSchemeInverted ? "an arrow key" : "W, A, S, or D";
                     return [[new Vector2(40, 570), "Use " + controls + " to shoot a fireball"]];
-                case 4: return [[new Vector2(240, 110), "He's burning houses, get him!"]];
-                case 6: return [[new Vector2(0, 10), "Remember, you can shoot in any direction."]];
-                case 7: return [[new Vector2(0, 10), "Latches will hold objects together."]];
-                case 9: return [[new Vector2(0, 10), "If you get stuck, you can press R to restart."]];
-                case 17: return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
-                case 16: return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
-                //30: "Remember, at any time, press R to restart.",
-                case 8: return [[new Vector2(0, 10), "Sometimes you have to make your own exit. Look for a bomb in the cave."]];
-                case 21: return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
+                case Embedded.fourthIntroTown: 
+                    return [[new Vector2(240, 110), "He's burning houses, get him!"]];
+                case Embedded.levelLearnDirectionalShoot:
+                    return [[new Vector2(0, 10), "Remember, you can shoot in any direction."]];
+                case Embedded.level5: 
+                    return [[new Vector2(0, 10), "Latches will hold objects together."]];
+                case Embedded.level4New:
+                    return [[new Vector2(0, 10), "If you get stuck, you can press R to restart."]];
+                case Embedded.levelLearnShootDown:
+                    return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
+                case Embedded.level10:
+                    return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
+                case Embedded.alevel1: 
+                    return [[new Vector2(0, 10), "Sometimes you have to make your own exit. Look for a bomb in the cave."]];
+                case Embedded.alevel9:
+                    return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
             }
             return [];
         }
