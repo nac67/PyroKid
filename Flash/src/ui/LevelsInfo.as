@@ -114,7 +114,7 @@ package ui {
                 case Embedded.levelLearnShootDown:
                     return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
                 case Embedded.level10:
-                    return [[new Vector2(0, 10), "Persistence is key, press R to restart."]];
+                    return [[new Vector2(0, 10), "You can shoot while falling. At any time\nPress R to restart."]];
                 case Embedded.alevel1: 
                     return [[new Vector2(0, 10), "Sometimes you have to make your own exit. Look for a bomb in the cave."]];
                 case Embedded.alevel9:

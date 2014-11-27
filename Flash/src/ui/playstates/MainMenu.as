@@ -22,8 +22,8 @@ package ui.playstates {
         
         public function hardCodedPoop() {
             for (var i:int = 0 ; i < 40; i++) {
-                var row:int = i / 8;
-                var col:int = i % 8;
+                var row:int = i / 10;
+                var col:int = i % 10;
                 var icon:Bitmap = Utils.getLevelIcon(i+1);
                 icon.x = col * 80;
                 icon.y = row * 80;
