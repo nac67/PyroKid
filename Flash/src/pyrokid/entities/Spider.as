@@ -54,6 +54,10 @@ package pyrokid.entities {
             return lit;
 		}
         
+        public override function isOnFire():Boolean {
+			return false;
+		}
+        
     
     }
 
