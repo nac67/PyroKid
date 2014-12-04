@@ -49,21 +49,18 @@ package pyrokid {
 		
         /* level is not specified if you want to start a new level in the level editor
          * Otherwise give it a byte array from an embedded level file */
-        public function GameController(level:Object) {
+        public function GameController(recipe:Object) {
             benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES", "REMOVE DEAD"]);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
-            initializeLevelAndEditor(level);
-                       
+            initializeLevelAndEditor(recipe);
             
-            
-            for (var j = 0; j < 30; j++) {
-                //level.addChild(new Embedded.FireTileSWF());
-                //addChild(new Filmstrip(new Embedded.FireTileStripBMP(), 15, 25, 80, 80, 5, 19));
-            }
             
             if (Constants.LEVEL_EDITOR_ENABLED) {
+                try {
+                    this.level.addMessage(Embedded.levelObjToString[LevelsInfo.levelDict[LevelsInfo.currLevel]], 0, 0);
+                } catch (e) {}
                 addSkipButton();
             }
         }

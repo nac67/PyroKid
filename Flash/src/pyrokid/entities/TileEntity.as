@@ -10,6 +10,7 @@ package pyrokid.entities {
     import pyrokid.tools.HashSet;
     import Utils;
     import pyrokid.graphics.ConnectedSpriteBuilder;
+    import ui.LevelsInfo;
 	
 	public class TileEntity extends GameEntity {
 		
@@ -103,7 +104,7 @@ package pyrokid.entities {
         }
 		
 		public function finalizeCells(level:Level, globalAnchor:Vector2i):void {
-            var tileSetMap:Bitmap = Constants.GET_TILE_SET(objectCode);
+            var tileSetMap:Bitmap = Constants.GET_TILE_SET(objectCode, LevelsInfo.currLevel);
             if (tileSetMap != null) {
                 var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, globalAnchor, objectCode == Constants.WALL_TILE_CODE, tileSetMap, level.cellWidth, level.cellHeight);
                 addChild(tileSet);

@@ -6,6 +6,7 @@ package ui.levelorderer
 	import flash.display.Shape;
 	import flash.events.Event;
 	import flash.events.KeyboardEvent;
+	import flash.geom.Point;
 	import flash.ui.Keyboard;
 	import pyrokid.Embedded;
 	import ui.LevelsInfo;
@@ -37,6 +38,10 @@ package ui.levelorderer
 			
             grid = new ShuffleGrid(numOfRows,numOfCols,gridItemHeight,gridItemWidth,1);
 
+			//for (var i : int = 0; i < grid.numCells; i++)
+			//{
+				//grid.addItem (new ShuffleGridItem(i+1,gridItemWidth,gridItemHeight));
+			//}
 			for (var i : int = 0; i < grid.numCells; i++)
 			{
 				grid.addItem (new ShuffleGridItem(i+1,gridItemWidth,gridItemHeight));
@@ -65,22 +70,28 @@ package ui.levelorderer
 		private function whileKeyDown(e:Event):void {
 			if (down_key == Keyboard.UP) {
 				grid.y += 5;
+				grid.onScreenYOffset += 5;
 			}
 			if (down_key == Keyboard.DOWN) {
 				grid.y -= 5;
+				grid.onScreenYOffset -= 5;
 			}
 			if (down_key == Keyboard.LEFT) {
 				grid.x += 5;
+				grid.onScreenXOffset += 5;
 			}
 			if (down_key == Keyboard.RIGHT) {
 				grid.x -= 5;
+				grid.onScreenXOffset -= 5;
 			}
 		}
 		
 		private function printLevelList():void {
+			
 			var list:String = "[\nnull,\n";
 			for (var row:int = 0; row < grid.rows; row++) {
 				for (var col:int = 0; col < grid.cols; col++) {
+					//trace(new Point(col, row));
 					list += grid.getItemAtPosition(row, col).toString()+",\n";
 				}
 			}

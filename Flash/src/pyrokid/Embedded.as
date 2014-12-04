@@ -192,6 +192,12 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/dirt_merge.png")]
         public static var DirtMergeBMP:Class;
         
+        [Embed(source="../../assets/tile_art/dirt_merge3.png")]
+        public static var DirtMerge2BMP:Class;
+        
+        [Embed(source="../../assets/tile_art/dirt_merge3.png")]
+        public static var DirtMerge3BMP:Class;
+        
         [Embed(source="../../assets/tile_art/wood_merge.png")]
         public static var WoodMergeBMP:Class;
         
@@ -217,7 +223,13 @@ package pyrokid {
         public static var TutorialBackground3:Class; //cast as Bitmap on instantiation
         
         [Embed(source="../../assets/tile_art/rock.jpg")]
-        public static var RockBMP:Class;
+        public static var RockBGBMP:Class;
+        
+        [Embed(source="../../assets/tile_art/Mossy Rock.png")]
+        public static var MossyBGBMP:Class;
+        
+        [Embed(source="../../assets/tile_art/Waterfall.png")]
+        public static var WaterBGBMP:Class;
         
         [Embed(source='../../assets/swf/FireTileOptimized.swf', symbol='FireTile')]
         public static var FireTileSWF:Class; //cast as Sprite on instantiation

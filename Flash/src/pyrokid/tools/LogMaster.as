@@ -10,12 +10,13 @@ package pyrokid.tools {
             logging = new Logging(Constants.TEAM_ID, Constants.VERSION_ID, !Constants.DO_LOGGING);
             logging.recordPageLoad();
             
-            if (Constants.DO_LOGGING) {
-                var proposed_version:int = Math.floor(Math.random() * 2);
-                Constants.IS_VERSION_A = logging.recordABTestValue(proposed_version) == 0;
-            } else {
-                Constants.IS_VERSION_A = false;
-            }
+            //if (Constants.DO_LOGGING) {
+                //var proposed_version:int = Math.floor(Math.random() * 2);
+                //Constants.IS_VERSION_A = logging.recordABTestValue(proposed_version) == 0;
+            //} else {
+                //Constants.IS_VERSION_A = false;
+            //}
+            Constants.IS_VERSION_A = true;
             currLevel = -1;
         }
         
@@ -44,7 +45,7 @@ package pyrokid.tools {
         }
         
         public function logFireballIgnite(cellX:int, cellY:int, type:String = ""):void {
-            logEvent(2, "fball: " + cellX + "," + cellY + "," + type);
+            //logEvent(2, "fball: " + cellX + "," + cellY + "," + type);
         }
         
         public function logEvent(action:int, msg:String):void {
