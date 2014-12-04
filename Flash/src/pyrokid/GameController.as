@@ -22,6 +22,7 @@ package pyrokid {
 	import ui.playstates.StateController;
     import ui.playstates.LevelSelect;
     import ui.TimerHUD;
+    import ui.buttons.CoreButton;
     
     public class GameController extends Sprite {
         
@@ -54,6 +55,10 @@ package pyrokid {
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
             initializeLevelAndEditor(level);
+            
+            if (Constants.LEVEL_EDITOR_ENABLED) {
+                addSkipButton();
+            }
         }
         
         public function destroy():void {
@@ -368,12 +373,19 @@ package pyrokid {
             benchmarker.beginPhase("REMOVE DEAD");
             level.removeDead();
             benchmarker.endPhase();
+            SoundManager.endFrame();
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
                 levelJustWon = true;
 				StateController.doOnLevelComplete(level.frameCount);
             }
             benchmarker.beginPhase("BETWEEN UPDATES");
+        }
+        
+        private function addSkipButton():void {
+            addChild(CoreButton.createDefaultSize(function():void {
+                StateController.doOnLevelComplete(level.frameCount);
+            }, "Skip Level"));
         }
     
     }

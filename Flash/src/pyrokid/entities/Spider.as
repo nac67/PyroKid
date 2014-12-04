@@ -40,7 +40,7 @@ package pyrokid.entities {
                 addChild(swf);
                 direction = oldDirection;
                 
-                if (GameSettings.soundOn) Embedded.loseArmorSound.play();
+                SoundManager.playSound(Embedded.loseArmorSound);
             }
             
             if (lit) {
@@ -48,7 +48,7 @@ package pyrokid.entities {
                 die.scaleX = swf.scaleX;
                 die.scaleY = swf.scaleY;
                 var deathAnimation:BriefClip = new BriefClip(new Vector2(swf.x + x, swf.y + y), die);
-                if (GameSettings.soundOn) Embedded.spiderdieSound.play();
+                SoundManager.playSound(Embedded.spiderdieSound);
                 kill(level, deathAnimation);
             }
             return lit;

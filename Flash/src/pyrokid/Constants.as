@@ -19,6 +19,7 @@ package pyrokid {
         public static var DEBUG:Boolean = false;
         public static var DEBUG_DRAW:Boolean = false;
         public static var LEVEL_EDITOR_ENABLED:Boolean = true; //!!!
+        
         public static var GOD_MODE:Boolean = false;
 		public static var ALL_LEVELS_UNLOCKED:Boolean = true; //!!!
 		public static var LEVEL_UNLOCK_NEXT_PAGE_PROPORTION:Number = (7 / 9);
