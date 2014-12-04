@@ -328,7 +328,7 @@ package pyrokid {
                     var format:TextFormat = new TextFormat();
                     format.align = TextFormatAlign.CENTER;
                     format.font = "Impact";
-                    format.size = 20;
+                    format.size = 26;
                     format.color = 0xFFFFFF;
                 }
                 textToAdd.selectable = false;

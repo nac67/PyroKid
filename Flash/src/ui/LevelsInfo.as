@@ -22,6 +22,7 @@ package ui {
             /*06*/Embedded.levelLearnDirectionalShoot,
             /*07*/Embedded.level5,
             /*08*/Embedded.tutorialBombExit,
+            Embedded.tutorialUsePause,
             /*09*/Embedded.level4New,
             /*10*/Embedded.level6,
             /*11*/Embedded.level7,
@@ -88,7 +89,7 @@ package ui {
         
 		public static var maxUnlockedLevel:int = 1; //TODO: LOAD THIS FROM SHAREDOBJECT
 		public static var totalNumberOfLevels:int = -1;
-		public static const numOfTutorialLevels:int = 8;
+		public static const numOfTutorialLevels:int = 9;
         
 		public static var completedLevels:Dictionary = new Dictionary();
 		public static var completedLevelsByPage:Dictionary = new Dictionary();
@@ -106,7 +107,8 @@ package ui {
                 case Embedded.fourthIntroTown: 
                     return [[new Vector2(240, 110), "He's burning houses, get him!"]];
                 case Embedded.levelLearnDirectionalShoot:
-                    return [[new Vector2(0, 10), "Remember, you can shoot in any direction."]];
+                    var controls:String = !GameSettings.controlSchemeInverted ? "the arrow keys" : "W, A, S, or D";
+                    return [[new Vector2(0, 10), "Remember, you can shoot in any direction with " + controls + "."]];
                 case Embedded.level5: 
                     return [[new Vector2(0, 10), "Latches will hold objects together."]];
                 case Embedded.level4New:
@@ -119,6 +121,8 @@ package ui {
                     return [[new Vector2(0, 10), "Sometimes you have to make your own exit. Look for a bomb in the cave."]];
                 case Embedded.alevel9:
                     return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
+                case Embedded.tutorialUsePause:
+                    return [[new Vector2(0, 10), "Use ESC to pause and see the minimap."], [new Vector2(-25, 285), "Use R to restart."]];
             }
             return [];
         }

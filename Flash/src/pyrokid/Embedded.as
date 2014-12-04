@@ -489,6 +489,11 @@ package pyrokid {
         private static var TutorialBombExit:Class;
         public static var tutorialBombExit:ByteArray = new TutorialBombExit();
 		Embedded.levelObjToString[Embedded.tutorialBombExit] = "Embedded.tutorialBombExit";
+        
+        [Embed(source="../../assets/levels/TutorialUsePause.txt", mimeType="application/octet-stream")]
+        private static var TutorialUsePause:Class;
+        public static var tutorialUsePause:ByteArray = new TutorialUsePause();
+		Embedded.levelObjToString[Embedded.tutorialUsePause] = "Embedded.tutorialUsePause";
 		
     }
 
