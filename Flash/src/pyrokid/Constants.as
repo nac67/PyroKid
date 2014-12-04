@@ -110,8 +110,8 @@ package pyrokid {
         public static var GROUNDED_TYPES:Array = [WALL_TILE_CODE];
         public static var SINGLE_TILE_TYPES:Array = [];
         
-        public static var WORLD2:int = 30;
-        public static var WORLD3:int = 40;
+        public static var WORLD2:int = 25;
+        public static var WORLD3:int = 35;
         
         public static function GET_TILE_SET(tileCode:int, levNumber:int):Bitmap {
             switch (tileCode) {
