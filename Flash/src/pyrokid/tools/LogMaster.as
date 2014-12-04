@@ -45,7 +45,7 @@ package pyrokid.tools {
         }
         
         public function logFireballIgnite(cellX:int, cellY:int, type:String = ""):void {
-            logEvent(2, "fball: " + cellX + "," + cellY + "," + type);
+            //logEvent(2, "fball: " + cellX + "," + cellY + "," + type);
         }
         
         public function logEvent(action:int, msg:String):void {

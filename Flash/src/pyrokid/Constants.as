@@ -10,7 +10,7 @@ package pyrokid {
     public class Constants {
         // LOGGING
         public static var TEAM_ID:int = 100;
-        public static var VERSION_ID:int = 4; //!!!
+        public static var VERSION_ID:int = 5; //!!!
         public static var DO_LOGGING:Boolean = false; //!!!
         public static var IS_VERSION_A:Boolean; //set in LogMaster.as
         
