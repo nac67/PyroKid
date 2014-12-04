@@ -47,17 +47,17 @@ package pyrokid {
             } else if (levelNum == 3 || levelNum == 4) {
                 bg = new Embedded.TutorialBackground3() as Bitmap;
                 bg.scaleY = scale;
-            } else if (levelNum < 30) {
+            } else if (levelNum < Constants.WORLD2) {
                 bg = new Embedded.RockBGBMP() as Bitmap;
                 bg.scaleX = bg.scaleY = .5;
                 isRock = true;
-            } else if (levelNum < 40) {
+            } else if (levelNum < Constants.WORLD3) {
                 bg = new Embedded.MossyBGBMP() as Bitmap;
                 bg.scaleX = bg.scaleY = .5;
                 isRock = true;
             } else {
                 bg = new Embedded.WaterBGBMP() as Bitmap;
-                bg.scaleX = bg.scaleY = .5;
+                bg.scaleX = bg.scaleY = 1.3;
                 isRock = true;
             }
             return bg;
