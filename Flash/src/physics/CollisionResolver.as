@@ -252,7 +252,7 @@ package physics {
             }
             
             if (dx == 0 && dy == 0) return;
-            dx *= 1.01;
+            dx *= 1.02;
             //dy *= 1.01;
             
             if (dy == 0 || (dx != 0 && Math.abs(dx) < Math.abs(dy))) {

@@ -6,6 +6,7 @@ package pyrokid.entities {
     import flash.utils.Dictionary;
 	import physics.*;
 	import pyrokid.*;
+    import pyrokid.graphics.Filmstrip;
     import pyrokid.tools.HashSet;
     import Utils;
     import pyrokid.graphics.ConnectedSpriteBuilder;
@@ -185,8 +186,7 @@ package pyrokid.entities {
             var child:DisplayObject;
             var edgeType:int;
             if (connector) {
-                child = new Embedded.ConnectorSWF() as Sprite;
-                child.scaleX = child.scaleY = 0.7;
+                child = new Filmstrip(new Embedded.ConnectorBMP(),17,17,0,0,0,1);
                 edgeType = Constants.CONNECTOR_CODE;
                 var islandCoor:Vector2i = cell.copy().AddV(islandAnchor);
                 connectors[Connector.coorAndDirToString(islandCoor, dir)] = [islandCoor, dir, child];
