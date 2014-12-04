@@ -3,7 +3,7 @@ package ui.playstates {
     import pyrokid.Embedded;
     import pyrokid.Constants;
     import ui.buttons.CoreButton;
-    import pyrokid.graphics.Filmstrip;
+	import ui.levelorderer.LevelOrderer;
     
 	public class MainMenu extends BasePlayState {
 		
@@ -17,22 +17,20 @@ package ui.playstates {
 			if (Constants.LEVEL_EDITOR_ENABLED) {
 				addCoreButton(CoreButton.create(140, 29, StateController.goToLevelEditor, "Level Editor").centerOn(600, 500));
 			}
-            
-            
-            
-            addCoreButton(CoreButton.create(140, 29, hardCodedPoop, "Draw All Levels").centerOn(600, 550));
+            addCoreButton(CoreButton.create(140, 29, hardCodedPoop, "Level Orderer").centerOn(600, 550));
 		}
         
         public function hardCodedPoop() {
-            for (var i:int = 0 ; i < 40; i++) {
-                var row:int = i / 10;
-                var col:int = i % 10;
-                var icon:Bitmap = Utils.getLevelIcon(i+1);
-                icon.x = col * 80;
-                icon.y = row * 80;
-                icon.scaleX = icon.scaleY = .1;
-                addChild(icon);
-            }
+			addChild(new LevelOrderer());
+            //for (var i:int = 0 ; i < 40; i++) {
+                //var row:int = i / 10;
+                //var col:int = i % 10;
+                //var icon:Bitmap = Utils.getLevelIcon(i+1);
+                //icon.x = col * 80;
+                //icon.y = row * 80;
+                //icon.scaleX = icon.scaleY = .1;
+                //addChild(icon);
+            //}
         }
 	}
 }
