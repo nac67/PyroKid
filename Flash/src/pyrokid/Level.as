@@ -418,7 +418,7 @@ package pyrokid {
                 // ignite FreeEntities
                 for each (var freeEntity:FreeEntity in enemies) {
                     if (freeEntity.isTouching(projectile)) {
-                        if (projectile is Fireball) {
+                        if (projectile is Fireball && !freeEntity.projectileCanPassThrough()) {
                             projectiles.markForDeletion(projectile);
                             freeEntity.ignite(this);
                             Main.log.logFireballIgnite(cellX, cellY, Object(freeEntity).constructor);
