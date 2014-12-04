@@ -51,11 +51,6 @@ package pyrokid {
         [Embed(source='../../assets/swf/buttons.swf', symbol='ControlsBTN2')]
         public static var ControlsInvertedIcon:Class; //cast as Sprite on instantiation
         
-        [Embed(source="../../assets/levels/introTown2.txt", mimeType="application/octet-stream")]
-        private static var FirstIntroTown:Class;
-        public static var firstIntroTown:ByteArray = new FirstIntroTown();
-		Embedded.levelObjToString[Embedded.firstIntroTown] = "Embedded.firstIntroTown";
-        
         [Embed(source="../../assets/levels/mazeRunner3.txt", mimeType="application/octet-stream")]
         private static var MazeRunner:Class;
         public static var mazeRunner:ByteArray = new MazeRunner();
@@ -65,11 +60,6 @@ package pyrokid {
         private static var NewBlankLevel:Class;
         public static var newBlankLevel:ByteArray = new NewBlankLevel();
 		Embedded.levelObjToString[Embedded.newBlankLevel] = "Embedded.newBlankLevel";
-        
-        [Embed(source="../../assets/levels/secondIntroTown.txt", mimeType="application/octet-stream")]
-        private static var SecondIntroTown:Class;
-        public static var secondIntroTown:ByteArray = new SecondIntroTown();
-		Embedded.levelObjToString[Embedded.secondIntroTown] = "Embedded.secondIntroTown";
         
         [Embed(source="../../assets/levels/introTown4.txt", mimeType="application/octet-stream")]
         private static var ThirdIntroTown:Class;
@@ -131,12 +121,12 @@ package pyrokid {
         public static var level5:ByteArray = new Level5();
 		Embedded.levelObjToString[Embedded.level5] = "Embedded.level5";
         
-        [Embed(source="../../assets/levels/tut6.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/LearnNotToSquishYourself.txt", mimeType="application/octet-stream")]
         private static var Level6:Class;
         public static var level6:ByteArray = new Level6();
 		Embedded.levelObjToString[Embedded.level6] = "Embedded.level6";
         
-        [Embed(source="../../assets/levels/tut7.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/EasyTrapDoor.txt", mimeType="application/octet-stream")]
         private static var Level7:Class;
         public static var level7:ByteArray = new Level7();
 		Embedded.levelObjToString[Embedded.level7] = "Embedded.level7";
@@ -151,7 +141,7 @@ package pyrokid {
         public static var level9:ByteArray = new Level9();
 		Embedded.levelObjToString[Embedded.level9] = "Embedded.level9";
         
-        [Embed(source="../../assets/levels/shoot_while_fall.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/LearnShootFall.txt", mimeType="application/octet-stream")]
         private static var Level10:Class;
         public static var level10:ByteArray = new Level10();
 		Embedded.levelObjToString[Embedded.level10] = "Embedded.level10";
@@ -356,17 +346,12 @@ package pyrokid {
         
         /////////////////
         
-        [Embed(source="../../assets/levels/tut8.txt", mimeType="application/octet-stream")]
-        private static var ALevel1:Class;
-        public static var alevel1:ByteArray = new ALevel1();
-		Embedded.levelObjToString[Embedded.alevel1] = "Embedded.alevel1";
-        
-        [Embed(source="../../assets/levels/tut9.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/LearnLava.txt", mimeType="application/octet-stream")]
         private static var ALevel2:Class;
         public static var alevel2:ByteArray = new ALevel2();
 		Embedded.levelObjToString[Embedded.alevel2] = "Embedded.alevel2";
         
-        [Embed(source="../../assets/levels/nlevel2.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/MediumLizardJump.txt", mimeType="application/octet-stream")]
         private static var ALevel3:Class;
         public static var alevel3:ByteArray = new ALevel3();
 		Embedded.levelObjToString[Embedded.alevel3] = "Embedded.alevel3";
@@ -381,7 +366,7 @@ package pyrokid {
         public static var alevel5:ByteArray = new ALevel5();
 		Embedded.levelObjToString[Embedded.alevel5] = "Embedded.alevel5";
         
-        [Embed(source="../../assets/levels/nlevel4.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/EasySpiderDrop.txt", mimeType="application/octet-stream")]
         private static var ALevel6:Class;
         public static var alevel6:ByteArray = new ALevel6();
 		Embedded.levelObjToString[Embedded.alevel6] = "Embedded.alevel6";
@@ -401,7 +386,7 @@ package pyrokid {
         public static var alevel9:ByteArray = new ALevel9();
 		Embedded.levelObjToString[Embedded.alevel9] = "Embedded.alevel9";
         
-        [Embed(source="../../assets/levels/introImmuneEnemies.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/LearnImmuneEnemies.txt", mimeType="application/octet-stream")]
         private static var ALevel10:Class;
         public static var alevel10:ByteArray = new ALevel10();
 		Embedded.levelObjToString[Embedded.alevel10] = "Embedded.alevel10";
@@ -438,7 +423,7 @@ package pyrokid {
         public static var wBat2:ByteArray = new WBat2();
 		Embedded.levelObjToString[Embedded.wBat2] = "Embedded.wBat2";
         
-        [Embed(source="../../assets/levels/waterbat3.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/WaterbatCombat.txt", mimeType="application/octet-stream")]
         private static var WBat3:Class;
         public static var wBat3:ByteArray = new WBat3();
 		Embedded.levelObjToString[Embedded.wBat3] = "Embedded.wBat3";
@@ -478,7 +463,7 @@ package pyrokid {
         public static var nickAnvil:ByteArray = new NickAnvil();
 		Embedded.levelObjToString[Embedded.nickAnvil] = "Embedded.nickAnvil";
         
-        [Embed(source="../../assets/levels/introspider.txt", mimeType="application/octet-stream")]
+        [Embed(source="../../assets/levels/LearnSpider.txt", mimeType="application/octet-stream")]
         private static var IntroSpider:Class;
         public static var introSpider:ByteArray = new IntroSpider();
 		Embedded.levelObjToString[Embedded.introSpider] = "Embedded.introSpider";
@@ -488,6 +473,7 @@ package pyrokid {
         public static var spiderFun:ByteArray = new SpiderFun();
 		Embedded.levelObjToString[Embedded.spiderFun] = "Embedded.spiderFun";
         
+<<<<<<< HEAD
         //new as of kongregate release
         
         [Embed(source="../../assets/levels/z1_revised.txt", mimeType="application/octet-stream")]
@@ -519,6 +505,27 @@ package pyrokid {
         private static var DaFrick:Class;
         public static var daFrick:ByteArray = new Z3();
 		Embedded.levelObjToString[Embedded.daFrick] = "Embedded.daFrick";
+        
+        [Embed(source="../../assets/levels/TutorialMovement.txt", mimeType="application/octet-stream")]
+        private static var TutorialMovement:Class;
+        public static var tutorialMovement:ByteArray = new TutorialMovement();
+		Embedded.levelObjToString[Embedded.tutorialMovement] = "Embedded.tutorialMovement";
+        
+        [Embed(source="../../assets/levels/TutorialShootRight.txt", mimeType="application/octet-stream")]
+        private static var TutorialShootRight:Class;
+        public static var tutorialShootRight:ByteArray = new TutorialShootRight();
+		Embedded.levelObjToString[Embedded.tutorialShootRight] = "Embedded.tutorialShootRight";
+        
+        [Embed(source="../../assets/levels/TutorialBombExit.txt", mimeType="application/octet-stream")]
+        private static var TutorialBombExit:Class;
+        public static var tutorialBombExit:ByteArray = new TutorialBombExit();
+		Embedded.levelObjToString[Embedded.tutorialBombExit] = "Embedded.tutorialBombExit";
+        
+        [Embed(source="../../assets/levels/TutorialUsePause.txt", mimeType="application/octet-stream")]
+        private static var TutorialUsePause:Class;
+        public static var tutorialUsePause:ByteArray = new TutorialUsePause();
+		Embedded.levelObjToString[Embedded.tutorialUsePause] = "Embedded.tutorialUsePause";
+		Embedded.levelObjToString[Embedded.tutorialUsePause] = "Embedded.tutorialUsePause";
 		
     }
 

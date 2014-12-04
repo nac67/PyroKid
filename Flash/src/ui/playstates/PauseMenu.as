@@ -36,18 +36,25 @@ package ui.playstates {
             createReturnToMainMenuButton().centerOn(700, buttonHeight);
             
             //StateController.displayOptions(true, Constants.BUTTON_PADDING, Constants.BUTTON_PADDING);
-            addChild(new OptionsMenu(true, Constants.BUTTON_PADDING, Constants.BUTTON_PADDING));
+			var options:OptionsMenu = new OptionsMenu(true, Constants.BUTTON_PADDING, Constants.BUTTON_PADDING);
+			options.y = 200;
+            addChild(options);
 		}
         
         private function addMinimap(level:Level):void {
             var minimapBitmap:Bitmap = Utils.generateMinimap(level);
-            minimapBitmap.scaleY = minimapBitmap.scaleX = 0.2;
-            minimapBitmap.x = (Constants.WIDTH - minimapBitmap.width) / 2;
+			
+			var widthRatio:Number = 500 / minimapBitmap.width;
+			var heightRatio:Number = 400 / minimapBitmap.height;
+			var ratio:Number = Math.min(widthRatio, heightRatio);
+			
+            minimapBitmap.scaleY = minimapBitmap.scaleX = ratio;
+            minimapBitmap.x = 100 + (Constants.WIDTH - minimapBitmap.width) / 2;
             minimapBitmap.y = (Constants.HEIGHT - minimapBitmap.height) / 2 - 20;
             addChild(minimapBitmap);
             
             var fadeOutOverlay:Sprite = new Sprite();
-            for (var i:int = 0; i < 70; i++) {
+            for (var i:int = 0; i < 100; i++) {
                 var lineWidth:int = 5;
                 fadeOutOverlay.graphics.lineStyle(lineWidth, 0x000000, Math.min(1, 0.75 + i * 0.003), false, "normal", null, JointStyle.MITER);
                 var distFromEdge:int = lineWidth / 2 + lineWidth * i;

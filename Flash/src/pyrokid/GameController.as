@@ -56,8 +56,9 @@ package pyrokid {
             
             initializeLevelAndEditor(recipe);
             
+
             
-            if (Constants.LEVEL_EDITOR_ENABLED) {
+            if (Constants.SKIP_BUTTON_ENABLED && Constants.LEVEL_EDITOR_ENABLED) {
                 try {
                     this.level.addMessage(Embedded.levelObjToString[LevelsInfo.levelDict[LevelsInfo.currLevel]], 0, 0);
                 } catch (e) {}

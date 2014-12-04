@@ -14,28 +14,29 @@ package ui {
 	{
 		public static var levelDict:Array = [
             null, // No level 0
-            /*01*/Embedded.firstIntroTown,
-            /*02*/Embedded.secondIntroTown,
+            /*01*/Embedded.tutorialMovement,
+            /*02*/Embedded.tutorialShootRight,
             /*03*/Embedded.thirdIntroTown,
             /*04*/Embedded.fourthIntroTown,
             /*05*/Embedded.introFallUnderground,
             /*06*/Embedded.levelLearnDirectionalShoot,
             /*07*/Embedded.level5,
-            /*08*/Embedded.alevel1,
+            /*08*/Embedded.tutorialBombExit,
+            Embedded.tutorialUsePause,
             /*09*/Embedded.level4New,
             /*10*/Embedded.level6,
             /*11*/Embedded.level7,
             /*12*/Embedded.alevel2,
             /*13*/Embedded.introSpider,
             /*14*/Embedded.alevel10,
-            /*15*/Embedded.wBatIntro, // lizard intro
+            /*15*/Embedded.wBatIntro,
             /*16*/Embedded.level10,
             /*17*/Embedded.levelLearnShootDown,
             /*18*/Embedded.level8,
             /*19*/Embedded.alevel4,
             /*20*/Embedded.alevel5,
             /*21*/Embedded.alevel9,
-            /*22*/Embedded.alevel8,
+            /*22*/Embedded.alevel8, // delete
             /*23*/Embedded.alevel6,
             /*24*/Embedded.alevel12,
             /*25*/Embedded.learnToSmoosh,
@@ -88,7 +89,7 @@ package ui {
         
 		public static var maxUnlockedLevel:int = 1; //TODO: LOAD THIS FROM SHAREDOBJECT
 		public static var totalNumberOfLevels:int = -1;
-		public static const numOfTutorialLevels:int = 8;
+		public static const numOfTutorialLevels:int = 9;
         
 		public static var completedLevels:Dictionary = new Dictionary();
 		public static var completedLevelsByPage:Dictionary = new Dictionary();
@@ -97,7 +98,7 @@ package ui {
         public static function getTutorialMessages(levelNum:int):Array {
             var level = levelDict[levelNum];
             switch (level) {
-                case Embedded.firstIntroTown:
+                case Embedded.tutorialMovement:
                     var controls:String = GameSettings.controlSchemeInverted ? "arrow" : "WASD";
                     return [[new Vector2(100, 560), "Use the " + controls + " keys to move and jump. Use ESC to pause."]];
                 case Embedded.thirdIntroTown:
@@ -106,7 +107,8 @@ package ui {
                 case Embedded.fourthIntroTown: 
                     return [[new Vector2(240, 110), "He's burning houses, get him!"]];
                 case Embedded.levelLearnDirectionalShoot:
-                    return [[new Vector2(0, 10), "Remember, you can shoot in any direction."]];
+                    var controls:String = !GameSettings.controlSchemeInverted ? "the arrow keys" : "W, A, S, or D";
+                    return [[new Vector2(0, 10), "Remember, you can shoot in any direction with " + controls + "."]];
                 case Embedded.level5: 
                     return [[new Vector2(0, 10), "Latches will hold objects together."]];
                 case Embedded.level4New:
@@ -115,10 +117,12 @@ package ui {
                     return [[new Vector2(0, 10), "Sometimes you'll need to jump and shoot down at the same time"]];
                 case Embedded.level10:
                     return [[new Vector2(0, 10), "You can shoot while falling. At any time\nPress R to restart."]];
-                case Embedded.alevel1: 
+                case Embedded.tutorialBombExit: 
                     return [[new Vector2(0, 10), "Sometimes you have to make your own exit. Look for a bomb in the cave."]];
                 case Embedded.alevel9:
                     return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
+                case Embedded.tutorialUsePause:
+                    return [[new Vector2(0, 10), "Use ESC to pause and see the minimap."], [new Vector2(-25, 285), "Use R to restart."]];
             }
             return [];
         }
