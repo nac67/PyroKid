@@ -55,13 +55,7 @@ package pyrokid {
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
             initializeLevelAndEditor(recipe);
-                       
             
-            
-            for (var j = 0; j < 30; j++) {
-                //level.addChild(new Embedded.FireTileSWF());
-                //addChild(new Filmstrip(new Embedded.FireTileStripBMP(), 15, 25, 80, 80, 5, 19));
-            }
             
             if (Constants.LEVEL_EDITOR_ENABLED) {
                 try {
