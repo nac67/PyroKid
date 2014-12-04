@@ -6,11 +6,12 @@ package pyrokid {
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.*;
+    import ui.LevelsInfo;
     
     public class Constants {
         // LOGGING
         public static var TEAM_ID:int = 100;
-        public static var VERSION_ID:int = 4; //!!!
+        public static var VERSION_ID:int = 5; //!!!
         public static var DO_LOGGING:Boolean = false; //!!!
         public static var IS_VERSION_A:Boolean; //set in LogMaster.as
         
@@ -111,14 +112,29 @@ package pyrokid {
         public static var GROUNDED_TYPES:Array = [WALL_TILE_CODE];
         public static var SINGLE_TILE_TYPES:Array = [];
         
-        public static function GET_TILE_SET(tileCode:int):Bitmap {
+        public static var WORLD2:int = 25;
+        public static var WORLD3:int = 35;
+        
+        public static function GET_TILE_SET(tileCode:int, levNumber:int):Bitmap {
             switch (tileCode) {
-                case WALL_TILE_CODE: return new Embedded.DirtMergeBMP() as Bitmap;
+                case WALL_TILE_CODE: return getDirt(levNumber);
                 case WOOD_TILE_CODE: return new Embedded.WoodMergeBMP() as Bitmap;
                 case METAL_TILE_CODE: return new Embedded.MetalMergeBMP() as Bitmap;
                 case OIL_TILE_CODE: return new Embedded.LavaMergeBMP() as Bitmap;
             }
             return null;
+        }
+        
+        private static function getDirt(levNumber:int):Bitmap {
+            if (levNumber < 5) {
+                return new Embedded.DirtMerge2BMP() as Bitmap;
+            } else if (levNumber < WORLD2) {
+                return new Embedded.DirtMergeBMP() as Bitmap;
+            } else if (levNumber < WORLD3) {
+                return new Embedded.DirtMerge2BMP() as Bitmap;
+            } else {
+                return new Embedded.DirtMerge3BMP() as Bitmap;
+            }
         }
         
         public static var MUSIC_STARTS_ON:Boolean = false;

@@ -3,6 +3,7 @@ package  {
     import flash.display.MovieClip;
     import flash.display.Sprite;
 	import flash.net.SharedObject;
+    import flash.text.TextField;
     import flash.utils.Dictionary;
 	import physics.PhysBox;
 	import ui.LevelsInfo;
@@ -382,7 +383,7 @@ package  {
 		public static function loadSavedData():void {
 			if (Constants.START_FRESH_GAME) return;
 			
-			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
+			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData_kongregate");
 			if (levelSO != undefined) {
 				if (levelSO.data.hasOwnProperty("maxUnlockedLevel")) {
 					LevelsInfo.maxUnlockedLevel = levelSO.data.maxUnlockedLevel;
@@ -409,7 +410,7 @@ package  {
 			}
 		}
 		public static function saveLevelData():void {
-			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
+			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData_kongregate");
 			levelSO.data.maxUnlockedLevel = LevelsInfo.maxUnlockedLevel;
 			levelSO.data.completedLevels = LevelsInfo.completedLevels;
 			levelSO.data.bestLevelCompletionTimes = LevelsInfo.bestLevelCompletionTimes;
@@ -421,6 +422,17 @@ package  {
 			//}
 		}
 		
+        
+        public static function findTextFieldInFlashBTN(btn:DisplayObjectContainer):TextField {
+            
+            for (var i:int = 0; i<btn.numChildren; i++) {
+                var child:DisplayObject = btn.getChildAt(i);
+                if (child is TextField) {
+                    return child as TextField;
+                }
+            }
+            return null;
+        }
     }
 
 }
