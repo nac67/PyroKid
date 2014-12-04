@@ -64,7 +64,9 @@ package pyrokid {
             }
             
             if (Constants.LEVEL_EDITOR_ENABLED) {
-                this.level.addMessage(Embedded.levelObjToString[LevelsInfo.levelDict[LevelsInfo.currLevel]], 0, 0);
+                try {
+                    this.level.addMessage(Embedded.levelObjToString[LevelsInfo.levelDict[LevelsInfo.currLevel]], 0, 0);
+                } catch (e) {}
                 addSkipButton();
             }
         }
