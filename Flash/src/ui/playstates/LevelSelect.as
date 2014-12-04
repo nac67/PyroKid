@@ -126,8 +126,8 @@ package ui.playstates {
 			
 			//display paging buttons
 			var max_level_displayed = (curr_page-1) * (x_tiles * y_tiles) + LevelsInfo.numOfTutorialLevels;
-            addCoreButton(CoreButton.create(100, 30, goToPreviousPage, "< Previous").centerOn(100, 300));
-            addCoreButton(CoreButton.create(100, 30, goToNextPage, "Next >").centerOn(700, 300));
+            if (curr_page > 1) addCoreButton(CoreButton.create(100, 30, goToPreviousPage, "< Previous").centerOn(100, 300));
+            if (max_level_displayed < LevelsInfo.getTotalNumberOfLevels()) addCoreButton(CoreButton.create(100, 30, goToNextPage, "Next >").centerOn(700, 300));
 		}
 		
 		private function goToPreviousPage():void {
