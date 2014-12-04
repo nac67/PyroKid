@@ -3,7 +3,6 @@ package pyrokid.entities {
     import flash.display.Sprite;
     import flash.geom.Point;
     import flash.utils.ByteArray;
-    import org.flintparticles.twoD.zones.PointZone;
 	import physics.PhysRectangle;
     import Vector2i;
 	import pyrokid.*;
@@ -35,16 +34,9 @@ package pyrokid.entities {
         private var onFireSprite:Sprite;
         
         public var fireDisabled:Boolean = false;
-        
-        // Particle Effects
-        public var emitterPosition:PointZone = new PointZone(new Point());
 
         public function Player(level:Level) {
             super(level, 1, 26, 44, 8, 8, 16, 40);
-            
-            //this.glowVisible = true;
-            //this.glowRadius = 30;
-            //this.glow = 0;
             
             
             legsSWF = new Embedded.PlayerLegsSWF() as MovieClip;
@@ -167,8 +159,6 @@ package pyrokid.entities {
 			prevFrameFireBtn = shootButton;
             
             updateAnimation();
-            //emitterPosition.x = (x + width * 0.3) / Constants.CELL;
-            //emitterPosition.y = (y + height * 0.8) / Constants.CELL;
         }
         
         
