@@ -192,7 +192,7 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/dirt_merge.png")]
         public static var DirtMergeBMP:Class;
         
-        [Embed(source="../../assets/tile_art/dirt_merge3.png")]
+        [Embed(source="../../assets/tile_art/grass_merge.png")]
         public static var DirtMerge2BMP:Class;
         
         [Embed(source="../../assets/tile_art/dirt_merge3.png")]
