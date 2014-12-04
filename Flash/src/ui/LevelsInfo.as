@@ -67,10 +67,10 @@ package ui {
             Embedded.mazeRunner,
             Embedded.michelleLevel1,
             Embedded.fallingLava,
-            Embedded.sideQuestCanyon,
+            Embedded.z1,
             Embedded.level13,
             Embedded.level14,
-            Embedded.z1,
+            Embedded.sideQuestCanyon,
             Embedded.z2,
             Embedded.z3,
             Embedded.z4
