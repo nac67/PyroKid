@@ -133,7 +133,16 @@ package ui {
                 case Embedded.alevel9:
                     return [[new Vector2(0, 10), "Some blocks are guarded by metal edges. Fire will not go past that side."]];
                 case Embedded.tutorialUsePause:
-                    return [[new Vector2(0, 10), "Use ESC to pause and see the minimap."], [new Vector2(-25, 285), "Use R to restart."]];
+                    return [[new Vector2(0, 10), "Use ESC to pause and see the map."],
+                        [new Vector2(110, 430), "Use R to restart."],
+                        [new Vector2(300, 820), "Use R to restart."]
+                    ];
+                case Embedded.wBat6:
+                    return [[new Vector2(630, 400), "Use ESC to see the map."]];
+                case Embedded.z3:
+                    return [[new Vector2(0, 10), "Remember, you don't need to beat every level to advance."],
+                        [new Vector2(0, 60), "Use ESC to visit the level select screen."]
+                    ];
             }
             return [];
         }
