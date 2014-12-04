@@ -3,6 +3,7 @@ package  {
     import flash.display.MovieClip;
     import flash.display.Sprite;
 	import flash.net.SharedObject;
+    import flash.text.TextField;
     import flash.utils.Dictionary;
 	import physics.PhysBox;
 	import ui.LevelsInfo;
@@ -421,6 +422,17 @@ package  {
 			//}
 		}
 		
+        
+        public static function findTextFieldInFlashBTN(btn:DisplayObjectContainer):TextField {
+            
+            for (var i:int = 0; i<btn.numChildren; i++) {
+                var child:DisplayObject = btn.getChildAt(i);
+                if (child is TextField) {
+                    return child as TextField;
+                }
+            }
+            return null;
+        }
     }
 
 }

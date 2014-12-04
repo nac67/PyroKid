@@ -17,11 +17,9 @@ package ui.buttons
 			this.x = x;
 			this.y = y;
 			
-			((this.upState as DisplayObjectContainer).getChildAt(1) as TextField).text = txt;
-			((this.downState as DisplayObjectContainer).getChildAt(2) as TextField).text = txt;
-			((this.overState as DisplayObjectContainer).getChildAt(2) as TextField).text = txt;
-			
-		
+            Utils.findTextFieldInFlashBTN(this.upState as DisplayObjectContainer).text = txt;
+            Utils.findTextFieldInFlashBTN(this.downState as DisplayObjectContainer).text = txt;
+            Utils.findTextFieldInFlashBTN(this.overState as DisplayObjectContainer).text = txt;
 		}
 		
 	}
