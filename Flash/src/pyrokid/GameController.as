@@ -263,13 +263,13 @@ package pyrokid {
                     }
                 }
                 if (level.player.isTouching(level.enemies[i])) {
-                    level.player.mutualIgnite(level, level.enemies[i]);
                     if (level.enemies[i] is Exit) {
                         if (level.enemies[i].canExit()) {
                             playerWon = true;
                             // TODO -- Aaron, exit can be bomb or hole
                         }
                     } else {
+                        level.player.mutualIgnite(level, level.enemies[i]);
                         level.player.damageFromEnemyContact(level);
                     }
                 }
