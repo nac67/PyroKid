@@ -198,6 +198,9 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/metal_merge.png")]
         public static var MetalMergeBMP:Class;
         
+        [Embed(source="../../assets/tile_art/FireTileStrip.png")]
+        public static var FireTileStripBMP:Class;
+        
         [Embed(source="../../assets/tile_art/lava.png")]
         public static var LavaMergeBMP:Class;
         
@@ -224,6 +227,9 @@ package pyrokid {
         
         [Embed(source='../../assets/swf/Connector.swf', symbol='Connector')]
         public static var ConnectorSWF:Class; //cast as Sprite on instantiation
+        
+        [Embed(source='../../assets/tile_art/connectornew.png')]
+        public static var ConnectorBMP:Class; //cast as Sprite on instantiation
         
         [Embed(source='../../assets/Glow.png')]
         public static var GlowBMP:Class; //cast as Bitmap on instantiation

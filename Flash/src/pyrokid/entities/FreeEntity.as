@@ -295,6 +295,10 @@ package pyrokid.entities {
                 return hitBox.hitTestObject(sprite);
             }
         }
+        
+        public function projectileCanPassThrough():Boolean {
+            return false;
+        }
 	}
 	
 }

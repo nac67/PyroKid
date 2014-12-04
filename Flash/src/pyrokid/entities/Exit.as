@@ -70,6 +70,10 @@ package pyrokid.entities {
             }
         }
         
+        public override function projectileCanPassThrough():Boolean {
+            return isHole;
+        }
+        
     }
     
 }

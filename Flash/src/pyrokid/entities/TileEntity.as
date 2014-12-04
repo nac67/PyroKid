@@ -6,6 +6,7 @@ package pyrokid.entities {
     import flash.utils.Dictionary;
 	import physics.*;
 	import pyrokid.*;
+    import pyrokid.graphics.Filmstrip;
     import pyrokid.tools.HashSet;
     import Utils;
     import pyrokid.graphics.ConnectedSpriteBuilder;
@@ -94,7 +95,8 @@ package pyrokid.entities {
         }
         
         public function addFireLocation(relativeCell:Vector2i):void {
-            var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;
+            var fire:DisplayObject = new FireFilm();
+            //var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;
             fire.x = relativeCell.x * Constants.CELL;
             fire.y = relativeCell.y * Constants.CELL;
             fireSprites.push(fire);
@@ -105,17 +107,20 @@ package pyrokid.entities {
             if (tileSetMap != null) {
                 var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, globalAnchor, objectCode == Constants.WALL_TILE_CODE, tileSetMap, level.cellWidth, level.cellHeight);
                 addChild(tileSet);
-                for each (var cell:Vector2i in cells) {
-                    addFireLocation(cell);
+                if (!(this is NonFlammableTile)) {
+                    for each (var cell:Vector2i in cells) {
+                        addFireLocation(cell);
+                    }
                 }
             } else {
-                for (var i:int = 0; i < cells.length; i++) {
-                    var child:DisplayObject = getSpriteForCell(cells[i]);
-                    child.x = cells[i].x * Constants.CELL;
-                    child.y = cells[i].y * Constants.CELL;
-                    addChild(child);
-                    fireSprites.push(child);
-                }
+                trace(Constants.ERROR_MESSAGE + "non tile set used");
+                //for (var i:int = 0; i < cells.length; i++) {
+                    //var child:DisplayObject = getSpriteForCell(cells[i]);
+                    //child.x = cells[i].x * Constants.CELL;
+                    //child.y = cells[i].y * Constants.CELL;
+                    //addChild(child);
+                    //fireSprites.push(child);
+                //}
             }
             
             edges = new Dictionary();
@@ -181,8 +186,7 @@ package pyrokid.entities {
             var child:DisplayObject;
             var edgeType:int;
             if (connector) {
-                child = new Embedded.ConnectorSWF() as Sprite;
-                child.scaleX = child.scaleY = 0.7;
+                child = new Filmstrip(new Embedded.ConnectorBMP(),17,17,0,0,0,1);
                 edgeType = Constants.CONNECTOR_CODE;
                 var islandCoor:Vector2i = cell.copy().AddV(islandAnchor);
                 connectors[Connector.coorAndDirToString(islandCoor, dir)] = [islandCoor, dir, child];

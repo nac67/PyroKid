@@ -10,7 +10,7 @@ package pyrokid {
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.graphics.Camera.CameraController;
-    import pyrokid.graphics.ParticleEngine;
+    import pyrokid.graphics.Filmstrip;
     import pyrokid.tools.*;
     import pyrokid.LevelEditor;
     import pyrokid.dev.LevelEditor;
@@ -55,6 +55,13 @@ package pyrokid {
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
             initializeLevelAndEditor(level);
+                       
+            
+            
+            for (var j = 0; j < 30; j++) {
+                //level.addChild(new Embedded.FireTileSWF());
+                //addChild(new Filmstrip(new Embedded.FireTileStripBMP(), 15, 25, 80, 80, 5, 19));
+            }
             
             if (Constants.LEVEL_EDITOR_ENABLED) {
                 addSkipButton();
@@ -112,11 +119,6 @@ package pyrokid {
                 physDebug = new PhysDebugLayer();
                 level.addChild(physDebug);
             }
-            
-            var eng:ParticleEngine = new ParticleEngine();
-            eng.scaleX = eng.scaleY = Constants.CELL;
-            eng.addFireTrail(level.player.emitterPosition);
-            level.addChildAt(eng, 1);
         }
         
         public function toggleLevelEditor():void {
@@ -374,6 +376,7 @@ package pyrokid {
             level.removeDead();
             benchmarker.endPhase();
             SoundManager.endFrame();
+            Filmstrip.update();
             // ---------------------- Game Win Conditions -------------------- //
             if (playerWon) {
                 levelJustWon = true;

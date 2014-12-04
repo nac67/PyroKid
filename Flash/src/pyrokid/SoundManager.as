@@ -4,7 +4,7 @@ package pyrokid {
     
     public class SoundManager {
         
-        private static var MAX_OVERLAP:int = 1;
+        private static var MAX_OVERLAP:int = 2;
         
         public static var currentlyStarted:Dictionary = new Dictionary();
         

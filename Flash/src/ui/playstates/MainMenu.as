@@ -17,7 +17,6 @@ package ui.playstates {
 			if (Constants.LEVEL_EDITOR_ENABLED) {
 				addCoreButton(CoreButton.create(140, 29, StateController.goToLevelEditor, "Level Editor").centerOn(600, 500));
 			}
-            
             addCoreButton(CoreButton.create(140, 29, hardCodedPoop, "Level Orderer").centerOn(600, 550));
 		}
         
