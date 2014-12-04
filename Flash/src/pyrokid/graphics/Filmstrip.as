@@ -39,12 +39,7 @@ package pyrokid.graphics {
             drawnObject.bitmapData =  new BitmapData(imageWidth, imageHeight);
             addChild(drawnObject);
             
-            x = Math.random() * 500;
-            y = 300;
-            
             render();
-            
-            
             
             addEventListener(Event.ADDED_TO_STAGE, attach);
             addEventListener(Event.REMOVED_FROM_STAGE, detach);
