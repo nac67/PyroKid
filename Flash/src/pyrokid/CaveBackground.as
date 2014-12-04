@@ -35,7 +35,7 @@ package pyrokid {
             var bg:Bitmap;
             var scale:Number = 1.05;
             if (menu) {
-                bg = new Embedded.RockBMP() as Bitmap;
+                bg = new Embedded.RockBGBMP() as Bitmap;
                 bg.scaleX = bg.scaleY = .5;
                 isRock = true;
             } else if (levelNum == 1) {
@@ -47,8 +47,16 @@ package pyrokid {
             } else if (levelNum == 3 || levelNum == 4) {
                 bg = new Embedded.TutorialBackground3() as Bitmap;
                 bg.scaleY = scale;
+            } else if (levelNum < 30) {
+                bg = new Embedded.RockBGBMP() as Bitmap;
+                bg.scaleX = bg.scaleY = .5;
+                isRock = true;
+            } else if (levelNum < 40) {
+                bg = new Embedded.MossyBGBMP() as Bitmap;
+                bg.scaleX = bg.scaleY = .5;
+                isRock = true;
             } else {
-                bg = new Embedded.RockBMP() as Bitmap;
+                bg = new Embedded.WaterBGBMP() as Bitmap;
                 bg.scaleX = bg.scaleY = .5;
                 isRock = true;
             }

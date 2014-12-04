@@ -21,7 +21,7 @@ package pyrokid {
         public static var LEVEL_EDITOR_ENABLED:Boolean = true; //!!!
         
         public static var GOD_MODE:Boolean = false;
-		public static var ALL_LEVELS_UNLOCKED:Boolean = false; //!!!
+		public static var ALL_LEVELS_UNLOCKED:Boolean = true; //!!!
 		public static var LEVEL_UNLOCK_NEXT_PAGE_PROPORTION:Number = (7 / 9);
 		public static var START_FRESH_GAME:Boolean = false;
 		public static var ALWAYS_DISPLAY_COMPLETION_TIME:Boolean = false;
