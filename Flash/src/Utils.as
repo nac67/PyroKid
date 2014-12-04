@@ -382,7 +382,7 @@ package  {
 		public static function loadSavedData():void {
 			if (Constants.START_FRESH_GAME) return;
 			
-			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
+			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData_kongregate");
 			if (levelSO != undefined) {
 				if (levelSO.data.hasOwnProperty("maxUnlockedLevel")) {
 					LevelsInfo.maxUnlockedLevel = levelSO.data.maxUnlockedLevel;
@@ -409,7 +409,7 @@ package  {
 			}
 		}
 		public static function saveLevelData():void {
-			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData");
+			var levelSO:SharedObject = SharedObject.getLocal("pyrokid_levelData_kongregate");
 			levelSO.data.maxUnlockedLevel = LevelsInfo.maxUnlockedLevel;
 			levelSO.data.completedLevels = LevelsInfo.completedLevels;
 			levelSO.data.bestLevelCompletionTimes = LevelsInfo.bestLevelCompletionTimes;
