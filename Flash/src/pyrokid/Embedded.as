@@ -502,7 +502,7 @@ package pyrokid {
         
         [Embed(source="../../assets/levels/dafrick.txt", mimeType="application/octet-stream")]
         private static var DaFrick:Class;
-        public static var daFrick:ByteArray = new Z3();
+        public static var daFrick:ByteArray = new DaFrick();
 		Embedded.levelObjToString[Embedded.daFrick] = "Embedded.daFrick";
         
         [Embed(source="../../assets/levels/TutorialMovement.txt", mimeType="application/octet-stream")]
@@ -550,31 +550,6 @@ package pyrokid {
         private static var Evan_jump_timing:Class;
         public static var evan_jump_timing:ByteArray = new Evan_jump_timing();
         Embedded.levelObjToString[Embedded.evan_jump_timing] = "Embedded.evan_jump_timing";
-        
-        [Embed(source="../../assets/levels/z1.txt", mimeType="application/octet-stream")]
-        private static var Z1:Class;
-        public static var z1:ByteArray = new Z1();
-        Embedded.levelObjToString[Embedded.z1] = "Embedded.z1";
-
-        [Embed(source="../../assets/levels/z2.txt", mimeType="application/octet-stream")]
-        private static var Z2:Class;
-        public static var z2:ByteArray = new Z2();
-        Embedded.levelObjToString[Embedded.z2] = "Embedded.z2";
-
-        [Embed(source="../../assets/levels/z3.txt", mimeType="application/octet-stream")]
-        private static var Z3:Class;
-        public static var z3:ByteArray = new Z3();
-        Embedded.levelObjToString[Embedded.z3] = "Embedded.z3";
-        
-        [Embed(source="../../assets/levels/z4.txt", mimeType="application/octet-stream")]
-        private static var Z4:Class;
-        public static var z4:ByteArray = new Z4();
-        Embedded.levelObjToString[Embedded.z4] = "Embedded.z4";
-        
-        [Embed(source="../../assets/levels/z5.txt", mimeType="application/octet-stream")]
-        private static var Z5:Class;
-        public static var z5:ByteArray = new Z5();
-        Embedded.levelObjToString[Embedded.z5] = "Embedded.z5";
 		
     }
 
