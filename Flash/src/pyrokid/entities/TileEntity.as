@@ -94,7 +94,8 @@ package pyrokid.entities {
         }
         
         public function addFireLocation(relativeCell:Vector2i):void {
-            var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;
+            var fire:DisplayObject = new FireFilm();
+            //var fire:DisplayObject = new Embedded.FireTileSWF() as MovieClip;
             fire.x = relativeCell.x * Constants.CELL;
             fire.y = relativeCell.y * Constants.CELL;
             fireSprites.push(fire);
@@ -105,17 +106,20 @@ package pyrokid.entities {
             if (tileSetMap != null) {
                 var tileSet:Bitmap = ConnectedSpriteBuilder.buildSpriteFromCoors(cells, globalAnchor, objectCode == Constants.WALL_TILE_CODE, tileSetMap, level.cellWidth, level.cellHeight);
                 addChild(tileSet);
-                for each (var cell:Vector2i in cells) {
-                    addFireLocation(cell);
+                if (!(this is NonFlammableTile)) {
+                    for each (var cell:Vector2i in cells) {
+                        addFireLocation(cell);
+                    }
                 }
             } else {
-                for (var i:int = 0; i < cells.length; i++) {
-                    var child:DisplayObject = getSpriteForCell(cells[i]);
-                    child.x = cells[i].x * Constants.CELL;
-                    child.y = cells[i].y * Constants.CELL;
-                    addChild(child);
-                    fireSprites.push(child);
-                }
+                trace(Constants.ERROR_MESSAGE + "non tile set used");
+                //for (var i:int = 0; i < cells.length; i++) {
+                    //var child:DisplayObject = getSpriteForCell(cells[i]);
+                    //child.x = cells[i].x * Constants.CELL;
+                    //child.y = cells[i].y * Constants.CELL;
+                    //addChild(child);
+                    //fireSprites.push(child);
+                //}
             }
             
             edges = new Dictionary();

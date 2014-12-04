@@ -168,6 +168,9 @@ package pyrokid {
         [Embed(source="../../assets/tile_art/metal_merge.png")]
         public static var MetalMergeBMP:Class;
         
+        [Embed(source="../../assets/tile_art/FireTileStrip.png")]
+        public static var FireTileStripBMP:Class;
+        
         [Embed(source="../../assets/tile_art/lava.png")]
         public static var LavaMergeBMP:Class;
         
