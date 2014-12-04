@@ -49,12 +49,12 @@ package pyrokid {
 		
         /* level is not specified if you want to start a new level in the level editor
          * Otherwise give it a byte array from an embedded level file */
-        public function GameController(level:Object) {
+        public function GameController(recipe:Object) {
             benchmarker = new Benchmarker(["PHYSICS", "FIRE", "BETWEEN UPDATES", "REMOVE DEAD"]);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, levelEditorListener);
             Main.MainStage.addEventListener(KeyboardEvent.KEY_UP, keyboardActionListener);
             
-            initializeLevelAndEditor(level);
+            initializeLevelAndEditor(recipe);
                        
             
             
@@ -64,6 +64,7 @@ package pyrokid {
             }
             
             if (Constants.LEVEL_EDITOR_ENABLED) {
+                this.level.addMessage(Embedded.levelObjToString[LevelsInfo.levelDict[LevelsInfo.currLevel]], 0, 0);
                 addSkipButton();
             }
         }

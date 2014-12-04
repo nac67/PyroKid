@@ -337,7 +337,7 @@ package pyrokid {
                 addChild(textToAdd);
 		}
         
-        private function addTutorialMessage():void {
+        public function addTutorialMessage():void {
             var messages:Array = LevelsInfo.getTutorialMessages(LevelsInfo.currLevel);
             for each (var message:Array in messages) {
                 addMessage(message[1], message[0].x, message[0].y);
