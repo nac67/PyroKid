@@ -6,6 +6,7 @@ package pyrokid {
     import physics.*;
     import pyrokid.entities.*;
     import pyrokid.tools.*;
+    import ui.LevelsInfo;
     
     public class Constants {
         // LOGGING
@@ -124,7 +125,9 @@ package pyrokid {
         }
         
         private static function getDirt(levNumber:int):Bitmap {
-            if (levNumber < WORLD2) {
+            if (levNumber < 5) {
+                return new Embedded.DirtMerge2BMP() as Bitmap;
+            } else if (levNumber < WORLD2) {
                 return new Embedded.DirtMergeBMP() as Bitmap;
             } else if (levNumber < WORLD3) {
                 return new Embedded.DirtMerge2BMP() as Bitmap;
