@@ -125,19 +125,18 @@ package ui.playstates {
 			
 			
 			//display paging buttons
-			
-			if (curr_page > 1) addButton(new UnlockedButton("<", 100, 300), goToPreviousPage);
 			var max_level_displayed = (curr_page-1) * (x_tiles * y_tiles) + LevelsInfo.numOfTutorialLevels;
-			if (max_level_displayed < LevelsInfo.getTotalNumberOfLevels()) addButton(new UnlockedButton(">", 700, 300), goToNextPage);;
+            addCoreButton(CoreButton.create(100, 30, goToPreviousPage, "< Previous").centerOn(100, 300));
+            addCoreButton(CoreButton.create(100, 30, goToNextPage, "Next >").centerOn(700, 300));
 		}
 		
-		private function goToPreviousPage(e:Event):void {
+		private function goToPreviousPage():void {
 			Utils.removeAllChildren(this);
 			curr_page--;
 			if (curr_page < 1) curr_page = 1;
 			displayLevelButtons();
 		}
-		private function goToNextPage(e:Event):void {
+		private function goToNextPage():void {
 			Utils.removeAllChildren(this);
 			curr_page++;
 			//if (curr_page < 0) curr_page = 0; //TODO: put in max_page logic
