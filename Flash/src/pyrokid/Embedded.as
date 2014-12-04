@@ -525,6 +525,56 @@ package pyrokid {
         public static var tutorialUsePause:ByteArray = new TutorialUsePause();
 		Embedded.levelObjToString[Embedded.tutorialUsePause] = "Embedded.tutorialUsePause";
 		Embedded.levelObjToString[Embedded.tutorialUsePause] = "Embedded.tutorialUsePause";
+        
+        [Embed(source="../../assets/levels/MichelleLevel1.txt", mimeType="application/octet-stream")]
+        private static var MichelleLevel1:Class;
+        public static var michelleLevel1:ByteArray = new MichelleLevel1();
+        Embedded.levelObjToString[Embedded.michelleLevel1] = "Embedded.michelleLevel1";
+        
+        [Embed(source="../../assets/levels/chasm.txt", mimeType="application/octet-stream")]
+        private static var Chasm:Class;
+        public static var chasm:ByteArray = new Chasm();
+        Embedded.levelObjToString[Embedded.chasm] = "Embedded.chasm";
+        
+        [Embed(source="../../assets/levels/fallingLava.txt", mimeType="application/octet-stream")]
+        private static var FallingLava:Class;
+        public static var fallingLava:ByteArray = new FallingLava();
+        Embedded.levelObjToString[Embedded.fallingLava] = "Embedded.fallingLava";
+        
+        [Embed(source="../../assets/levels/sideQuestCanyon.txt", mimeType="application/octet-stream")]
+        private static var SideQuestCanyon:Class;
+        public static var sideQuestCanyon:ByteArray = new SideQuestCanyon();
+        Embedded.levelObjToString[Embedded.sideQuestCanyon] = "Embedded.sideQuestCanyon";
+        
+        [Embed(source="../../assets/levels/evan_jump_timing.txt", mimeType="application/octet-stream")]
+        private static var Evan_jump_timing:Class;
+        public static var evan_jump_timing:ByteArray = new Evan_jump_timing();
+        Embedded.levelObjToString[Embedded.evan_jump_timing] = "Embedded.evan_jump_timing";
+        
+        [Embed(source="../../assets/levels/z1.txt", mimeType="application/octet-stream")]
+        private static var Z1:Class;
+        public static var z1:ByteArray = new Z1();
+        Embedded.levelObjToString[Embedded.z1] = "Embedded.z1";
+
+        [Embed(source="../../assets/levels/z2.txt", mimeType="application/octet-stream")]
+        private static var Z2:Class;
+        public static var z2:ByteArray = new Z2();
+        Embedded.levelObjToString[Embedded.z2] = "Embedded.z2";
+
+        [Embed(source="../../assets/levels/z3.txt", mimeType="application/octet-stream")]
+        private static var Z3:Class;
+        public static var z3:ByteArray = new Z3();
+        Embedded.levelObjToString[Embedded.z3] = "Embedded.z3";
+        
+        [Embed(source="../../assets/levels/z4.txt", mimeType="application/octet-stream")]
+        private static var Z4:Class;
+        public static var z4:ByteArray = new Z4();
+        Embedded.levelObjToString[Embedded.z4] = "Embedded.z4";
+        
+        [Embed(source="../../assets/levels/z5.txt", mimeType="application/octet-stream")]
+        private static var Z5:Class;
+        public static var z5:ByteArray = new Z5();
+        Embedded.levelObjToString[Embedded.z5] = "Embedded.z5";
 		
     }
 

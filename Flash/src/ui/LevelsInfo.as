@@ -63,6 +63,17 @@ package ui {
             /*46*/Embedded.clevel2,
             /*47*/Embedded.wBat7,
             /*48*/Embedded.level14,
+            Embedded.michelleLevel1,
+            Embedded.chasm,
+            Embedded.fallingLava,
+            Embedded.sideQuestCanyon,
+            Embedded.evan_jump_timing,
+            Embedded.daFrick,
+            Embedded.z1,
+            Embedded.z2,
+            Embedded.z3,
+            Embedded.z4,
+            Embedded.z5
         ];
 		
 		private static var _currLevel:int = 1;
