@@ -64,7 +64,7 @@ package pyrokid {
                 //addChild(new Filmstrip(new Embedded.FireTileStripBMP(), 15, 25, 80, 80, 5, 19));
             }
             
-            if (Constants.LEVEL_EDITOR_ENABLED) {
+            if (Constants.SKIP_BUTTON_ENABLED && Constants.LEVEL_EDITOR_ENABLED) {
                 addSkipButton();
             }
         }
