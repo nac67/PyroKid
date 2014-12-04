@@ -21,7 +21,11 @@ package ui.playstates {
 		}
         
         public function hardCodedPoop() {
-			addChild(new LevelOrderer());
+			var levelOrderer:LevelOrderer = new LevelOrderer();
+			
+			
+			addChild(levelOrderer);
+			
             //for (var i:int = 0 ; i < 40; i++) {
                 //var row:int = i / 10;
                 //var col:int = i % 10;
