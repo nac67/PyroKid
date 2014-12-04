@@ -473,7 +473,6 @@ package pyrokid {
         public static var spiderFun:ByteArray = new SpiderFun();
 		Embedded.levelObjToString[Embedded.spiderFun] = "Embedded.spiderFun";
         
-<<<<<<< HEAD
         //new as of kongregate release
         
         [Embed(source="../../assets/levels/z1_revised.txt", mimeType="application/octet-stream")]
